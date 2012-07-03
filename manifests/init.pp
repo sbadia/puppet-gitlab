@@ -4,6 +4,7 @@
 #
 # [git_user]
 # [git_home]
+# [git_email]
 # [git_comment]
 # [git_adminkey]
 # [gitlab_user]
@@ -27,6 +28,7 @@
 class gitlab(
   $git_user       = 'git',
   $git_home       = '/home/git',
+  $git_email      = 'git@someserver.net'
   $git_comment    = 'git version control',
   $git_adminkey   = '',
   $gitlab_user    = 'gitlab',
