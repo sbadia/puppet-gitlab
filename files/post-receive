@@ -1,0 +1,19 @@
+#!/bin/sh
+# MANAGED BY PUPPET
+# Module:: gitlab
+#
+while read oldrev newrev refname
+do
+  /usr/bin/git config hooks.mailinglist > /dev/null 2>&1
+  if [ "$?" -eq "0" ]
+  then
+    echo "* hook.email to $(/usr/bin/git config hooks.mailinglist)"
+    echo $oldrev $newrev $refname | . /usr/share/doc/git-core/contrib/hooks/post-receive-email
+  fi
+done
+
+if [ -f ./hooks/custom-hook ]
+then
+  echo "* hook.custom"
+  ./hooks/custom-hook
+fi
