@@ -2,8 +2,11 @@
 #
 # === Parameters
 #
+# [git_user]
 # [git_home]
 # [git_comment]
+# [git_adminkey]
+# [gitlab_user]
 # [gitlab_home]
 # [gitlab_comment]
 #
@@ -116,5 +119,12 @@ class gitlab::gitolite inherits gitlab::pre {
 #
 #
 class gitlab::gitlab inherits gitlab::gitolite {
-
+  package {
+    ["charlock_holmes","bundler"]:
+      ensure   => installed,
+      provider => gem;
+    "pygments":
+      ensure  => installed,
+      provider => pip;
+  }
 } # Class:: gitlab::gitlab inherits gitlab::gitolite
