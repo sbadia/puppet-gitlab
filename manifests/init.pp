@@ -28,7 +28,7 @@
 class gitlab(
   $git_user       = 'git',
   $git_home       = '/home/git',
-  $git_email      = 'git@someserver.net'
+  $git_email      = 'git@someserver.net',
   $git_comment    = 'git version control',
   $git_adminkey   = '',
   $gitlab_user    = 'gitlab',
@@ -93,9 +93,9 @@ class gitlab::gitolite inherits gitlab::pre {
     "${git_home}/.gitolite/hooks/common/post-receive":
       source  => "puppet:///modules/gitlab/post-receive",
       ensure  => file,
-      owner   => $git_user, group => $git_user, mode => 755,
+      owner   => $git_user, group => $git_user, mode => 755;
     "${git_home}/.gitconfig":
-      source  => template('gitlab/gitolite.gitconfig.erb'),
+      content => template('gitlab/gitolite.gitconfig.erb'),
       ensure  => file,
       owner   => $git_user, group => $git_user, mode => 644,
       require => Package["gitolite"];
