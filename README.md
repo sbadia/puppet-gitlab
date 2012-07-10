@@ -7,10 +7,3 @@ is a collection of related content that can be used to model the configuration
 of a discrete service.
 
 This module is based on the admin guides for [gitlab](https://github.com/gitlabhq/gitlabhq/wiki)
-
-Authors
--------
-
-* Author:: Sebastien Badia (<seb@sebian.fr>)
-* Date:: Tue Jul 03 20:06:33 +0200 2012
-* Maintainer:: Sebastien Badia (<seb@sebian.fr>)
