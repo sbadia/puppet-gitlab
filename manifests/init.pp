@@ -10,6 +10,7 @@
 # [gitlab_user]
 # [gitlab_home]
 # [gitlab_comment]
+# [gitlab_sources]
 #
 # === Examples
 #
@@ -33,7 +34,8 @@ class gitlab(
   $git_adminkey   = '',
   $gitlab_user    = 'gitlab',
   $gitlab_home    = '/home/gitlab',
-  $gitlab_comment = 'gitlab system') {
+  $gitlab_comment = 'gitlab system',
+  $gitlab_sources = 'git://github.com/gitlabhq/gitlabhq.git') {
   case $operatingsystem {
     debian,ubuntu: {
       include "gitlab::gitlab"
@@ -112,7 +114,7 @@ class gitlab::gitolite inherits gitlab::pre {
     "gl-setup gitolite":
       command     => "/bin/su -c '/usr/bin/gl-setup ${git_home}/${git_user}.pub > /dev/null 2>&1' ${git_user}",
       user        => root,
-      require     => [Package["gitolite"],File["${git_home}/.gitconfig"]],
+      require     => [Package["gitolite"],File["${git_home}/.gitconfig"],File["${git_home}/${git_user}.pub"]],
       refreshonly => "true";
   }
 } # Class:: gitlab::gitolite inherits gitlab::pre
@@ -128,5 +130,15 @@ class gitlab::gitlab inherits gitlab::gitolite {
     "pygments":
       ensure  => installed,
       provider => pip;
+  }
+
+  exec {
+    "Get gitlab":
+      command     => "git clone -b stable ${gitlab_sources} ./gitlab",
+      cwd         => $gitlab_home,
+      path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+      user        => $gitlab_user,
+      require     => Package["gitolite"],
+      refreshonly => true;
   }
 } # Class:: gitlab::gitlab inherits gitlab::gitolite
