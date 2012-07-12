@@ -6,7 +6,7 @@ A ['Puppet Module'](http://docs.puppetlabs.com/learning/modules1.html#modules)
 is a collection of related content that can be used to model the configuration
 of a discrete service.
 
-This module is based on the admin guides for [gitlab](https://github.com/gitlabhq/gitlabhq/wiki)
+This module is based on the admin guides for [gitlab](https://github.com/gitlabhq/gitlabhq/wiki), [stable](https://github.com/gitlabhq/gitlabhq/blob/stable/doc/installation.md) version.
 
 ## Testing with vagrant
 
