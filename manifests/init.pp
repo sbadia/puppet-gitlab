@@ -2,18 +2,27 @@
 #
 # === Parameters
 #
-# [git_user]
-# [git_home]
-# [git_email]
-# [git_comment]
-# [git_adminkey]
-# [gitlab_user]
-# [gitlab_home]
-# [gitlab_comment]
-# [gitlab_sources]
-# [gitlab_dbtype]
+# [git_user] Name of the gitolite user (for ssh)
+# [git_home] Home directory for gitolite repository
+# [git_email] Email address for gitolite user
+# [git_comment] Gitolite user comment
+# [git_adminkey] Gitolite admin ssh key (required)
+# [gitlab_user] Name of gitlab user
+# [gitlab_home] Home directory for gitlab installation
+# [gitlab_comment] Gitlab comment
+# [gitlab_sources] Gitlab sources (github)
+# [gitlab_dbtype] Gitlab database type (sqlite/mysql)
 #
 # === Examples
+#
+# See examples/gitlab.pp
+#
+# node /gitlab/ {
+#   class {
+#     'gitlab':
+#       git_adminkey => 'ssh-rsa AAA...'
+#   }
+# }
 #
 # === Authors
 #
