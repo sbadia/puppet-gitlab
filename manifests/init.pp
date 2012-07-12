@@ -11,6 +11,7 @@
 # [gitlab_home]
 # [gitlab_comment]
 # [gitlab_sources]
+# [gitlab_dbtype]
 #
 # === Examples
 #
@@ -31,11 +32,12 @@ class gitlab(
   $git_home       = '/home/git',
   $git_email      = 'git@someserver.net',
   $git_comment    = 'git version control',
-  $git_adminkey   = '',
+  $git_adminkey   = '#Not configured',
   $gitlab_user    = 'gitlab',
   $gitlab_home    = '/home/gitlab',
   $gitlab_comment = 'gitlab system',
-  $gitlab_sources = 'git://github.com/gitlabhq/gitlabhq.git') {
+  $gitlab_sources = 'git://github.com/gitlabhq/gitlabhq.git',
+  $gitlab_dbtype  = 'sqlite') {
   case $operatingsystem {
     debian,ubuntu: {
       include "gitlab::gitlab"
@@ -138,7 +140,32 @@ class gitlab::gitlab inherits gitlab::gitolite {
       cwd         => $gitlab_home,
       path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       user        => $gitlab_user,
-      require     => Package["gitolite"],
+      require     => Package["gitolite"];
+    "Install gitlab":
+      command     => "bundle install --without development test --deployment",
+      cwd         => "${gitlab_home}/gitlab",
+      path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+      user        => $gitlab_user,
+      require     => Exec["Get gitlab"],
       refreshonly => true;
+    "Setup gitlab DB":
+      command     => "bundle exec rake gitlab:app:setup RAILS_ENV=production",
+      cwd         => "${gitlab_home}/gitlab",
+      path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+      user        => $gitlab_user,
+      require     => [Exec["Install gitlab"],File["${gitlab_home}/gitlab/config/database.yml"]],
+      refreshonly => true;
+  }
+
+  file {
+    "${gitlab_home}/gitlab/config/database.yml":
+      ensure  => link,
+      target  => "${gitlab_home}/gitlab/config/database.yml.${gitlab_dbtype}",
+      require => [Exec["Get gitlab"],File["${gitlab_home}/gitlab/config/gitlab.yml"]];
+    "${gitlab_home}/gitlab/config/gitlab.yml":
+      ensure  => link,
+      target  => "${gitlab_home}/gitlab/config/gitlab.yml.example",
+      require => Exec["Get gitlab"],
+      notify  => Exec["Setup gitlab DB"];
   }
 } # Class:: gitlab::gitlab inherits gitlab::gitolite
