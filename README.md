@@ -12,7 +12,7 @@ This module is based on the admin guides for [gitlab](https://github.com/gitlabh
 
     $ vagrant up
     $ vagrant ssh gitlab
-    $ mkdir /srv/gitlab/.ssh/;cp /srv/vagrant-puppet/manifests/id_rsa /srv/gitlab/.ssh/; chown -R tig:tig /srv/gitlab/.ssh/
+    $ mkdir /home/gitlab/.ssh/;cp /home/vagrant-puppet/manifests/id_rsa /home/gitlab/.ssh/; chown -R tig:tig /home/gitlab/.ssh/
     $ sudo su - tig
     $ cd gitlab; bundle exec rails s -e production
 
