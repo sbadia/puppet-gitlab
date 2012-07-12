@@ -177,4 +177,23 @@ class gitlab::gitlab inherits gitlab::gitolite {
       require => Exec["Get gitlab"],
       notify  => Exec["Setup gitlab DB"];
   }
+
+  #TODO: add nginx config.
+  #FIXME: untested…
+
+  file {
+    "/etc/init.d/gitlab":
+      source  => "puppet:///modules/gitlab/gitlab.init",
+      ensure  => file,
+      owner   => root, group => root, mode => 0755,
+      notify  => Service["gitlab"],
+      require => Exec["Setup gitlab DB"];
+  }
+
+  service {
+    "gitlab":
+      ensure  => running,
+      require => File["/etc/init.d/gitlab"],
+      enabled => true;
+  }
 } # Class:: gitlab::gitlab inherits gitlab::gitolite
