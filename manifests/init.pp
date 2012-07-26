@@ -106,8 +106,8 @@ class gitlab::gitolite inherits gitlab::pre {
     "${git_home}/.gitolite/hooks/common/post-receive":
       source  => "puppet:///modules/gitlab/post-receive",
       ensure  => file,
-      owner   => $git_user, group => $git_user, mode => 755;
-      require => [Package["gitolite"],User["${git_user}"]];
+      owner   => $git_user, group => $git_user, mode => 755,
+      require => [Exec["gl-setup gitolite"],User["${git_user}"]];
     "${git_home}/.gitconfig":
       content => template('gitlab/gitolite.gitconfig.erb'),
       ensure  => file,
@@ -150,6 +150,7 @@ class gitlab::gitlab inherits gitlab::gitolite {
       cwd         => $gitlab_home,
       path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       user        => $gitlab_user,
+      unless      => "/usr/bin/test -d ${gitlab_home}/gitlab",
       require     => Package["gitolite"];
     "Install gitlab":
       command     => "bundle install --without development test --deployment",
@@ -180,8 +181,6 @@ class gitlab::gitlab inherits gitlab::gitolite {
   }
 
   #TODO: add nginx config.
-  #FIXME: untested…
-
   file {
     "/etc/init.d/gitlab":
       source  => "puppet:///modules/gitlab/gitlab.init",
@@ -189,11 +188,5 @@ class gitlab::gitlab inherits gitlab::gitolite {
       owner   => root, group => root, mode => 0755,
       notify  => Service["gitlab"],
       require => Exec["Setup gitlab DB"];
-  }
-
-  service {
-    "gitlab":
-      ensure  => running,
-      require => File["/etc/init.d/gitlab"];
   }
 } # Class:: gitlab::gitlab inherits gitlab::gitolite
