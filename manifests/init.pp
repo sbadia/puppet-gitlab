@@ -156,14 +156,14 @@ class gitlab::gitlab inherits gitlab::gitolite {
       cwd         => "${gitlab_home}/gitlab",
       path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       user        => $gitlab_user,
-      require     => Exec["Get gitlab"],
+      require     => [Exec["Get gitlab"],Package["bundler"]],
       refreshonly => true;
     "Setup gitlab DB":
       command     => "bundle exec rake gitlab:app:setup RAILS_ENV=production",
       cwd         => "${gitlab_home}/gitlab",
       path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       user        => $gitlab_user,
-      require     => [Exec["Install gitlab"],File["${gitlab_home}/gitlab/config/database.yml"]],
+      require     => [Exec["Install gitlab"],File["${gitlab_home}/gitlab/config/database.yml"],Package["bundler"]],
       refreshonly => true;
   }
 
