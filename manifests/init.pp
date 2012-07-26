@@ -67,7 +67,7 @@ class gitlab::pre {
      "libcurl4-openssl-dev","libreadline-dev","libc6-dev","libssl-dev",
      "libmysql++-dev","make","build-essential","zlib1g-dev","libicu-dev",
      "redis-server","openssh-server","python-dev","python-pip","libyaml-dev",
-     "ruby1.9.1","ruby1.9.1-dev"]:
+     "ruby1.9.1","ruby1.9.1-dev","rubygems"]:
       ensure => installed;
   }
 
@@ -194,7 +194,6 @@ class gitlab::gitlab inherits gitlab::gitolite {
   service {
     "gitlab":
       ensure  => running,
-      require => File["/etc/init.d/gitlab"],
-      enabled => true;
+      require => File["/etc/init.d/gitlab"];
   }
 } # Class:: gitlab::gitlab inherits gitlab::gitolite
