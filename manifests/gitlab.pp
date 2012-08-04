@@ -27,7 +27,7 @@ class gitlab::gitlab inherits gitlab::gitolite {
       cwd       => "${gitlab_home}/gitlab",
       path      => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       user      => $gitlab_user,
-      require   => [Exec["Get gitlab"],Package['gitolite']];
+      require   => [Exec["Get gitlab"],Package['gitolite'],Package['bundle']];
     "Setup gitlab DB":
       command     => "bundle exec rake gitlab:app:setup RAILS_ENV=production; bundle exec rake gitlab:app:enable_automerge RAILS_ENV=production",
       logoutput   => true,
@@ -40,7 +40,8 @@ class gitlab::gitlab inherits gitlab::gitolite {
         File["${gitlab_home}/gitlab/tmp"],
         Sshkey['localhost'],
         File["${gitlab_home}/.ssh/id_rsa"],
-        Package['gitolite']
+        Package['gitolite'],
+        Package['bundle']
         ],
       refreshonly => true;
   }

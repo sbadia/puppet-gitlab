@@ -21,6 +21,13 @@ class gitlab::gitolite inherits gitlab::pre {
       group   => $git_user,
       mode    => 644,
       require => [Package["gitolite"],User["${git_user}"]];
+    "${git_home}/.gitolite/hooks/common/post-receive":
+      source  => "puppet:///modules/gitlab/post-receive",
+      ensure  => file,
+      owner   => $git_user,
+      group   => $git_user,
+      mode    => 755;
+      require => [Exec["gl-setup gitolite"],User["${git_user}"]];
     "${git_home}/.gitconfig":
       content => template('gitlab/gitolite.gitconfig.erb'),
       ensure  => file,

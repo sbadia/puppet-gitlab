@@ -1,0 +1,8 @@
+name    'puppet-gitlab'
+version '0.1.0'
+source  'https://github.com/sbadia/puppet-gitlab'
+author  'Sebastien Badia'
+license 'GPLv3'
+summary 'Puppet GitLab Module'
+description 'Module to install GitLab using puppet'
+project_page 'https://github.com/sbadia/puppet-gitlab/'
