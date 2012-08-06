@@ -17,7 +17,7 @@ This module is based on the admin guides for [gitlab](https://github.com/gitlabh
     $ cd gitlab; bundle exec rails s -e production
 
 ## Test gitlab
-- **Login**: loginadmin@local.host
+- **Login**: admin@local.host
 - **Password**: 5iveL!fe
 
 1. Add an ssh key to your account, or create another account

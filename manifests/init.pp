@@ -37,16 +37,28 @@
 #
 #
 class gitlab(
-  $git_user       = 'git',
-  $git_home       = '/home/git',
-  $git_email      = 'git@someserver.net',
-  $git_comment    = 'git version control',
-  $git_adminkey   = '#Not configured',
-  $gitlab_user    = 'gitlab',
-  $gitlab_home    = '/home/gitlab',
-  $gitlab_comment = 'gitlab system',
-  $gitlab_sources = 'git://github.com/gitlabhq/gitlabhq.git',
-  $gitlab_dbtype  = 'sqlite') {
+    $git_user           = $gitlab::params::git_user,
+    $git_home           = $gitlab::params::git_home,
+    $git_email          = $gitlab::params::git_email,
+    $git_comment        = $gitlab::params::git_comment,
+    $git_admin_pubkey   = $gitlab::params::git_admin_pubkey,
+    $git_admin_privkey  = $gitlab::params::git_admin_privkey,
+    $gitlab_user        = $gitlab::params::gitlab_user,
+    $gitlab_home        = $gitlab::params::gitlab_home,
+    $gitlab_comment     = $gitlab::params::gitlab_comment,
+    $gitlab_sources     = $gitlab::params::gitlab_sources,
+    $gitlab_branch      = $gitlab::params::gitlab_branch,
+    $gitlab_dbtype      = $gitlab::params::gitlab_dbtype,
+    $ldap_enabled       = $gitlab::params::ldap_enabled,
+    $ldap_title         = $gitlab::params::ldap_title,
+    $ldap_host          = $gitlab::params::ldap_host,
+    $ldap_base          = $gitlab::params::ldap_base,
+    $ldap_uid           = $gitlab::params::ldap_uid,
+    $ldap_port          = $gitlab::params::ldap_port,
+    $ldap_method        = $gitlab::params::ldap_method,
+    $ldap_bind_dn       = $gitlab::params::ldap_bind_dn,
+    $ldap_bind_password = $gitlab::params::ldap_bind_password
+  ) inherits gitlab::params {
   case $operatingsystem {
     debian,ubuntu: {
       include "gitlab::gitlab"
@@ -56,137 +68,3 @@ class gitlab(
     }
   } # case
 } # Class:: gitlab
-
-# Class:: gitlab::pre
-#
-#
-class gitlab::pre {
-  package {
-    ["git","git-core","wget","curl","gcc","checkinstall",
-     "libxml2-dev","libxslt-dev","sqlite3","libsqlite3-dev",
-     "libcurl4-openssl-dev","libreadline-dev","libc6-dev","libssl-dev",
-     "libmysql++-dev","make","build-essential","zlib1g-dev","libicu-dev",
-     "redis-server","openssh-server","python-dev","python-pip","libyaml-dev",
-     "ruby1.9.1","ruby1.9.1-dev","rubygems"]:
-      ensure => installed;
-  }
-
-  user {
-    $git_user:
-      ensure  => present,
-      shell   => '/bin/sh',
-      home    => $git_home, managehome => true,
-      comment => $git_comment, system => true;
-    $gitlab_user:
-      ensure  => present,
-      groups  => 'git', shell => '/bin/bash',
-      home    => $gitlab_home, managehome => true,
-      comment => $gitlab_comment;
-  }
-} # Class:: gitlab::pre
-
-# Class:: gitlab::gitolite inherits gitlab::pre
-#
-#
-class gitlab::gitolite inherits gitlab::pre {
-  file {
-    "/var/cache/debconf/gitolite.preseed":
-      content => template('gitlab/gitolite.preseed.erb'),
-      ensure  => file,
-      before  => Package["gitolite"];
-    "${git_home}/${git_user}.pub":
-      content => $git_adminkey,
-      ensure  => file, owner => git,
-      mode    => 644, require => User["${git_user}"];
-    "${git_home}/.gitolite.rc":
-      source  => "puppet:///modules/gitlab/gitolite-rc",
-      ensure  => file,
-      owner   => $git_user, group => $git_user, mode => 644,
-      require => [Package["gitolite"],User["${git_user}"]];
-    "${git_home}/.gitolite/hooks/common/post-receive":
-      source  => "puppet:///modules/gitlab/post-receive",
-      ensure  => file,
-      owner   => $git_user, group => $git_user, mode => 755,
-      require => [Exec["gl-setup gitolite"],User["${git_user}"]];
-    "${git_home}/.gitconfig":
-      content => template('gitlab/gitolite.gitconfig.erb'),
-      ensure  => file,
-      owner   => $git_user, group => $git_user, mode => 644,
-      require => Package["gitolite"];
-  }
-
-  package {
-    "gitolite":
-      ensure       => installed,
-      notify       => Exec["gl-setup gitolite"],
-      responsefile => "/var/cache/debconf/gitolite.preseed";
-  }
-
-  exec {
-    "gl-setup gitolite":
-      command     => "/bin/su -c '/usr/bin/gl-setup ${git_home}/${git_user}.pub > /dev/null 2>&1' ${git_user}",
-      user        => root,
-      require     => [Package["gitolite"],File["${git_home}/.gitconfig"],File["${git_home}/${git_user}.pub"]],
-      refreshonly => "true";
-  }
-} # Class:: gitlab::gitolite inherits gitlab::pre
-
-# Class:: gitlab::gitlab inherits gitlab::gitolite
-#
-#
-class gitlab::gitlab inherits gitlab::gitolite {
-  package {
-    ["charlock_holmes","bundler"]:
-      ensure   => installed,
-      provider => gem;
-    "pygments":
-      ensure  => installed,
-      provider => pip;
-  }
-
-  exec {
-    "Get gitlab":
-      command     => "git clone -b stable ${gitlab_sources} ./gitlab",
-      cwd         => $gitlab_home,
-      path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-      user        => $gitlab_user,
-      unless      => "/usr/bin/test -d ${gitlab_home}/gitlab",
-      require     => Package["gitolite"];
-    "Install gitlab":
-      command     => "bundle install --without development test --deployment",
-      cwd         => "${gitlab_home}/gitlab",
-      path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-      user        => $gitlab_user,
-      require     => [Exec["Get gitlab"],Package["bundler"]],
-      refreshonly => true;
-    "Setup gitlab DB":
-      command     => "bundle exec rake gitlab:app:setup RAILS_ENV=production",
-      cwd         => "${gitlab_home}/gitlab",
-      path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-      user        => $gitlab_user,
-      require     => [Exec["Install gitlab"],File["${gitlab_home}/gitlab/config/database.yml"],Package["bundler"]],
-      refreshonly => true;
-  }
-
-  file {
-    "${gitlab_home}/gitlab/config/database.yml":
-      ensure  => link,
-      target  => "${gitlab_home}/gitlab/config/database.yml.${gitlab_dbtype}",
-      require => [Exec["Get gitlab"],File["${gitlab_home}/gitlab/config/gitlab.yml"]];
-    "${gitlab_home}/gitlab/config/gitlab.yml":
-      ensure  => link,
-      target  => "${gitlab_home}/gitlab/config/gitlab.yml.example",
-      require => Exec["Get gitlab"],
-      notify  => Exec["Setup gitlab DB"];
-  }
-
-  #TODO: add nginx config.
-  file {
-    "/etc/init.d/gitlab":
-      source  => "puppet:///modules/gitlab/gitlab.init",
-      ensure  => file,
-      owner   => root, group => root, mode => 0755,
-      notify  => Service["gitlab"],
-      require => Exec["Setup gitlab DB"];
-  }
-} # Class:: gitlab::gitlab inherits gitlab::gitolite
