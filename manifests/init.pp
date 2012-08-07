@@ -6,12 +6,22 @@
 # [git_home] Home directory for gitolite repository
 # [git_email] Email address for gitolite user
 # [git_comment] Gitolite user comment
-# [git_adminkey] Gitolite admin ssh key (required)
+# [git_admin_pubkey] Gitolite admin ssh public key (required)
+# [git_admin_privkey] Gitolite admin ssh private key (required)
 # [gitlab_user] Name of gitlab user
 # [gitlab_home] Home directory for gitlab installation
 # [gitlab_comment] Gitlab comment
 # [gitlab_sources] Gitlab sources (github)
 # [gitlab_dbtype] Gitlab database type (sqlite/mysql)
+# [ldap_enabled] Enable LDAP backend for gitlab web (see bellow)
+# [ldap_title] Name of LDAP configuration
+# [ldap_host] FQDN of LDAP server
+# [ldap_base] LDAP base dn
+# [ldap_uid] Uid for LDAP auth
+# [ldap_port] LDAP port
+# [ldap_method] Method to use (ssl)
+# [ldap_bind_dn] User for LDAP bind auth
+# [ldap_bind_password] Password for LDN bind auth
 #
 # === Examples
 #
@@ -27,6 +37,7 @@
 # === Authors
 #
 # Sebastien Badia (<seb@sebian.fr>)
+# Matt Klich (<matt@elementalvoid.com>)
 #
 # === Copyright
 #
