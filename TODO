@@ -1,5 +1,3 @@
-gitolite:
-  - Better management of ssh keys (content or source)
 nginx:
   - Vhost management
 puppet:
