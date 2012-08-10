@@ -8,6 +8,7 @@ class gitlab::params {
   $git_comment        = 'git version control'
   $git_admin_pubkey   = '#Not configured'
   $git_admin_privkey  = '#Not configured'
+  $ssh_key_provider   = 'source'
   $gitlab_user        = 'gitlab'
   $gitlab_home        = '/home/gitlab'
   $gitlab_comment     = 'gitlab system'

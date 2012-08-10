@@ -1,5 +1,5 @@
 name    'puppet-gitlab'
-version '0.1.0'
+version '0.0.1'
 source  'https://github.com/sbadia/puppet-gitlab'
 author  'Sebastien Badia'
 license 'GPLv3'

@@ -8,6 +8,7 @@
 # [git_comment] Gitolite user comment
 # [git_admin_pubkey] Gitolite admin ssh public key (required)
 # [git_admin_privkey] Gitolite admin ssh private key (required)
+# [ssh_key_provider] Type of provider for ssh keys (source/content)(default source)
 # [gitlab_user] Name of gitlab user
 # [gitlab_home] Home directory for gitlab installation
 # [gitlab_comment] Gitlab comment
@@ -54,6 +55,7 @@ class gitlab(
     $git_comment        = $gitlab::params::git_comment,
     $git_admin_pubkey   = $gitlab::params::git_admin_pubkey,
     $git_admin_privkey  = $gitlab::params::git_admin_privkey,
+    $ssh_key_provider   = $gitlab::params::ssh_key_provider,
     $gitlab_user        = $gitlab::params::gitlab_user,
     $gitlab_home        = $gitlab::params::gitlab_home,
     $gitlab_comment     = $gitlab::params::gitlab_comment,
