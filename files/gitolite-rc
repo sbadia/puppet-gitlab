@@ -1,4 +1,6 @@
 # MANAGED BY PUPPET
+# Module:: gitlab
+#
 # paths and configuration variables for gitolite
 
 $GL_PACKAGE_CONF="/etc/gitolite";

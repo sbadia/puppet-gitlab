@@ -1,3 +1,6 @@
+# MANAGED BY PUPPET
+# Module:: gitlab
+#
 upstream gitlab {
     server unix:<%= gitlab_home %>/gitlab/tmp/sockets/gitlab.socket;
 }
