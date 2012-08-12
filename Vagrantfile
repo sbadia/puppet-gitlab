@@ -4,6 +4,8 @@
 Vagrant::Config.run do |config|
   config.vm.define :gitlab do |hq|
     hq.vm.box = "ubuntu1204-amd64"
+    # Debian Wheezy box: http://sebian.yasaw.net/pub/debian-wheezy-x64.box
+    #hq.vm.box = "debian-wheezy-x64"
     hq.vm.host_name = "gitlab"
     hq.vm.network :hostonly, "192.168.1.10"
     # Rails port

@@ -10,11 +10,11 @@ This module is based on the admin guides for [gitlab](https://github.com/gitlabh
 
 ## Testing with vagrant
 
+A Debian Wheezy box is avaiable here <http://sebian.yasaw.net/pub/debian-wheezy-x64.box>
+
     $ vagrant up
     $ vagrant ssh gitlab
-    $ mkdir /home/gitlab/.ssh/;cp /home/vagrant-puppet/manifests/id_rsa /home/gitlab/.ssh/; chown -R tig:tig /home/gitlab/.ssh/
-    $ sudo su - tig
-    $ cd gitlab; bundle exec rails s -e production
+    $ puppet apply --modulepath /srv/puppet_modules --certname gitlab_server /srv/vagrant-puppet/manifests/gitlab.pp
 
 ## Test gitlab
 - **Login**: admin@local.host
