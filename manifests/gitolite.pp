@@ -65,4 +65,22 @@ class gitlab::gitolite inherits gitlab::pre {
     mode      => 0770,
     subscribe => Exec['gl-setup gitolite']
   }
+
+  # Solve strange issue with gitolite on ubuntu (https://github.com/sbadia/puppet-gitlab/issues/9)
+  # So create a VERSION file if it doesn't exist
+  if $operatingsystem == 'Ubuntu' {
+    file {
+      "/etc/gitolite":
+        ensure  => directory,
+        mode    => 0755;
+      "/etc/gitolite/VERSION":
+        content => "42",
+        ensure  => file,
+        replace => false,
+        owner   => root,
+        group   => root,
+        mode    => 0644,
+        require => File["/etc/gitolite"];
+    }
+  }
 } # Class:: gitlab::gitolite inherits gitlab::pre
