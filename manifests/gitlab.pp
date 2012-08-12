@@ -64,6 +64,7 @@ class gitlab::gitlab inherits gitlab::gitolite {
     key          => $::sshrsakey,
     type         => 'ssh-rsa'
   }
+
   file { '/etc/ssh/ssh_known_hosts':
     ensure  => file,
     owner   => root,
@@ -108,37 +109,53 @@ class gitlab::gitlab inherits gitlab::gitolite {
       mode   => 0700;
     "${gitlab_home}/.ssh/id_rsa":
       ensure  => file,
-      content => "${git_admin_privkey}",
       owner   => $gitlab_user,
       group   => $gitlab_user,
       mode    => 0600;
     "${gitlab_home}/.ssh/id_rsa.pub":
       ensure  => file,
-      content => "${git_admin_pubkey}",
       owner   => $gitlab_user,
       group   => $gitlab_user,
+      mode    => 0644;
+  }
+
+  case $ssh_key_provider {
+    content: {
+      File["${gitlab_home}/.ssh/id_rsa"] { content => "${git_admin_privkey}" }
+      File["${gitlab_home}/.ssh/id_rsa.pub"] { content => "${git_admin_pubkey}" }
+    }
+    source: {
+      File["${gitlab_home}/.ssh/id_rsa"] { source => "${git_admin_privkey}" }
+      File["${gitlab_home}/.ssh/id_rsa.pub"] { source => "${git_admin_pubkey}" }
+    }
+    default: {
+      err "${ssh_key_provider} not supported yet"
+    }
+  } # case ssh
+
+  package {
+    "nginx":
+      ensure => latest
+  }
+
+  #TODO: vhost managment
+  #      or hostname.tld/gitlab/ installation
+  file {
+    "/etc/nginx/conf.d/gitlab.conf":
+      ensure  => file,
+      content => template('gitlab/nginx-gitlab.conf.erb'),
+      owner   => root,
+      group   => root,
       mode    => 0644,
+      require => Package["nginx"],
+      notify  => Service["nginx"];
   }
 
-  #TODO: add nginx config.
-  package { nginx:
-    ensure => latest
-  }
-
-  file { "/etc/nginx/conf.d/gitlab.conf":
-    ensure  => file,
-    content => template('gitlab/nginx-gitlab.conf.erb'),
-    owner   => root,
-    group   => root,
-    mode    => 0644,
-    require => Package["nginx"],
-    notify  => Service["nginx"]
-  }
-
-  service { nginx:
-    ensure  => running,
-    require => Package["nginx"],
-    enable  => true
+  service {
+    "nginx":
+      ensure  => running,
+      require => Package["nginx"],
+      enable  => true;
   }
 
   file {
