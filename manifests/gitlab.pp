@@ -123,10 +123,12 @@ class gitlab::gitlab inherits gitlab::gitolite {
     content: {
       File["${gitlab_home}/.ssh/id_rsa"] { content => "${git_admin_privkey}" }
       File["${gitlab_home}/.ssh/id_rsa.pub"] { content => "${git_admin_pubkey}" }
+      File["${git_home}/${git_user}.pub"] { content => "${git_admin_pubkey}" }
     }
     source: {
       File["${gitlab_home}/.ssh/id_rsa"] { source => "${git_admin_privkey}" }
       File["${gitlab_home}/.ssh/id_rsa.pub"] { source => "${git_admin_pubkey}" }
+      File["${git_home}/${git_user}.pub"] { source => "${git_admin_pubkey}" }
     }
     default: {
       err "${ssh_key_provider} not supported yet"

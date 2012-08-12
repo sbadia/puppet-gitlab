@@ -8,7 +8,6 @@ class gitlab::gitolite inherits gitlab::pre {
       ensure  => file,
       before  => Package["gitolite"];
     "${git_home}/${git_user}.pub":
-      content => $git_admin_pubkey,
       ensure  => file,
       owner   => $git_user,
       group   => $git_user,
