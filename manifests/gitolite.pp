@@ -3,65 +3,65 @@
 #
 class gitlab::gitolite inherits gitlab::pre {
   file {
-    "/var/cache/debconf/gitolite.preseed":
-      content => template('gitlab/gitolite.preseed.erb'),
+    '/var/cache/debconf/gitolite.preseed':
       ensure  => file,
-      before  => Package["gitolite"];
+      content => template('gitlab/gitolite.preseed.erb'),
+      before  => Package['gitolite'];
     "${git_home}/${git_user}.pub":
       ensure  => file,
       owner   => $git_user,
       group   => $git_user,
-      mode    => 644,
-      require => User["${git_user}"];
+      mode    => '0644',
+      require => User[$git_user];
     "${git_home}/.gitolite.rc":
-      source  => "puppet:///modules/gitlab/gitolite-rc",
       ensure  => file,
+      source  => 'puppet:///modules/gitlab/gitolite-rc',
       owner   => $git_user,
       group   => $git_user,
-      mode    => 644,
-      require => [Package["gitolite"],User["${git_user}"]];
+      mode    => '0644',
+      require => [Package['gitolite'],User[$git_user]];
     "${git_home}/.gitolite/hooks/common/post-receive":
-      source  => "puppet:///modules/gitlab/post-receive",
       ensure  => file,
+      source  => 'puppet:///modules/gitlab/post-receive',
       owner   => $git_user,
       group   => $git_user,
-      mode    => 755,
-      require => [Exec["gl-setup gitolite"],User["${git_user}"]];
+      mode    => '0755',
+      require => [Exec['gl-setup gitolite'],User[$git_user]];
     "${git_home}/.gitconfig":
-      content => template('gitlab/gitolite.gitconfig.erb'),
       ensure  => file,
+      content => template('gitlab/gitolite.gitconfig.erb'),
       owner   => $git_user,
       group   => $git_user,
-      mode    => 644,
-      require => Package["gitolite"];
+      mode    => '0644',
+      require => Package['gitolite'];
     "${git_home}/.profile":
       ensure => file,
-      source => "puppet:///modules/gitlab/git_user-dot-profile",
+      source => 'puppet:///modules/gitlab/git_user-dot-profile',
       owner  => $git_user,
       group  => $git_user,
-      mode   => 644;
+      mode   => '0644';
   }
 
   package {
-    "gitolite":
+    'gitolite':
       ensure       => installed,
-      notify       => Exec["gl-setup gitolite"],
-      responsefile => "/var/cache/debconf/gitolite.preseed";
+      notify       => Exec['gl-setup gitolite'],
+      responsefile => '/var/cache/debconf/gitolite.preseed';
   }
 
   exec {
-    "gl-setup gitolite":
+    'gl-setup gitolite':
       command     => "/bin/su -c '/usr/bin/gl-setup ${git_home}/${git_user}.pub > /dev/null 2>&1' ${git_user}",
       user        => root,
-      require     => [Package["gitolite"],File["${git_home}/.gitconfig"],File["${git_home}/${git_user}.pub"]],
-      refreshonly => "true";
+      require     => [Package['gitolite'],File["${git_home}/.gitconfig"],File["${git_home}/${git_user}.pub"]],
+      refreshonly => true;
   }
 
   file { "${git_home}/repositories":
     ensure    => directory,
     owner     => $git_user,
     group     => $git_user,
-    mode      => 0770,
+    mode      => '0770',
     subscribe => Exec['gl-setup gitolite']
   }
 
@@ -69,17 +69,17 @@ class gitlab::gitolite inherits gitlab::pre {
   # So create a VERSION file if it doesn't exist
   if $operatingsystem == 'Ubuntu' {
     file {
-      "/etc/gitolite":
+      '/etc/gitolite':
         ensure  => directory,
-        mode    => 0755;
-      "/etc/gitolite/VERSION":
-        content => "42",
+        mode    => '0755';
+      '/etc/gitolite/VERSION':
         ensure  => file,
+        content => '42',
         replace => false,
         owner   => root,
         group   => root,
-        mode    => 0644,
-        require => File["/etc/gitolite"];
+        mode    => '0644',
+        require => File['/etc/gitolite'];
     }
   }
 } # Class:: gitlab::gitolite inherits gitlab::pre

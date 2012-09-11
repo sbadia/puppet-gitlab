@@ -62,3 +62,23 @@ namespace :version do
     end
   end
 end
+
+namespace :check do
+  desc 'Check erb template syntax'
+  task :erb do
+    file=ARGV.values_at(Range.new(ARGV.index('check:erb')+1,-1))
+    exec "erb -x -T '-' #{file} | ruby -c"
+  end
+
+  desc "Check pp file syntax (return nothing if ok)"
+  task :pp do
+    file=ARGV.values_at(Range.new(ARGV.index('check:pp')+1,-1))
+    exec "puppet parser validate \"#{file}\""
+  end
+
+  desc "Check puppet syntax"
+  task :syntax do
+    file=ARGV.values_at(Range.new(ARGV.index('check:syntax')+1,-1))
+    exec "puppet-lint \"#{file}\""
+  end
+end
