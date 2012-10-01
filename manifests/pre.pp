@@ -3,12 +3,29 @@
 #
 class gitlab::pre {
   package {
-    ['git','git-core','wget','curl','sqlite3','redis-server',
+    ['git','git-core','wget','curl','redis-server',
       'openssh-server','python-pip','ruby','ruby-dev','rubygems',
-      'rake','libicu-dev','libxml2-dev','libxslt1-dev','libmysqlclient-dev',
-      'libsqlite3-dev','python-dev']:
+      'rake','libicu-dev','libxml2-dev','libxslt-dev','python-dev']:
       ensure => installed;
   }
+
+  case $gitlab_dbtype {
+    'sqlite': {
+      package {
+        ['libsqlite3-dev','sqlite3']:
+          ensure => installed;
+      }
+    } # Sqlite
+    'mysql': {
+      package {
+        ['libmysql++-dev','mysql-server','mysql-client','libmysqlclient-dev']:
+          ensure => installed;
+      }
+    } # Mysql
+    default: {
+      err "${gitlab_dbtype} not supported yet"
+    }
+  } # Case:: $gitlab_dbtype
 
   user {
     $git_user:
