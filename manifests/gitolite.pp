@@ -54,6 +54,7 @@ class gitlab::gitolite inherits gitlab::pre {
       command     => "/bin/su -c '/usr/bin/gl-setup ${git_home}/${git_user}.pub > /dev/null 2>&1' ${git_user}",
       user        => root,
       require     => [Package['gitolite'],File["${git_home}/.gitconfig"],File["${git_home}/${git_user}.pub"]],
+      logoutput   => 'on_failure',
       refreshonly => true;
   }
 

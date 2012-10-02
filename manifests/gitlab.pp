@@ -15,7 +15,7 @@ class gitlab::gitlab inherits gitlab::gitolite {
     'Get gitlab':
       command   => "git clone -b ${gitlab_branch} ${gitlab_sources} ./gitlab",
       creates   => "${gitlab_home}/gitlab",
-      logoutput => true,
+      logoutput => 'on_failure',
       cwd       => $gitlab_home,
       path      => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       user      => $gitlab_user,
@@ -23,14 +23,14 @@ class gitlab::gitlab inherits gitlab::gitolite {
       require   => Package['gitolite'];
     'Install gitlab':
       command   => 'bundle install --without development test --deployment',
-      logoutput => true,
+      logoutput => 'on_failure',
       cwd       => "${gitlab_home}/gitlab",
       path      => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       user      => $gitlab_user,
       require   => [Exec['Get gitlab'],Package['gitolite'],Package['bundler']];
     'Setup gitlab DB':
       command     => 'bundle exec rake gitlab:app:setup RAILS_ENV=production; bundle exec rake gitlab:app:enable_automerge RAILS_ENV=production',
-      logoutput   => true,
+      logoutput   => 'on_failure',
       cwd         => "${gitlab_home}/gitlab",
       path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       user        => $gitlab_user,
