@@ -5,7 +5,8 @@ class gitlab::pre {
   package {
     ['git','git-core','wget','curl','redis-server',
       'openssh-server','python-pip','libicu-dev',
-      'libxml2-dev','libxslt1-dev','python-dev']:
+      'libxml2-dev','libxslt1-dev','python-dev',
+      'libmysql++-dev','libmysqlclient-dev']:
       ensure => installed;
   }
 
@@ -18,7 +19,7 @@ class gitlab::pre {
     } # Sqlite
     'mysql': {
       package {
-        ['libmysql++-dev','mysql-server','mysql-client','libmysqlclient-dev']:
+        ['mysql-server','mysql-client']:
           ensure => installed;
       }
     } # Mysql
