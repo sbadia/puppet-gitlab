@@ -1,5 +1,7 @@
 # Module gitlab
 
+* Tested with Gitlab 3.0.3 [7ecfacc]
+
 [GitLab](http://gitlabhq.com) is a free project and repository management application
 
 A ['Puppet Module'](http://docs.puppetlabs.com/learning/modules1.html#modules)
