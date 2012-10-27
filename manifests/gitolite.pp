@@ -26,7 +26,7 @@ class gitlab::gitolite inherits gitlab::pre {
       owner   => $git_user,
       group   => $git_user,
       mode    => '0755',
-      require => [Exec['gl-setup gitolite'],User[$git_user]];
+      require => [Pacakge['gitolite'],User[$git_user]];
     "${git_home}/.gitconfig":
       ensure  => file,
       content => template('gitlab/gitolite.gitconfig.erb'),
@@ -45,25 +45,25 @@ class gitlab::gitolite inherits gitlab::pre {
   package {
     'gitolite':
       ensure       => installed,
-      notify       => Exec['gl-setup gitolite'],
       responsefile => '/var/cache/debconf/gitolite.preseed';
   }
 
   exec {
     'gl-setup gitolite':
       command     => "/bin/su -c '/usr/bin/gl-setup ${git_home}/${git_user}.pub > /dev/null 2>&1' ${git_user}",
-      user        => root,
+      user        => $git_user,
       require     => [Package['gitolite'],File["${git_home}/.gitconfig"],File["${git_home}/${git_user}.pub"]],
       logoutput   => 'on_failure',
-      refreshonly => true;
+      unless      => "/usr/bin/test -f ${git_home}/projects.list";
   }
 
-  file { "${git_home}/repositories":
-    ensure    => directory,
-    owner     => $git_user,
-    group     => $git_user,
-    mode      => '0770',
-    subscribe => Exec['gl-setup gitolite']
+  file {
+    "${git_home}/repositories":
+      ensure    => directory,
+      owner     => $git_user,
+      group     => $git_user,
+      mode      => '0770',
+      require   => Package['gitolite'];
   }
 
   # Solve strange issue with gitolite on ubuntu (https://github.com/sbadia/puppet-gitlab/issues/9)
