@@ -69,20 +69,6 @@ class gitlab::gitlab inherits gitlab::gitolite {
       refreshonly => true;
   }
 
-  sshkey { 'localhost':
-    ensure       => present,
-    host_aliases => $::fqdn,
-    key          => $::sshrsakey,
-    type         => 'ssh-rsa'
-  }
-
-  file { '/etc/ssh/ssh_known_hosts':
-    ensure  => file,
-    owner   => root,
-    group   => root,
-    mode    => '0644',
-    require => Sshkey['localhost']
-  }
 
   file {
     "${gitlab_home}/gitlab/config/database.yml":
@@ -112,6 +98,14 @@ class gitlab::gitlab inherits gitlab::gitolite {
       require => Exec['Get gitlab'],
   }
 
+  sshkey {
+    'localhost':
+      ensure       => present,
+      host_aliases => $::fqdn,
+      key          => $::sshrsakey,
+      type         => 'ssh-rsa'
+  }
+
   file { # SSH keys
     "${gitlab_home}/.ssh":
       ensure => directory,
@@ -128,6 +122,12 @@ class gitlab::gitlab inherits gitlab::gitolite {
       owner   => $gitlab_user,
       group   => $gitlab_user,
       mode    => '0644';
+    '/etc/ssh/ssh_known_hosts':
+      ensure  => file,
+      owner   => root,
+      group   => root,
+      mode    => '0644',
+      require => Sshkey['localhost']
   }
 
   case $ssh_key_provider {
