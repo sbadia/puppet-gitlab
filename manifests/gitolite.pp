@@ -26,7 +26,7 @@ class gitlab::gitolite inherits gitlab::pre {
       owner   => $git_user,
       group   => $git_user,
       mode    => '0755',
-      require => [Pacakge['gitolite'],User[$git_user]];
+      require => Package['gitolite'];
     "${git_home}/.gitconfig":
       ensure  => file,
       content => template('gitlab/gitolite.gitconfig.erb'),
