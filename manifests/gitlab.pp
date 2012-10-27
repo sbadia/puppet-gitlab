@@ -2,6 +2,9 @@
 #
 #
 class gitlab::gitlab inherits gitlab::gitolite {
+
+  include 'gitlab::nginx'
+
   package {
     'bundler':
       ensure   => installed,
@@ -141,31 +144,6 @@ class gitlab::gitlab inherits gitlab::gitolite {
       err "${ssh_key_provider} not supported yet"
     }
   } # case ssh
-
-  package {
-    'nginx':
-      ensure => latest
-  }
-
-  #TODO: vhost managment
-  #      or hostname.tld/gitlab/ installation
-  file {
-    '/etc/nginx/conf.d/gitlab.conf':
-      ensure  => file,
-      content => template('gitlab/nginx-gitlab.conf.erb'),
-      owner   => root,
-      group   => root,
-      mode    => '0644',
-      require => Package['nginx'],
-      notify  => Service['nginx'];
-  }
-
-  service {
-    'nginx':
-      ensure  => running,
-      require => Package['nginx'],
-      enable  => true;
-  }
 
   file {
     '/etc/init.d/gitlab':
