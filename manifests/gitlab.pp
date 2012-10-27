@@ -14,6 +14,22 @@ class gitlab::gitlab inherits gitlab::gitolite {
       provider => pip;
   }
 
+  case $gitlab_dbtype {
+    sqlite: {
+      $gitlab_without_gems = 'mysql postgres'
+    }
+    mysql: {
+      $gitlab_without_gems = 'sqlite postgres'
+    }
+    postgres: {
+      $gitlab_without_gems = 'sqlite mysql'
+    }
+    default: {
+      # Install all db type gems
+      $gitlab_without_gems = ''
+    }
+  }
+
   exec {
     'Get gitlab':
       command   => "git clone -b ${gitlab_branch} ${gitlab_sources} ./gitlab",
@@ -25,14 +41,14 @@ class gitlab::gitlab inherits gitlab::gitolite {
       unless    => "/usr/bin/test -d ${gitlab_home}/gitlab",
       require   => Package['gitolite'];
     'Install gitlab':
-      command   => 'bundle install --without development test --deployment',
+      command   => "bundle install --without development test ${gitlab_without_gems} --deployment",
       logoutput => 'on_failure',
       cwd       => "${gitlab_home}/gitlab",
       path      => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       user      => $gitlab_user,
       require   => [Exec['Get gitlab'],Package['gitolite'],Package['bundler']];
     'Setup gitlab DB':
-      command     => 'bundle exec rake gitlab:app:setup RAILS_ENV=production; bundle exec rake gitlab:app:enable_automerge RAILS_ENV=production',
+      command     => 'bundle exec rake gitlab:app:setup RAILS_ENV=production; bundle exec rake gitlab:app:enable_automerge RAILS_ENV=production; bundle exec rake db:migrate RAILS_ENV=production',
       logoutput   => 'on_failure',
       cwd         => "${gitlab_home}/gitlab",
       path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
