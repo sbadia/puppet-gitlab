@@ -6,6 +6,9 @@ class gitlab::gitlab inherits gitlab::gitolite {
     'bundler':
       ensure   => installed,
       provider => gem;
+    'charlock_holmes':
+      ensure   => '0.6.8',
+      provider => gem;
     'pygments':
       ensure   => installed,
       provider => pip;
@@ -44,18 +47,6 @@ class gitlab::gitlab inherits gitlab::gitolite {
         Package['bundler']
         ],
       refreshonly => true;
-  }
-
-  if $ldap_enabled == true {
-    file { "${gitlab_home}/gitlab/config/initializers/omniauth.rb":
-      ensure  => file,
-      content => template('gitlab/omniauth.rb.erb'),
-      owner   => $gitlab_user,
-      group   => $gitlab_user,
-      mode    => '0640',
-      require => [Exec['Get gitlab'],File["${gitlab_home}/gitlab/config/gitlab.yml"]],
-      notify  => Service['gitlab'];
-    }
   }
 
   sshkey { 'localhost':

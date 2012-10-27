@@ -16,7 +16,6 @@ class gitlab::params {
   $gitlab_branch      = 'stable'
   $gitlab_dbtype      = 'sqlite'
   $ldap_enabled       = false
-  $ldap_title         = 'LDAP Auth'
   $ldap_host          = 'ldap.domain.com'
   $ldap_base          = 'dc=domain,dc=com'
   $ldap_uid           = 'uid'
