@@ -159,8 +159,10 @@ class gitlab::gitlab inherits gitlab::gitolite {
 
   service {
     'gitlab':
-      ensure  => running,
-      require => File['/etc/init.d/gitlab'],
-      enable  => true;
+      ensure    => running,
+      require   => File['/etc/init.d/gitlab'],
+      hasstatus => false,
+      pattern   => 'unicorn_rails',
+      enable    => true;
   }
 } # Class:: gitlab::gitlab inherits gitlab::gitolite
