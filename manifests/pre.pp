@@ -2,12 +2,18 @@
 #
 #
 class gitlab::pre {
+
+  exec { "apt-get update":
+    command => "/usr/bin/apt-get update",
+  }
+
   package {
     ['git','git-core','wget','curl','redis-server',
       'openssh-server','python-pip','libicu-dev',
       'libxml2-dev','libxslt1-dev','python-dev',
       'libmysql++-dev','libmysqlclient-dev']:
-      ensure => installed;
+      ensure => latest,
+      require => Exec['apt-get update'],
   }
 
   case $gitlab_dbtype {
