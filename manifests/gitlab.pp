@@ -49,8 +49,7 @@ class gitlab::gitlab inherits gitlab::gitolite {
       cwd         => "${gitlab_home}/gitlab",
       path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       user        => $gitlab_user,
-      require     => [Exec['Get gitlab'],Package['gitolite'],Package['bundler']],
-      refreshonly => true;
+      require     => [Exec['Get gitlab'],Package['gitolite'],Package['bundler']];
     'Setup gitlab DB':
       command     => 'bundle exec rake gitlab:app:setup RAILS_ENV=production; bundle exec rake gitlab:app:enable_automerge RAILS_ENV=production; bundle exec rake db:migrate RAILS_ENV=production',
       logoutput   => 'on_failure',
