@@ -72,9 +72,9 @@ class gitlab(
     $ldap_bind_dn       = $gitlab::params::ldap_bind_dn,
     $ldap_bind_password = $gitlab::params::ldap_bind_password
   ) inherits gitlab::params {
-  case $::operatingsystem {
-    debian,ubuntu: {
-      include 'gitlab::gitlab'
+  case $::osfamily {
+    Debian: {
+      include gitlab::server
     }
     default: {
       err "${::operatingsystem} not supported yet"
