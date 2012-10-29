@@ -29,6 +29,7 @@ Vagrant::Config.run do |config|
 
     hq.vm.host_name = "gitlab.localdomain.local"
     hq.vm.network :hostonly, "192.168.111.10"
+
     hq.vm.share_folder "puppet_modules", "/srv/puppet_modules/gitlab", "."
 
     hq.vm.provision :puppet, :pp_path => "/srv/vagrant-puppet" do |puppet|
@@ -37,6 +38,5 @@ Vagrant::Config.run do |config|
       puppet.manifests_path = "examples"
       puppet.manifest_file = "gitlab.pp"
     end
-
   end
 end
