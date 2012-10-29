@@ -13,9 +13,8 @@
 # [gitlab_home] Home directory for gitlab installation
 # [gitlab_comment] Gitlab comment
 # [gitlab_sources] Gitlab sources (github)
-# [gitlab_dbtype] Gitlab database type (sqlite/mysql)
+# [gitlab_dbtype] Gitlab database type (sqlite/mysql/pgsql)
 # [ldap_enabled] Enable LDAP backend for gitlab web (see bellow)
-# [ldap_title] Name of LDAP configuration
 # [ldap_host] FQDN of LDAP server
 # [ldap_base] LDAP base dn
 # [ldap_uid] Uid for LDAP auth
@@ -63,7 +62,6 @@ class gitlab(
     $gitlab_branch      = $gitlab::params::gitlab_branch,
     $gitlab_dbtype      = $gitlab::params::gitlab_dbtype,
     $ldap_enabled       = $gitlab::params::ldap_enabled,
-    $ldap_title         = $gitlab::params::ldap_title,
     $ldap_host          = $gitlab::params::ldap_host,
     $ldap_base          = $gitlab::params::ldap_base,
     $ldap_uid           = $gitlab::params::ldap_uid,
