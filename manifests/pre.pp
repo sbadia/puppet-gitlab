@@ -2,24 +2,32 @@
 #
 #
 class gitlab::pre {
+
+  exec { "apt-get update":
+    command => "/usr/bin/apt-get update",
+  }
+
   package {
     ['git','git-core','wget','curl','redis-server',
       'openssh-server','python-pip','libicu-dev',
       'libxml2-dev','libxslt1-dev','python-dev',
       'libmysql++-dev','libmysqlclient-dev']:
-      ensure => installed;
+      ensure => latest,
+      require => Exec['apt-get update'],
   }
 
   case $gitlab_dbtype {
     'sqlite': {
       package {
         ['libsqlite3-dev','sqlite3']:
+          require => Exec['apt-get update'],
           ensure => installed;
       }
     } # Sqlite
     'mysql': {
       package {
         ['mysql-server','mysql-client']:
+          require => Exec['apt-get update'],
           ensure => installed;
       }
     } # Mysql
@@ -54,6 +62,7 @@ class gitlab::pre {
           package {
             ['checkinstall','libcurl4-openssl-dev','libreadline6-dev',
             'libssl-dev','build-essential','zlib1g-dev','libyaml-dev']:
+              require => Exec['apt-get update'],
               ensure => installed;
           }
 
@@ -89,6 +98,7 @@ class gitlab::pre {
           # Assuming default ruby 1.9.3 (wheezy,quantal)
           package {
             ['ruby','ruby-dev','rubygems','rake']:
+              require => Exec['apt-get update'],
               ensure => installed;
           }
         } # Default
