@@ -3,8 +3,10 @@
 
 Vagrant::Config.run do |config|
   config.vm.define :gitlab do |hq|
-    hq.vm.box = "ubuntu1204-amd64"
-    config.vm.box_url ='http://sebian.yasaw.net/pub/debian-wheezy-x64.box' 
+    # hq.vm.box = "ubuntu1204-amd64"
+    # config.vm.box_url ='http://sebian.yasaw.net/pub/debian-wheezy-x64.box' 
+    hq.vm.box = "centos6.gitlab"
+    config.vm.box_url ='http://sroegner-vagrant.s3.amazonaws.com/Centos6_puppet3_virtualbox4.2.box'
 
     hq.vm.host_name = "gitlab.localdomain.local"
     hq.vm.network :hostonly, "192.168.111.10"
