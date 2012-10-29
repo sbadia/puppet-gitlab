@@ -2,9 +2,19 @@
 #
 #
 class gitlab::pre {
+  include gitlab
 
-  exec { "apt-get update":
-    command => "/usr/bin/apt-get update",
+  $gitlab_dbtype  = $gitlab::gitlab_dbtype
+  $gitlab_home    = $gitlab::gitlab_home
+  $gitlab_user    = $gitlab::gitlab_user
+  $git_home       = $gitlab::git_home
+  $git_user       = $gitlab::git_user
+  $git_comment    = $gitlab::git_comment
+  $gitlab_comment = $gitlab::gitlab_comment
+
+
+  exec { 'apt-get update':
+    command => '/usr/bin/apt-get update',
   }
 
   package {
