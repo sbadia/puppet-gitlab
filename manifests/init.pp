@@ -36,12 +36,13 @@
 #
 # === Authors
 #
-# Sebastien Badia (<seb@sebian.fr>)
-# Matt Klich (<matt@elementalvoid.com>)
+# Sebastien Badia <seb@sebian.fr>
+# Matt Klich <matt@elementalvoid.com>
+# Steffen Roegner <steffen@sroegner.org>
 #
 # === Copyright
 #
-# Sebastien Badia © 2012
+# See LICENSE file, Sebastien Badia © 2012
 # Tue Jul 03 20:06:33 +0200 2012
 
 # Class:: gitlab
