@@ -1,7 +1,27 @@
-# Class:: gitlab::gitolite inherits gitlab::pre
-#
-#
-class gitlab::gitolite inherits gitlab::pre {
+# Class:: gitlab::gitolite
+class gitlab::gitolite {
+  include gitlab
+  require gitlab::pre
+
+  $git_user         = $gitlab::git_user
+  $git_home         = $gitlab::git_home
+  $git_admin_pubkey = $gitlab::git_admin_pubkey
+  $git_email        = $gitlab::git_email
+
+  case $gitlab::ssh_key_provider {
+    content: {
+      File["${git_home}/${gitlab::git_user}.pub"] {
+        content => $gitlab::git_admin_pubkey }
+    }
+    source: {
+      File["${git_home}/${gitlab::git_user}.pub"] {
+        source => $gitlab::git_admin_pubkey }
+    }
+    default: {
+      err "${gitlab::ssh_key_provider} not supported yet"
+    }
+  } # case ssh
+
   file {
     '/var/cache/debconf/gitolite.preseed':
       ensure  => file,
@@ -72,7 +92,7 @@ class gitlab::gitolite inherits gitlab::pre {
 
   # Solve strange issue with gitolite on ubuntu (https://github.com/sbadia/puppet-gitlab/issues/9)
   # So create a VERSION file if it doesn't exist
-  if $operatingsystem == 'Ubuntu' {
+  if $::operatingsystem == 'Ubuntu' {
     file {
       '/etc/gitolite':
         ensure  => directory,

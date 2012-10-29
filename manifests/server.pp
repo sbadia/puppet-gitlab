@@ -1,9 +1,14 @@
 # Class:: gitlab::gitlab inherits gitlab::gitolite
-#
-#
-class gitlab::gitlab inherits gitlab::gitolite {
+class gitlab::server {
+  include gitlab
+  require gitlab::gitolite
+  require gitlab::nginx
 
-  include 'gitlab::nginx'
+  $gitlab_dbtype = $gitlab::gitlab_dbtype
+  $gitlab_home   = $gitlab::gitlab_home
+  $gitlab_user   = $gitlab::gitlab_user
+  $git_home      = $gitlab::git_home
+  $git_email     = $gitlab::git_email
 
   package {
     'bundler':
@@ -35,7 +40,7 @@ class gitlab::gitlab inherits gitlab::gitolite {
 
   exec {
     'Get gitlab':
-      command     => "git clone -b ${gitlab_branch} ${gitlab_sources} ./gitlab",
+      command     => "git clone -b ${gitlab::gitlab_branch} ${gitlab::gitlab_sources} ./gitlab",
       creates     => "${gitlab_home}/gitlab",
       logoutput   => 'on_failure',
       cwd         => $gitlab_home,
@@ -129,19 +134,17 @@ class gitlab::gitlab inherits gitlab::gitolite {
       require => Sshkey['localhost']
   }
 
-  case $ssh_key_provider {
+  case $gitlab::ssh_key_provider {
     content: {
-      File["${gitlab_home}/.ssh/id_rsa"] { content => $git_admin_privkey }
-      File["${gitlab_home}/.ssh/id_rsa.pub"] { content => $git_admin_pubkey }
-      File["${git_home}/${git_user}.pub"] { content => $git_admin_pubkey }
+      File["${gitlab_home}/.ssh/id_rsa"] { content => $gitlab::git_admin_privkey }
+      File["${gitlab_home}/.ssh/id_rsa.pub"] { content => $gitlab::git_admin_pubkey }
     }
     source: {
-      File["${gitlab_home}/.ssh/id_rsa"] { source => $git_admin_privkey }
-      File["${gitlab_home}/.ssh/id_rsa.pub"] { source => $git_admin_pubkey }
-      File["${git_home}/${git_user}.pub"] { source => $git_admin_pubkey }
+      File["${gitlab_home}/.ssh/id_rsa"] { source => $gitlab::git_admin_privkey }
+      File["${gitlab_home}/.ssh/id_rsa.pub"] { source => $gitlab::git_admin_pubkey }
     }
     default: {
-      err "${ssh_key_provider} not supported yet"
+      err "${gitlab::ssh_key_provider} not supported yet"
     }
   } # case ssh
 
