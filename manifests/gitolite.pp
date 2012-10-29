@@ -92,7 +92,7 @@ class gitlab::gitolite {
 
   # Solve strange issue with gitolite on ubuntu (https://github.com/sbadia/puppet-gitlab/issues/9)
   # So create a VERSION file if it doesn't exist
-  if $::operatingsystem == 'Ubuntu' {
+  if $::osfamily == 'Debian' {
     file {
       '/etc/gitolite':
         ensure  => directory,
