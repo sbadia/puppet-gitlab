@@ -77,7 +77,7 @@ class gitlab(
       include gitlab::server
     }
     default: {
-      err "${::operatingsystem} not supported yet"
+      err "${::osfamily} not supported yet"
     }
   } # case
 } # Class:: gitlab
