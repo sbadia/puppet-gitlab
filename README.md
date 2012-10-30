@@ -12,13 +12,17 @@ This module is based on the admin guides for [gitlab](https://github.com/gitlabh
 
 ## Testing with vagrant
 
-A Debian Wheezy box is avaiable here <http://sebian.yasaw.net/pub/debian-wheezy-x64.box>
+### Using Debian Wheezy (will start as debian.gitlab.local on 192.168.111.10)
 
-    $ vagrant up
-    $ vagrant ssh gitlab
-    $ puppet apply --modulepath /srv/puppet_modules --certname gitlab_server /srv/vagrant-puppet/manifests/gitlab.pp
+    $ vagrant up debian 
+
+### Using Centos 6 (will start as centos.gitlab.local on 192.168.111.11)
+
+    $ vagrant up centos
 
 ## Test gitlab
+- add the ip and name to your /etc/hosts file
+- access via your browser under the hostname (e.g. http://centos.gitlab.local)
 - **Login**: admin@local.host
 - **Password**: 5iveL!fe
 
