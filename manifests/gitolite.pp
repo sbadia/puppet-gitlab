@@ -22,72 +22,50 @@ class gitlab::gitolite {
     }
   } # case ssh
 
+  File {owner => $git_user, group => $git_user, }
   file {
-    '/var/cache/debconf/gitolite.preseed':
-      ensure  => file,
-      content => template('gitlab/gitolite.preseed.erb'),
-      before  => Package['gitolite'];
     "${git_home}/${git_user}.pub":
-      ensure  => file,
-      owner   => $git_user,
-      group   => $git_user,
-      mode    => '0644',
-      require => User[$git_user];
-    "${git_home}/.gitolite.rc":
-      ensure  => file,
-      source  => 'puppet:///modules/gitlab/gitolite-rc',
-      owner   => $git_user,
-      group   => $git_user,
-      mode    => '0644',
-      require => [Package['gitolite'],User[$git_user]];
+      mode    => '0644';
     "${git_home}/.gitolite/hooks/common/post-receive":
-      ensure  => file,
       source  => 'puppet:///modules/gitlab/post-receive',
-      owner   => $git_user,
-      group   => $git_user,
       mode    => '0755',
-      require => Package['gitolite'];
-    "${git_home}/.gitolite":
-      ensure  => directory,
-      mode    => '0755',
-      require => Package['gitolite'];
+      require => Exec['gitolite setup'];
     "${git_home}/.gitconfig":
-      ensure  => file,
       content => template('gitlab/gitolite.gitconfig.erb'),
-      owner   => $git_user,
-      group   => $git_user,
-      mode    => '0644',
-      require => Package['gitolite'];
+      mode    => '0644';
     "${git_home}/.profile":
-      ensure => file,
       source => 'puppet:///modules/gitlab/git_user-dot-profile',
-      owner  => $git_user,
-      group  => $git_user,
       mode   => '0644';
-  }
-
-  package {
-    'gitolite':
-      ensure       => installed,
-      responsefile => '/var/cache/debconf/gitolite.preseed';
-  }
-
-  exec {
-    'gl-setup gitolite':
-      command     => "/bin/su -c '/usr/bin/gl-setup ${git_home}/${git_user}.pub > /dev/null 2>&1' ${git_user}",
-      user        => $git_user,
-      require     => [Package['gitolite'],File["${git_home}/.gitconfig"],File["${git_home}/${git_user}.pub"]],
-      logoutput   => 'on_failure',
-      unless      => "/usr/bin/test -f ${git_home}/projects.list";
-  }
-
-  file {
     "${git_home}/repositories":
       ensure    => directory,
-      owner     => $git_user,
-      group     => $git_user,
-      mode      => '0770',
-      require   => Package['gitolite'];
+      mode      => '0770';
+  }
+
+  case $::osfamily {
+    Debian: {
+        $glsetup_cmd = "/bin/su -c '/usr/bin/gl-setup ${git_home}/${git_user}.pub > /dev/null 2>&1' ${git_user}"
+        file { "${git_home}/.gitolite.rc":
+               source  => 'puppet:///modules/gitlab/gitolite-rc',
+               mode    => '0644',
+               before  => Exec['gitolite setup']
+        }
+    } #Debian
+    Redhat: {
+      file {
+        "${git_home}/.gitolite": ensure => directory, mode => '0750';
+        "${git_home}/.gitolite/logs": ensure => directory, mode => '0750', require => File["${git_home}/.gitolite"], before => Exec['gitolite setup'],
+      }
+      $glsetup_cmd = "/usr/bin/gitolite setup -pk ${git_home}/${git_user}.pub"
+    } # Redhat
+  }
+
+  exec { 'gitolite setup':
+    command     => $glsetup_cmd,
+    user        => $git_user,
+    environment => ["HOME=${git_home}"],
+    require     => [File["${git_home}/.gitconfig"],File["${git_home}/${git_user}.pub"]],
+    logoutput   => 'on_failure',
+    creates     => "${git_home}/projects.list";
   }
 
   # Solve strange issue with gitolite on ubuntu (https://github.com/sbadia/puppet-gitlab/issues/9)

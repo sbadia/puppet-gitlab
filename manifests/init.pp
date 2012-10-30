@@ -72,7 +72,7 @@ class gitlab(
     $ldap_bind_password = $gitlab::params::ldap_bind_password
   ) inherits gitlab::params {
   case $::osfamily {
-    Debian: {
+    Debian, Redhat: {
       include gitlab::server
     }
     default: {
