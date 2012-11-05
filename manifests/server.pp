@@ -114,6 +114,11 @@ class gitlab::server {
       owner  => $gitlab_user,
       group  => $gitlab_user,
       mode   => '0700';
+    "/var/lib/gitlab":
+      ensure => directory,
+      owner  => $gitlab_user,
+      group  => nginx,
+      mode   => '0775';
     "${gitlab_home}/.ssh/id_rsa":
       ensure  => file,
       owner   => $gitlab_user,
