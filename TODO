@@ -1,4 +1,0 @@
-nginx:
-  - Vhost management
-puppet:
-  - Dynamic lookup is deprecated, rewrite global var with (http://docs.puppetlabs.com/guides/scope_and_puppet.html)

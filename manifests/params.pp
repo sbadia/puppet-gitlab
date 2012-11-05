@@ -23,5 +23,4 @@ class gitlab::params {
   $ldap_method        = 'ssl'
   $ldap_bind_dn       = ''
   $ldap_bind_password = ''
-  $ldap_title         = ''
 } # Class:: gitlab::params

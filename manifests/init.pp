@@ -13,9 +13,8 @@
 # [gitlab_home] Home directory for gitlab installation
 # [gitlab_comment] Gitlab comment
 # [gitlab_sources] Gitlab sources (github)
-# [gitlab_dbtype] Gitlab database type (sqlite/mysql)
+# [gitlab_dbtype] Gitlab database type (sqlite/mysql/pgsql)
 # [ldap_enabled] Enable LDAP backend for gitlab web (see bellow)
-# [ldap_title] Name of LDAP configuration
 # [ldap_host] FQDN of LDAP server
 # [ldap_base] LDAP base dn
 # [ldap_uid] Uid for LDAP auth
@@ -37,12 +36,13 @@
 #
 # === Authors
 #
-# Sebastien Badia (<seb@sebian.fr>)
-# Matt Klich (<matt@elementalvoid.com>)
+# Sebastien Badia <seb@sebian.fr>
+# Matt Klich <matt@elementalvoid.com>
+# Steffen Roegner <steffen@sroegner.org>
 #
 # === Copyright
 #
-# Sebastien Badia © 2012
+# See LICENSE file, Sebastien Badia © 2012
 # Tue Jul 03 20:06:33 +0200 2012
 
 # Class:: gitlab
@@ -63,7 +63,6 @@ class gitlab(
     $gitlab_branch      = $gitlab::params::gitlab_branch,
     $gitlab_dbtype      = $gitlab::params::gitlab_dbtype,
     $ldap_enabled       = $gitlab::params::ldap_enabled,
-    $ldap_title         = $gitlab::params::ldap_title,
     $ldap_host          = $gitlab::params::ldap_host,
     $ldap_base          = $gitlab::params::ldap_base,
     $ldap_uid           = $gitlab::params::ldap_uid,
@@ -77,7 +76,7 @@ class gitlab(
       include gitlab::server
     }
     default: {
-      err "${::operatingsystem} not supported yet"
+      err "${::osfamily} not supported yet"
     }
   } # case
 } # Class:: gitlab

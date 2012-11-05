@@ -18,7 +18,7 @@ node /gitlab_server/ {
       gitlab_comment    => 'GITLab is awesome',
       #FIXME mysql db not yet created, see https://github.com/sbadia/puppet-gitlab/issues/11
       gitlab_dbtype     => 'mysql',
-      ldap_enable       => true,
+      ldap_enabled      => true,
       ldap_host         => 'ldap.foobar.fr',
       ldap_base         => 'dc=foobar,dc=fr',
       ldap_uid          => 'uid',
