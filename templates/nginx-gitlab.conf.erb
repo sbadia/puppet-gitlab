@@ -2,7 +2,8 @@
 # Module:: gitlab
 #
 upstream gitlab {
-    server unix:<%= gitlab_home %>/gitlab/tmp/sockets/gitlab.socket;
+#    server unix:<%= gitlab_home %>/gitlab/tmp/sockets/gitlab.socket;
+    server unix:/var/lib/gitlab/gitlab.socket;
 }
 
 server {
