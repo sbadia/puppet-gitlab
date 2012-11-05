@@ -27,9 +27,8 @@ Vagrant::Config.run do |config|
     hq.vm.box = boxes[default]['name']
     config.vm.box_url = boxes[default]['url']
 
-    hq.vm.host_name = "gitlab.localdomain.local"
     hq.vm.customize [ "modifyvm", :id , "--name", "gitlab_#{boxes[default]['name']}" , "--memory", "2048", "--cpus", "1"]
-
+    hq.vm.host_name = "gitlab.localdomain.local"
     hq.vm.network :hostonly, "192.168.111.10"
 
     hq.vm.share_folder "puppet_modules", "/srv/puppet_modules/gitlab", "."
