@@ -14,11 +14,11 @@ This module is based on the admin guides for [gitlab](https://github.com/gitlabh
 
 ### Using Debian Wheezy
 
-    $ _vagrant up debian7_ (this is the default, _vagrant up_ does the same) 
+    $ *vagrant up debian7* (this is the default, *vagrant up* does the same) 
 
 ### Using Centos 6
 
-    $ _vagrant up centos6_
+    $ *vagrant up centos6*
 
 ## Test gitlab
 - add the ip and name to your /etc/hosts file (192.168.111.10 gitlab.localdomain.local)
