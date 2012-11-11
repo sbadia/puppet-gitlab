@@ -12,17 +12,17 @@ This module is based on the admin guides for [gitlab](https://github.com/gitlabh
 
 ## Testing with vagrant
 
-### Using Debian Wheezy (will start as debian.gitlab.local on 192.168.111.10)
+### Using Debian Wheezy (the default)
 
-    $ vagrant up debian 
+$ vagrant up debian7
 
-### Using Centos 6 (will start as centos.gitlab.local on 192.168.111.11)
+### Using Centos 6
 
-    $ vagrant up centos
+$ vagrant up centos6
 
 ## Test gitlab
-- add the ip and name to your /etc/hosts file
-- access via your browser under the hostname (e.g. http://centos.gitlab.local)
+- add the ip and name to your /etc/hosts file (192.168.111.10 gitlab.localdomain.local)
+- access via your browser under the hostname (e.g. http://gitlab.localdomain.local)
 - **Login**: admin@local.host
 - **Password**: 5iveL!fe
 
