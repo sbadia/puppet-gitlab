@@ -99,7 +99,7 @@ class gitlab::pre {
               path        => '/usr/sbin:/sbin:/usr/bin:/bin',
               user        => root,
               timeout     => 900,
-              require     => Exec['Untar Ruby 1.9.3'],
+              require     => [Exec['Untar Ruby 1.9.3'],Package['build-essential']],
               logoutput   => 'on_failure',
               refreshonly => true;
           }
