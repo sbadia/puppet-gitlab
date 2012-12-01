@@ -77,8 +77,10 @@ class gitlab::debian_packages {
   $git_user       = $gitlab::git_user
   $git_admin_pubkey = $gitlab::git_admin_pubkey
 
-  exec { 'apt-get update':
-    command => '/usr/bin/apt-get update',
+  exec {
+    'apt-get update':
+      command     => '/usr/bin/apt-get update',
+      refreshonly => true;
   }
 
   package {
@@ -86,8 +88,8 @@ class gitlab::debian_packages {
       'openssh-server','python-pip','libicu-dev',
       'libxml2-dev','libxslt1-dev','python-dev',
       'libmysql++-dev','libmysqlclient-dev']:
-      ensure => installed,
-      require => Exec['apt-get update'],
+        ensure => installed,
+        require => Exec['apt-get update'],
   }
 
   file {
@@ -127,8 +129,8 @@ class gitlab::debian_packages {
     # Need to install a fresh ruby version…
     'squeeze','precise': {
       package {
-        ['checkinstall','libcurl4-openssl-dev','libreadline6-dev',
-        'libssl-dev','build-essential','zlib1g-dev','libyaml-dev']:
+        ['checkinstall','libcurl4-openssl-dev','libreadline6-dev','libpq-dev',
+        'libssl-dev','build-essential','zlib1g-dev','libyaml-dev','libc6-dev']:
           require => Exec['apt-get update'],
           ensure => installed;
       }
