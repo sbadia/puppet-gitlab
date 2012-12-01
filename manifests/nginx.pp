@@ -1,4 +1,4 @@
-# Class:: gitlab::gitlab inherits gitlab::gitolite
+# Class:: gitlab::nginx
 #
 #
 class gitlab::nginx {
@@ -27,5 +27,4 @@ class gitlab::nginx {
       require => Package['nginx'],
       enable  => true;
   }
-
-} # Class:: gitlab::gitlab inherits gitlab::gitolite
+} # Class:: gitlab::nginx
