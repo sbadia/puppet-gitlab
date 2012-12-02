@@ -15,7 +15,7 @@ class gitlab::server {
       ensure   => installed,
       provider => gem;
     'charlock_holmes':
-      ensure   => '0.6.8',
+      ensure   => '0.6.9',
       provider => gem;
     'pygments':
       ensure   => installed,
@@ -39,6 +39,11 @@ class gitlab::server {
   }
 
   exec {
+    'Setup GIT':
+      command => "git config --global user.email \"${gitlab_user}@${fqdn}\";git config --global user.name 'Gitlab'",
+      path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+      user    => $gitlab_user,
+      unless  => "test -f ${gitlab_home}/.gitconfig";
     'Get gitlab':
       command     => "git clone -b ${gitlab::gitlab_branch} ${gitlab::gitlab_sources} ./gitlab",
       creates     => "${gitlab_home}/gitlab",
