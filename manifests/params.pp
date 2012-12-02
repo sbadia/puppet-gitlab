@@ -14,6 +14,8 @@ class gitlab::params {
   $gitlab_comment     = 'gitlab system'
   $gitlab_sources     = 'git://github.com/gitlabhq/gitlabhq.git'
   $gitlab_branch      = 'stable'
+  $gitolite_sources   = 'git://github.com/gitlabhq/gitolite.git'
+  $gitolite_branch    = 'gl-v304'
   $gitlab_dbtype      = 'sqlite'
   $ldap_enabled       = false
   $ldap_host          = 'ldap.domain.com'

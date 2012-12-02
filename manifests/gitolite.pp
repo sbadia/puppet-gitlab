@@ -1,4 +1,5 @@
 # Class:: gitlab::gitolite
+#
 class gitlab::gitolite {
   include gitlab
   require gitlab::pre
@@ -29,43 +30,65 @@ class gitlab::gitolite {
     "${git_home}/.gitolite/hooks/common/post-receive":
       source  => 'puppet:///modules/gitlab/post-receive',
       mode    => '0755',
-      require => Exec['gitolite setup'];
+      require => Exec['Setup gitolite'];
     "${git_home}/.gitconfig":
       content => template('gitlab/gitolite.gitconfig.erb'),
       mode    => '0644';
     "${git_home}/.profile":
-      source => 'puppet:///modules/gitlab/git_user-dot-profile',
-      mode   => '0644';
+      source  => 'puppet:///modules/gitlab/git_user-dot-profile',
+      mode    => '0644';
     "${git_home}/repositories":
-      ensure    => directory,
-      mode      => '0770';
+      ensure  => directory,
+      require => Exec['Setup gitolite'],
+      mode    => '0770';
+    "${git_home}/bin":
+      ensure  => directory;
   }
 
   case $::osfamily {
     Debian: {
-        $glsetup_cmd = "/bin/su -c '/usr/bin/gl-setup ${git_home}/${git_user}.pub > /dev/null 2>&1' ${git_user}"
-        file { "${git_home}/.gitolite.rc":
-               source  => 'puppet:///modules/gitlab/gitolite-rc',
-               mode    => '0644',
-               before  => Exec['gitolite setup']
+      file {
+        "${git_home}/.gitolite.rc":
+          source  => 'puppet:///modules/gitlab/gitolite-rc',
+          mode    => '0644',
+          before  => Exec['Setup gitolite'];
         }
     } #Debian
     Redhat: {
       file {
-        "${git_home}/.gitolite": ensure => directory, mode => '0750';
-        "${git_home}/.gitolite/logs": ensure => directory, mode => '0750', require => File["${git_home}/.gitolite"], before => Exec['gitolite setup'],
+        "${git_home}/.gitolite":
+          ensure  => directory,
+          mode    => '0750';
+        "${git_home}/.gitolite/logs":
+          ensure  => directory,
+          mode    => '0750',
+          require => File["${git_home}/.gitolite"],
+          before  => Exec['Setup gitolite'];
       }
-      $glsetup_cmd = "/usr/bin/gitolite setup -pk ${git_home}/${git_user}.pub"
     } # Redhat
-  }
+  } # Case
 
-  exec { 'gitolite setup':
-    command     => $glsetup_cmd,
-    user        => $git_user,
-    environment => ["HOME=${git_home}"],
-    require     => [File["${git_home}/.gitconfig"],File["${git_home}/${git_user}.pub"]],
-    logoutput   => 'on_failure',
-    creates     => "${git_home}/projects.list";
+  exec {
+    'Get patched gitolite':
+      command   => "git clone -b ${gitlab::gitolite_branch} ${gitlab::gitolite_sources} ${git_home}/gitolite",
+      path      => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+      logoutput => 'on_failure',
+      user      => $git_user,
+      require   => User[$git_user],
+      unless    => "/usr/bin/test -d ${git_home}/gitolite";
+    'Install patched gitolite':
+      command     => "${git_home}/gitolite/install -ln ${git_home}/bin",
+      user        => $git_user,
+      require     => [Exec['Get patched gitolite'],File["${git_home}/bin"]],
+      unless    => "/usr/bin/test -f ${git_home}/bin/gitolite";
+    'Setup gitolite':
+      command     => "gitolite setup -pk ${git_home}/${git_user}.pub",
+      path        => "${git_home}/bin",
+      user        => $git_user,
+      environment => ["HOME=${git_home}"],
+      require     => [File["${git_home}/.gitconfig"],File["${git_home}/${git_user}.pub"],Exec['Install patched gitolite']],
+      logoutput   => 'on_failure',
+      creates     => "${git_home}/projects.list";
   }
 
   # Solve strange issue with gitolite on ubuntu (https://github.com/sbadia/puppet-gitlab/issues/9)
@@ -85,4 +108,4 @@ class gitlab::gitolite {
         require => File['/etc/gitolite'];
     }
   }
-} # Class:: gitlab::gitolite inherits gitlab::pre
+} # Class:: gitlab::gitolite

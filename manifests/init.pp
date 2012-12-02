@@ -13,6 +13,9 @@
 # [gitlab_home] Home directory for gitlab installation
 # [gitlab_comment] Gitlab comment
 # [gitlab_sources] Gitlab sources (github)
+# [gitlab_branch] Gitlab branch (default stable)
+# [gitolite_sources] Gitolite sources (github)
+# [gitolite_banch] Gitolite branch (default gl-304 from gitlabhq)
 # [gitlab_dbtype] Gitlab database type (sqlite/mysql/pgsql)
 # [ldap_enabled] Enable LDAP backend for gitlab web (see bellow)
 # [ldap_host] FQDN of LDAP server
@@ -61,6 +64,8 @@ class gitlab(
     $gitlab_comment     = $gitlab::params::gitlab_comment,
     $gitlab_sources     = $gitlab::params::gitlab_sources,
     $gitlab_branch      = $gitlab::params::gitlab_branch,
+    $gitolite_sources   = $gitlab::params::gitolite_sources,
+    $gitolite_branch    = $gitlab::params::gitolite_branch,
     $gitlab_dbtype      = $gitlab::params::gitlab_dbtype,
     $ldap_enabled       = $gitlab::params::ldap_enabled,
     $ldap_host          = $gitlab::params::ldap_host,

@@ -48,8 +48,10 @@ class gitlab::redhat_packages {
   Package{ ensure => latest, provider => yum, }
   package {
     [ 'git','wget','curl','redis','openssh-server','python-pip','libicu-devel',
-      'libxml2-devel','libxslt-devel','python-devel', 'libcurl-devel','readline-devel',
-      'openssl-devel','zlib-devel','libyaml-devel', 'gitolite3', 'postgresql-devel']: }
+      'libxml2-devel','libxslt-devel','python-devel','libcurl-devel','readline-devel',
+      'openssl-devel','zlib-devel','libyaml-devel','postgresql-devel']:
+        ensure => installed;
+  }
 
   case $gitlab_dbtype {
     'sqlite': {
@@ -88,21 +90,8 @@ class gitlab::debian_packages {
       'openssh-server','python-pip','libicu-dev',
       'libxml2-dev','libxslt1-dev','python-dev',
       'libmysql++-dev','libmysqlclient-dev']:
-        ensure => installed,
+        ensure  => installed,
         require => Exec['apt-get update'],
-  }
-
-  file {
-    '/var/cache/debconf/gitolite.preseed':
-      content => template('gitlab/gitolite.preseed.erb'),
-      owner => root, group => root,
-  }
-
-  package {
-    'gitolite':
-      ensure       => installed,
-      responsefile => '/var/cache/debconf/gitolite.preseed',
-      require      => File['/var/cache/debconf/gitolite.preseed'];
   }
 
   case $gitlab_dbtype {
@@ -110,14 +99,14 @@ class gitlab::debian_packages {
       package {
         ['libsqlite3-dev','sqlite3']:
           require => Exec['apt-get update'],
-          ensure => installed;
+          ensure  => installed;
       }
     } # Sqlite
     'mysql': {
       package {
         ['mysql-server','mysql-client']:
           require => Exec['apt-get update'],
-          ensure => installed;
+          ensure  => installed;
       }
     } # Mysql
     default: {
@@ -132,7 +121,7 @@ class gitlab::debian_packages {
         ['checkinstall','libcurl4-openssl-dev','libreadline6-dev','libpq-dev',
         'libssl-dev','build-essential','zlib1g-dev','libyaml-dev','libc6-dev']:
           require => Exec['apt-get update'],
-          ensure => installed;
+          ensure  => installed;
       }
 
       exec {
@@ -168,11 +157,15 @@ class gitlab::debian_packages {
       package {
         ['ruby','ruby-dev','rubygems','rake']:
           require => Exec['apt-get update'],
-          ensure => installed;
+          ensure  => installed;
       }
     } # Default
   } # Case:: $::operatingsystem
 
-  service { 'redis-server': ensure => running, enable => true, require => Package['redis-server'], }
-
-}
+  service {
+    'redis-server':
+      ensure  => running,
+      enable  => true,
+      require => Package['redis-server'];
+  }
+} # Class:: gitlab::pre
