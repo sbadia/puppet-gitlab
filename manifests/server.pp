@@ -39,11 +39,6 @@ class gitlab::server {
   }
 
   exec {
-    'Setup GIT':
-      command => "git config --global user.email \"${gitlab_user}@${fqdn}\";git config --global user.name 'Gitlab'",
-      path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-      user    => $gitlab_user,
-      unless  => "test -f ${gitlab_home}/.gitconfig";
     'Get gitlab':
       command     => "git clone -b ${gitlab::gitlab_branch} ${gitlab::gitlab_sources} ./gitlab",
       creates     => "${gitlab_home}/gitlab",
@@ -121,7 +116,10 @@ class gitlab::server {
       ensure  => directory,
       owner   => $gitlab_user,
       group   => $gitlab_user,
-      require => Exec['Get gitlab'],
+      require => Exec['Get gitlab'];
+    "${gitlab_home}/.gitconfig":
+      content => template('gitlab/gitolite.gitconfig.erb'),
+      mode    => '0644';
   }
 
   sshkey {
