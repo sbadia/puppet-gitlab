@@ -1,6 +1,6 @@
 # Module gitlab
 
-* Tested with Gitlab 3.0.3 [7ecfacc]
+* Tested successfully with Gitlab 3.1.0 [319f0c3]
 
 [GitLab](http://gitlabhq.com) is a free project and repository management application
 
@@ -14,11 +14,17 @@ This module is based on the admin guides for [gitlab](https://github.com/gitlabh
 
 ### Using Debian Wheezy (the default)
 
-$ vagrant up debian7
+$ vagrant up
+or
+$ OS=debian7 vagrant up
 
 ### Using Centos 6
 
-$ vagrant up centos6
+$ OS=centos6 vagrant up
+
+### Using Ubuntu Quantal Quetzal (12.10)
+
+$ OS=ubuntu vagrant up
 
 ## Test gitlab
 - add the ip and name to your /etc/hosts file (192.168.111.10 gitlab.localdomain.local)
