@@ -26,7 +26,8 @@ class gitlab::gitolite {
   File {owner => $git_user, group => $git_user, }
   file {
     "${git_home}/${git_user}.pub":
-      mode    => '0644';
+      mode    => '0644',
+      before  => Exec['Setup gitolite'];
     "${git_home}/.gitolite/hooks/common/post-receive":
       source  => 'puppet:///modules/gitlab/post-receive',
       mode    => '0755',
@@ -82,15 +83,15 @@ class gitlab::gitolite {
       require     => [Exec['Get patched gitolite'],File["${git_home}/bin"]],
       unless    => "/usr/bin/test -f ${git_home}/bin/gitolite";
     'Setup gitolite':
-      command     => "gitolite setup -pk ${git_home}/${git_user}.pub",
-      path        => "${git_home}/bin",
-      user        => $git_user,
-      environment => ["HOME=${git_home}"],
-      require     => [File["${git_home}/.gitconfig"],File["${git_home}/${git_user}.pub"],Exec['Install patched gitolite']],
+      command     => "sudo -u ${git_user} -H sh -c \"PATH=${git_home}/bin:/usr/sbin:/usr/bin:/sbin:/bin; gitolite setup -pk ${git_home}/${git_user}.pub\"",
+      path        => "/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+      user        => root,
+      require     => [File["${git_home}/.gitconfig"],File["${git_home}/${git_user}.pub"]],
       logoutput   => 'on_failure',
       creates     => "${git_home}/projects.list";
   }
 
+  #FIXME already needed ?
   # Solve strange issue with gitolite on ubuntu (https://github.com/sbadia/puppet-gitlab/issues/9)
   # So create a VERSION file if it doesn't exist
   if $::osfamily == 'Debian' {
