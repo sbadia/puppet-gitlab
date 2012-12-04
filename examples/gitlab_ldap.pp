@@ -1,4 +1,4 @@
-# Configure a gitlab server with LDAP auth (gitlab.domain.tld)
+# Configure a gitlab server with LDAP auth (gitlab.foobar.fr)
 node /gitlab_server/ {
   class {
     'gitlab':
@@ -16,6 +16,11 @@ node /gitlab_server/ {
       gitlab_user       => 'gitlab',
       gitlab_home       => '/home/gitlab',
       gitlab_comment    => 'GITLab is awesome',
+      # Setup gitlab sources and branch (default to GIT proto)
+      gitlab_sources    => 'https://github.com/gitlabhq/gitlabhq.git',
+      gitlab_branch     => 'stable',
+      gitolite_sources  => 'https://github.com/gitlabhq/gitolite.git',
+      gitolite_branch   => 'gl-v304',
       #FIXME mysql db not yet created, see https://github.com/sbadia/puppet-gitlab/issues/11
       gitlab_dbtype     => 'mysql',
       ldap_enabled      => true,
