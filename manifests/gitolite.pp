@@ -47,14 +47,6 @@ class gitlab::gitolite {
   }
 
   case $::osfamily {
-    Debian: {
-      file {
-        "${git_home}/.gitolite.rc":
-          source  => 'puppet:///modules/gitlab/gitolite-rc',
-          mode    => '0644',
-          before  => Exec['Setup gitolite'];
-        }
-    } #Debian
     Redhat: {
       file {
         "${git_home}/.gitolite":
@@ -89,24 +81,5 @@ class gitlab::gitolite {
       require     => [File["${git_home}/.gitconfig"],File["${git_home}/${git_user}.pub"]],
       logoutput   => 'on_failure',
       creates     => "${git_home}/projects.list";
-  }
-
-  #FIXME already needed ?
-  # Solve strange issue with gitolite on ubuntu (https://github.com/sbadia/puppet-gitlab/issues/9)
-  # So create a VERSION file if it doesn't exist
-  if $::osfamily == 'Debian' {
-    file {
-      '/etc/gitolite':
-        ensure  => directory,
-        mode    => '0755';
-      '/etc/gitolite/VERSION':
-        ensure  => file,
-        content => '42',
-        replace => false,
-        owner   => root,
-        group   => root,
-        mode    => '0644',
-        require => File['/etc/gitolite'];
-    }
   }
 } # Class:: gitlab::gitolite
