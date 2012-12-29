@@ -80,7 +80,7 @@ class gitlab::debian_packages {
   }
 
   case $::lsbdistcodename {
-    # Need to install a fresh ruby version…
+    # Need to install a fresh ruby version...
     'squeeze','precise': {
       package {
         ['checkinstall','libcurl4-openssl-dev','libreadline6-dev','libpq-dev',
