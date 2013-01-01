@@ -49,19 +49,9 @@ class gitlab::redhat_packages {
   package {
     [ 'git','wget','curl','redis','openssh-server','python-pip','libicu-devel',
       'libxml2-devel','libxslt-devel','python-devel','libcurl-devel','readline-devel',
-      'openssl-devel','zlib-devel','libyaml-devel','postgresql-devel']:
+      'openssl-devel','zlib-devel','libyaml-devel','postgresql-devel','mysql-devel']:
         ensure => installed;
   }
-
-  case $gitlab_dbtype {
-    'mysql': {
-      package {
-        ['mysql-client', 'mysql-devel']: }
-    } # Mysql
-    default: {
-      err "${gitlab_dbtype} not supported yet"
-    }
-  } # Case:: $gitlab_dbtype
 
   service { 'redis': ensure => running, enable => true, require => Package['redis'], }
 
@@ -88,19 +78,6 @@ class gitlab::debian_packages {
         ensure  => installed,
         require => Exec['apt-get update'],
   }
-
-  case $gitlab_dbtype {
-    'mysql': {
-      package {
-        'mysql-client':
-          require => Exec['apt-get update'],
-          ensure  => installed;
-      }
-    } # Mysql
-    default: {
-      err "${gitlab_dbtype} not supported yet"
-    }
-  } # Case:: $gitlab_dbtype
 
   case $::lsbdistcodename {
     # Need to install a fresh ruby version…
