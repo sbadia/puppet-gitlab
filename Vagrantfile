@@ -31,14 +31,16 @@ box_data = boxes[type] || boxes[default_type]
 
 Vagrant::Config.run do |config|
   config.vm.define :gitlab do |hq|
-    hq.vm.box     = box_data['name'] 
+    hq.vm.box     = box_data['name']
     hq.vm.box_url = box_data['url']
 
     hq.vm.customize [ "modifyvm", :id , "--name", "gitlab_#{box_data['name']}" , "--memory", "2048", "--cpus", "1"]
     hq.vm.host_name = "gitlab.localdomain.local"
     hq.vm.network :hostonly, "192.168.111.10"
 
-    hq.vm.share_folder "puppet_modules", "/srv/puppet_modules/gitlab", "."
+    hq.vm.share_folder "sbadia_gitlab", "/srv/puppet_modules/gitlab", "."
+    # https://github.com/puppetlabs/puppetlabs-mysql
+    hq.vm.share_folder "puppetlabs_mysql", "/srv/puppet_modules/mysql", "../../puppetlabs/puppetlabs-mysql/"
 
     hq.vm.provision :puppet, :pp_path => "/srv/vagrant-puppet" do |puppet|
       #puppet.options = [ "--debug", "--modulepath", "/srv/puppet_modules", "--certname gitlab_server"]

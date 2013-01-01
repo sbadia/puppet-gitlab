@@ -1,0 +1,29 @@
+# MANAGED BY PUPPET
+# Module:: gitlab
+#
+# PRODUCTION
+#
+<% case gitlab_dbtype -%>
+<% when 'mysql' -%>
+production:
+  adapter: mysql2
+  encoding: utf8
+  reconnect: false
+  database: <%= gitlab_dbname %>
+  pool: 5
+  username: <%= gitlab_dbuser %>
+  password: <%= gitlab_dbpwd %>
+  # host: localhost
+  # socket: /tmp/mysql.sock
+<% when 'postgres' -%>
+production:
+  adapter: postgresql
+  encoding: unicode
+  database: <%= gitlab_dbname %>
+  pool: 5
+  username: <%= gitlab_dbuser %>
+  password: <%= gitlab_dbpwd %>
+  # host: localhost
+  # port: 5432
+  # socket: /tmp/postgresql.sock
+<% end -%>

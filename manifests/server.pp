@@ -4,11 +4,12 @@ class gitlab::server {
   require gitlab::gitolite
   require gitlab::nginx
 
-  $gitlab_dbtype = $gitlab::gitlab_dbtype
-  $gitlab_home   = $gitlab::gitlab_home
-  $gitlab_user   = $gitlab::gitlab_user
-  $git_home      = $gitlab::git_home
-  $git_email     = $gitlab::git_email
+  $gitlab_dbtype  = $gitlab::gitlab_dbtype
+  $gitlab_dbsetup = $gitlab::gitlab_dbsetup
+  $gitlab_home    = $gitlab::gitlab_home
+  $gitlab_user    = $gitlab::gitlab_user
+  $git_home       = $gitlab::git_home
+  $git_email      = $gitlab::git_email
 
   package {
     'bundler':
@@ -32,6 +33,13 @@ class gitlab::server {
     default: {
       # Install all db type gems
       $gitlab_without_gems = ''
+    }
+  }
+
+  if ($gitlab_dbsetup == true) {
+    File["${gitlab_home}/gitlab/config/database.yml"]{
+      ensure => file,
+      content => template('gitlab/database.yml.erb'),
     }
   }
 
