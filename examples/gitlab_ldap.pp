@@ -1,5 +1,23 @@
 # Configure a gitlab server with LDAP auth (gitlab.foobar.fr)
 node /gitlab_server/ {
+  $gitlab_dbname  = 'gitlab_prod'
+  $gitlab_dbuser  = 'labu'
+  $gitlab_dbpwd   = 'labpass'
+
+  # git://github.com/puppetlabs/puppetlabs-mysql.git
+  include 'mysql'
+
+  class { 'mysql::server': }
+  mysql::db {
+    $gitlab_dbname:
+      ensure   => 'present',
+      charset  => 'utf8',
+      user     => $gitlab_dbuser,
+      password => $gitlab_dbpwd,
+      host     => 'localhost',
+      grant    => ['all'],
+  }
+
   class {
     'gitlab':
       git_user          => 'git',
@@ -23,6 +41,10 @@ node /gitlab_server/ {
       gitolite_branch   => 'gl-v304',
       #FIXME mysql db not yet created, see https://github.com/sbadia/puppet-gitlab/issues/11
       gitlab_dbtype     => 'mysql',
+      gitlab_dbsetup    => true,
+      gitlab_dbname     => $gitlab_dbname,
+      gitlab_dbuser     => $gitlab_dbuser,
+      gitlab_dbpwd      => $gitlab_dbpwd,
       ldap_enabled      => true,
       ldap_host         => 'ldap.foobar.fr',
       ldap_base         => 'dc=foobar,dc=fr',
