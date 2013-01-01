@@ -5,7 +5,6 @@ class gitlab::server {
   require gitlab::nginx
 
   $gitlab_dbtype  = $gitlab::gitlab_dbtype
-  $gitlab_dbsetup = $gitlab::gitlab_dbsetup
   $gitlab_dbname  = $gitlab::gitlab_dbname
   $gitlab_dbuser  = $gitlab::gitlab_dbuser
   $gitlab_dbpwd   = $gitlab::gitlab_dbpwd
@@ -36,13 +35,6 @@ class gitlab::server {
     default: {
       # Install all db type gems
       $gitlab_without_gems = ''
-    }
-  }
-
-  if ($gitlab_dbsetup == true) {
-    File["${gitlab_home}/gitlab/config/database.yml"]{
-      ensure => file,
-      content => template('gitlab/database.yml.erb'),
     }
   }
 
@@ -101,8 +93,8 @@ class gitlab::server {
 
   file {
     "${gitlab_home}/gitlab/config/database.yml":
-      ensure  => link,
-      target  => "${gitlab_home}/gitlab/config/database.yml.${gitlab_dbtype}",
+      ensure  => file,
+      content => template('gitlab/database.yml.erb'),
       owner   => $gitlab_user,
       group   => $gitlab_user,
       require => [Exec['Get gitlab'],File["${gitlab_home}/gitlab/config/gitlab.yml"]];

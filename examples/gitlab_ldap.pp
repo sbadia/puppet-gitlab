@@ -41,7 +41,6 @@ node /gitlab_server/ {
       gitolite_branch   => 'gl-v304',
       #FIXME mysql db not yet created, see https://github.com/sbadia/puppet-gitlab/issues/11
       gitlab_dbtype     => 'mysql',
-      gitlab_dbsetup    => true,
       gitlab_dbname     => $gitlab_dbname,
       gitlab_dbuser     => $gitlab_dbuser,
       gitlab_dbpwd      => $gitlab_dbpwd,

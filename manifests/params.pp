@@ -17,7 +17,6 @@ class gitlab::params {
   $gitolite_sources   = 'git://github.com/gitlabhq/gitolite.git'
   $gitolite_branch    = 'gl-v320'
   $gitlab_dbtype      = 'mysql'
-  $gitlab_dbsetup     = false
   $gitlab_dbname      = 'gitladb'
   $gitlab_dbuser      = 'gitladbu'
   $gitlab_dbpwd       = 'changeme'

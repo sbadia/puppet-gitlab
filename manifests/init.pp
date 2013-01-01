@@ -17,7 +17,6 @@
 # [gitolite_sources] Gitolite sources (github)
 # [gitolite_banch] Gitolite branch (default gl-320 from gitlabhq)
 # [gitlab_dbtype] Gitlab database type (mysql/pgsql)
-# [gitlab_dbsetup] Boolean, for enable mysql/pgsql setup
 # [gitlab_dbname] Gitlab database name
 # [gitlab_dbuser] Gitlab database user
 # [gitlab_dbpwd] Gitlab database password
@@ -71,7 +70,6 @@ class gitlab(
     $gitolite_sources   = $gitlab::params::gitolite_sources,
     $gitolite_branch    = $gitlab::params::gitolite_branch,
     $gitlab_dbtype      = $gitlab::params::gitlab_dbtype,
-    $gitlab_dbsetup     = $gitlab::params::gitlab_dbsetup,
     $gitlab_dbname      = $gitlab::params::gitlab_dbname,
     $gitlab_dbuser      = $gitlab::params::gitlab_dbuser,
     $gitlab_dbpwd       = $gitlab::params::gitlab_dbpwd,
