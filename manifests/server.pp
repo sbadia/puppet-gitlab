@@ -6,6 +6,9 @@ class gitlab::server {
 
   $gitlab_dbtype  = $gitlab::gitlab_dbtype
   $gitlab_dbsetup = $gitlab::gitlab_dbsetup
+  $gitlab_dbname  = $gitlab::gitlab_dbname
+  $gitlab_dbuser  = $gitlab::gitlab_dbuser
+  $gitlab_dbpwd   = $gitlab::gitlab_dbpwd
   $gitlab_home    = $gitlab::gitlab_home
   $gitlab_user    = $gitlab::gitlab_user
   $git_home       = $gitlab::git_home
