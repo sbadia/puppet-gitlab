@@ -32,6 +32,10 @@ class gitlab::gitolite {
       source  => 'puppet:///modules/gitlab/post-receive',
       mode    => '0755',
       require => Exec['Setup gitolite'];
+    "${git_home}/.gitolite":
+      ensure  => directory,
+      mode    => '0750',
+      require => Exec['Setup gitolite'];
     "${git_home}/.gitconfig":
       content => template('gitlab/gitolite.gitconfig.erb'),
       mode    => '0644';
@@ -41,7 +45,7 @@ class gitlab::gitolite {
     "${git_home}/repositories":
       ensure  => directory,
       require => Exec['Setup gitolite'],
-      mode    => '0770';
+      mode    => '6770';
     "${git_home}/bin":
       ensure  => directory;
   }
