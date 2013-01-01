@@ -1,8 +1,8 @@
 # Module gitlab
 
-* Tested successfully with Gitlab 3.1.0 [319f0c3]
+* Tested successfully with Gitlab 4.0 [708a0d4]
 
-[GitLab](http://gitlabhq.com) is a free project and repository management application
+[GitLab](http://gitlabhq.org/) is a free project and repository management application
 
 A ['Puppet Module'](http://docs.puppetlabs.com/learning/modules1.html#modules)
 is a collection of related content that can be used to model the configuration

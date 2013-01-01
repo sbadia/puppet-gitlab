@@ -23,14 +23,11 @@ class gitlab::server {
   }
 
   case $gitlab_dbtype {
-    sqlite: {
-      $gitlab_without_gems = 'mysql postgres'
-    }
     mysql: {
-      $gitlab_without_gems = 'sqlite postgres'
+      $gitlab_without_gems = 'postgres'
     }
     postgres: {
-      $gitlab_without_gems = 'sqlite mysql'
+      $gitlab_without_gems = 'mysql'
     }
     default: {
       # Install all db type gems

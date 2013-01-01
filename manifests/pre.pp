@@ -54,13 +54,9 @@ class gitlab::redhat_packages {
   }
 
   case $gitlab_dbtype {
-    'sqlite': {
-      package {
-        ['sqlite-devel','sqlite']: }
-    } # Sqlite
     'mysql': {
       package {
-        ['mysql-server','mysql-client', 'mysql-devel']: }
+        ['mysql-client', 'mysql-devel']: }
     } # Mysql
     default: {
       err "${gitlab_dbtype} not supported yet"
@@ -94,16 +90,9 @@ class gitlab::debian_packages {
   }
 
   case $gitlab_dbtype {
-    'sqlite': {
-      package {
-        ['libsqlite3-dev','sqlite3']:
-          require => Exec['apt-get update'],
-          ensure  => installed;
-      }
-    } # Sqlite
     'mysql': {
       package {
-        ['mysql-server','mysql-client']:
+        'mysql-client':
           require => Exec['apt-get update'],
           ensure  => installed;
       }
