@@ -1,6 +1,6 @@
 # Module gitlab
 
-* Tested successfully with Gitlab 4.0 [708a0d4]
+* Tested successfully with Gitlab 4.0 [708a0d4] on debian wheezy with puppet 3
 
 [GitLab](http://gitlabhq.org/) is a free project and repository management application
 
