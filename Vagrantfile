@@ -15,7 +15,7 @@ type = ENV['OS'] || default_type
 boxes = {
   'debian7' => {
     'name'  => 'debian-wheezy-amd64',
-    'url'   => 'http://sebian.yasaw.net/pub/debian-wheezy-x64.box'
+    'url'   => 'https://vagrant.irisa.fr/boxes/debian-wheezy-x64-puppet_3.0.1.box'
   },
   'ubuntu' => {
     'name'  => 'ubuntu-server-amd64',
@@ -41,6 +41,8 @@ Vagrant::Config.run do |config|
     hq.vm.share_folder "sbadia_gitlab", "/srv/puppet_modules/gitlab", "."
     # https://github.com/puppetlabs/puppetlabs-mysql
     hq.vm.share_folder "puppetlabs_mysql", "/srv/puppet_modules/mysql", "../../puppetlabs/puppetlabs-mysql/"
+    # https://github.com/puppetlabs/puppetlabs-stdlib
+    hq.vm.share_folder "puppetlabs_stdlib", "/srv/puppet_modules/stdlib", "../../puppetlabs/puppetlabs-stdlib/"
 
     hq.vm.provision :puppet, :pp_path => "/srv/vagrant-puppet" do |puppet|
       #puppet.options = [ "--debug", "--modulepath", "/srv/puppet_modules", "--certname gitlab_server"]
