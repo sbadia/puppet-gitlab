@@ -13,7 +13,13 @@
 # [gitlab_home] Home directory for gitlab installation
 # [gitlab_comment] Gitlab comment
 # [gitlab_sources] Gitlab sources (github)
-# [gitlab_dbtype] Gitlab database type (sqlite/mysql/pgsql)
+# [gitlab_branch] Gitlab branch (default stable)
+# [gitolite_sources] Gitolite sources (github)
+# [gitolite_banch] Gitolite branch (default gl-320 from gitlabhq)
+# [gitlab_dbtype] Gitlab database type (mysql/pgsql)
+# [gitlab_dbname] Gitlab database name
+# [gitlab_dbuser] Gitlab database user
+# [gitlab_dbpwd] Gitlab database password
 # [ldap_enabled] Enable LDAP backend for gitlab web (see bellow)
 # [ldap_host] FQDN of LDAP server
 # [ldap_base] LDAP base dn
@@ -61,7 +67,12 @@ class gitlab(
     $gitlab_comment     = $gitlab::params::gitlab_comment,
     $gitlab_sources     = $gitlab::params::gitlab_sources,
     $gitlab_branch      = $gitlab::params::gitlab_branch,
+    $gitolite_sources   = $gitlab::params::gitolite_sources,
+    $gitolite_branch    = $gitlab::params::gitolite_branch,
     $gitlab_dbtype      = $gitlab::params::gitlab_dbtype,
+    $gitlab_dbname      = $gitlab::params::gitlab_dbname,
+    $gitlab_dbuser      = $gitlab::params::gitlab_dbuser,
+    $gitlab_dbpwd       = $gitlab::params::gitlab_dbpwd,
     $ldap_enabled       = $gitlab::params::ldap_enabled,
     $ldap_host          = $gitlab::params::ldap_host,
     $ldap_base          = $gitlab::params::ldap_base,
@@ -72,7 +83,7 @@ class gitlab(
     $ldap_bind_password = $gitlab::params::ldap_bind_password
   ) inherits gitlab::params {
   case $::osfamily {
-    Debian: {
+    Debian, Redhat: {
       include gitlab::server
     }
     default: {

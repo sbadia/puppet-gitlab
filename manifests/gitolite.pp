@@ -1,4 +1,5 @@
 # Class:: gitlab::gitolite
+#
 class gitlab::gitolite {
   include gitlab
   require gitlab::pre
@@ -22,89 +23,63 @@ class gitlab::gitolite {
     }
   } # case ssh
 
+  File {owner => $git_user, group => $git_user, }
   file {
-    '/var/cache/debconf/gitolite.preseed':
-      ensure  => file,
-      content => template('gitlab/gitolite.preseed.erb'),
-      before  => Package['gitolite'];
     "${git_home}/${git_user}.pub":
-      ensure  => file,
-      owner   => $git_user,
-      group   => $git_user,
       mode    => '0644',
-      require => User[$git_user];
-    "${git_home}/.gitolite.rc":
-      ensure  => file,
-      source  => 'puppet:///modules/gitlab/gitolite-rc',
-      owner   => $git_user,
-      group   => $git_user,
-      mode    => '0644',
-      require => [Package['gitolite'],User[$git_user]];
+      before  => Exec['Setup gitolite'];
     "${git_home}/.gitolite/hooks/common/post-receive":
-      ensure  => file,
       source  => 'puppet:///modules/gitlab/post-receive',
-      owner   => $git_user,
-      group   => $git_user,
       mode    => '0755',
-      require => Package['gitolite'];
-    "${git_home}/.gitolite":
-      ensure  => directory,
-      mode    => '0755',
-      require => Package['gitolite'];
+      require => Exec['Setup gitolite'];
     "${git_home}/.gitconfig":
-      ensure  => file,
       content => template('gitlab/gitolite.gitconfig.erb'),
-      owner   => $git_user,
-      group   => $git_user,
-      mode    => '0644',
-      require => Package['gitolite'];
+      mode    => '0644';
     "${git_home}/.profile":
-      ensure => file,
-      source => 'puppet:///modules/gitlab/git_user-dot-profile',
-      owner  => $git_user,
-      group  => $git_user,
-      mode   => '0644';
+      source  => 'puppet:///modules/gitlab/git_user-dot-profile',
+      mode    => '0644';
+    "${git_home}/repositories":
+      ensure  => directory,
+      require => Exec['Setup gitolite'],
+      mode    => '0770';
+    "${git_home}/bin":
+      ensure  => directory;
   }
 
-  package {
-    'gitolite':
-      ensure       => installed,
-      responsefile => '/var/cache/debconf/gitolite.preseed';
-  }
+  case $::osfamily {
+    Redhat: {
+      file {
+        "${git_home}/.gitolite":
+          ensure  => directory,
+          mode    => '0750';
+        "${git_home}/.gitolite/logs":
+          ensure  => directory,
+          mode    => '0750',
+          require => File["${git_home}/.gitolite"],
+          before  => Exec['Setup gitolite'];
+      }
+    } # Redhat
+  } # Case
 
   exec {
-    'gl-setup gitolite':
-      command     => "/bin/su -c '/usr/bin/gl-setup ${git_home}/${git_user}.pub > /dev/null 2>&1' ${git_user}",
+    'Get patched gitolite':
+      command   => "git clone -b ${gitlab::gitolite_branch} ${gitlab::gitolite_sources} ${git_home}/gitolite",
+      path      => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+      logoutput => 'on_failure',
+      user      => $git_user,
+      require   => User[$git_user],
+      unless    => "/usr/bin/test -d ${git_home}/gitolite";
+    'Install patched gitolite':
+      command     => "${git_home}/gitolite/install -ln ${git_home}/bin",
       user        => $git_user,
-      require     => [Package['gitolite'],File["${git_home}/.gitconfig"],File["${git_home}/${git_user}.pub"]],
+      require     => [Exec['Get patched gitolite'],File["${git_home}/bin"]],
+      unless    => "/usr/bin/test -f ${git_home}/bin/gitolite";
+    'Setup gitolite':
+      command     => "sudo -u ${git_user} -H sh -c \"PATH=${git_home}/bin:/usr/sbin:/usr/bin:/sbin:/bin; gitolite setup -pk ${git_home}/${git_user}.pub\"",
+      path        => "/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+      user        => root,
+      require     => [File["${git_home}/.gitconfig"],File["${git_home}/${git_user}.pub"]],
       logoutput   => 'on_failure',
-      unless      => "/usr/bin/test -f ${git_home}/projects.list";
+      creates     => "${git_home}/projects.list";
   }
-
-  file {
-    "${git_home}/repositories":
-      ensure    => directory,
-      owner     => $git_user,
-      group     => $git_user,
-      mode      => '0770',
-      require   => Package['gitolite'];
-  }
-
-  # Solve strange issue with gitolite on ubuntu (https://github.com/sbadia/puppet-gitlab/issues/9)
-  # So create a VERSION file if it doesn't exist
-  if $::osfamily == 'Debian' {
-    file {
-      '/etc/gitolite':
-        ensure  => directory,
-        mode    => '0755';
-      '/etc/gitolite/VERSION':
-        ensure  => file,
-        content => '42',
-        replace => false,
-        owner   => root,
-        group   => root,
-        mode    => '0644',
-        require => File['/etc/gitolite'];
-    }
-  }
-} # Class:: gitlab::gitolite inherits gitlab::pre
+} # Class:: gitlab::gitolite

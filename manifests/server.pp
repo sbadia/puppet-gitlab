@@ -1,21 +1,24 @@
-# Class:: gitlab::gitlab inherits gitlab::gitolite
+# Class:: gitlab::server
 class gitlab::server {
   include gitlab
   require gitlab::gitolite
   require gitlab::nginx
 
-  $gitlab_dbtype = $gitlab::gitlab_dbtype
-  $gitlab_home   = $gitlab::gitlab_home
-  $gitlab_user   = $gitlab::gitlab_user
-  $git_home      = $gitlab::git_home
-  $git_email     = $gitlab::git_email
+  $gitlab_dbtype  = $gitlab::gitlab_dbtype
+  $gitlab_dbname  = $gitlab::gitlab_dbname
+  $gitlab_dbuser  = $gitlab::gitlab_dbuser
+  $gitlab_dbpwd   = $gitlab::gitlab_dbpwd
+  $gitlab_home    = $gitlab::gitlab_home
+  $gitlab_user    = $gitlab::gitlab_user
+  $git_home       = $gitlab::git_home
+  $git_email      = $gitlab::git_email
 
   package {
     'bundler':
       ensure   => installed,
       provider => gem;
     'charlock_holmes':
-      ensure   => '0.6.8',
+      ensure   => '0.6.9',
       provider => gem;
     'pygments':
       ensure   => installed,
@@ -23,14 +26,11 @@ class gitlab::server {
   }
 
   case $gitlab_dbtype {
-    sqlite: {
-      $gitlab_without_gems = 'mysql postgres'
-    }
     mysql: {
-      $gitlab_without_gems = 'sqlite postgres'
+      $gitlab_without_gems = 'postgres'
     }
     postgres: {
-      $gitlab_without_gems = 'sqlite mysql'
+      $gitlab_without_gems = 'mysql'
     }
     default: {
       # Install all db type gems
@@ -46,18 +46,19 @@ class gitlab::server {
       cwd         => $gitlab_home,
       path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       user        => $gitlab_user,
-      unless      => "/usr/bin/test -d ${gitlab_home}/gitlab",
-      require     => Package['gitolite'];
+      unless      => "/usr/bin/test -d ${gitlab_home}/gitlab";
     'Install gitlab':
       command     => "bundle install --without development test ${gitlab_without_gems} --deployment",
       logoutput   => 'on_failure',
+      provider    => shell,
       cwd         => "${gitlab_home}/gitlab",
       path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       user        => $gitlab_user,
-      require     => [Exec['Get gitlab'],Package['gitolite'],Package['bundler']];
+      require     => [Exec['Get gitlab'], Package['bundler']];
     'Setup gitlab DB':
       command     => 'bundle exec rake gitlab:app:setup RAILS_ENV=production; bundle exec rake gitlab:app:enable_automerge RAILS_ENV=production; bundle exec rake db:migrate RAILS_ENV=production',
       logoutput   => 'on_failure',
+      provider    => shell,
       cwd         => "${gitlab_home}/gitlab",
       path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       user        => $gitlab_user,
@@ -67,17 +68,33 @@ class gitlab::server {
         File["${gitlab_home}/gitlab/tmp"],
         Sshkey['localhost'],
         File["${gitlab_home}/.ssh/id_rsa"],
-        Package['gitolite'],
         Package['bundler']
         ],
       refreshonly => true;
   }
 
 
+  # fixing eventmachine and thin gem build problems on newer debian/ubuntu versions
+  if ($::osfamily == 'Debian'){
+    file {
+      "${gitlab_home}/gitlab/.bundle":
+        ensure  => directory,
+        owner   => $gitlab_user,
+        group   => $gitlab_user,
+        require => Exec['Get gitlab'],
+        before  => File['bundle_config'];
+      'bundle_config':
+        path    => "${gitlab_home}/gitlab/.bundle/config",
+        content => template('gitlab/gitlab.bundle.config.erb'),
+        owner   => $gitlab_user,
+        group   => $gitlab_user,
+        before  => Exec['Install gitlab']; }
+  }
+
   file {
     "${gitlab_home}/gitlab/config/database.yml":
-      ensure  => link,
-      target  => "${gitlab_home}/gitlab/config/database.yml.${gitlab_dbtype}",
+      ensure  => file,
+      content => template('gitlab/database.yml.erb'),
       owner   => $gitlab_user,
       group   => $gitlab_user,
       require => [Exec['Get gitlab'],File["${gitlab_home}/gitlab/config/gitlab.yml"]];
@@ -99,7 +116,10 @@ class gitlab::server {
       ensure  => directory,
       owner   => $gitlab_user,
       group   => $gitlab_user,
-      require => Exec['Get gitlab'],
+      require => Exec['Get gitlab'];
+    "${gitlab_home}/.gitconfig":
+      content => template('gitlab/gitolite.gitconfig.erb'),
+      mode    => '0644';
   }
 
   sshkey {
@@ -110,12 +130,22 @@ class gitlab::server {
       type         => 'ssh-rsa'
   }
 
+  case $::osfamily {
+    Redhat: { $nginx_group = 'nginx' }
+    Debian: { $nginx_group = 'www-data' }
+  }
+
   file { # SSH keys
     "${gitlab_home}/.ssh":
       ensure => directory,
       owner  => $gitlab_user,
       group  => $gitlab_user,
       mode   => '0700';
+    "/var/lib/gitlab":
+      ensure => directory,
+      owner  => $gitlab_user,
+      group  => $nginx_group,
+      mode   => '0775';
     "${gitlab_home}/.ssh/id_rsa":
       ensure  => file,
       owner   => $gitlab_user,
@@ -167,4 +197,4 @@ class gitlab::server {
       pattern   => 'unicorn_rails',
       enable    => true;
   }
-} # Class:: gitlab::gitlab inherits gitlab::gitolite
+} # Class:: gitlab::server

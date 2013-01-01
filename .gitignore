@@ -2,4 +2,5 @@
 *.swp
 pkg/
 .rvmrc
-.project
+metadata.json
+
