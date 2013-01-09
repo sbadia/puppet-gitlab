@@ -16,6 +16,8 @@ node /gitlab_server/ {
       password => $gitlab_dbpwd,
       host     => 'localhost',
       grant    => ['all'],
+      # See http://projects.puppetlabs.com/issues/17802 (thanks Elliot)
+      require  => Class['mysql::config'],
   }
 
   class {
@@ -38,8 +40,7 @@ node /gitlab_server/ {
       gitlab_sources    => 'https://github.com/gitlabhq/gitlabhq.git',
       gitlab_branch     => 'stable',
       gitolite_sources  => 'https://github.com/gitlabhq/gitolite.git',
-      gitolite_branch   => 'gl-v304',
-      #FIXME mysql db not yet created, see https://github.com/sbadia/puppet-gitlab/issues/11
+      gitolite_branch   => 'gl-v320',
       gitlab_dbtype     => 'mysql',
       gitlab_dbname     => $gitlab_dbname,
       gitlab_dbuser     => $gitlab_dbuser,
