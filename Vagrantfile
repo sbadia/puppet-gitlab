@@ -37,7 +37,17 @@ Vagrant::Config.run do |config|
     hq.vm.customize [ "modifyvm", :id , "--name", "gitlab_#{box_data['name']}" , "--memory", "2048", "--cpus", "1"]
     hq.vm.host_name = "gitlab.localdomain.local"
     hq.vm.network :hostonly, "192.168.111.10"
-
+    #
+    # FIXME
+    # This configuration does not satisfy me completely (very specific…)
+    #
+    # github.com
+    # ├── puppetlabs
+    # │   ├── puppetlabs-mysql
+    # │   └── puppetlabs-stdlib
+    # └── sbadia
+    #     └── puppet-gitlab
+    #
     hq.vm.share_folder "sbadia_gitlab", "/srv/puppet_modules/gitlab", "."
     # https://github.com/puppetlabs/puppetlabs-mysql
     hq.vm.share_folder "puppetlabs_mysql", "/srv/puppet_modules/mysql", "../../puppetlabs/puppetlabs-mysql/"
