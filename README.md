@@ -12,6 +12,18 @@ This module is based on the admin guides for [gitlab](https://github.com/gitlabh
 
 ## Testing with vagrant
 
+### Setup
+
+After cloning this repository, you will have to 
+
+    git submodule init
+
+and
+
+    git submodule update
+
+in order to add the modules that puppet-gitlab depends on to your local copy.
+
 ### Using Debian Wheezy (the default)
 
 $ vagrant up
