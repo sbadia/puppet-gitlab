@@ -4,6 +4,4 @@
 [submodule "modules/puppetlabs-stdlib"]
 	path = modules/puppetlabs-stdlib
 	url = https://github.com/puppetlabs/puppetlabs-stdlib
-[submodule "modules/puppetlabs_spec_helper"]
-	path = modules/puppetlabs_spec_helper
-	url = https://github.com/puppetlabs/puppetlabs_spec_helper.git
+
