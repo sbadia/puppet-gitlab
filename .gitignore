@@ -3,4 +3,6 @@
 pkg/
 .rvmrc
 metadata.json
+.redcar
+
 
