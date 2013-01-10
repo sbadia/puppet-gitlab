@@ -10,13 +10,13 @@ require 'facter'
 gem 'rspec', '>=2.0.0'
 require 'rspec/expectations'
 require 'rspec-puppet'
-
-require_relative File.join(dir, '..', 'modules', 'puppetlabs_spec_helper/lib/puppetlabs_spec_helper/module_spec_helper')
+require 'puppetlabs_spec_helper/module_spec_helper'
+require 'gitlab_shared'
 
 RSpec.configure do |config|
-  # FIXME REVISIT - We may want to delegate to Facter like we do in
-  # Puppet::PuppetSpecInitializer.initialize_via_testhelper(config) because
-  # this behavior is a duplication of the spec_helper in Facter.
+  @gitlab_variables = "$abc=123"
+
+  config.color_enabled = true
   config.before :each do
     # Ensure that we don't accidentally cache facts and environment between
     # test cases.  This requires each example group to explicitly load the
@@ -25,6 +25,5 @@ RSpec.configure do |config|
     Facter::Util::Loader.any_instance.stubs(:load_all)
     Facter.clear
     Facter.clear_messages
-    
   end
 end

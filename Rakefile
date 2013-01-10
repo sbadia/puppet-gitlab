@@ -4,6 +4,8 @@
 NAME = 'puppet-gitlab'
 TDIR = File.expand_path(File.dirname(__FILE__))
 
+require 'puppetlabs_spec_helper/rake_tasks'
+
 def get_version
   if File.read(File.join(TDIR, 'Modulefile')) =~ /(\d+)\.(\d+)\.(\d+)/
     return [$1.to_i, $2.to_i, $3.to_i].compact.join('.')
@@ -83,11 +85,3 @@ namespace :check do
   end
 end
 
-namespace :test do
-  require "rspec/core/rake_task"
-
-  RSpec::Core::RakeTask.new
-
-  task :default => :spec
-  task :test => :spec
-end
