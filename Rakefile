@@ -82,3 +82,12 @@ namespace :check do
     exec "puppet-lint \"#{file}\""
   end
 end
+
+namespace :test do
+  require "rspec/core/rake_task"
+
+  RSpec::Core::RakeTask.new
+
+  task :default => :spec
+  task :test => :spec
+end
