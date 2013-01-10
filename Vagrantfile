@@ -50,9 +50,9 @@ Vagrant::Config.run do |config|
     #
     hq.vm.share_folder "sbadia_gitlab", "/srv/puppet_modules/gitlab", "."
     # https://github.com/puppetlabs/puppetlabs-mysql
-    hq.vm.share_folder "puppetlabs_mysql", "/srv/puppet_modules/mysql", "../../puppetlabs/puppetlabs-mysql/"
+    hq.vm.share_folder "puppetlabs_mysql", "/srv/puppet_modules/mysql", "modules/puppetlabs-mysql/"
     # https://github.com/puppetlabs/puppetlabs-stdlib
-    hq.vm.share_folder "puppetlabs_stdlib", "/srv/puppet_modules/stdlib", "../../puppetlabs/puppetlabs-stdlib/"
+    hq.vm.share_folder "puppetlabs_stdlib", "/srv/puppet_modules/stdlib", "modules/puppetlabs-stdlib/"
 
     hq.vm.provision :puppet, :pp_path => "/srv/vagrant-puppet" do |puppet|
       #puppet.options = [ "--debug", "--modulepath", "/srv/puppet_modules", "--certname gitlab_server"]
