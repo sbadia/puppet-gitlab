@@ -81,7 +81,7 @@ class gitlab::debian_packages {
 
   case $::lsbdistcodename {
     # Need to install a fresh ruby version…
-    'squeeze','precise': {
+    'squeeze': {
       package {
         ['checkinstall','libcurl4-openssl-dev','libreadline6-dev','libpq-dev',
         'libssl-dev','build-essential','zlib1g-dev','libyaml-dev','libc6-dev']:
@@ -118,7 +118,7 @@ class gitlab::debian_packages {
       }
     } # Squeeze, Precise
     default: {
-      # Assuming default ruby 1.9.3 (wheezy,quantal)
+      # Assuming default ruby 1.9.3 (wheezy,quantal,precise)
       package {
         ['ruby','ruby-dev','rubygems','rake']:
           require => Exec['apt-get update'],
