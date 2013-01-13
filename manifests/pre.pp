@@ -29,7 +29,8 @@ class gitlab::pre {
       require    => User[$git_user];
   }
 
-  # try and decide about the family here, deal with version/dist specifics within the class
+  # try and decide about the family here,
+  # deal with version/dist specifics within the class
   case $::osfamily {
     'Debian': {
       require gitlab::debian_packages
@@ -37,9 +38,15 @@ class gitlab::pre {
     'Redhat': {
       require gitlab::redhat_packages
     }
+    default: {
+      err "${::osfamily} not supported yet"
+    }
   }
-}
+} # Class:: gitlab::pre
 
+# Class:: gitlab::redhat_packages
+# FIXME: gitlab::redhat_packages not in autoload module layout
+#
 class gitlab::redhat_packages {
   include gitlab
 
@@ -48,15 +55,24 @@ class gitlab::redhat_packages {
   Package{ ensure => latest, provider => yum, }
   package {
     [ 'git','wget','curl','redis','openssh-server','python-pip','libicu-devel',
-      'libxml2-devel','libxslt-devel','python-devel','libcurl-devel','readline-devel',
-      'openssl-devel','zlib-devel','libyaml-devel','postgresql-devel','mysql-devel']:
+      'libxml2-devel','libxslt-devel','python-devel','libcurl-devel',
+      'readline-devel','openssl-devel','zlib-devel','libyaml-devel',
+      'postgresql-devel','mysql-devel']:
         ensure => installed;
   }
 
-  service { 'redis': ensure => running, enable => true, require => Package['redis'], }
+  service {
+    'redis':
+      ensure  => running,
+      enable  => true,
+      require => Package['redis'];
+  }
 
-}
+} # Class:: gitlab::redhat_packages
 
+# Class:: gitlab::debian_packages
+# FIXME: gitlab::debian_packages not in autoload module layout
+#
 class gitlab::debian_packages {
   include gitlab
 
@@ -85,8 +101,8 @@ class gitlab::debian_packages {
       package {
         ['checkinstall','libcurl4-openssl-dev','libreadline6-dev','libpq-dev',
         'libssl-dev','build-essential','zlib1g-dev','libyaml-dev','libc6-dev']:
-          require => Exec['apt-get update'],
-          ensure  => installed;
+          ensure  => installed,
+          require => Exec['apt-get update'];
       }
 
       exec {
@@ -121,8 +137,8 @@ class gitlab::debian_packages {
       # Assuming default ruby 1.9.3 (wheezy,quantal,precise)
       package {
         ['ruby','ruby-dev','rubygems','rake']:
-          require => Exec['apt-get update'],
-          ensure  => installed;
+          ensure  => installed,
+          require => Exec['apt-get update'];
       }
     } # Default
   } # Case:: $::operatingsystem
@@ -133,4 +149,4 @@ class gitlab::debian_packages {
       enable  => true,
       require => Package['redis-server'];
   }
-} # Class:: gitlab::pre
+} # Class:: gitlab::debian_packages

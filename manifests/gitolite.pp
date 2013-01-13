@@ -1,5 +1,6 @@
 # Class:: gitlab::gitolite
 #
+#
 class gitlab::gitolite {
   include gitlab
   require gitlab::pre
@@ -63,6 +64,9 @@ class gitlab::gitolite {
           before  => Exec['Setup gitolite'];
       }
     } # Redhat
+    default: {
+      err "No customizations for ${::osfamily}"
+    }
   } # Case
 
   exec {
@@ -74,16 +78,17 @@ class gitlab::gitolite {
       require   => User[$git_user],
       unless    => "/usr/bin/test -d ${git_home}/gitolite";
     'Install patched gitolite':
-      command     => "${git_home}/gitolite/install -ln ${git_home}/bin",
-      user        => $git_user,
-      require     => [Exec['Get patched gitolite'],File["${git_home}/bin"]],
+      command   => "${git_home}/gitolite/install -ln ${git_home}/bin",
+      user      => $git_user,
+      require   => [Exec['Get patched gitolite'],File["${git_home}/bin"]],
       unless    => "/usr/bin/test -f ${git_home}/bin/gitolite";
     'Setup gitolite':
-      command     => "sudo -u ${git_user} -H sh -c \"PATH=${git_home}/bin:/usr/sbin:/usr/bin:/sbin:/bin; gitolite setup -pk ${git_home}/${git_user}.pub\"",
-      path        => "/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-      user        => root,
-      require     => [File["${git_home}/.gitconfig"],File["${git_home}/${git_user}.pub"]],
-      logoutput   => 'on_failure',
-      creates     => "${git_home}/projects.list";
+      command   => "sudo -u ${git_user} -H sh -c \"PATH=${git_home}/bin:/usr/sbin:/usr/bin:/sbin:/bin; gitolite setup -pk ${git_home}/${git_user}.pub\"",
+      path      => '/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+      user      => root,
+      require   => [File["${git_home}/.gitconfig"],
+                    File["${git_home}/${git_user}.pub"]],
+      logoutput => 'on_failure',
+      creates   => "${git_home}/projects.list";
   }
 } # Class:: gitlab::gitolite
