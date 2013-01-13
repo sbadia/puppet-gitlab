@@ -138,7 +138,7 @@ class gitlab::server {
   case $::osfamily {
     Redhat:   { $nginx_group = 'nginx' }
     Debian:   { $nginx_group = 'www-data' }
-    default:  { err "${::osfamily} not supported yet" }
+    default:  { warning "${::osfamily} not supported yet" }
   }
 
   file { # SSH keys

@@ -65,7 +65,7 @@ class gitlab::gitolite {
       }
     } # Redhat
     default: {
-      err "No customizations for ${::osfamily}"
+      info "No customizations for ${::osfamily}"
     }
   } # Case
 
