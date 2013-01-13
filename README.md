@@ -1,4 +1,4 @@
-# Puppet-gitlab
+# Puppet-gitlab [![Build Status](https://travis-ci.org/sbadia/puppet-gitlab.png?branch=master)](https://travis-ci.org/sbadia/puppet-gitlab)
 
 Tested successfully with Gitlab 4.0 [708a0d4] on debian wheezy with puppet 3
 
