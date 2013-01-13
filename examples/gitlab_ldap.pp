@@ -28,7 +28,8 @@ node /gitlab_server/ {
       git_comment       => 'GIT control version',
       # Default provider for ssh keys is 'source'
       # you can use also   => 'puppet:///modules/gitlab/file'
-      # fileserving on http doesn't work yet (http://projects.puppetlabs.com/issues/5783)
+      # fileserving on http doesn't work yet
+      # see bug http://projects.puppetlabs.com/issues/5783
       # If you choose ssh_key_provider = 'content'
       # you can use directly => 'ssh-rsa AAA...'
       git_admin_pubkey  => '/srv/vagrant-puppet/manifests/gitlab_testing.pub',

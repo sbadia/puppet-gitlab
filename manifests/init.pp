@@ -81,7 +81,8 @@ class gitlab(
     $ldap_method        = $gitlab::params::ldap_method,
     $ldap_bind_dn       = $gitlab::params::ldap_bind_dn,
     $ldap_bind_password = $gitlab::params::ldap_bind_password
-  ) inherits gitlab::params {
+  ) {
+  require 'gitlab::params'
   case $::osfamily {
     Debian, Redhat: {
       include gitlab::server

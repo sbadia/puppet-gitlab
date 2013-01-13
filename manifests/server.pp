@@ -1,4 +1,6 @@
 # Class:: gitlab::server
+#
+#
 class gitlab::server {
   include gitlab
   require gitlab::gitolite
@@ -74,7 +76,8 @@ class gitlab::server {
   }
 
 
-  # fixing eventmachine and thin gem build problems on newer debian/ubuntu versions
+  # fixing eventmachine and thin gem build problems
+  # on newer debian/ubuntu versions
   if ($::osfamily == 'Debian'){
     file {
       "${gitlab_home}/gitlab/.bundle":
@@ -97,13 +100,15 @@ class gitlab::server {
       content => template('gitlab/database.yml.erb'),
       owner   => $gitlab_user,
       group   => $gitlab_user,
-      require => [Exec['Get gitlab'],File["${gitlab_home}/gitlab/config/gitlab.yml"]];
+      require => [Exec['Get gitlab'],
+                  File["${gitlab_home}/gitlab/config/gitlab.yml"]];
     "${gitlab_home}/gitlab/config/unicorn.rb":
       ensure  => file,
       content => template('gitlab/unicorn.rb.erb'),
       owner   => $gitlab_user,
       group   => $gitlab_user,
-      require => [Exec['Get gitlab'],File["${gitlab_home}/gitlab/config/gitlab.yml"]];
+      require => [Exec['Get gitlab'],
+                  File["${gitlab_home}/gitlab/config/gitlab.yml"]];
     "${gitlab_home}/gitlab/config/gitlab.yml":
       ensure  => file,
       content => template('gitlab/gitlab.yml.erb'),
@@ -131,8 +136,9 @@ class gitlab::server {
   }
 
   case $::osfamily {
-    Redhat: { $nginx_group = 'nginx' }
-    Debian: { $nginx_group = 'www-data' }
+    Redhat:   { $nginx_group = 'nginx' }
+    Debian:   { $nginx_group = 'www-data' }
+    default:  { err "${::osfamily} not supported yet" }
   }
 
   file { # SSH keys
@@ -141,7 +147,7 @@ class gitlab::server {
       owner  => $gitlab_user,
       group  => $gitlab_user,
       mode   => '0700';
-    "/var/lib/gitlab":
+    '/var/lib/gitlab':
       ensure => directory,
       owner  => $gitlab_user,
       group  => $nginx_group,
@@ -166,12 +172,20 @@ class gitlab::server {
 
   case $gitlab::ssh_key_provider {
     content: {
-      File["${gitlab_home}/.ssh/id_rsa"] { content => $gitlab::git_admin_privkey }
-      File["${gitlab_home}/.ssh/id_rsa.pub"] { content => $gitlab::git_admin_pubkey }
+      File["${gitlab_home}/.ssh/id_rsa"] {
+        content => $gitlab::git_admin_privkey
+      }
+      File["${gitlab_home}/.ssh/id_rsa.pub"] {
+        content => $gitlab::git_admin_pubkey
+      }
     }
     source: {
-      File["${gitlab_home}/.ssh/id_rsa"] { source => $gitlab::git_admin_privkey }
-      File["${gitlab_home}/.ssh/id_rsa.pub"] { source => $gitlab::git_admin_pubkey }
+      File["${gitlab_home}/.ssh/id_rsa"] {
+        source => $gitlab::git_admin_privkey
+      }
+      File["${gitlab_home}/.ssh/id_rsa.pub"] {
+        source => $gitlab::git_admin_pubkey
+      }
     }
     default: {
       err "${gitlab::ssh_key_provider} not supported yet"
