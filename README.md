@@ -1,6 +1,6 @@
-# Module gitlab
+# Puppet-gitlab
 
-* Tested successfully with Gitlab 4.0 [708a0d4] on debian wheezy with puppet 3
+Tested successfully with Gitlab 4.0 [708a0d4] on debian wheezy with puppet 3
 
 [GitLab](http://gitlabhq.org/) is a free project and repository management application
 
@@ -14,7 +14,7 @@ This module is based on the admin guides for [gitlab](https://github.com/gitlabh
 
 ### Setup
 
-After cloning this repository, you will have to 
+After cloning this repository, you will have to
 
     git submodule init
 
@@ -47,3 +47,6 @@ $ OS=ubuntu vagrant up
 1. Add an ssh key to your account, or create another account
 2. Create a project
 3. Play !
+
+## Contribute
+Want to help - send a pull request.
