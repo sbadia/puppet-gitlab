@@ -2,7 +2,10 @@
 #
 #
 class gitlab::nginx {
+  include gitlab
+
   #FIXME Manage nginx with puppetlabs recipes, not re-invent the wheel :-)
+  $gitlab_domain = $gitlab::gitlab_domain
 
   package {
     'nginx':
