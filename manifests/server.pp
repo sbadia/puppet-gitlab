@@ -10,6 +10,7 @@ class gitlab::server {
   $gitlab_dbname  = $gitlab::gitlab_dbname
   $gitlab_dbuser  = $gitlab::gitlab_dbuser
   $gitlab_dbpwd   = $gitlab::gitlab_dbpwd
+  $gitlab_domain  = $gitlab::gitlab_domain
   $gitlab_home    = $gitlab::gitlab_home
   $gitlab_user    = $gitlab::gitlab_user
   $git_home       = $gitlab::git_home
