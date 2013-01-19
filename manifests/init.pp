@@ -20,6 +20,7 @@
 # [gitlab_dbname] Gitlab database name
 # [gitlab_dbuser] Gitlab database user
 # [gitlab_dbpwd] Gitlab database password
+# [gitlab_domain] Gitlab domain (default $fqdn)
 # [ldap_enabled] Enable LDAP backend for gitlab web (see bellow)
 # [ldap_host] FQDN of LDAP server
 # [ldap_base] LDAP base dn
@@ -73,6 +74,7 @@ class gitlab(
     $gitlab_dbname      = $gitlab::params::gitlab_dbname,
     $gitlab_dbuser      = $gitlab::params::gitlab_dbuser,
     $gitlab_dbpwd       = $gitlab::params::gitlab_dbpwd,
+    $gitlab_domain      = $gitlab::params::gitlab_domain,
     $ldap_enabled       = $gitlab::params::ldap_enabled,
     $ldap_host          = $gitlab::params::ldap_host,
     $ldap_base          = $gitlab::params::ldap_base,

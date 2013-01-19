@@ -20,6 +20,7 @@ class gitlab::params {
   $gitlab_dbname      = 'gitladb'
   $gitlab_dbuser      = 'gitladbu'
   $gitlab_dbpwd       = 'changeme'
+  $gitlab_domain      = $::fqdn
   $ldap_enabled       = false
   $ldap_host          = 'ldap.domain.com'
   $ldap_base          = 'dc=domain,dc=com'
