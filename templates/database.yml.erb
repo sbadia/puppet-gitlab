@@ -15,7 +15,7 @@ production:
   password: <%= gitlab_dbpwd %>
   # host: localhost
   # socket: /tmp/mysql.sock
-<% when 'postgres' -%>
+<% when 'pgsql' -%>
 production:
   adapter: postgresql
   encoding: unicode
