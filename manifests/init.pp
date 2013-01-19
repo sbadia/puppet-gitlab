@@ -74,6 +74,8 @@ class gitlab(
     $gitlab_dbname      = $gitlab::params::gitlab_dbname,
     $gitlab_dbuser      = $gitlab::params::gitlab_dbuser,
     $gitlab_dbpwd       = $gitlab::params::gitlab_dbpwd,
+    $gitlab_dbhost      = $gitlab::params::gitlab_dbhost,
+    $gitlab_dbport      = $gitlab::params::gitlab_dbport,
     $gitlab_domain      = $gitlab::params::gitlab_domain,
     $ldap_enabled       = $gitlab::params::ldap_enabled,
     $ldap_host          = $gitlab::params::ldap_host,
