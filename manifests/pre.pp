@@ -53,11 +53,18 @@ class gitlab::redhat_packages {
   $gitlab_dbtype  = $gitlab::gitlab_dbtype
 
   Package{ ensure => latest, provider => yum, }
+  $db_packages = $gitlab_dbtype ? {
+    mysql => ['mysql-devel'],
+    pgsql => ['postgresql-devel'],
+  }
+  package {
+    $db_packages:
+      ensure => installed;
+  }
   package {
     [ 'git','wget','curl','redis','openssh-server','python-pip','libicu-devel',
       'libxml2-devel','libxslt-devel','python-devel','libcurl-devel',
-      'readline-devel','openssl-devel','zlib-devel','libyaml-devel',
-      'postgresql-devel','mysql-devel']:
+      'readline-devel','openssl-devel','zlib-devel','libyaml-devel']:
         ensure => installed;
   }
 
@@ -86,11 +93,21 @@ class gitlab::debian_packages {
       command     => '/usr/bin/apt-get update';
   }
 
+  $db_packages = $gitlab_dbtype ? {
+    mysql => ['libmysql++-dev','libmysqlclient-dev'],
+    pgsql => ['libpq-dev', 'postgresql-client'],
+  }
+
+  package {
+    $db_packages:
+      ensure  => installed,
+      require => Exec['apt-get update']
+  }
+
   package {
     ['git','git-core','wget','curl','redis-server',
       'openssh-server','python-pip','libicu-dev',
-      'libxml2-dev','libxslt1-dev','python-dev',
-      'libmysql++-dev','libmysqlclient-dev']:
+      'libxml2-dev','libxslt1-dev','python-dev']:
         ensure  => installed,
         require => Exec['apt-get update'],
   }
