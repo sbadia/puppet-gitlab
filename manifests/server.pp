@@ -27,17 +27,10 @@ class gitlab::server {
       provider => pip;
   }
 
-  case $gitlab_dbtype {
-    mysql: {
-      $gitlab_without_gems = 'postgres'
-    }
-    postgres: {
-      $gitlab_without_gems = 'mysql'
-    }
-    default: {
-      # Install all db type gems
-      $gitlab_without_gems = ''
-    }
+  $gitlab_without_gems = $gitlab_dbtype ? {
+    mysql    => 'postgres',
+    pgsql    => 'mysql',
+    default  => '',
   }
 
   exec {
