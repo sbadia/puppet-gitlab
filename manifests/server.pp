@@ -6,17 +6,26 @@ class gitlab::server {
   require gitlab::gitolite
   require gitlab::nginx
 
-  $gitlab_dbtype  = $gitlab::gitlab_dbtype
-  $gitlab_dbname  = $gitlab::gitlab_dbname
-  $gitlab_dbuser  = $gitlab::gitlab_dbuser
-  $gitlab_dbpwd   = $gitlab::gitlab_dbpwd
-  $gitlab_dbhost  = $gitlab::gitlab_dbhost
-  $gitlab_dbport  = $gitlab::gitlab_dbport
-  $gitlab_domain  = $gitlab::gitlab_domain
-  $gitlab_home    = $gitlab::gitlab_home
-  $gitlab_user    = $gitlab::gitlab_user
-  $git_home       = $gitlab::git_home
-  $git_email      = $gitlab::git_email
+  $gitlab_dbtype      = $gitlab::gitlab_dbtype
+  $gitlab_dbname      = $gitlab::gitlab_dbname
+  $gitlab_dbuser      = $gitlab::gitlab_dbuser
+  $gitlab_dbpwd       = $gitlab::gitlab_dbpwd
+  $gitlab_dbhost      = $gitlab::gitlab_dbhost
+  $gitlab_dbport      = $gitlab::gitlab_dbport
+  $gitlab_domain      = $gitlab::gitlab_domain
+  $gitlab_home        = $gitlab::gitlab_home
+  $gitlab_user        = $gitlab::gitlab_user
+  $git_home           = $gitlab::git_home
+  $git_email          = $gitlab::git_email
+  $ldap_enabled       = $gitlab::ldap_enabled
+  $ldap_host          = $gitlab::ldap_host
+  $ldap_base          = $gitlab::ldap_base
+  $ldap_uid           = $gitlab::ldap_uid
+  $ldap_port          = $gitlab::ldap_port
+  $ldap_method        = $gitlab::ldap_method
+  $ldap_bind_dn       = $gitlab::ldap_bind_dn
+  $ldap_bind_password = $gitlab::ldap_bind_password
+
 
   package {
     'bundler':
