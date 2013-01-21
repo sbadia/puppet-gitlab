@@ -1,7 +1,11 @@
 #!/bin/bash
 # MANAGED BY PUPPET
-# Module:: gitlab#
+# Module:: gitlab
 #
+# GITLAB
+# Maintainer: @randx
+# App Version: 4.1
+
 ### BEGIN INIT INFO
 # Provides:          gitlab
 # Required-Start:    $local_fs $remote_fs $network $syslog redis-server
@@ -12,46 +16,116 @@
 # Description:       GitLab git repository management
 ### END INIT INFO
 
-DAEMON_OPTS="-c <%= gitlab_home %>/gitlab/config/unicorn.rb -E production -D"
-NAME=unicorn
+APP_ROOT="<%= gitlab_home %>/gitlab"
+DAEMON_OPTS="-c $APP_ROOT/config/unicorn.rb -E production"
+PID_PATH="$APP_ROOT/tmp/pids"
+UNICORN_PID="$PID_PATH/unicorn.pid"
+SIDEKIQ_PID="$PID_PATH/sidekiq.pid"
+STOP_SIDEKIQ="RAILS_ENV=production bundle exec rake sidekiq:stop"
+START_SIDEKIQ="RAILS_ENV=production bundle exec rake sidekiq:start"
+NAME="unicorn"
 DESC="Gitlab service"
-PID=<%= gitlab_home %>/gitlab/tmp/pids/unicorn.pid
-RESQUE_PID=<%= gitlab_home %>/gitlab/tmp/pids/resque_worker.pid
+
+check_pid(){
+  if [ -f $UNICORN_PID ]; then
+    PID=`cat $UNICORN_PID`
+    SPID=`cat $SIDEKIQ_PID`
+    STATUS=`ps aux | grep $PID | grep -v grep | wc -l`
+  else
+    STATUS=0
+    PID=0
+  fi
+}
+
+start() {
+  cd $APP_ROOT
+  check_pid
+  if [ "$PID" -ne 0 -a "$STATUS" -ne 0 ]; then
+    # Program is running, exit with error code 1.
+    echo "Error! $DESC $NAME is currently running!"
+    exit 1
+  else
+    if [ `whoami` = root ]; then
+      sudo -u <%= gitlab_user %> -H bash -l -c "nohup bundle exec unicorn_rails $DAEMON_OPTS  > /dev/null  2>&1 &"
+      sudo -u <%= gitlab_user %> -H bash -l -c "mkdir -p $PID_PATH && $START_SIDEKIQ  > /dev/null  2>&1 &"
+      echo "$DESC started"
+    fi
+  fi
+}
+
+stop() {
+  cd $APP_ROOT
+  check_pid
+  if [ "$PID" -ne 0 -a "$STATUS" -ne 0 ]; then
+    ## Program is running, stop it.
+    kill -QUIT `cat $UNICORN_PID`
+    sudo -u <%= gitlab_user %> -H bash -l -c "mkdir -p $PID_PATH && $STOP_SIDEKIQ  > /dev/null  2>&1 &"
+    rm "$UNICORN_PID" >> /dev/null
+    echo "$DESC stopped"
+  else
+    ## Program is not running, exit with error.
+    echo "Error! $DESC not started!"
+    exit 1
+  fi
+}
+
+restart() {
+  cd $APP_ROOT
+  check_pid
+  if [ "$PID" -ne 0 -a "$STATUS" -ne 0 ]; then
+    echo "Restarting $DESC..."
+    kill -USR2 `cat $UNICORN_PID`
+    sudo -u <%= gitlab_user %> -H bash -l -c "mkdir -p $PID_PATH && $STOP_SIDEKIQ  > /dev/null  2>&1 &"
+    if [ `whoami` = root ]; then
+      sudo -u <%= gitlab_user %> -H bash -l -c "mkdir -p $PID_PATH && $START_SIDEKIQ  > /dev/null  2>&1 &"
+    fi
+    echo "$DESC restarted."
+  else
+    echo "Error, $NAME not running!"
+    exit 1
+  fi
+}
+
+status() {
+  cd $APP_ROOT
+  check_pid
+  if [ "$PID" -ne 0 -a "$STATUS" -ne 0 ]; then
+    echo "$DESC / Unicorn with PID $PID is running."
+    echo "$DESC / Sidekiq with PID $SPID is running."
+  else
+    echo "$DESC is not running."
+    exit 1
+  fi
+}
+
+## Check to see if we are running as root first.
+## Found at http://www.cyberciti.biz/tips/shell-root-user-check-script.html
+if [ "$(id -u)" != "0" ]; then
+    echo "This script must be run as root"
+    exit 1
+fi
 
 case "$1" in
   start)
-        CD_TO_APP_DIR="cd <%= gitlab_home %>/gitlab"
-        START_DAEMON_PROCESS="bundle exec unicorn_rails $DAEMON_OPTS"
-        START_RESQUE_PROCESS="./resque.sh"
-
-        echo -n "Starting $DESC: "
-        if [ `whoami` = root ]; then
-          sudo -u <%= gitlab_user %> sh -l -c "$CD_TO_APP_DIR > /dev/null 2>&1 && $START_DAEMON_PROCESS && $START_RESQUE_PROCESS"
-        else
-          $CD_TO_APP_DIR > /dev/null 2>&1 && $START_DAEMON_PROCESS && $START_RESQUE_PROCESS
-        fi
-        echo "$NAME."
+        start
         ;;
   stop)
-        echo -n "Stopping $DESC: "
-        kill -QUIT `cat $PID`
-        kill -QUIT `cat $RESQUE_PID`
-        echo "$NAME."
+        stop
         ;;
   restart)
-        echo -n "Restarting $DESC: "
-        kill -USR2 `cat $PID`
-        kill -USR2 `cat $RESQUE_PID`
-        echo "$NAME."
+        restart
         ;;
-  reload)
-        echo -n "Reloading $DESC configuration: "
+  reload|force-reload)
+        echo -n "Reloading $NAME configuration: "
         kill -HUP `cat $PID`
-        kill -HUP `cat $RESQUE_PID`
-        echo "$NAME."
+        kill -HUP `cat $SPID`
+        echo "done."
+        ;;
+  status)
+        status
         ;;
   *)
-        echo "Usage: $NAME {start|stop|restart|reload}" >&2
+        echo "Usage: sudo service gitlab {start|stop|restart|reload}" >&2
         exit 1
         ;;
 esac

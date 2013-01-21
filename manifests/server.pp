@@ -61,7 +61,14 @@ class gitlab::server {
       cwd         => "${gitlab_home}/gitlab",
       path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       user        => $gitlab_user,
-      require     => [Exec['Get gitlab'], Package['bundler']];
+      require     => [Exec['Get gitlab'], Package['bundler'], Exec['Checkout correct gitlab branch']];
+    'Checkout correct gitlab branch':
+      command     => "git fetch ; git checkout ${gitlab::gitlab_branch}",
+      creates     => "${gitlab_home}/gitlab",
+      logoutput   => 'on_failure',
+      cwd         => $gitlab_home,
+      path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+      user        => $gitlab_user;
     'Setup gitlab DB':
       command   => 'bundle exec rake gitlab:app:setup RAILS_ENV=production',
       logoutput => 'on_failure',
@@ -88,6 +95,7 @@ class gitlab::server {
       user      => $gitlab_user,
       require   => [
         Exec['Install gitlab'],
+        Exec['Checkout correct gitlab branch'],
         File["${gitlab_home}/gitlab/config/database.yml"],
         File["${gitlab_home}/gitlab/tmp"],
         Sshkey['localhost'],
