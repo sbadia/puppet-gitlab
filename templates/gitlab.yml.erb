@@ -32,15 +32,15 @@ app:
 # 2. Auth settings
 # ==========================
 ldap:
-  enabled: <%= ldap_enabled %>
-  host: '<%= ldap_host %>'
-  base: '<%= ldap_base %>'
-  port: <%= ldap_port %>
-  uid: '<%= ldap_uid %>'
-  method: '<%= ldap_method %>' # plain
-<% if ldap_bind_dn != '' -%>
-  bind_dn: '<%= ldap_bind_dn %>'
-  password: '<%= ldap_bind_password %>'
+  enabled: <%= @ldap_enabled %>
+  host: '<%= @ldap_host %>'
+  base: '<%= @ldap_base %>'
+  port: <%= @ldap_port %>
+  uid: '<%= @ldap_uid %>'
+  method: '<%= @ldap_method %>' # plain
+<% if @ldap_bind_dn != '' -%>
+  bind_dn: '<%= @ldap_bind_dn %>'
+  password: '<%= @ldap_bind_password %>'
 <% end -%>
 
 omniauth:
@@ -70,11 +70,11 @@ omniauth:
 
 # Git Hosting configuration
 git_host:
-  admin_uri: <%= git_user %>@localhost:gitolite-admin
-  base_path: <%= git_home %>/repositories/
-  hooks_path: <%= git_home %>/.gitolite/hooks/
+  admin_uri: <%= @git_user %>@localhost:gitolite-admin
+  base_path: <%= @git_home %>/repositories/
+  hooks_path: <%= @git_home %>/.gitolite/hooks/
   gitolite_admin_key: gitlab
-  git_user: <%= git_user %>
+  git_user: <%= @git_user %>
   upload_pack: true
   receive_pack: true
   # host: localhost
