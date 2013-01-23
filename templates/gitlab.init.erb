@@ -12,15 +12,15 @@
 # Description:       GitLab git repository management
 ### END INIT INFO
 
-DAEMON_OPTS="-c <%= gitlab_home %>/gitlab/config/unicorn.rb -E production -D"
+DAEMON_OPTS="-c <%= @gitlab_home %>/gitlab/config/unicorn.rb -E production -D"
 NAME=unicorn
 DESC="Gitlab service"
-PID=<%= gitlab_home %>/gitlab/tmp/pids/unicorn.pid
-RESQUE_PID=<%= gitlab_home %>/gitlab/tmp/pids/resque_worker.pid
+PID=<%= @gitlab_home %>/gitlab/tmp/pids/unicorn.pid
+RESQUE_PID=<%= @gitlab_home %>/gitlab/tmp/pids/resque_worker.pid
 
 case "$1" in
   start)
-        CD_TO_APP_DIR="cd <%= gitlab_home %>/gitlab"
+        CD_TO_APP_DIR="cd <%= @gitlab_home %>/gitlab"
         START_DAEMON_PROCESS="bundle exec unicorn_rails $DAEMON_OPTS"
         START_RESQUE_PROCESS="./resque.sh"
 
