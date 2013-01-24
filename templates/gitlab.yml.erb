@@ -12,13 +12,13 @@
 ## GitLab settings
 gitlab:
   ## Web server settings
-  host: <%= gitlab_domain %>
+  host: <%= @gitlab_domain %>
   port: 80
   https: false
 
   ## Email settings
   # Email address used in the "From" field in mails sent by GitLab
-  email_from: <%= git_email %>
+  email_from: <%= @git_email %>
 
   ## Project settings
   default_projects_limit: 10
@@ -36,15 +36,15 @@ gravatar:
 
 ## LDAP settings
 ldap:
-  enabled: <%= ldap_enabled %>
-  host: '<%= ldap_host %>'
-  base: '<%= ldap_base %>'
-  port: <%= ldap_port %>
-  uid: '<%= ldap_uid %>'
-  method: '<%= ldap_method %>' # plain
-<% if ldap_bind_dn != '' -%>
-  bind_dn: '<%= ldap_bind_dn %>'
-  password: '<%= ldap_bind_password %>'
+  enabled: <%= @ldap_enabled %>
+  host: '<%= @ldap_host %>'
+  base: '<%= @ldap_base %>'
+  port: <%= @ldap_port %>
+  uid: '<%= @ldap_uid %>'
+  method: '<%= @ldap_method %>' # plain
+<% if @ldap_bind_dn != '' -%>
+  bind_dn: '<%= @ldap_bind_dn %>'
+  password: '<%= @ldap_bind_password %>'
 <% end -%>
 
 ## Omniauth settings
@@ -86,9 +86,9 @@ backup:
 
 # Gitolite settings
 gitolite:
-  admin_uri: <%= git_user %>@localhost:gitolite-admin
-  repos_path: <%= git_home %>/repositories/
-  hooks_path: <%= git_home %>/.gitolite/hooks/
+  admin_uri: <%= @git_user %>@localhost:gitolite-admin
+  repos_path: <%= @git_home %>/repositories/
+  hooks_path: <%= @git_home %>/.gitolite/hooks/
   admin_key: gitlab
   upload_pack: true
   receive_pack: true

@@ -3,29 +3,29 @@
 #
 # PRODUCTION
 #
-<% case gitlab_dbtype -%>
+<% case @gitlab_dbtype -%>
 <% when 'mysql' -%>
 production:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: <%= gitlab_dbname %>
+  database: <%= @gitlab_dbname %>
   pool: 5
-  username: <%= gitlab_dbuser %>
-  password: <%= gitlab_dbpwd %>
-  host: <%= gitlab_dbhost %>
+  username: <%= @gitlab_dbuser %>
+  password: <%= @gitlab_dbpwd %>
+  host: <%= @gitlab_dbhost %>
   # host: localhost
   # socket: /tmp/mysql.sock
 <% when 'pgsql' -%>
 production:
   adapter: postgresql
   encoding: unicode
-  database: <%= gitlab_dbname %>
+  database: <%= @gitlab_dbname %>
   pool: 5
-  username: <%= gitlab_dbuser %>
-  password: <%= gitlab_dbpwd %>
-  host: <%= gitlab_dbhost %>
-  port: <%= gitlab_dbport %>
+  username: <%= @gitlab_dbuser %>
+  password: <%= @gitlab_dbpwd %>
+  host: <%= @gitlab_dbhost %>
+  port: <%= @gitlab_dbport %>
   # host: localhost
   # port: 5432
   # socket: /tmp/postgresql.sock

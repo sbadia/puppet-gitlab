@@ -2,14 +2,14 @@
 # Module:: gitlab
 #
 upstream gitlab {
-#    server unix:<%= gitlab_home %>/gitlab/tmp/sockets/gitlab.socket;
+#    server unix:<%= @gitlab_home %>/gitlab/tmp/sockets/gitlab.socket;
     server unix:/var/lib/gitlab/gitlab.socket;
 }
 
 server {
     listen 0.0.0.0:80;         # e.g., listen 192.168.1.1:80;
-    server_name <%= gitlab_domain %>;     # e.g., server_name source.example.com;
-    root <%= gitlab_home %>/gitlab/public;
+    server_name <%= @gitlab_domain %>;     # e.g., server_name source.example.com;
+    root <%= @gitlab_home %>/gitlab/public;
     #ssl on;
     #ssl_certificate gitlab.crt;
     #ssl_certificate_key gitlab.key;
@@ -41,8 +41,8 @@ server {
 
 #server {
 #    listen 0.0.0.0:443;         # e.g., listen 192.168.1.1:443;
-#    server_name <%= gitlab_domain %>;     # e.g., server_name source.example.com;
-#    root <%= gitlab_home %>/gitlab/public;
+#    server_name <%= @gitlab_domain %>;     # e.g., server_name source.example.com;
+#    root <%= @gitlab_home %>/gitlab/public;
 #    ssl on;
 #    ssl_certificate gitlab.crt;
 #    ssl_certificate_key gitlab.key;
