@@ -85,3 +85,6 @@ namespace :check do
   end
 end
 
+task(:default).clear
+task :default => :spec
+
