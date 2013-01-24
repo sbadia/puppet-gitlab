@@ -29,10 +29,10 @@ class gitlab::gitolite {
     "${git_home}/${git_user}.pub":
       mode    => '0644',
       before  => Exec['Setup gitolite'];
-    "${git_home}/.gitolite/hooks/common/post-receive":
-      source  => 'puppet:///modules/gitlab/post-receive',
-      mode    => '0755',
-      require => Exec['Setup gitolite'];
+    #"${git_home}/.gitolite/hooks/common/post-receive":
+    #  source  => 'puppet:///modules/gitlab/post-receive',
+    #  mode    => '0755',
+    #  require => Exec['Setup gitolite'];
     "${git_home}/.gitolite":
       ensure  => directory,
       mode    => '0750',

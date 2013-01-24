@@ -51,28 +51,27 @@ class gitlab::server {
     logoutput   => 'on_failure',
   }
 
+  $tarball_path = "/tmp/gitlab-${gitlab::gitlab_branch}.tgz"
+
   exec {
-    'Get gitlab':
-      command     => "git clone -b ${gitlab::gitlab_branch} ${gitlab::gitlab_sources} ./gitlab",
-      creates     => "${gitlab_home}/gitlab",
-      cwd         => $gitlab_home,
+    'Download gitlab tarball':
+      command     => "curl -L ${gitlab::gitlab_tarball_url}/${gitlab::gitlab_branch} -o ${tarball_path}",
+      creates     => "${tarball_path}",
+      user        => $gitlab_user;
+    'Unpack gitlab':
+      command     => "tar -xzf ${tarball_path} -C ${gitlab_home}/gitlab --strip-components 1",
+      creates     => "${gitlab_home}/gitlab/Gemfile",
       user        => $gitlab_user,
-      unless      => "/usr/bin/test -d ${gitlab_home}/gitlab";
+      require     => Exec['Download gitlab tarball'];
     'Install gitlab':
       command     => "bundle install --without development test ${gitlab_without_gems} --deployment",
       provider    => 'shell',
       cwd         => "${gitlab_home}/gitlab",
       user        => $gitlab_user,
       require     => [
-        Exec['Get gitlab'],
+        Exec['Unpack gitlab'],
         Package['bundler'],
-        Exec['Checkout correct gitlab branch']
       ];
-    'Checkout correct gitlab branch':
-      command     => "git fetch ; git checkout ${gitlab::gitlab_branch}",
-      creates     => "${gitlab_home}/gitlab",
-      cwd         => $gitlab_home,
-      user        => $gitlab_user;
     'Setup gitlab DB':
       command     => 'bundle exec rake gitlab:app:setup RAILS_ENV=production',
       provider    => 'shell',
@@ -97,18 +96,12 @@ class gitlab::server {
       user      => $gitlab_user,
       require   => [
         Exec['Install gitlab'],
-        Exec['Checkout correct gitlab branch'],
         File["${gitlab_home}/gitlab/config/database.yml"],
         File["${gitlab_home}/gitlab/tmp"],
         Sshkey['localhost'],
         File["${gitlab_home}/.ssh/id_rsa"],
         Package['bundler']
         ];
-    'Copy post-receive hook':
-      command   => "cp ${gitlab_home}/gitlab/lib/hooks/post-receive ${git_user}/.gitolite/hooks/common/post-receive",
-      user      => $git_user,
-      provider  => 'shell',
-      require   => Exec['Migrate gitlab DB'];
     'Setup git for git user':
       command   => "su -l -c 'git config --global user.name GitLab' ${gitlab_user} ; su -l -c 'git config --global user.email ${git_email}' ${gitlab_user}",
       provider  => 'shell',
@@ -116,6 +109,21 @@ class gitlab::server {
   }
 
   file {
+    'gitlab app dir':
+      path    => "${gitlab_home}/gitlab",
+      ensure  => directory,
+      before  => Exec['Unpack gitlab'],
+      recurse => false,
+      owner   => $gitlab_user, 
+      group   => $gitlab_group, 
+      mode    => 0775;
+    'post receive hook':
+      path    => "${git_home}/.gitolite/hooks/common/post-receive",
+      source  => "${gitlab_home}/gitlab/lib/hooks/post-receive", 
+      owner   => $git_user,
+      group   => $git_group,
+      mode    => 0755,
+      require => Exec['Unpack gitlab'];
     '/.gitlab_setup_done':
       ensure  => 'present',
       owner   => 'root',
@@ -132,7 +140,7 @@ class gitlab::server {
         ensure  => directory,
         owner   => $gitlab_user,
         group   => $gitlab_user,
-        require => Exec['Get gitlab'],
+        require => Exec['Unpack gitlab'],
         before  => File['bundle_config'];
       'bundle_config':
         path    => "${gitlab_home}/gitlab/.bundle/config",
@@ -148,14 +156,14 @@ class gitlab::server {
       content => template('gitlab/database.yml.erb'),
       owner   => $gitlab_user,
       group   => $gitlab_user,
-      require => [Exec['Get gitlab'],
+      require => [Exec['Unpack gitlab'],
                   File["${gitlab_home}/gitlab/config/gitlab.yml"]];
     "${gitlab_home}/gitlab/config/unicorn.rb":
       ensure  => file,
       content => template('gitlab/unicorn.rb.erb'),
       owner   => $gitlab_user,
       group   => $gitlab_user,
-      require => [Exec['Get gitlab'],
+      require => [Exec['Unpack gitlab'],
                   File["${gitlab_home}/gitlab/config/gitlab.yml"]];
     "${gitlab_home}/gitlab/config/gitlab.yml":
       ensure  => file,
@@ -163,13 +171,13 @@ class gitlab::server {
       owner   => $gitlab_user,
       group   => $gitlab_user,
       mode    => '0640',
-      require => Exec['Get gitlab'],
+      require => Exec['Unpack gitlab'],
       notify  => Exec['Setup gitlab DB'];
     "${gitlab_home}/gitlab/tmp":
       ensure  => directory,
       owner   => $gitlab_user,
       group   => $gitlab_user,
-      require => Exec['Get gitlab'];
+      require => Exec['Unpack gitlab'];
     "${gitlab_home}/.gitconfig":
       content => template('gitlab/gitolite.gitconfig.erb'),
       mode    => '0644';

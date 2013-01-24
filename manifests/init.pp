@@ -69,6 +69,7 @@ class gitlab(
     $gitlab_comment     = $gitlab::params::gitlab_comment,
     $gitlab_sources     = $gitlab::params::gitlab_sources,
     $gitlab_branch      = $gitlab::params::gitlab_branch,
+    $gitlab_tarball_url = $gitlab::params::gitlab_tarball_url,
     $gitolite_sources   = $gitlab::params::gitolite_sources,
     $gitolite_branch    = $gitlab::params::gitolite_branch,
     $gitlab_dbtype      = $gitlab::params::gitlab_dbtype,
