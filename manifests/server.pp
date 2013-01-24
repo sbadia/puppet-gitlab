@@ -16,6 +16,7 @@ class gitlab::server {
   $gitlab_home        = $gitlab::gitlab_home
   $gitlab_user        = $gitlab::gitlab_user
   $git_home           = $gitlab::git_home
+  $git_user           = $gitlab::git_user
   $git_email          = $gitlab::git_email
   $ldap_enabled       = $gitlab::ldap_enabled
   $ldap_host          = $gitlab::ldap_host
@@ -45,39 +46,40 @@ class gitlab::server {
     default  => '',
   }
 
+  Exec{
+    path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+    logoutput   => 'on_failure',
+  }
+
   exec {
     'Get gitlab':
       command     => "git clone -b ${gitlab::gitlab_branch} ${gitlab::gitlab_sources} ./gitlab",
       creates     => "${gitlab_home}/gitlab",
-      logoutput   => 'on_failure',
       cwd         => $gitlab_home,
-      path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       user        => $gitlab_user,
       unless      => "/usr/bin/test -d ${gitlab_home}/gitlab";
     'Install gitlab':
       command     => "bundle install --without development test ${gitlab_without_gems} --deployment",
-      logoutput   => 'on_failure',
-      provider    => shell,
+      provider    => 'shell',
       cwd         => "${gitlab_home}/gitlab",
-      path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       user        => $gitlab_user,
-      require     => [Exec['Get gitlab'], Package['bundler'], Exec['Checkout correct gitlab branch']];
+      require     => [
+        Exec['Get gitlab'],
+        Package['bundler'],
+        Exec['Checkout correct gitlab branch']
+      ];
     'Checkout correct gitlab branch':
       command     => "git fetch ; git checkout ${gitlab::gitlab_branch}",
       creates     => "${gitlab_home}/gitlab",
-      logoutput   => 'on_failure',
       cwd         => $gitlab_home,
-      path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       user        => $gitlab_user;
     'Setup gitlab DB':
-      command   => 'bundle exec rake gitlab:app:setup RAILS_ENV=production',
-      logoutput => 'on_failure',
-      provider  => shell,
-      cwd       => "${gitlab_home}/gitlab",
-      path      => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-      user      => $gitlab_user,
-      creates   => '/.gitlab_setup_done',
-      require   => [
+      command     => 'bundle exec rake gitlab:app:setup RAILS_ENV=production',
+      provider    => 'shell',
+      cwd         => "${gitlab_home}/gitlab",
+      user        => $gitlab_user,
+      creates     => '/.gitlab_setup_done',
+      require     => [
         Exec['Install gitlab'],
         File["${gitlab_home}/gitlab/config/database.yml"],
         File["${gitlab_home}/gitlab/tmp"],
@@ -86,12 +88,12 @@ class gitlab::server {
         Package['bundler']
         ],
       refreshonly => true;
+    # Note: removed in e65417a
+    # bundle exec rake gitlab:app:enable_automerge RAILS_ENV=production
     'Migrate gitlab DB':
       command   => 'bundle exec rake db:migrate RAILS_ENV=production',
-      logoutput => 'on_failure',
       provider  => 'shell',
       cwd       => "${gitlab_home}/gitlab",
-      path      => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       user      => $gitlab_user,
       require   => [
         Exec['Install gitlab'],
@@ -103,25 +105,22 @@ class gitlab::server {
         Package['bundler']
         ];
     'Copy post-receive hook':
-      command   => 'cp /home/gitlab/gitlab/lib/hooks/post-receive /home/git/.gitolite/hooks/common/post-receive',
+      command   => "cp ${gitlab_home}/gitlab/lib/hooks/post-receive ${git_user}/.gitolite/hooks/common/post-receive",
       user      => $git_user,
-      logoutput => 'on_failure',
       provider  => 'shell',
-      path      => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       require   => Exec['Migrate gitlab DB'];
     'Setup git for git user':
-      command => "su -l -c 'git config --global user.name GitLab' ${gitlab_user} ; su -l -c 'git config --global user.email ${git_email}' ${gitlab_user}",
-      logoutput => 'on_failure',
+      command   => "su -l -c 'git config --global user.name GitLab' ${gitlab_user} ; su -l -c 'git config --global user.email ${git_email}' ${gitlab_user}",
       provider  => 'shell',
-      path      => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       require   => Exec['Migrate gitlab DB'];
   }
 
-  file { '/.gitlab_setup_done':
-    ensure  => 'present',
-    owner   => 'root',
-    group   => 'root',
-    require => Exec['Migrate gitlab DB'],
+  file {
+    '/.gitlab_setup_done':
+      ensure  => 'present',
+      owner   => 'root',
+      group   => 'root',
+      require => Exec['Migrate gitlab DB'];
   }
 
 
