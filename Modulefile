@@ -1,7 +1,7 @@
 name    'puppet-gitlab'
 version '0.0.3'
 source  'https://github.com/sbadia/puppet-gitlab'
-author  'Steffen Roegner, Matt Klich, Sebastien Badia'
+author  'Steffen Roegner, Uwe Kleinmann, Matt Klich, Sebastien Badia'
 license 'GPLv3'
 summary 'Puppet GitLab Module'
 description 'Module to install GitLab using puppet'

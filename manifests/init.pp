@@ -44,6 +44,7 @@
 # === Authors
 #
 # Sebastien Badia <seb@sebian.fr>
+# Uwe Kleinmann <uwe@kleinmann.org>
 # Matt Klich <matt@elementalvoid.com>
 # Steffen Roegner <steffen@sroegner.org>
 #
