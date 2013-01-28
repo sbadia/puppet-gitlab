@@ -151,6 +151,8 @@ class gitlab::server {
     "${gitlab_home}/.gitconfig":
       content => template('gitlab/gitolite.gitconfig.erb'),
       mode    => '0644';
+    "${gitlab_home}/gitlab-satellites":
+      ensure  => directory;
   }
 
   sshkey {
