@@ -131,6 +131,14 @@ class gitlab::debian_packages {
           require     => Exec['Configure and Install Ruby 1.9.3'],
           logoutput   => 'on_failure',
           unless      => "test -f /usr/local/lib/ruby/site_ruby/1.9.1/${hardwaremodel}-linux/zlib.so";
+        'Configure and Install ruby-openssl':
+          command     => 'ruby extconf.rb; make; make install',
+          path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+          cwd         => '/root/ruby-1.9.3-p194/ext/openssl',
+          user        => root,
+          require     => Exec['Configure and Install Ruby 1.9.3'],
+          logoutput   => 'on_failure',
+          unless      => "test -f /usr/local/lib/ruby/site_ruby/1.9.1/${hardwaremodel}-linux/openssl.so";
       }
     } # Squeeze, Precise
     default: {
