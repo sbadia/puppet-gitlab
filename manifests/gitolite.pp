@@ -9,6 +9,7 @@ class gitlab::gitolite {
   $git_home         = $gitlab::git_home
   $git_admin_pubkey = $gitlab::git_admin_pubkey
   $git_email        = $gitlab::git_email
+  $gitlab_home      = $gitlab::gitlab_home
 
   case $gitlab::ssh_key_provider {
     content: {
@@ -30,7 +31,7 @@ class gitlab::gitolite {
       mode    => '0644',
       before  => Exec['Setup gitolite'];
     "${git_home}/.gitolite/hooks/common/post-receive":
-      source  => 'puppet:///modules/gitlab/post-receive',
+      ensure  => "${gitlab_home}/gitlab/lib/hooks/post-receive",
       mode    => '0755',
       require => Exec['Setup gitolite'];
     "${git_home}/.gitolite":
