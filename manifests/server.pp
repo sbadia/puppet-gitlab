@@ -87,37 +87,18 @@ class gitlab::server {
       refreshonly => true;
     # Note: removed in e65417a
     # bundle exec rake gitlab:app:enable_automerge RAILS_ENV=production
-    'Migrate gitlab DB':
-      command   => 'bundle exec rake db:migrate RAILS_ENV=production',
-      provider  => 'shell',
-      cwd       => "${gitlab_home}/gitlab",
-      user      => $gitlab_user,
-      require   => [
-        Exec['Install gitlab'],
-        Exec['Checkout correct gitlab branch'],
-        File["${gitlab_home}/gitlab/config/database.yml"],
-        File["${gitlab_home}/gitlab/tmp"],
-        Sshkey['localhost'],
-        File["${gitlab_home}/.ssh/id_rsa"],
-        Package['bundler']
-        ];
-    'Copy post-receive hook':
-      command   => "cp ${gitlab_home}/gitlab/lib/hooks/post-receive ${git_user}/.gitolite/hooks/common/post-receive",
-      user      => $git_user,
-      provider  => 'shell',
-      require   => Exec['Migrate gitlab DB'];
     'Setup git for git user':
       command   => "su -l -c 'git config --global user.name GitLab' ${gitlab_user} ; su -l -c 'git config --global user.email ${git_email}' ${gitlab_user}",
       provider  => 'shell',
-      require   => Exec['Migrate gitlab DB'];
+      require   => Exec['Setup gitlab DB'];
   }
 
   file {
-    '/.gitlab_setup_done':
+    "${gitlab_home}/.gitlab_setup_done":
       ensure  => 'present',
       owner   => 'root',
       group   => 'root',
-      require => Exec['Migrate gitlab DB'];
+      require => Exec['Setup gitlab DB'];
   }
 
 
