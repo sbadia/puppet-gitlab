@@ -15,6 +15,8 @@ class gitlab::server {
   $gitlab_domain      = $gitlab::gitlab_domain
   $gitlab_home        = $gitlab::gitlab_home
   $gitlab_user        = $gitlab::gitlab_user
+  $gitlab_branch      = $gitlab::gitlab_branch
+  $gitlab_sources     = $gitlab::gitlab_sources
   $git_home           = $gitlab::git_home
   $git_user           = $gitlab::git_user
   $git_email          = $gitlab::git_email
@@ -53,7 +55,7 @@ class gitlab::server {
 
   exec {
     'Get gitlab':
-      command     => "git clone -b ${gitlab::gitlab_branch} ${gitlab::gitlab_sources} ./gitlab",
+      command     => "git clone -b ${gitlab_branch} ${gitlab_sources} ./gitlab",
       creates     => "${gitlab_home}/gitlab",
       cwd         => $gitlab_home,
       user        => $gitlab_user,
@@ -65,20 +67,15 @@ class gitlab::server {
       user        => $gitlab_user,
       require     => [
         Exec['Get gitlab'],
-        Package['bundler'],
-        Exec['Checkout correct gitlab branch']
+        Package['bundler']
       ];
-    'Checkout correct gitlab branch':
-      command     => "git fetch ; git checkout ${gitlab::gitlab_branch}",
-      creates     => "${gitlab_home}/gitlab",
-      cwd         => $gitlab_home,
-      user        => $gitlab_user;
     'Setup gitlab DB':
-      command     => 'bundle exec rake gitlab:app:setup RAILS_ENV=production',
+      # /usr/bin/yes \"yes\" | bundle exec rake gitlab:setup RAILS_ENV=production
+      command     => 'bundle exec rake gitlab:setup RAILS_ENV=production',
       provider    => 'shell',
       cwd         => "${gitlab_home}/gitlab",
       user        => $gitlab_user,
-      creates     => '/.gitlab_setup_done',
+      creates     => "${gitlab_home}/.gitlab_setup_done",
       require     => [
         Exec['Install gitlab'],
         File["${gitlab_home}/gitlab/config/database.yml"],
