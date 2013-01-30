@@ -16,10 +16,20 @@ class gitlab::server {
   package {
     'bundler':
       ensure   => installed,
-      provider => gem;
+      provider => gem,
+      require  => [
+        Gitlab::Debian_packages::Ruby_native_ext['psych'],
+        Gitlab::Debian_packages::Ruby_native_ext['zlib'],
+        Gitlab::Debian_packages::Ruby_native_ext['openssl']
+      ];
     'charlock_holmes':
       ensure   => '0.6.9',
-      provider => gem;
+      provider => gem,
+      require  => [
+        Gitlab::Debian_packages::Ruby_native_ext['psych'],
+        Gitlab::Debian_packages::Ruby_native_ext['zlib'],
+        Gitlab::Debian_packages::Ruby_native_ext['openssl']
+      ];
     'pygments':
       ensure   => installed,
       provider => pip;
