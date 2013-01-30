@@ -60,6 +60,18 @@ class gitlab::redhat_packages {
 class gitlab::debian_packages {
   include gitlab
 
+  define ruby_native_ext($ext) {
+    exec{$ext:
+      command     => 'ruby extconf.rb; make; make install',
+      path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+      cwd         => "/root/ruby-1.9.3-p194/ext/${ext}",
+      user        => root,
+      require     => Exec['Configure and Install Ruby 1.9.3'],
+      logoutput   => 'on_failure',
+      unless      => "test -f /usr/local/lib/ruby/site_ruby/1.9.1/${::hardwaremodel}-linux/${ext}.so";
+    }
+  }
+
   $gitlab_dbtype  = $gitlab::gitlab_dbtype
   $git_home       = $gitlab::git_home
   $git_user       = $gitlab::git_user
@@ -115,31 +127,18 @@ class gitlab::debian_packages {
           require     => Exec['Untar Ruby 1.9.3'],
           logoutput   => 'on_failure',
           refreshonly => true;
-        'Configure and Install ruby-spych':
-          command     => 'ruby extconf.rb; make; make install',
-          path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          cwd         => '/root/ruby-1.9.3-p194/ext/psych',
-          user        => root,
-          require     => Exec['Configure and Install Ruby 1.9.3'],
-          logoutput   => 'on_failure',
-          unless      => "test -f /usr/local/lib/ruby/site_ruby/1.9.1/${hardwaremodel}-linux/psych.so";
-        'Configure and Install ruby-zlib':
-          command     => 'ruby extconf.rb; make; make install',
-          path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          cwd         => '/root/ruby-1.9.3-p194/ext/zlib',
-          user        => root,
-          require     => Exec['Configure and Install Ruby 1.9.3'],
-          logoutput   => 'on_failure',
-          unless      => "test -f /usr/local/lib/ruby/site_ruby/1.9.1/${hardwaremodel}-linux/zlib.so";
-        'Configure and Install ruby-openssl':
-          command     => 'ruby extconf.rb; make; make install',
-          path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          cwd         => '/root/ruby-1.9.3-p194/ext/openssl',
-          user        => root,
-          require     => Exec['Configure and Install Ruby 1.9.3'],
-          logoutput   => 'on_failure',
-          unless      => "test -f /usr/local/lib/ruby/site_ruby/1.9.1/${hardwaremodel}-linux/openssl.so";
       }
+
+      ruby_native_ext{'psych':
+        ext           => 'psych',
+      }
+      ruby_native_ext{'zlib':
+        ext           => 'zlib',
+      }
+      ruby_native_ext{'openssl':
+        ext           => 'openssl',
+      }
+
     } # Squeeze, Precise
     default: {
       # Assuming default ruby 1.9.3 (wheezy,quantal)
