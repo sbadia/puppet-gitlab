@@ -64,7 +64,7 @@ class gitlab::redhat_packages {
   package {
     [ 'git','wget','curl','redis','openssh-server','python-pip','libicu-devel',
       'libxml2-devel','libxslt-devel','python-devel','libcurl-devel',
-      'readline-devel','openssl-devel','zlib-devel','libyaml-devel']:
+      'readline-devel','openssl-devel','zlib-devel','libyaml-devel', 'perl-Time-HiRes']:
         ensure => installed;
   }
 

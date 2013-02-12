@@ -73,7 +73,7 @@ class gitlab::server {
         Package['bundler'],
       ];
     'Setup gitlab DB':
-      command     => 'bundle exec rake gitlab:app:setup RAILS_ENV=production',
+      command     => 'bundle exec rake gitlab:setup RAILS_ENV=production',
       provider    => 'shell',
       cwd         => "${gitlab_home}/gitlab",
       user        => $gitlab_user,

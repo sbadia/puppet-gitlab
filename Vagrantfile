@@ -23,7 +23,7 @@ boxes = {
   },
   'centos6' => {
     'name'  => 'centos6.gitlab',
-    'url'   => 'http://sroegner-vagrant.s3.amazonaws.com/Centos6_puppet3_virtualbox4.2.box'
+    'url'   => 'http://sroegner-vagrant.s3.amazonaws.com/gitlab-centos6-VirtualBox-4.2.6.box'
   }
 }
 

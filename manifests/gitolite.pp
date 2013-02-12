@@ -29,10 +29,6 @@ class gitlab::gitolite {
     "${git_home}/${git_user}.pub":
       mode    => '0644',
       before  => Exec['Setup gitolite'];
-    #"${git_home}/.gitolite/hooks/common/post-receive":
-    #  source  => 'puppet:///modules/gitlab/post-receive',
-    #  mode    => '0755',
-    #  require => Exec['Setup gitolite'];
     "${git_home}/.gitolite":
       ensure  => directory,
       mode    => '0750',
@@ -51,23 +47,20 @@ class gitlab::gitolite {
       ensure  => directory;
   }
 
-  case $::osfamily {
-    Redhat: {
-      file {
-        "${git_home}/.gitolite":
-          ensure  => directory,
-          mode    => '0750';
-        "${git_home}/.gitolite/logs":
-          ensure  => directory,
-          mode    => '0750',
-          require => File["${git_home}/.gitolite"],
-          before  => Exec['Setup gitolite'];
-      }
-    } # Redhat
-    default: {
-      info "No customizations for ${::osfamily}"
-    }
-  } # Case
+#  case $::osfamily {
+#    Redhat: {
+#      file {
+#        "${git_home}/.gitolite/logs":
+#          ensure  => directory,
+#          mode    => '0750',
+#          require => File["${git_home}/.gitolite"],
+#          before  => Exec['Setup gitolite'];
+#      }
+#    } # Redhat
+#    default: {
+#      info "No customizations for ${::osfamily}"
+#    }
+#  } # Case
 
   exec {
     'Get patched gitolite':
