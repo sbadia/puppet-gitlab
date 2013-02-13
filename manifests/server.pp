@@ -69,9 +69,11 @@ class gitlab::server {
         Exec['Get gitlab'],
         Package['bundler']
       ];
+    # FIXME sudo ln -s /usr/bin/python /usr/bin/python2
+    # recommanded by gitlab (bundle exec rake gitlab:check RAILS_ENV=production)
+    # but it's a bit ugly...
     'Setup gitlab DB':
-      # /usr/bin/yes \"yes\" | bundle exec rake gitlab:setup RAILS_ENV=production
-      command     => 'bundle exec rake gitlab:setup RAILS_ENV=production',
+      command     => '/usr/bin/yes yes | bundle exec rake gitlab:setup RAILS_ENV=production',
       provider    => 'shell',
       cwd         => "${gitlab_home}/gitlab",
       user        => $gitlab_user,
@@ -85,8 +87,6 @@ class gitlab::server {
         Package['bundler']
         ],
       refreshonly => true;
-    # Note: removed in e65417a
-    # bundle exec rake gitlab:app:enable_automerge RAILS_ENV=production
     'Setup git for git user':
       command   => "su -l -c 'git config --global user.name GitLab' ${gitlab_user} ; su -l -c 'git config --global user.email ${git_email}' ${gitlab_user}",
       provider  => 'shell',
@@ -235,8 +235,7 @@ class gitlab::server {
     'gitlab':
       ensure    => running,
       require   => File['/etc/init.d/gitlab'],
-      hasstatus => false,
-      pattern   => 'unicorn_rails',
+      hasstatus => true,
       enable    => true;
   }
 } # Class:: gitlab::server

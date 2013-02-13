@@ -118,7 +118,6 @@ case "$1" in
   reload|force-reload)
         echo -n "Reloading $NAME configuration: "
         kill -HUP `cat $PID`
-        kill -HUP `cat $SPID`
         echo "done."
         ;;
   status)
