@@ -1,0 +1,7 @@
+* 2012-11-02 - 0.0.4
+- up to GitLab 4.1
+* 2013-01-01 - 0.0.3
+- up to GitLab 3.2
+- add dependency to mysql, stdlib
+* 2012-08-12 - 0.0.1
+- initial release
