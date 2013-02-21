@@ -8,7 +8,6 @@ node /gitlab_server/ {
   # git://github.com/puppetlabs/puppetlabs-mysql.git
   include 'mysql'
 
-  class { 'mysql::server': }
   mysql::db {
     $gitlab_dbname:
       ensure   => 'present',

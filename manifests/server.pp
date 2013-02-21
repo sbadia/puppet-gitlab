@@ -87,10 +87,6 @@ class gitlab::server {
         Package['bundler']
         ],
       refreshonly => true;
-    'Setup git for git user':
-      command   => "su -l -c 'git config --global user.name GitLab' ${gitlab_user} ; su -l -c 'git config --global user.email ${git_email}' ${gitlab_user}",
-      provider  => 'shell',
-      require   => Exec['Setup gitlab DB'];
   }
 
   file {
@@ -149,7 +145,7 @@ class gitlab::server {
       group   => $gitlab_user,
       require => Exec['Get gitlab'];
     "${gitlab_home}/.gitconfig":
-      content => template('gitlab/gitolite.gitconfig.erb'),
+      content => template('gitlab/gitlab.gitconfig.erb'),
       mode    => '0644';
     "${gitlab_home}/gitlab-satellites":
       ensure  => directory;

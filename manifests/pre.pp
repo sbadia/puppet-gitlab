@@ -37,11 +37,18 @@ class gitlab::pre {
     }
     'Redhat': {
       require gitlab::redhat_packages
+      file {
+          $git_home:
+          mode    => '0750',
+          recurse => false,
+          require => User[$git_user];
+      }
     }
     default: {
       err "${::osfamily} not supported yet"
     }
   }
+
 } # Class:: gitlab::pre
 
 # Class:: gitlab::redhat_packages
@@ -49,6 +56,7 @@ class gitlab::pre {
 #
 class gitlab::redhat_packages {
   include gitlab
+  include mysql
 
   $gitlab_dbtype  = $gitlab::gitlab_dbtype
 
@@ -62,13 +70,18 @@ class gitlab::redhat_packages {
       ensure => installed;
   }
   package {
-    [ 'git','wget','curl','redis','openssh-server','python-pip','libicu-devel',
+    [ 'git','perl-Time-HiRes','wget','curl','redis','openssh-server','python-pip','libicu-devel',
       'libxml2-devel','libxslt-devel','python-devel','libcurl-devel',
       'readline-devel','openssl-devel','zlib-devel','libyaml-devel']:
         ensure => installed;
   }
 
+  class { 'mysql::server': }
+
   service {
+    'iptables':
+      ensure  => stopped,
+      enable  => false;
     'redis':
       ensure  => running,
       enable  => true,
@@ -82,6 +95,7 @@ class gitlab::redhat_packages {
 #
 class gitlab::debian_packages {
   include gitlab
+  include mysql
 
   $gitlab_dbtype  = $gitlab::gitlab_dbtype
   $git_home       = $gitlab::git_home
@@ -90,8 +104,11 @@ class gitlab::debian_packages {
 
   exec {
     'apt-get update':
+      before      => Class['mysql'],
       command     => '/usr/bin/apt-get update';
   }
+
+  class { 'mysql::server': require => Exec['apt-get update'], }
 
   $db_packages = $gitlab_dbtype ? {
     mysql => ['libmysql++-dev','libmysqlclient-dev'],

@@ -52,24 +52,6 @@ class gitlab::gitolite {
       ensure  => directory;
   }
 
-  case $::osfamily {
-    Redhat: {
-      file {
-        "${git_home}/.gitolite":
-          ensure  => directory,
-          mode    => '0750';
-        "${git_home}/.gitolite/logs":
-          ensure  => directory,
-          mode    => '0750',
-          require => File["${git_home}/.gitolite"],
-          before  => Exec['Setup gitolite'];
-      }
-    } # Redhat
-    default: {
-      info "No customizations for ${::osfamily}"
-    }
-  } # Case
-
   exec {
     'Get patched gitolite':
       command   => "git clone -b ${gitlab::gitolite_branch} ${gitlab::gitolite_sources} ${git_home}/gitolite",
