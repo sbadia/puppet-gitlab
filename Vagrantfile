@@ -43,6 +43,14 @@ Vagrant::Config.run do |config|
     hq.vm.share_folder "puppetlabs_mysql", "/srv/puppet_modules/mysql", "modules/puppetlabs-mysql/"
     # https://github.com/puppetlabs/puppetlabs-stdlib
     hq.vm.share_folder "puppetlabs_stdlib", "/srv/puppet_modules/stdlib", "modules/puppetlabs-stdlib/"
+    # https://github.com/puppetlabs/puppetlabs-apt
+    hq.vm.share_folder "puppetlabs_apt", "/srv/puppet_modules/apt", "modules/puppetlabs-apt/"
+    # https://github.com/puppetlabs/puppetlabs-concat
+    hq.vm.share_folder "puppetlabs_concat", "/srv/puppet_modules/concat", "modules/puppetlabs-concat/"
+    # https://github.com/puppetlabs/puppetlabs-firewall
+    hq.vm.share_folder "puppetlabs_firewall", "/srv/puppet_modules/firewall", "modules/puppetlabs-firewall/"
+    # https://github.com/puppetlabs/puppet-postgresql
+    hq.vm.share_folder "puppet_postgresql", "/srv/puppet_modules/postgresql", "modules/puppet-postgresql/"
 
     hq.vm.provision :puppet, :pp_path => "/srv/vagrant-puppet" do |puppet|
       #puppet.options = [ "--debug", "--modulepath", "/srv/puppet_modules", "--certname gitlab_server"]

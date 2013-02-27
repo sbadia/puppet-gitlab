@@ -4,4 +4,15 @@
 [submodule "modules/puppetlabs-stdlib"]
 	path = modules/puppetlabs-stdlib
 	url = https://github.com/puppetlabs/puppetlabs-stdlib
-
+[submodule "modules/puppet-postgresql"]
+	path = modules/puppet-postgresql
+	url = https://github.com/puppetlabs/puppet-postgresql
+[submodule "modules/puppetlabs-firewall"]
+	path = modules/puppetlabs-firewall
+	url = https://github.com/puppetlabs/puppetlabs-firewall
+[submodule "modules/puppetlabs-apt"]
+	path = modules/puppetlabs-apt
+	url = https://github.com/puppetlabs/puppetlabs-apt
+[submodule "modules/puppetlabs-concat"]
+	path = modules/puppetlabs-concat
+	url = https://github.com/puppetlabs/puppetlabs-concat
