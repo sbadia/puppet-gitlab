@@ -12,7 +12,7 @@ describe 'gitlab::server' do
     let :pre_condition do
       global_gitlab_variables
     end
-    
+
     it { should contain_package('nginx').with(
       :name   => 'nginx',
       :ensure => 'latest'
@@ -22,7 +22,7 @@ describe 'gitlab::server' do
       :provider   => 'gem',
       :ensure => 'installed'
     )}
-  
+
     it { should contain_package('charlock_holmes').with(
       :provider   => 'gem',
       :ensure => '0.6.9'
@@ -32,6 +32,6 @@ describe 'gitlab::server' do
       :provider   => 'pip',
       :ensure => 'installed'
     )}
-    
+
   end
 end
