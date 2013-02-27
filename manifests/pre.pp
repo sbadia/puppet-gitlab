@@ -56,7 +56,6 @@ class gitlab::pre {
 #
 class gitlab::redhat_packages {
   include gitlab
-  include mysql
 
   $gitlab_dbtype  = $gitlab::gitlab_dbtype
 
@@ -70,13 +69,12 @@ class gitlab::redhat_packages {
       ensure => installed;
   }
   package {
-    [ 'git','perl-Time-HiRes','wget','curl','redis','openssh-server','python-pip','libicu-devel',
-      'libxml2-devel','libxslt-devel','python-devel','libcurl-devel',
-      'readline-devel','openssl-devel','zlib-devel','libyaml-devel']:
+    [ 'git','perl-Time-HiRes','wget','curl','redis','openssh-server',
+      'python-pip','libicu-devel','libxml2-devel','libxslt-devel',
+      'python-devel','libcurl-devel','readline-devel','openssl-devel',
+      'zlib-devel','libyaml-devel']:
         ensure => installed;
   }
-
-  class { 'mysql::server': }
 
   service {
     'iptables':
@@ -95,7 +93,6 @@ class gitlab::redhat_packages {
 #
 class gitlab::debian_packages {
   include gitlab
-  include mysql
 
   $gitlab_dbtype  = $gitlab::gitlab_dbtype
   $git_home       = $gitlab::git_home
@@ -104,11 +101,8 @@ class gitlab::debian_packages {
 
   exec {
     'apt-get update':
-      before      => Class['mysql'],
       command     => '/usr/bin/apt-get update';
   }
-
-  class { 'mysql::server': require => Exec['apt-get update'], }
 
   $db_packages = $gitlab_dbtype ? {
     mysql => ['libmysql++-dev','libmysqlclient-dev'],
