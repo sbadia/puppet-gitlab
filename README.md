@@ -1,6 +1,6 @@
 # Puppet-gitlab [![Build Status](https://travis-ci.org/sbadia/puppet-gitlab.png)](https://travis-ci.org/sbadia/puppet-gitlab)
 
-Tested successfully with Gitlab 4.1-stable [db958e5997](https://github.com/gitlabhq/gitlabhq/commit/db958e59977474d47c62df10806a33f2b4709d88) on debian wheezy with puppet 3
+Tested successfully with Gitlab 4.2-stable [d67117b](https://github.com/gitlabhq/gitlabhq/commit/d67117b5a185cfb15a1d7e749588ff981ffbf779) on debian wheezy with puppet 3
 
 [GitLab](http://gitlabhq.org/) is a free project and repository management application
 
