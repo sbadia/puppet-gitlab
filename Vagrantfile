@@ -11,6 +11,7 @@
 
 default_type = 'debian7'
 type = ENV['OS'] || default_type
+custom = ENV['CUSTOM'] || 'mysql'
 
 boxes = {
   'debian7' => {
@@ -56,7 +57,7 @@ Vagrant::Config.run do |config|
       #puppet.options = [ "--debug", "--modulepath", "/srv/puppet_modules", "--certname gitlab_server"]
       puppet.options = [ "--modulepath", "/srv/puppet_modules", "--certname gitlab_server"]
       puppet.manifests_path = "examples"
-      puppet.manifest_file = "gitlab.pp"
+      puppet.manifest_file = "gitlab_#{custom}.pp"
     end
   end
 end

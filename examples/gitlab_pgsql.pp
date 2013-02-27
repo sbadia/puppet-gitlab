@@ -6,13 +6,6 @@ node /gitlab_server/ {
   $gitlab_dbpwd   = 'labpass'
 
   # git://github.com/puppetlabs/puppet-postgresql.git
-  include 'postgresql::server'
-
-  class {
-    'postgres':
-      charset => 'UTF8',
-      locale  => 'en_US',
-  }->
   class {
     'postgresql::server':
       config_hash => {
