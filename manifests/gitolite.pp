@@ -58,6 +58,7 @@ class gitlab::gitolite {
       path      => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       logoutput => 'on_failure',
       user      => $git_user,
+      cwd       => $git_home,
       require   => User[$git_user],
       unless    => "/usr/bin/test -d ${git_home}/gitolite";
     'Install patched gitolite':
