@@ -133,8 +133,8 @@ class gitlab::debian_packages {
     # Need to install a fresh ruby version...
     'squeeze': {
       package {
-        ['checkinstall','libcurl4-openssl-dev','libreadline6-dev','libpq-dev',
-        'libssl-dev','build-essential','zlib1g-dev','libyaml-dev','libc6-dev']:
+        ['checkinstall','libcurl4-openssl-dev','libreadline6-dev','libssl-dev',
+        'build-essential','zlib1g-dev','libyaml-dev','libc6-dev']:
           ensure  => installed,
           require => Exec['apt-get update'];
       }
@@ -146,6 +146,8 @@ class gitlab::debian_packages {
           cwd         => '/root',
           user        => root,
           logoutput   => 'on_failure',
+          require     => Package['checkinstall','libcurl4-openssl-dev','libreadline6-dev','libssl-dev',
+                         'build-essential','zlib1g-dev','libyaml-dev','libc6-dev'],
           unless      => 'test -f /root/ruby-1.9.3-p194.tar.gz';
         'Untar Ruby 1.9.3':
           command     => 'tar xfz ruby-1.9.3-p194.tar.gz',
