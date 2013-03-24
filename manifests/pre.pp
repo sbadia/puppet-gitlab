@@ -4,29 +4,18 @@
 class gitlab::pre {
   include gitlab
 
-  $gitlab_home    = $gitlab::gitlab_home
-  $gitlab_user    = $gitlab::gitlab_user
   $git_home       = $gitlab::git_home
   $git_user       = $gitlab::git_user
   $git_comment    = $gitlab::git_comment
-  $gitlab_comment = $gitlab::gitlab_comment
 
   user {
     $git_user:
       ensure     => present,
-      shell      => '/bin/sh',
+      shell      => '/bin/false',
       home       => $git_home,
       managehome => true,
       comment    => $git_comment,
       system     => true;
-    $gitlab_user:
-      ensure     => present,
-      groups     => $git_user,
-      shell      => '/bin/bash',
-      home       => $gitlab_home,
-      managehome => true,
-      comment    => $gitlab_comment,
-      require    => User[$git_user];
   }
 
   # try and decide about the family here,
