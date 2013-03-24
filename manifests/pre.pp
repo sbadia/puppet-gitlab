@@ -70,9 +70,10 @@ class gitlab::redhat_packages {
       ensure => installed;
   }
   package {
-    [ 'git','perl-Time-HiRes','wget','curl','redis','openssh-server','python-pip','libicu-devel',
-      'libxml2-devel','libxslt-devel','python-devel','libcurl-devel',
-      'readline-devel','openssl-devel','zlib-devel','libyaml-devel']:
+    [ 'git','perl-Time-HiRes','wget','curl','redis','openssh-server',
+      'python-pip','libicu-devel','libxml2-devel','libxslt-devel',
+      'python-devel','libcurl-devel','readline-devel','openssl-devel',
+      'zlib-devel','libyaml-devel']:
         ensure => installed;
   }
 
@@ -123,8 +124,8 @@ class gitlab::debian_packages {
 
   package {
     ['git','git-core','wget','curl','redis-server',
-      'openssh-server','python-pip','libicu-dev',
-      'libxml2-dev','libxslt1-dev','python-dev']:
+      'openssh-server','python-pip','libicu-dev','python2.7',
+      'libxml2-dev','libxslt1-dev','python-dev','postfix']:
         ensure  => installed,
         require => Exec['apt-get update'],
   }
@@ -133,8 +134,9 @@ class gitlab::debian_packages {
     # Need to install a fresh ruby version...
     'squeeze': {
       package {
-        ['checkinstall','libcurl4-openssl-dev','libreadline6-dev','libssl-dev',
-        'build-essential','zlib1g-dev','libyaml-dev','libc6-dev']:
+        ['checkinstall','libcurl4-openssl-dev','libreadline-dev','libssl-dev',
+        'build-essential','zlib1g-dev','libyaml-dev','libc6-dev','libgdbm-dev',
+        'libncurses5-dev','libffi-dev','libcurl4-openssl-dev','libicu-dev']:
           ensure  => installed,
           require => Exec['apt-get update'];
       }
@@ -146,8 +148,10 @@ class gitlab::debian_packages {
           cwd         => '/root',
           user        => root,
           logoutput   => 'on_failure',
-          require     => Package['checkinstall','libcurl4-openssl-dev','libreadline6-dev','libssl-dev',
-                         'build-essential','zlib1g-dev','libyaml-dev','libc6-dev'],
+          require     => Package['checkinstall','libcurl4-openssl-dev',
+                                  'libreadline6-dev','libssl-dev',
+                                  'build-essential','zlib1g-dev','libyaml-dev',
+                                  'libc6-dev'],
           unless      => 'test -f /root/ruby-1.9.3-p194.tar.gz';
         'Untar Ruby 1.9.3':
           command     => 'tar xfz ruby-1.9.3-p194.tar.gz',
