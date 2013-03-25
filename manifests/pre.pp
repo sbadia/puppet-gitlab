@@ -132,7 +132,7 @@ class gitlab::debian_packages {
 
       exec {
         'Get Ruby 1.9.3':
-          command     => 'wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p327.tar.gz',
+          command     => 'wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p392.tar.gz',
           path        => '/usr/sbin:/sbin:/usr/bin:/bin',
           cwd         => '/root',
           user        => root,
@@ -141,19 +141,19 @@ class gitlab::debian_packages {
                                   'libreadline6-dev','libssl-dev',
                                   'build-essential','zlib1g-dev','libyaml-dev',
                                   'libc6-dev'],
-          unless      => 'test -f /root/ruby-1.9.3-p327.tar.gz';
+          unless      => 'test -f /root/ruby-1.9.3-p392.tar.gz';
         'Untar Ruby 1.9.3':
-          command     => 'tar xfz ruby-1.9.3-p327.tar.gz',
+          command     => 'tar xfz ruby-1.9.3-p392.tar.gz',
           path        => '/usr/sbin:/sbin:/usr/bin:/bin',
           cwd         => '/root',
           user        => root,
           require     => Exec['Get Ruby 1.9.3'],
-          unless      => 'test -d /root/ruby-1.9.3-p327',
+          unless      => 'test -d /root/ruby-1.9.3-p392',
           logoutput   => 'on_failure',
           notify      => Exec['Configure and Install Ruby 1.9.3'];
         'Configure and Install Ruby 1.9.3':
           command     => '/bin/sh configure && make && make install',
-          cwd         => '/root/ruby-1.9.3-p327/',
+          cwd         => '/root/ruby-1.9.3-p392/',
           path        => '/usr/sbin:/sbin:/usr/bin:/bin',
           user        => root,
           timeout     => 900,
