@@ -143,7 +143,7 @@ class gitlab::server {
       group   => $git_user,
       require => Exec['Get gitlab'];
     "${git_home}/.gitconfig":
-      content => template('gitlab/gitlab.gitconfig.erb'),
+      content => template('gitlab/git.gitconfig.erb'),
       mode    => '0644';
     "${git_home}/gitlab-satellites":
       ensure  => directory;
@@ -163,56 +163,13 @@ class gitlab::server {
     default:  { warning "${::osfamily} not supported yet" }
   }
 
-  file { # SSH keys
-    "${git_home}/.ssh":
-      ensure => directory,
-      owner  => $git_user,
-      group  => $git_user,
-      mode   => '0700';
+  file {
     '/var/lib/gitlab':
       ensure => directory,
       owner  => $git_user,
       group  => $nginx_group,
       mode   => '0775';
-    "${git_home}/.ssh/id_rsa":
-      ensure  => file,
-      owner   => $git_user,
-      group   => $git_user,
-      mode    => '0600';
-    "${git_home}/.ssh/id_rsa.pub":
-      ensure  => file,
-      owner   => $git_user,
-      group   => $git_user,
-      mode    => '0644';
-    '/etc/ssh/ssh_known_hosts':
-      ensure  => file,
-      owner   => root,
-      group   => root,
-      mode    => '0644',
-      require => Sshkey['localhost']
   }
-
-  case $gitlab::ssh_key_provider {
-    content: {
-      File["${gitlab_home}/.ssh/id_rsa"] {
-        content => $gitlab::git_admin_privkey
-      }
-      File["${gitlab_home}/.ssh/id_rsa.pub"] {
-        content => $gitlab::git_admin_pubkey
-      }
-    }
-    source: {
-      File["${gitlab_home}/.ssh/id_rsa"] {
-        source => $gitlab::git_admin_privkey
-      }
-      File["${gitlab_home}/.ssh/id_rsa.pub"] {
-        source => $gitlab::git_admin_pubkey
-      }
-    }
-    default: {
-      err "${gitlab::ssh_key_provider} not supported yet"
-    }
-  } # case ssh
 
   file {
     '/etc/init.d/gitlab':
