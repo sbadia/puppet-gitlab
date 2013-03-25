@@ -11,7 +11,8 @@ class gitlab::pre {
   user {
     $git_user:
       ensure     => present,
-      shell      => '/bin/false',
+      shell      => '/bin/bash',
+      password   => '*',
       home       => $git_home,
       managehome => true,
       comment    => $git_comment,
