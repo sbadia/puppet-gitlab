@@ -7,6 +7,7 @@ class gitlab::gitlabshell {
 
   $git_user         = $gitlab::git_user
   $git_home         = $gitlab::git_home
+  $gitlab_domain    = $gitlab::gitlab_domain
 
   file {
     "${git_home}/gitlab-shell/config.yml":
