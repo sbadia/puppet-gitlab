@@ -3,7 +3,7 @@
 #
 class gitlab::server {
   include gitlab
-  require gitlab::gitolite
+  require gitlab::gitlabshell
   require gitlab::nginx
 
   $gitlab_dbtype      = $gitlab::gitlab_dbtype
@@ -13,8 +13,6 @@ class gitlab::server {
   $gitlab_dbhost      = $gitlab::gitlab_dbhost
   $gitlab_dbport      = $gitlab::gitlab_dbport
   $gitlab_domain      = $gitlab::gitlab_domain
-  $gitlab_home        = $gitlab::gitlab_home
-  $gitlab_user        = $gitlab::gitlab_user
   $gitlab_branch      = $gitlab::gitlab_branch
   $gitlab_sources     = $gitlab::gitlab_sources
   $git_home           = $gitlab::git_home
@@ -56,15 +54,15 @@ class gitlab::server {
   exec {
     'Get gitlab':
       command     => "git clone -b ${gitlab_branch} ${gitlab_sources} ./gitlab",
-      creates     => "${gitlab_home}/gitlab",
-      cwd         => $gitlab_home,
-      user        => $gitlab_user,
-      unless      => "/usr/bin/test -d ${gitlab_home}/gitlab";
+      creates     => "${git_home}/gitlab",
+      cwd         => $git_home,
+      user        => $git_user,
+      unless      => "/usr/bin/test -d ${git_home}/gitlab";
     'Install gitlab':
       command     => "bundle install --without development test ${gitlab_without_gems} --deployment",
       provider    => 'shell',
-      cwd         => "${gitlab_home}/gitlab",
-      user        => $gitlab_user,
+      cwd         => "${git_home}/gitlab",
+      user        => $git_user,
       require     => [
         Exec['Get gitlab'],
         Package['bundler']
@@ -75,22 +73,22 @@ class gitlab::server {
     'Setup gitlab DB':
       command     => '/usr/bin/yes yes | bundle exec rake gitlab:setup RAILS_ENV=production',
       provider    => 'shell',
-      cwd         => "${gitlab_home}/gitlab",
-      user        => $gitlab_user,
-      creates     => "${gitlab_home}/.gitlab_setup_done",
+      cwd         => "${git_home}/gitlab",
+      user        => $git_user,
+      creates     => "${git_home}/.gitlab_setup_done",
       require     => [
         Exec['Install gitlab'],
-        File["${gitlab_home}/gitlab/config/database.yml"],
-        File["${gitlab_home}/gitlab/tmp"],
+        File["${git_home}/gitlab/config/database.yml"],
+        File["${git_home}/gitlab/tmp"],
         Sshkey['localhost'],
-        File["${gitlab_home}/.ssh/id_rsa"],
+        File["${git_home}/.ssh/id_rsa"],
         Package['bundler']
         ],
       refreshonly => true;
   }
 
   file {
-    "${gitlab_home}/.gitlab_setup_done":
+    "${git_home}/.gitlab_setup_done":
       ensure  => 'present',
       owner   => 'root',
       group   => 'root',
@@ -102,52 +100,52 @@ class gitlab::server {
   # on newer debian/ubuntu versions
   if ($::osfamily == 'Debian'){
     file {
-      "${gitlab_home}/gitlab/.bundle":
+      "${git_home}/gitlab/.bundle":
         ensure  => directory,
-        owner   => $gitlab_user,
-        group   => $gitlab_user,
+        owner   => $git_user,
+        group   => $git_user,
         require => Exec['Get gitlab'],
         before  => File['bundle_config'];
       'bundle_config':
-        path    => "${gitlab_home}/gitlab/.bundle/config",
+        path    => "${git_home}/gitlab/.bundle/config",
         content => template('gitlab/gitlab.bundle.config.erb'),
-        owner   => $gitlab_user,
-        group   => $gitlab_user,
+        owner   => $git_user,
+        group   => $git_user,
         before  => Exec['Install gitlab']; }
   }
 
   file {
-    "${gitlab_home}/gitlab/config/database.yml":
+    "${git_home}/gitlab/config/database.yml":
       ensure  => file,
       content => template('gitlab/database.yml.erb'),
-      owner   => $gitlab_user,
-      group   => $gitlab_user,
+      owner   => $git_user,
+      group   => $git_user,
       require => [Exec['Get gitlab'],
-                  File["${gitlab_home}/gitlab/config/gitlab.yml"]];
-    "${gitlab_home}/gitlab/config/unicorn.rb":
+                  File["${git_home}/gitlab/config/gitlab.yml"]];
+    "${git_home}/gitlab/config/unicorn.rb":
       ensure  => file,
       content => template('gitlab/unicorn.rb.erb'),
-      owner   => $gitlab_user,
-      group   => $gitlab_user,
+      owner   => $git_user,
+      group   => $git_user,
       require => [Exec['Get gitlab'],
-                  File["${gitlab_home}/gitlab/config/gitlab.yml"]];
-    "${gitlab_home}/gitlab/config/gitlab.yml":
+                  File["${git_home}/gitlab/config/gitlab.yml"]];
+    "${git_home}/gitlab/config/gitlab.yml":
       ensure  => file,
       content => template('gitlab/gitlab.yml.erb'),
-      owner   => $gitlab_user,
-      group   => $gitlab_user,
+      owner   => $git_user,
+      group   => $git_user,
       mode    => '0640',
       require => Exec['Get gitlab'],
       notify  => Exec['Setup gitlab DB'];
-    "${gitlab_home}/gitlab/tmp":
+    "${git_home}/gitlab/tmp":
       ensure  => directory,
-      owner   => $gitlab_user,
-      group   => $gitlab_user,
+      owner   => $git_user,
+      group   => $git_user,
       require => Exec['Get gitlab'];
-    "${gitlab_home}/.gitconfig":
+    "${git_home}/.gitconfig":
       content => template('gitlab/gitlab.gitconfig.erb'),
       mode    => '0644';
-    "${gitlab_home}/gitlab-satellites":
+    "${git_home}/gitlab-satellites":
       ensure  => directory;
   }
 
@@ -166,25 +164,25 @@ class gitlab::server {
   }
 
   file { # SSH keys
-    "${gitlab_home}/.ssh":
+    "${git_home}/.ssh":
       ensure => directory,
-      owner  => $gitlab_user,
-      group  => $gitlab_user,
+      owner  => $git_user,
+      group  => $git_user,
       mode   => '0700';
     '/var/lib/gitlab':
       ensure => directory,
-      owner  => $gitlab_user,
+      owner  => $git_user,
       group  => $nginx_group,
       mode   => '0775';
-    "${gitlab_home}/.ssh/id_rsa":
+    "${git_home}/.ssh/id_rsa":
       ensure  => file,
-      owner   => $gitlab_user,
-      group   => $gitlab_user,
+      owner   => $git_user,
+      group   => $git_user,
       mode    => '0600';
-    "${gitlab_home}/.ssh/id_rsa.pub":
+    "${git_home}/.ssh/id_rsa.pub":
       ensure  => file,
-      owner   => $gitlab_user,
-      group   => $gitlab_user,
+      owner   => $git_user,
+      group   => $git_user,
       mode    => '0644';
     '/etc/ssh/ssh_known_hosts':
       ensure  => file,
