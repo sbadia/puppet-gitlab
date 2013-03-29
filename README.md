@@ -1,6 +1,6 @@
 # Puppet-gitlab [![Build Status](https://travis-ci.org/sbadia/puppet-gitlab.png)](https://travis-ci.org/sbadia/puppet-gitlab)
 
-Tested successfully with Gitlab 4.2-stable [d67117b](https://github.com/gitlabhq/gitlabhq/commit/d67117b5a185cfb15a1d7e749588ff981ffbf779) on debian wheezy with puppet 3
+Tested successfully with Gitlab 5.0-stable [4606380316](https://github.com/gitlabhq/gitlabhq/commit/46063803162064e05973c6c86e7033801266c34c) on debian wheezy with puppet 3
 
 [GitLab](http://gitlabhq.org/) is a free project and repository management application
 
@@ -8,7 +8,7 @@ A [Puppet Module](http://docs.puppetlabs.com/learning/modules1.html#modules)
 is a collection of related content that can be used to model the configuration
 of a discrete service.
 
-This module is based on the admin guides for [gitlab](https://github.com/gitlabhq/gitlabhq/wiki), [stable](https://github.com/gitlabhq/gitlabhq/blob/4-1-stable/doc/install/installation.md) version.
+This module is based on the admin guides for [gitlab](https://github.com/gitlabhq/gitlabhq/wiki), [stable](https://github.com/gitlabhq/gitlabhq/blob/5-0-stable/doc/install/installation.md) version.
 
 ## Testing with vagrant
 
