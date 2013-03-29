@@ -2,20 +2,14 @@
 #
 # === Parameters
 #
-# [git_user] Name of the gitolite user (for ssh)
-# [git_home] Home directory for gitolite repository
-# [git_email] Email address for gitolite user
-# [git_comment] Gitolite user comment
-# [git_admin_pubkey] Gitolite admin ssh public key (required)
-# [git_admin_privkey] Gitolite admin ssh private key (required)
-# [ssh_key_provider] Type of provider for ssh keys (source/content)(default source)
-# [gitlab_user] Name of gitlab user
-# [gitlab_home] Home directory for gitlab installation
-# [gitlab_comment] Gitlab comment
+# [git_user] Name of the gitlab
+# [git_home] Home directory for gitlab repository
+# [git_email] Email address for gitlab user
+# [git_comment] Gitlab user comment
 # [gitlab_sources] Gitlab sources (github)
 # [gitlab_branch] Gitlab branch (default stable)
-# [gitolite_sources] Gitolite sources (github)
-# [gitolite_banch] Gitolite branch (default gl-320 from gitlabhq)
+# [gitlabshell_sources] Gitlab-shell sources (github)
+# [gitlabshell_banch] Gitlab-shell branch (default master)
 # [gitlab_dbtype] Gitlab database type (mysql/pgsql)
 # [gitlab_dbname] Gitlab database name
 # [gitlab_dbuser] Gitlab database user
@@ -37,7 +31,7 @@
 # node /gitlab/ {
 #   class {
 #     'gitlab':
-#       git_adminkey => 'ssh-rsa AAA...'
+#       git_email => 'toto@foobar'
 #   }
 # }
 #
@@ -50,8 +44,7 @@
 #
 # === Copyright
 #
-# See LICENSE file, Sebastien Badia (c) 2012
-# Tue Jul 03 20:06:33 +0200 2012
+# See LICENSE file, Sebastien Badia (c) 2013
 
 # Class:: gitlab
 #
@@ -64,7 +57,7 @@ class gitlab(
     $gitlab_sources      = $gitlab::params::gitlab_sources,
     $gitlab_branch       = $gitlab::params::gitlab_branch,
     $gitlabshell_branch  = $gitlab::params::gitlabshell_branch,
-    $gitlabshell_sources = $gitlab::params::gitlabshell_branch,
+    $gitlabshell_sources = $gitlab::params::gitlabshell_sources,
     $gitlab_dbtype       = $gitlab::params::gitlab_dbtype,
     $gitlab_dbname       = $gitlab::params::gitlab_dbname,
     $gitlab_dbuser       = $gitlab::params::gitlab_dbuser,
