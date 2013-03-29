@@ -31,6 +31,7 @@ node /gitlab_server/ {
       gitlab_branch         => '5-0-stable',
       gitlabshell_sources   => 'https://github.com/gitlabhq/gitlab-shell.git',
       gitlabshell_branch    => 'master',
+      gitlab_domain         => 'gitlab.localdomain.local',
       gitlab_dbtype         => 'mysql',
       gitlab_dbname         => $gitlab_dbname,
       gitlab_dbuser         => $gitlab_dbuser,

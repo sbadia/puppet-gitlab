@@ -29,7 +29,7 @@ node /gitlab_server/ {
       # Setup gitlab sources and branch (default to GIT proto)
       gitlab_sources    => 'https://github.com/gitlabhq/gitlabhq.git',
       gitlab_branch     => '5-0-stable',
-      gitlab_domain     => 'gitlab.foobarr.fr',
+      gitlab_domain     => 'gitlab.localdomain.local',
       gitlab_dbtype     => 'mysql',
       gitlab_dbname     => $gitlab_dbname,
       gitlab_dbuser     => $gitlab_dbuser,
