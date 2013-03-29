@@ -81,7 +81,6 @@ class gitlab::server {
         File["${git_home}/gitlab/config/database.yml"],
         File["${git_home}/gitlab/tmp"],
         Sshkey['localhost'],
-        File["${git_home}/.ssh/id_rsa"],
         Package['bundler']
         ],
       refreshonly => true;
