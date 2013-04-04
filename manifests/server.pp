@@ -57,7 +57,6 @@ class gitlab::server {
       creates     => "${git_home}/gitlab",
       cwd         => $git_home,
       user        => $git_user,
-      unless      => "/usr/bin/test -d ${git_home}/gitlab";
     'Install gitlab':
       command     => "bundle install --without development test ${gitlab_without_gems} --deployment",
       provider    => 'shell',
