@@ -58,8 +58,7 @@ class gitlab::server {
       command     => "git clone -b ${gitlab_branch} ${gitlab_sources} ./gitlab",
       creates     => "${gitlab_home}/gitlab",
       cwd         => $gitlab_home,
-      user        => $gitlab_user,
-      unless      => "/usr/bin/test -d ${gitlab_home}/gitlab";
+      user        => $gitlab_user;
     'Install gitlab':
       command     => "bundle install --without development test ${gitlab_without_gems} --deployment",
       provider    => 'shell',
