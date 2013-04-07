@@ -76,7 +76,11 @@ class gitlab(
   ) inherits gitlab::params {
   # FIXME class inheriting from params class
   case $::osfamily {
-    Debian, Redhat: {
+    Debian: {
+      include gitlab::server
+    }
+    Redhat: {
+      warn "${::osfamily} not fully tested with gitlab 5.0"
       include gitlab::server
     }
     default: {
