@@ -22,35 +22,25 @@ node /gitlab_server/ {
 
   class {
     'gitlab':
-      git_user          => 'git',
-      git_home          => '/home/git',
-      git_email         => 'notifs@foobar.fr',
-      git_comment       => 'GIT control version',
-      # Default provider for ssh keys is 'source'
-      # you can use also   => 'puppet:///modules/gitlab/file'
-      # fileserving on http doesn't work yet
-      # see bug http://projects.puppetlabs.com/issues/5783
-      # If you choose ssh_key_provider = 'content'
-      # you can use directly => 'ssh-rsa AAA...'
-      git_admin_pubkey  => '/srv/vagrant-puppet/manifests/gitlab_testing.pub',
-      git_admin_privkey => '/srv/vagrant-puppet/manifests/gitlab_testing.priv',
-      gitlab_user       => 'gitlab',
-      gitlab_home       => '/home/gitlab',
-      gitlab_comment    => 'GITLab is awesome',
+      git_user              => 'git',
+      git_home              => '/home/git',
+      git_email             => 'notifs@foobar.fr',
+      git_comment           => 'GITLab is awesome',
       # Setup gitlab sources and branch (default to GIT proto)
-      gitlab_sources    => 'https://github.com/gitlabhq/gitlabhq.git',
-      gitlab_branch     => '4-2-stable',
-      gitolite_sources  => 'https://github.com/gitlabhq/gitolite.git',
-      gitolite_branch   => 'gl-v320',
-      gitlab_dbtype     => 'mysql',
-      gitlab_dbname     => $gitlab_dbname,
-      gitlab_dbuser     => $gitlab_dbuser,
-      gitlab_dbpwd      => $gitlab_dbpwd,
-      ldap_enabled      => true,
-      ldap_host         => 'ldap.foobar.fr',
-      ldap_base         => 'dc=foobar,dc=fr',
-      ldap_uid          => 'uid',
-      ldap_port         => '636',
-      ldap_method       => 'ssl',
+      gitlab_sources        => 'https://github.com/gitlabhq/gitlabhq.git',
+      gitlab_branch         => '5-0-stable',
+      gitlabshell_sources   => 'https://github.com/gitlabhq/gitlab-shell.git',
+      gitlabshell_branch    => 'master',
+      gitlab_domain         => 'gitlab.localdomain.local',
+      gitlab_dbtype         => 'mysql',
+      gitlab_dbname         => $gitlab_dbname,
+      gitlab_dbuser         => $gitlab_dbuser,
+      gitlab_dbpwd          => $gitlab_dbpwd,
+      ldap_enabled          => true,
+      ldap_host             => 'ldap.foobar.fr',
+      ldap_base             => 'dc=foobar,dc=fr',
+      ldap_uid              => 'uid',
+      ldap_port             => '636',
+      ldap_method           => 'ssl',
   }
 }

@@ -2,20 +2,14 @@
 #
 # === Parameters
 #
-# [git_user] Name of the gitolite user (for ssh)
-# [git_home] Home directory for gitolite repository
-# [git_email] Email address for gitolite user
-# [git_comment] Gitolite user comment
-# [git_admin_pubkey] Gitolite admin ssh public key (required)
-# [git_admin_privkey] Gitolite admin ssh private key (required)
-# [ssh_key_provider] Type of provider for ssh keys (source/content)(default source)
-# [gitlab_user] Name of gitlab user
-# [gitlab_home] Home directory for gitlab installation
-# [gitlab_comment] Gitlab comment
+# [git_user] Name of the gitlab
+# [git_home] Home directory for gitlab repository
+# [git_email] Email address for gitlab user
+# [git_comment] Gitlab user comment
 # [gitlab_sources] Gitlab sources (github)
 # [gitlab_branch] Gitlab branch (default stable)
-# [gitolite_sources] Gitolite sources (github)
-# [gitolite_banch] Gitolite branch (default gl-320 from gitlabhq)
+# [gitlabshell_sources] Gitlab-shell sources (github)
+# [gitlabshell_banch] Gitlab-shell branch (default master)
 # [gitlab_dbtype] Gitlab database type (mysql/pgsql)
 # [gitlab_dbname] Gitlab database name
 # [gitlab_dbuser] Gitlab database user
@@ -37,7 +31,7 @@
 # node /gitlab/ {
 #   class {
 #     'gitlab':
-#       git_adminkey => 'ssh-rsa AAA...'
+#       git_email => 'toto@foobar'
 #   }
 # }
 #
@@ -50,46 +44,43 @@
 #
 # === Copyright
 #
-# See LICENSE file, Sebastien Badia (c) 2012
-# Tue Jul 03 20:06:33 +0200 2012
+# See LICENSE file, Sebastien Badia (c) 2013
 
 # Class:: gitlab
 #
 #
 class gitlab(
-    $git_user           = $gitlab::params::git_user,
-    $git_home           = $gitlab::params::git_home,
-    $git_email          = $gitlab::params::git_email,
-    $git_comment        = $gitlab::params::git_comment,
-    $git_admin_pubkey   = $gitlab::params::git_admin_pubkey,
-    $git_admin_privkey  = $gitlab::params::git_admin_privkey,
-    $ssh_key_provider   = $gitlab::params::ssh_key_provider,
-    $gitlab_user        = $gitlab::params::gitlab_user,
-    $gitlab_home        = $gitlab::params::gitlab_home,
-    $gitlab_comment     = $gitlab::params::gitlab_comment,
-    $gitlab_sources     = $gitlab::params::gitlab_sources,
-    $gitlab_branch      = $gitlab::params::gitlab_branch,
-    $gitolite_sources   = $gitlab::params::gitolite_sources,
-    $gitolite_branch    = $gitlab::params::gitolite_branch,
-    $gitlab_dbtype      = $gitlab::params::gitlab_dbtype,
-    $gitlab_dbname      = $gitlab::params::gitlab_dbname,
-    $gitlab_dbuser      = $gitlab::params::gitlab_dbuser,
-    $gitlab_dbpwd       = $gitlab::params::gitlab_dbpwd,
-    $gitlab_dbhost      = $gitlab::params::gitlab_dbhost,
-    $gitlab_dbport      = $gitlab::params::gitlab_dbport,
-    $gitlab_domain      = $gitlab::params::gitlab_domain,
-    $ldap_enabled       = $gitlab::params::ldap_enabled,
-    $ldap_host          = $gitlab::params::ldap_host,
-    $ldap_base          = $gitlab::params::ldap_base,
-    $ldap_uid           = $gitlab::params::ldap_uid,
-    $ldap_port          = $gitlab::params::ldap_port,
-    $ldap_method        = $gitlab::params::ldap_method,
-    $ldap_bind_dn       = $gitlab::params::ldap_bind_dn,
-    $ldap_bind_password = $gitlab::params::ldap_bind_password
+    $git_user            = $gitlab::params::git_user,
+    $git_home            = $gitlab::params::git_home,
+    $git_email           = $gitlab::params::git_email,
+    $git_comment         = $gitlab::params::git_comment,
+    $gitlab_sources      = $gitlab::params::gitlab_sources,
+    $gitlab_branch       = $gitlab::params::gitlab_branch,
+    $gitlabshell_branch  = $gitlab::params::gitlabshell_branch,
+    $gitlabshell_sources = $gitlab::params::gitlabshell_sources,
+    $gitlab_dbtype       = $gitlab::params::gitlab_dbtype,
+    $gitlab_dbname       = $gitlab::params::gitlab_dbname,
+    $gitlab_dbuser       = $gitlab::params::gitlab_dbuser,
+    $gitlab_dbpwd        = $gitlab::params::gitlab_dbpwd,
+    $gitlab_dbhost       = $gitlab::params::gitlab_dbhost,
+    $gitlab_dbport       = $gitlab::params::gitlab_dbport,
+    $gitlab_domain       = $gitlab::params::gitlab_domain,
+    $ldap_enabled        = $gitlab::params::ldap_enabled,
+    $ldap_host           = $gitlab::params::ldap_host,
+    $ldap_base           = $gitlab::params::ldap_base,
+    $ldap_uid            = $gitlab::params::ldap_uid,
+    $ldap_port           = $gitlab::params::ldap_port,
+    $ldap_method         = $gitlab::params::ldap_method,
+    $ldap_bind_dn        = $gitlab::params::ldap_bind_dn,
+    $ldap_bind_password  = $gitlab::params::ldap_bind_password
   ) inherits gitlab::params {
   # FIXME class inheriting from params class
   case $::osfamily {
-    Debian, Redhat: {
+    Debian: {
+      include gitlab::server
+    }
+    Redhat: {
+      warn "${::osfamily} not fully tested with gitlab 5.0"
       include gitlab::server
     }
     default: {

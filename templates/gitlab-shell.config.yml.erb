@@ -1,0 +1,16 @@
+# GitLab user. git by default
+user: <%= @git_user %>
+
+# Url to gitlab instance. Used for api calls. Should be ends with slash.
+gitlab_url: "http://<%= @gitlab_domain %>/"
+
+http_settings:
+#  user: someone
+#  password: somepass
+  self_signed_cert: false
+
+# Repositories path
+repos_path: "<%= @git_home %>/repositories"
+
+# File used as authorized_keys for gitlab user
+auth_file: "<%= @git_home %>/.ssh/authorized_keys"
