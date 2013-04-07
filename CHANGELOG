@@ -1,3 +1,6 @@
+* 2013-04-07 - 0.0.5
+- up to GitLab 5.0
+- remove gitolite (use gitlab-shell)
 * 2012-11-02 - 0.0.4
 - up to GitLab 4.1
 * 2013-01-01 - 0.0.3
