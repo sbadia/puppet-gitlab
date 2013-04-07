@@ -58,11 +58,12 @@ class gitlab::server {
       cwd         => $git_home,
       user        => $git_user;
     'Install gitlab':
-      command     => "bundle install --without development test ${gitlab_without_gems} --deployment",
-      provider    => 'shell',
-      cwd         => "${git_home}/gitlab",
-      user        => $git_user,
-      require     => [
+      command  => "bundle install --without development test ${gitlab_without_gems} --deployment",
+      provider => 'shell',
+      cwd      => "${git_home}/gitlab",
+      user     => $git_user,
+      unless   => "/usr/bin/test -f ${git_home}/.gitlab_setup_done",
+      require  => [
         Exec['Get gitlab'],
         Package['bundler']
       ];
