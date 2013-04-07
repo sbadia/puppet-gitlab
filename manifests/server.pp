@@ -107,6 +107,7 @@ class gitlab::server {
       'bundle_config':
         path    => "${git_home}/gitlab/.bundle/config",
         content => template('gitlab/gitlab.bundle.config.erb'),
+        replace => false,
         owner   => $git_user,
         group   => $git_user,
         before  => Exec['Install gitlab']; }
