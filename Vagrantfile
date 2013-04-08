@@ -2,15 +2,15 @@
 # vi: set ft=ruby :
 #
 # For debian wheezy dev
-# $ OS=debian7 vagrant up
+# $ GUEST_OS=debian7 vagrant up
 # or (debian7 is default os)
 # $ vagrant up
 #
 # For centos 6 dev
-# $ OS=centos6 vagrant up
+# $ GUEST_OS=centos6 vagrant up
 
 default_type = 'debian7'
-type = ENV['OS'] || default_type
+type = ENV['GUEST_OS'] || default_type
 
 boxes = {
   'debian7' => {

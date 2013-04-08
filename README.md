@@ -28,15 +28,15 @@ in order to add the modules that puppet-gitlab depends on to your local copy.
 
 $ vagrant up
 or
-$ OS=debian7 vagrant up
+$ GUEST_OS=debian7 vagrant up
 
 ### Using Centos 6
 
-$ OS=centos6 vagrant up
+$ GUEST_OS=centos6 vagrant up
 
 ### Using Ubuntu Quantal Quetzal (12.10)
 
-$ OS=ubuntu vagrant up
+$ GUEST_OS=ubuntu vagrant up
 
 ## Test gitlab
 - add the ip and name to your /etc/hosts file (192.168.111.10 gitlab.localdomain.local)
