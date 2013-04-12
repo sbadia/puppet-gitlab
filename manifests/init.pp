@@ -80,11 +80,11 @@ class gitlab(
       include gitlab::server
     }
     Redhat: {
-      warning "${::osfamily} not fully tested with gitlab 5.0"
+      warning("${::osfamily} not fully tested with gitlab 5.0")
       include gitlab::server
     }
     default: {
-      err "${::osfamily} not supported yet"
+      fail("${::osfamily} not supported yet")
     }
   } # case
 } # Class:: gitlab
