@@ -35,7 +35,7 @@ class gitlab::server {
     'charlock_holmes':
       ensure   => '0.6.9',
       provider => gem;
-    'pygments':
+    'Pygments':
       ensure   => installed,
       provider => pip;
   }
