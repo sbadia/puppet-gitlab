@@ -145,11 +145,11 @@ class gitlab::server {
       owner   => $git_user,
       group   => $git_user,
       require => Exec['Get gitlab'];
-    "${git_home}/gitlab/tmp/pids":
+    ["${git_home}/gitlab/tmp/pids","${git_home}/gitlab/tmp/sockets"]:
       ensure  => directory,
       owner   => $git_user,
       group   => $git_user,
-      require => Exec["${git_home}/gitlab/tmp"];
+      require => File["${git_home}/gitlab/tmp"];
     "${git_home}/.gitconfig":
       content => template('gitlab/git.gitconfig.erb'),
       mode    => '0644';
