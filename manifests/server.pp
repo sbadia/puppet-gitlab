@@ -63,6 +63,7 @@ class gitlab::server {
       cwd      => "${git_home}/gitlab",
       user     => $git_user,
       unless   => "/usr/bin/test -f ${git_home}/.gitlab_setup_done",
+      timeout  => 0,
       require  => [
         Exec['Get gitlab'],
         Package['bundler']
