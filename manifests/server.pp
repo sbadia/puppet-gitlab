@@ -123,9 +123,9 @@ class gitlab::server {
       group   => $git_user,
       require => [Exec['Get gitlab'],
                   File["${git_home}/gitlab/config/gitlab.yml"]];
-    "${git_home}/gitlab/config/unicorn.rb":
+    "${git_home}/gitlab/config/puma.rb":
       ensure  => file,
-      content => template('gitlab/unicorn.rb.erb'),
+      content => template('gitlab/puma.rb.erb'),
       owner   => $git_user,
       group   => $git_user,
       require => [Exec['Get gitlab'],
