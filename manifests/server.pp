@@ -138,16 +138,21 @@ class gitlab::server {
       mode    => '0640',
       require => Exec['Get gitlab'],
       notify  => Exec['Setup gitlab DB'];
-    "${git_home}/gitlab/tmp":
+    ["${git_home}/gitlab/tmp",
+      "${git_home}/gitlab/log",
+      "${git_home}/gitlab-satellites"]:
       ensure  => directory,
       owner   => $git_user,
       group   => $git_user,
       require => Exec['Get gitlab'];
+    "${git_home}/gitlab/tmp/pids":
+      ensure  => directory,
+      owner   => $git_user,
+      group   => $git_user,
+      require => Exec["${git_home}/gitlab/tmp"];
     "${git_home}/.gitconfig":
       content => template('gitlab/git.gitconfig.erb'),
       mode    => '0644';
-    "${git_home}/gitlab-satellites":
-      ensure  => directory;
   }
 
   sshkey {
