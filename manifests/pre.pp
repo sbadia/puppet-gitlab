@@ -124,7 +124,7 @@ class gitlab::debian_packages {
     # Need to install a fresh ruby version...
     'squeeze': {
       package {
-        ['checkinstall','libcurl4-openssl-dev','libreadline-dev','libssl-dev',
+        ['checkinstall','libreadline-dev','libssl-dev',
         'build-essential','zlib1g-dev','libyaml-dev','libc6-dev','libgdbm-dev',
         'libncurses5-dev','libffi-dev','libcurl4-openssl-dev','libicu-dev']:
           ensure  => installed,
