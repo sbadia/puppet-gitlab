@@ -14,13 +14,17 @@ class gitlab::nginx {
 
   #TODO: vhost managment or hostname.tld/gitlab/ installation
   file {
-    '/etc/nginx/conf.d/gitlab.conf':
+    '/etc/nginx/sites-available/gitlab':
       ensure  => file,
       content => template('gitlab/nginx-gitlab.conf.erb'),
       owner   => root,
       group   => root,
       mode    => '0644',
-      require => Package['nginx'],
+      require => Package['nginx'];
+    '/etc/nginx/sites-enabled/gitlab':
+      ensure  => link,
+      target  => '/etc/nginx/sites-available/gitlab',
+      require => File['/etc/nginx/sites-available/gitlab'],
       notify  => Service['nginx'];
   }
 
