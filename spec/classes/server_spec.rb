@@ -28,7 +28,7 @@ describe 'gitlab::server' do
       :ensure => '0.6.9'
     )}
 
-    it { should contain_package('pygments').with(
+    it { should contain_package('Pygments').with(
       :provider   => 'pip',
       :ensure => 'installed'
     )}
