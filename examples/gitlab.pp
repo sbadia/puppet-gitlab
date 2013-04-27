@@ -1,12 +1,18 @@
 # Configure a gitlab server (gitlab.domain.tld)
 node /gitlab_server/ {
 
+  stage { 'first': before => Stage['main'] }
+  stage { 'last': require => Stage['main'] }
+
   $gitlab_dbname  = 'gitlab_prod'
   $gitlab_dbuser  = 'labu'
   $gitlab_dbpwd   = 'labpass'
 
+
+  class { 'gitlab::apt': stage => first; }
+
   # git://github.com/puppetlabs/puppetlabs-mysql.git
-  include 'mysql'
+  class { 'mysql::server': stage => main; }
 
   mysql::db {
     $gitlab_dbname:
@@ -22,6 +28,7 @@ node /gitlab_server/ {
 
   class {
     'gitlab':
+      stage             => last,
       git_user          => 'git',
       git_home          => '/home/git',
       git_email         => 'notifs@foobar.fr',

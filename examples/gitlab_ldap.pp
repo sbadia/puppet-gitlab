@@ -1,13 +1,18 @@
 # Configure a gitlab server with LDAP auth (gitlab.foobar.fr)
 node /gitlab_server/ {
+
+  stage { 'first': before => Stage['main'] }
+  stage { 'last': require => Stage['main'] }
+
   $gitlab_dbname  = 'gitlab_prod'
   $gitlab_dbuser  = 'labu'
   $gitlab_dbpwd   = 'labpass'
 
-  # git://github.com/puppetlabs/puppetlabs-mysql.git
-  include 'mysql'
+  class { 'gitlab::apt': stage => first; }
 
-  class { 'mysql::server': }
+  # git://github.com/puppetlabs/puppetlabs-mysql.git
+  class { 'mysql::server': stage => main; }
+
   mysql::db {
     $gitlab_dbname:
       ensure   => 'present',
@@ -22,6 +27,7 @@ node /gitlab_server/ {
 
   class {
     'gitlab':
+      stage                 => last,
       git_user              => 'git',
       git_home              => '/home/git',
       git_email             => 'notifs@foobar.fr',
