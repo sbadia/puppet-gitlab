@@ -2,6 +2,7 @@
 #
 #
 class gitlab::nginx {
+
   include gitlab
 
   #FIXME Manage nginx with puppetlabs recipes, not re-invent the wheel :-)
@@ -34,4 +35,5 @@ class gitlab::nginx {
       require => Package['nginx'],
       enable  => true;
   }
+
 } # Class:: gitlab::nginx

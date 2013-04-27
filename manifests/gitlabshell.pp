@@ -2,6 +2,7 @@
 #
 #
 class gitlab::gitlabshell {
+
   include gitlab
   require gitlab::pre
 
@@ -38,4 +39,5 @@ class gitlab::gitlabshell {
       logoutput => 'on_failure',
       creates   => "${git_home}/repositories";
   }
+
 } # Class:: gitlab::gitolite

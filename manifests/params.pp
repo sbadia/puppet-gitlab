@@ -2,6 +2,7 @@
 #
 #
 class gitlab::params {
+
   $git_user            = 'git'
   $git_home            = '/home/git'
   $git_email           = 'git@someserver.net'
@@ -25,4 +26,5 @@ class gitlab::params {
   $ldap_method         = 'ssl'
   $ldap_bind_dn        = ''
   $ldap_bind_password = ''
+
 } # Class:: gitlab::params
