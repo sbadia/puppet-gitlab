@@ -2,6 +2,7 @@
 - Fix packaging issue (https://github.com/sbadia/puppet-gitlab/issues/33) wait for a cleaner way to do that (http://projects.puppetlabs.com/issues/14651)
 - Bump to GitLab 5.1 (switch from unicorn to puma)
 - Fix timeouts issue, and others bugs
+- Remove apt and mysql setting from core module
 * 2013-04-07 - 0.0.5
 - up to GitLab 5.0
 - remove gitolite (use gitlab-shell)
