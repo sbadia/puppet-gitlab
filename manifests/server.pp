@@ -2,6 +2,7 @@
 #
 #
 class gitlab::server {
+
   include gitlab
   require gitlab::gitlabshell
   require gitlab::nginx
@@ -190,9 +191,11 @@ class gitlab::server {
 
   service {
     'gitlab':
-      ensure    => running,
-      require   => File['/etc/init.d/gitlab'],
-      hasstatus => true,
-      enable    => true;
+      ensure     => running,
+      require    => File['/etc/init.d/gitlab'],
+      hasstatus  => true,
+      hasrestart => true,
+      enable     => true;
   }
+
 } # Class:: gitlab::server

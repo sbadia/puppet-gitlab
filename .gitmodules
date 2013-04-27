@@ -5,3 +5,6 @@
 	path = modules/puppetlabs-stdlib
 	url = https://github.com/puppetlabs/puppetlabs-stdlib
 
+[submodule "modules/puppetlabs-apt"]
+	path = modules/puppetlabs-apt
+	url = https://github.com/puppetlabs/puppetlabs-apt.git
