@@ -9,7 +9,7 @@ class gitlab::params {
   $git_comment         = 'GitLab'
   $gitlab_sources      = 'git://github.com/gitlabhq/gitlabhq.git'
   $gitlab_branch       = '5-1-stable'
-  $gitlabshell_branch  = 'v1.2.0'
+  $gitlabshell_branch  = 'v1.3.0'
   $gitlabshell_sources = 'git://github.com/gitlabhq/gitlab-shell.git'
   $gitlab_dbtype       = 'mysql'
   $gitlab_dbname       = 'gitladb'
