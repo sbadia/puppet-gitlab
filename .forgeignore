@@ -1,0 +1,11 @@
+- modules/
+- spec/
+- Rakefile
+- Gemfile
+- Vagrantfile
+- .git/
+- .forgeignore
+- .travis.yml
+- .gitignore
+- .gitmodules
+- .project
