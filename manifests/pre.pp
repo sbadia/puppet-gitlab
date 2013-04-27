@@ -2,6 +2,7 @@
 #
 #
 class gitlab::pre {
+
   include gitlab
 
   $git_home       = $gitlab::git_home
@@ -45,20 +46,23 @@ class gitlab::pre {
 # FIXME: gitlab::redhat_packages not in autoload module layout
 #
 class gitlab::redhat_packages {
+
   include gitlab
-  include mysql
 
   $gitlab_dbtype  = $gitlab::gitlab_dbtype
 
   Package{ ensure => latest, provider => yum, }
+
   $db_packages = $gitlab_dbtype ? {
     mysql => ['mysql-devel'],
     pgsql => ['postgresql-devel'],
   }
+
   package {
     $db_packages:
       ensure => installed;
   }
+
   package {
     [ 'git','perl-Time-HiRes','wget','curl','redis','openssh-server',
       'python-pip','libicu-devel','libxml2-devel','libxslt-devel',
@@ -66,8 +70,6 @@ class gitlab::redhat_packages {
       'zlib-devel','libyaml-devel']:
         ensure => installed;
   }
-
-  class { 'mysql::server': }
 
   service {
     'iptables':
@@ -85,21 +87,13 @@ class gitlab::redhat_packages {
 # FIXME: gitlab::debian_packages not in autoload module layout
 #
 class gitlab::debian_packages {
+
   include gitlab
-  include mysql
 
   $gitlab_dbtype  = $gitlab::gitlab_dbtype
   $git_home       = $gitlab::git_home
   $git_user       = $gitlab::git_user
   $git_admin_pubkey = $gitlab::git_admin_pubkey
-
-  exec {
-    'apt-get update':
-      before      => Class['mysql'],
-      command     => '/usr/bin/apt-get update';
-  }
-
-  class { 'mysql::server': require => Exec['apt-get update'], }
 
   $db_packages = $gitlab_dbtype ? {
     mysql => ['libmysql++-dev','libmysqlclient-dev'],
@@ -108,16 +102,14 @@ class gitlab::debian_packages {
 
   package {
     $db_packages:
-      ensure  => installed,
-      require => Exec['apt-get update']
+      ensure  => installed;
   }
 
   package {
     ['git','git-core','wget','curl','redis-server',
       'openssh-server','python-pip','libicu-dev','python2.7',
       'libxml2-dev','libxslt1-dev','python-dev','postfix']:
-        ensure  => installed,
-        require => Exec['apt-get update'],
+        ensure  => installed;
   }
 
   case $::lsbdistcodename {
@@ -126,9 +118,8 @@ class gitlab::debian_packages {
       package {
         ['checkinstall','libreadline-dev','libssl-dev',
         'build-essential','zlib1g-dev','libyaml-dev','libc6-dev','libgdbm-dev',
-        'libncurses5-dev','libffi-dev','libcurl4-openssl-dev','libicu-dev']:
-          ensure  => installed,
-          require => Exec['apt-get update'];
+        'libncurses5-dev','libffi-dev','libcurl4-openssl-dev']:
+          ensure  => installed;
       }
 
       exec {
@@ -139,7 +130,7 @@ class gitlab::debian_packages {
           user        => root,
           logoutput   => 'on_failure',
           require     => Package['checkinstall','libcurl4-openssl-dev',
-                                  'libreadline6-dev','libssl-dev',
+                                  'libreadline-dev','libssl-dev',
                                   'build-essential','zlib1g-dev','libyaml-dev',
                                   'libc6-dev'],
           unless      => 'test -f /root/ruby-1.9.3-p392.tar.gz';
@@ -167,8 +158,7 @@ class gitlab::debian_packages {
       # Assuming default ruby 1.9.3 (wheezy,quantal,precise)
       package {
         ['ruby','ruby-dev','rubygems','rake']:
-          ensure  => installed,
-          require => Exec['apt-get update'];
+          ensure  => installed;
       }
     } # Default
   } # Case:: $::operatingsystem
@@ -179,4 +169,5 @@ class gitlab::debian_packages {
       enable  => true,
       require => Package['redis-server'];
   }
+
 } # Class:: gitlab::debian_packages
