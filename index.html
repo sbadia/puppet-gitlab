@@ -25,22 +25,35 @@
           <li><a class="buttons github" href="https://github.com/sbadia/puppet-gitlab">View On GitHub</a></li>
         </ul>
 
-        <p class="header">This project is maintained by <a class="header name" href="https://github.com/sroegner">sroegner</a> and <a class="header name" href="https://github.com/sbadia">sbadia</a></p>
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/sbadia">sbadia</a></p>
 
 
       </header>
       <section>
         <h1>Puppet-gitlab</h1>
 
-<p>Tested successfully with Gitlab 4.1-stable <a href="https://github.com/gitlabhq/gitlabhq/commit/db958e59977474d47c62df10806a33f2b4709d88">db958e5997</a> on debian wheezy with puppet 3</p>
+<p>Tested successfully with Gitlab 5.1-stable <a href="https://github.com/gitlabhq/gitlabhq/commit/09b915799d3c06dcf63ebab606f05d81ab4589a8">b4589a8</a> on debian wheezy with puppet 3</p>
 
 <p><a href="http://gitlabhq.org/">GitLab</a> is a free project and repository management application</p>
 
-<p>A <a href="http://docs.puppetlabs.com/learning/modules1.html#modules">Puppet Module</a>
-is a collection of related content that can be used to model the configuration
-of a discrete service.</p>
+<p>A <a href="http://docs.puppetlabs.com/learning/modules1.html#modules">Puppet Module</a> is a collection of related content that can be used to model the configuration of a discrete service.</p>
 
-<p>This module is based on the admin guides for <a href="https://github.com/gitlabhq/gitlabhq/wiki">gitlab</a>, <a href="https://github.com/gitlabhq/gitlabhq/blob/4-1-stable/doc/install/installation.md">stable</a> version.</p>
+<p>This module is based on the admin guides for <a href="https://github.com/gitlabhq/gitlabhq/wiki">gitlab</a>, <a href="https://github.com/gitlabhq/gitlabhq/blob/5-1-stable/doc/install/installation.md">stable</a> version.</p>
+
+<h2>Usage</h2>
+
+<pre><code>  class {
+    'gitlab':
+      git_email         =&gt; 'notifs@foobar.fr',
+      git_comment       =&gt; 'GitLab',
+      gitlab_domain     =&gt; 'gitlab.foobar.fr',
+      gitlab_dbtype     =&gt; 'mysql',
+      gitlab_dbname     =&gt; $gitlab_dbname,
+      gitlab_dbuser     =&gt; $gitlab_dbuser,
+      gitlab_dbpwd      =&gt; $gitlab_dbpwd,
+      ldap_enabled      =&gt; false,
+  }
+</code></pre>
 
 <h2>Testing with vagrant</h2>
 
@@ -48,37 +61,31 @@ of a discrete service.</p>
 
 <p>After cloning this repository, you will have to</p>
 
-<pre><code>$ git submodule init
+<pre><code>git submodule init
 </code></pre>
 
 <p>and</p>
 
-<pre><code>$ git submodule update
+<pre><code>git submodule update
 </code></pre>
 
 <p>in order to add the modules that puppet-gitlab depends on to your local copy.</p>
 
 <h3>Using Debian Wheezy (the default)</h3>
 
-<pre><code>$ vagrant up
-</code></pre>
-
-<p>or</p>
-
-<pre><code>$ OS=debian7 vagrant up
-</code></pre>
+<p>$ vagrant up
+or
+$ GUEST_OS=debian7 vagrant up</p>
 
 <h3>Using Centos 6</h3>
 
-<pre><code>$ OS=centos6 vagrant up
-</code></pre>
+<p>$ GUEST_OS=centos6 vagrant up</p>
 
 <h3>Using Ubuntu Quantal Quetzal (12.10)</h3>
 
-<pre><code>$ OS=ubuntu vagrant up
-</code></pre>
+<p>$ GUEST_OS=ubuntu vagrant up</p>
 
-<h2>Test gitlab</h2>
+<h2>GitLab web interface</h2>
 
 <ul>
 <li>add the ip and name to your /etc/hosts file (192.168.111.10 gitlab.localdomain.local)</li>
@@ -101,6 +108,6 @@ of a discrete service.</p>
       </footer>
     </div>
     <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-
+		
   </body>
 </html>
