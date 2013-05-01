@@ -16,7 +16,9 @@ class gitlab::apt {
     'apt-get update':
       command   => '/usr/bin/apt-get update',
       user      => root,
-      logoutput => 'on_failure';
+      logoutput => 'on_failure',
+      onlyif    => ['test -x /usr/bin/apt-get', 'test `find "/var/lib/apt/lists" -maxdepth 0 -mtime +7`'],
+      path      => '/bin:/usr/bin';
   }
 
 } # Class:: gitlab::apt

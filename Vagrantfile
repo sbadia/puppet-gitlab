@@ -45,8 +45,9 @@ Vagrant::Config.run do |config|
     hq.vm.share_folder "puppetlabs_stdlib", "/srv/puppet_modules/stdlib", "modules/puppetlabs-stdlib/"
 
     hq.vm.provision :puppet, :pp_path => "/srv/vagrant-puppet" do |puppet|
-      #puppet.options = [ "--debug", "--modulepath", "/srv/puppet_modules", "--certname gitlab_server"]
       puppet.options = [ "--modulepath", "/srv/puppet_modules", "--certname gitlab_server"]
+      logging = ENV['logging']
+      puppet.options << "--#{logging}" if ["verbose","debug"].include?(logging)
       puppet.manifests_path = "examples"
       puppet.manifest_file = "gitlab.pp"
     end
