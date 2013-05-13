@@ -193,7 +193,7 @@ class gitlab::server {
     'gitlab':
       ensure     => running,
       require    => File['/etc/init.d/gitlab'],
-      hasstatus  => true,
+      pattern    => 'puma',
       hasrestart => true,
       enable     => true;
   }
