@@ -1,6 +1,0 @@
-[submodule "modules/puppetlabs-mysql"]
-	path = modules/puppetlabs-mysql
-	url = https://github.com/puppetlabs/puppetlabs-mysql
-[submodule "modules/puppetlabs-stdlib"]
-	path = modules/puppetlabs-stdlib
-	url = https://github.com/puppetlabs/puppetlabs-stdlib
