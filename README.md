@@ -24,9 +24,12 @@ This module is based on the admin guides for [gitlab](https://github.com/gitlabh
   }
 ```
 
+### Dependencys
+- [puppetlabs/mysql](https://github.com/puppetlabs/mysql) >= 0.5.0
+- [puppetlabs/stdlib](https://github.com/puppetlabs/stdlib) >= 2.2.1
+
 ## GitLab web interface
-- add the ip and name to your /etc/hosts file (192.168.111.10 gitlab.localdomain.local)
-- access via your browser under the hostname (e.g. http://gitlab.localdomain.local)
+- access via your browser under the hostname (e.g. http://gitlab.domain.tld)
 - **Login**: admin@local.host
 - **Password**: 5iveL!fe
 
