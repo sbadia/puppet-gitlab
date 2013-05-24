@@ -154,6 +154,21 @@ class gitlab::debian_packages {
           refreshonly => true;
       }
     } # Squeeze, Precise
+    precise: {
+      package { 'ruby1.9.3': ensure => installed; }
+      exec { 'ruby-version':
+        command     => '/usr/bin/update-alternatives --set ruby /usr/bin/ruby1.9.1',
+        user        => root,
+        logoutput   => 'on_failure',
+        require     => Package['ruby1.9.3']
+      }
+      exec { 'gem-version':
+        command     => '/usr/bin/update-alternatives --set gem /usr/bin/gem1.9.1',
+        user        => root,
+        logoutput   => 'on_failure',
+        require     => Package['ruby1.9.3']
+      }
+    }
     default: {
       # Assuming default ruby 1.9.3 (wheezy,quantal,precise)
       package {
