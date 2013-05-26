@@ -22,7 +22,7 @@ production: &base
     port: 80
     https: false
     # Uncomment and customize to run in non-root path
-    # Note that ENV['RAILS_RELATIVE_URL_ROOT'] in config/unicorn.rb may need to be changed
+    # Note that ENV['RAILS_RELATIVE_URL_ROOT'] in config/puma.rb may need to be changed
     # relative_url_root: /gitlab
 
     # Uncomment and customize if you can't use the default user to run GitLab (default: 'git')
@@ -37,9 +37,18 @@ production: &base
 
     ## Project settings
     default_projects_limit: 10
-    # signup_enabled: true          # default: false - Account passwords are not sent via the email if signup is enabled.
-    # username_changing_enabled: false # default: true - User can change her username/namespace
 
+    ## Users management
+    # signup_enabled: true          # default: false - Account passwords are not sent via the email if signup is enabled.
+    # username_changing_enabled: false # default: true - User can change her username/namespace#
+
+    ## Default project features settings
+    default_projects_features:
+      issues: true
+      merge_requests: true
+      wiki: true
+      wall: false
+      snippets: false
 
   ## External issues trackers
   issues_tracker:
@@ -49,20 +58,25 @@ production: &base
     #   ##  :project_id        - GitLab project identifier
     #   ##  :issues_tracker_id - Project Name or Id in external issue tracker
     #   project_url: "http://redmine.sample/projects/:issues_tracker_id"
+    #
     #   ## If not nil, links from /#\d/ entities from commit messages will replaced with this
     #   ## Use placeholders:
     #   ##  :project_id        - GitLab project identifier
     #   ##  :issues_tracker_id - Project Name or Id in external issue tracker
     #   ##  :id                - Issue id (from commit messages)
     #   issues_url: "http://redmine.sample/issues/:id"
+    #
+    #   ## If not nil, linkis to creating new issues will be replaced with this
+    #   ## Use placeholders:
+    #   ##  :project_id        - GitLab project identifier
+    #   ##  :issues_tracker_id - Project Name or Id in external issue tracker
+    #   new_issue_url: "http://redmine.sample/projects/:issues_tracker_id/issues/new"
 
   ## Gravatar
   gravatar:
     enabled: true                 # Use user avatar image from Gravatar.com (default: true)
     # plain_url: "http://..."     # default: http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=mm
     # ssl_url:   "https://..."    # default: https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=mm
-
-
 
   #
   # 2. Auth settings
@@ -147,6 +161,18 @@ production: &base
     max_size: 5242880 # 5.megabytes
     # Git timeout to read a commit, in seconds
     timeout: 10
+  #
+  # 4. Extra customization
+  # ==========================
+
+  extra:
+    ## Google analytics. Uncomment if you want it
+    # google_analytics_id: '_your_tracking_id'
+
+    ## Text under sign-in page (Markdown enabled)
+    # sign_in_text: |
+    #   ![Company Logo](http://www.companydomain.com/logo.png)
+    #   [Learn more about CompanyName](http://www.companydomain.com/)
 
 development:
   <<: *base
@@ -157,6 +183,7 @@ test:
     redmine:
       project_url: "http://redmine/projects/:issues_tracker_id"
       issues_url: "http://redmine/:project_id/:issues_tracker_id/:id"
+      new_issue_url: "http://redmine/projects/:issues_tracker_id/issues/new"
 
 staging:
   <<: *base

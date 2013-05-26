@@ -33,11 +33,8 @@ class gitlab::server {
       ensure   => installed,
       provider => gem;
     'charlock_holmes':
-      ensure   => '0.6.9',
+      ensure   => '0.6.9.4',
       provider => gem;
-    'Pygments':
-      ensure   => installed,
-      provider => pip;
   }
 
   $gitlab_without_gems = $gitlab_dbtype ? {
@@ -140,16 +137,20 @@ class gitlab::server {
       notify  => Exec['Setup gitlab DB'];
     ["${git_home}/gitlab/tmp",
       "${git_home}/gitlab/log",
-      "${git_home}/gitlab-satellites"]:
+      "${git_home}/gitlab-satellites",
+      "${git_home}/public/uploads"]:
       ensure  => directory,
+      mode    => '0755',
       owner   => $git_user,
       group   => $git_user,
       require => Exec['Get gitlab'];
     ["${git_home}/gitlab/tmp/pids","${git_home}/gitlab/tmp/sockets"]:
-      ensure  => directory,
-      owner   => $git_user,
-      group   => $git_user,
-      require => File["${git_home}/gitlab/tmp"];
+      ensure    => directory,
+      mode      => '0755',
+      recursive => true,
+      owner     => $git_user,
+      group     => $git_user,
+      require   => File["${git_home}/gitlab/tmp"];
     "${git_home}/.gitconfig":
       content => template('gitlab/git.gitconfig.erb'),
       mode    => '0644';

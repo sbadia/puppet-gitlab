@@ -102,7 +102,7 @@ class gitlab::pre {
   }
 
   package {
-    ['openssh-server','git','curl','wget','python-pip']:
+    ['openssh-server','git','curl']:
       ensure => installed;
   }
 
