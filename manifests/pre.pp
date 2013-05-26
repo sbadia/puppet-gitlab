@@ -8,6 +8,7 @@ class gitlab::pre {
   $git_home       = $gitlab::git_home
   $git_user       = $gitlab::git_user
   $git_comment    = $gitlab::git_comment
+  $gitlab_dbtype  = $gitlab::gitlab_dbtype
 
   user {
     $git_user:
@@ -24,12 +25,67 @@ class gitlab::pre {
   # deal with version/dist specifics within the class
   case $::osfamily {
     'Debian': {
-      require gitlab::debian_packages
-    }
+      $db_packages = $gitlab_dbtype ? {
+        mysql => ['libmysql++-dev','libmysqlclient-dev'],
+        pgsql => ['libpq-dev', 'postgresql-client'],
+      }
+
+      package {
+        ['git-core',
+          'libicu-dev','python2.7',
+          'libxml2-dev','libxslt1-dev','python-dev','postfix']:
+            ensure  => installed;
+      }
+
+      # Ruby settings
+      case $::lsbdistcodename {
+
+        precise: {
+          package {
+            'ruby1.9.3':
+              ensure => installed;
+          }
+
+          exec {
+            'ruby-version':
+              command     => '/usr/bin/update-alternatives --set ruby /usr/bin/ruby1.9.1',
+              user        => root,
+              logoutput   => 'on_failure',
+              require     => Package['ruby1.9.3'];
+            'gem-version':
+              command     => '/usr/bin/update-alternatives --set gem /usr/bin/gem1.9.1',
+              user        => root,
+              logoutput   => 'on_failure',
+              require     => Package['ruby1.9.3'];
+          }
+        }
+
+        default: {
+          # Assuming default ruby 1.9.x (wheezy,quantal,raring)
+          package {
+            ['ruby','ruby-dev','rubygems','rake']:
+              ensure  => installed;
+          }
+        } # Default
+      } # Case:: $::operatingsystem (ruby settings)
+    } # Debian pre-requists
     'Redhat': {
-      require gitlab::redhat_packages
+      $db_packages = $gitlab_dbtype ? {
+        mysql => ['mysql-devel'],
+        pgsql => ['postgresql-devel'],
+      }
+
+      package {
+        ['perl-Time-HiRes',
+          'libicu-devel','libxml2-devel','libxslt-devel',
+          'python-devel','libcurl-devel','readline-devel','openssl-devel',
+          'zlib-devel','libyaml-devel']:
+            ensure   => latest,
+            provider => yum;
+      }
+
       file {
-          $git_home:
+        $git_home:
           mode    => '0750',
           recurse => false,
           require => User[$git_user];
@@ -40,97 +96,14 @@ class gitlab::pre {
     }
   }
 
-} # Class:: gitlab::pre
-
-# Class:: gitlab::redhat_packages
-# FIXME: gitlab::redhat_packages not in autoload module layout
-#
-class gitlab::redhat_packages {
-
-  include gitlab
-
-  $gitlab_dbtype  = $gitlab::gitlab_dbtype
-
-  Package{ ensure => latest, provider => yum, }
-
-  $db_packages = $gitlab_dbtype ? {
-    mysql => ['mysql-devel'],
-    pgsql => ['postgresql-devel'],
+  package {
+    $db_packages:
+      ensure   => installed;
   }
 
   package {
-    $db_packages:
+    ['openssh-server','git','curl','wget','python-pip']:
       ensure => installed;
   }
 
-  package {
-    [ 'git','perl-Time-HiRes','wget','curl','openssh-server',
-      'python-pip','libicu-devel','libxml2-devel','libxslt-devel',
-      'python-devel','libcurl-devel','readline-devel','openssl-devel',
-      'zlib-devel','libyaml-devel']:
-        ensure => installed;
-  }
-
-} # Class:: gitlab::redhat_packages
-
-# Class:: gitlab::debian_packages
-# FIXME: gitlab::debian_packages not in autoload module layout
-#
-class gitlab::debian_packages {
-
-  include gitlab
-
-  $gitlab_dbtype  = $gitlab::gitlab_dbtype
-  $git_home       = $gitlab::git_home
-  $git_user       = $gitlab::git_user
-  $git_admin_pubkey = $gitlab::git_admin_pubkey
-
-  $db_packages = $gitlab_dbtype ? {
-    mysql => ['libmysql++-dev','libmysqlclient-dev'],
-    pgsql => ['libpq-dev', 'postgresql-client'],
-  }
-
-  package {
-    $db_packages:
-      ensure  => installed;
-  }
-
-  package {
-    ['git','git-core','wget','curl',
-      'openssh-server','python-pip','libicu-dev','python2.7',
-      'libxml2-dev','libxslt1-dev','python-dev','postfix']:
-        ensure  => installed;
-  }
-
-  case $::lsbdistcodename {
-
-    precise: {
-      package {
-        'ruby1.9.3':
-          ensure => installed;
-      }
-
-      exec {
-        'ruby-version':
-          command     => '/usr/bin/update-alternatives --set ruby /usr/bin/ruby1.9.1',
-          user        => root,
-          logoutput   => 'on_failure',
-          require     => Package['ruby1.9.3'];
-        'gem-version':
-          command     => '/usr/bin/update-alternatives --set gem /usr/bin/gem1.9.1',
-          user        => root,
-          logoutput   => 'on_failure',
-          require     => Package['ruby1.9.3'];
-      }
-    }
-
-    default: {
-      # Assuming default ruby 1.9.x (wheezy,quantal,raring)
-      package {
-        ['ruby','ruby-dev','rubygems','rake']:
-          ensure  => installed;
-      }
-    } # Default
-  } # Case:: $::operatingsystem
-
-} # Class:: gitlab::debian_packages
+} # Class:: gitlab::pre
