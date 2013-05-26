@@ -54,7 +54,8 @@ _Note:_ Assume that a database server is already installed on your server/infras
 ## Dependencys
 - [puppetlabs/mysql](https://github.com/puppetlabs/mysql) >= 0.5.0
 - [puppetlabs/stdlib](https://github.com/puppetlabs/stdlib) >= 2.2.1
-- [fsalum/redis](https://github.com/fsalum/puppet-redis) >= 0.0.4
+- [fsalum/puppet-redis](https://github.com/fsalum/puppet-redis) >= 0.0.4
+- [jfryman/puppet-nginx](https://github.com/jfryman/puppet-nginx) >= 0.0.1]
 
 ## GitLab web interface
 - access via your browser under the hostname (e.g. http://gitlab.domain.tld)

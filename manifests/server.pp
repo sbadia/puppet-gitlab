@@ -5,7 +5,6 @@ class gitlab::server {
 
   include gitlab
   require gitlab::gitlabshell
-  require gitlab::nginx
 
   $gitlab_dbtype      = $gitlab::gitlab_dbtype
   $gitlab_dbname      = $gitlab::gitlab_dbname
@@ -196,6 +195,19 @@ class gitlab::server {
       pattern    => 'puma',
       hasrestart => true,
       enable     => true;
+  }
+
+  file {
+    '/etc/nginx/sites-available/gitlab':
+      ensure  => file,
+      content => template('gitlab/nginx-gitlab.conf.erb'),
+      owner   => root,
+      group   => root,
+      mode    => '0644';
+    '/etc/nginx/sites-enabled/gitlab':
+      ensure  => link,
+      target  => '/etc/nginx/sites-available/gitlab',
+      require => File['/etc/nginx/sites-available/gitlab'];
   }
 
 } # Class:: gitlab::server
