@@ -64,21 +64,11 @@ class gitlab::redhat_packages {
   }
 
   package {
-    [ 'git','perl-Time-HiRes','wget','curl','redis','openssh-server',
+    [ 'git','perl-Time-HiRes','wget','curl','openssh-server',
       'python-pip','libicu-devel','libxml2-devel','libxslt-devel',
       'python-devel','libcurl-devel','readline-devel','openssl-devel',
       'zlib-devel','libyaml-devel']:
         ensure => installed;
-  }
-
-  service {
-    'iptables':
-      ensure  => stopped,
-      enable  => false;
-    'redis':
-      ensure  => running,
-      enable  => true,
-      require => Package['redis'];
   }
 
 } # Class:: gitlab::redhat_packages
@@ -106,7 +96,7 @@ class gitlab::debian_packages {
   }
 
   package {
-    ['git','git-core','wget','curl','redis-server',
+    ['git','git-core','wget','curl',
       'openssh-server','python-pip','libicu-dev','python2.7',
       'libxml2-dev','libxslt1-dev','python-dev','postfix']:
         ensure  => installed;
@@ -142,12 +132,5 @@ class gitlab::debian_packages {
       }
     } # Default
   } # Case:: $::operatingsystem
-
-  service {
-    'redis-server':
-      ensure  => running,
-      enable  => true,
-      require => Package['redis-server'];
-  }
 
 } # Class:: gitlab::debian_packages
