@@ -2,27 +2,29 @@
 #
 # === Parameters
 #
-# [git_user] Name of the gitlab
-# [git_home] Home directory for gitlab repository
-# [git_email] Email address for gitlab user
-# [git_comment] Gitlab user comment
-# [gitlab_sources] Gitlab sources (github)
-# [gitlab_branch] Gitlab branch (default stable)
-# [gitlabshell_sources] Gitlab-shell sources (github)
-# [gitlabshell_banch] Gitlab-shell branch (default master)
-# [gitlab_dbtype] Gitlab database type (mysql/pgsql)
-# [gitlab_dbname] Gitlab database name
-# [gitlab_dbuser] Gitlab database user
-# [gitlab_dbpwd] Gitlab database password
+# [git_user] Name of the gitlab (default: git)
+# [git_home] Home directory for gitlab repository (default: /home/git)
+# [git_email] Email address for gitlab user (default: git@someserver.net)
+# [git_comment] Gitlab user comment (default: GitLab)
+# [gitlab_sources] Gitlab sources (default: git://github.com/gitlabhq/gitlabhq.git)
+# [gitlab_branch] Gitlab branch (default: 5-2-stable)
+# [gitlabshell_sources] Gitlab-shell sources (default: git://github.com/gitlabhq/gitlab-shell.git)
+# [gitlabshell_banch] Gitlab-shell branch (default: v1.3.0)
+# [gitlab_dbtype] Gitlab database type (default: mysql)
+# [gitlab_dbname] Gitlab database name (default: gitlabdb)
+# [gitlab_dbuser] Gitlab database user (default: gitlabu)
+# [gitlab_dbpwd] Gitlab database password (default: changeme)
+# [gitlab_dbhost] Gitlab database host (default: localhost)
+# [gitlab_dbport] Gitlab database port (default: 3306)
 # [gitlab_domain] Gitlab domain (default $fqdn)
-# [ldap_enabled] Enable LDAP backend for gitlab web (see bellow)
-# [ldap_host] FQDN of LDAP server
-# [ldap_base] LDAP base dn
-# [ldap_uid] Uid for LDAP auth
-# [ldap_port] LDAP port
-# [ldap_method] Method to use (ssl)
-# [ldap_bind_dn] User for LDAP bind auth
-# [ldap_bind_password] Password for LDN bind auth
+# [ldap_enabled] Enable LDAP backend for gitlab web (see bellow) (default: false)
+# [ldap_host] FQDN of LDAP server (default: ldap.domain.com)
+# [ldap_base] LDAP base dn (default: dc=domain,dc=com)
+# [ldap_uid] Uid for LDAP auth (default: uid)
+# [ldap_port] LDAP port (default: 636)
+# [ldap_method] Method to use (default: ssl)
+# [ldap_bind_dn] User for LDAP bind auth (default: nil)
+# [ldap_bind_password] Password for LDN bind auth (default: nil)
 #
 # === Examples
 #
