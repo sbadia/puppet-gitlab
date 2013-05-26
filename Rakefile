@@ -34,7 +34,7 @@ def bump_version(level)
 
   new_version = [major,minor,patch].compact.join('.')
   v = File.read(File.join(TDIR,'Modulefile')).chomp
-  v.gsub!(/(\d+)\.(\d+)\.(\d+)/,"#{new_version}")
+  v.gsub!(/\w+\s'(\d+)\.(\d+)\.(\d+)'/,"version\ '#{new_version}")
   File.open(File.join(TDIR,'Modulefile'), 'w') do |file|
     file.puts v
   end
