@@ -113,64 +113,29 @@ class gitlab::debian_packages {
   }
 
   case $::lsbdistcodename {
-    # Need to install a fresh ruby version...
-    'squeeze': {
+
+    precise: {
       package {
-        ['checkinstall','libreadline-dev','libssl-dev',
-        'build-essential','zlib1g-dev','libyaml-dev','libc6-dev','libgdbm-dev',
-        'libncurses5-dev','libffi-dev','libcurl4-openssl-dev']:
-          ensure  => installed;
+        'ruby1.9.3':
+          ensure => installed;
       }
 
       exec {
-        'Get Ruby 1.9.3':
-          command     => 'wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p392.tar.gz',
-          path        => '/usr/sbin:/sbin:/usr/bin:/bin',
-          cwd         => '/root',
+        'ruby-version':
+          command     => '/usr/bin/update-alternatives --set ruby /usr/bin/ruby1.9.1',
           user        => root,
           logoutput   => 'on_failure',
-          require     => Package['checkinstall','libcurl4-openssl-dev',
-                                  'libreadline-dev','libssl-dev',
-                                  'build-essential','zlib1g-dev','libyaml-dev',
-                                  'libc6-dev'],
-          unless      => 'test -f /root/ruby-1.9.3-p392.tar.gz';
-        'Untar Ruby 1.9.3':
-          command     => 'tar xfz ruby-1.9.3-p392.tar.gz',
-          path        => '/usr/sbin:/sbin:/usr/bin:/bin',
-          cwd         => '/root',
+          require     => Package['ruby1.9.3'];
+        'gem-version':
+          command     => '/usr/bin/update-alternatives --set gem /usr/bin/gem1.9.1',
           user        => root,
-          require     => Exec['Get Ruby 1.9.3'],
-          unless      => 'test -d /root/ruby-1.9.3-p392',
           logoutput   => 'on_failure',
-          notify      => Exec['Configure and Install Ruby 1.9.3'];
-        'Configure and Install Ruby 1.9.3':
-          command     => '/bin/sh configure && make && make install',
-          cwd         => '/root/ruby-1.9.3-p392/',
-          path        => '/usr/sbin:/sbin:/usr/bin:/bin',
-          user        => root,
-          timeout     => 900,
-          require     => Exec['Untar Ruby 1.9.3'],
-          logoutput   => 'on_failure',
-          refreshonly => true;
-      }
-    } # Squeeze, Precise
-    precise: {
-      package { 'ruby1.9.3': ensure => installed; }
-      exec { 'ruby-version':
-        command     => '/usr/bin/update-alternatives --set ruby /usr/bin/ruby1.9.1',
-        user        => root,
-        logoutput   => 'on_failure',
-        require     => Package['ruby1.9.3']
-      }
-      exec { 'gem-version':
-        command     => '/usr/bin/update-alternatives --set gem /usr/bin/gem1.9.1',
-        user        => root,
-        logoutput   => 'on_failure',
-        require     => Package['ruby1.9.3']
+          require     => Package['ruby1.9.3'];
       }
     }
+
     default: {
-      # Assuming default ruby 1.9.3 (wheezy,quantal,precise)
+      # Assuming default ruby 1.9.x (wheezy,quantal,raring)
       package {
         ['ruby','ruby-dev','rubygems','rake']:
           ensure  => installed;
