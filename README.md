@@ -1,6 +1,6 @@
 # Puppet-gitlab [![Build Status](https://travis-ci.org/sbadia/puppet-gitlab.png)](https://travis-ci.org/sbadia/puppet-gitlab)
 
-Tested successfully with Gitlab 5.1-stable [b4589a8](https://github.com/gitlabhq/gitlabhq/commit/09b915799d3c06dcf63ebab606f05d81ab4589a8) on debian wheezy with puppet 3
+Tested successfully with Gitlab 5.2-stable on Debian Wheezy with Puppet 3
 
 [GitLab](http://gitlabhq.org/) is a free project and repository management application
 
@@ -56,6 +56,8 @@ _Note:_ Assume that a database server is already installed on your server/infras
 - [puppetlabs/stdlib](https://github.com/puppetlabs/stdlib) >= 2.2.1
 - [fsalum/puppet-redis](https://github.com/fsalum/puppet-redis) >= 0.0.4
 - [jfryman/puppet-nginx](https://github.com/jfryman/puppet-nginx) >= 0.0.1
+
+See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/examples/gitlab.pp).
 
 ## GitLab web interface
 - access via your browser under the hostname (e.g. http://gitlab.domain.tld)

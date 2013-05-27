@@ -138,18 +138,18 @@ class gitlab::server {
     ["${git_home}/gitlab/tmp",
       "${git_home}/gitlab/log",
       "${git_home}/gitlab-satellites",
-      "${git_home}/public"]:
+      "${git_home}/gitlab/public"]:
       ensure  => directory,
       mode    => '0755',
       owner   => $git_user,
       group   => $git_user,
       require => Exec['Get gitlab'];
-    "${git_home}/public/uploads":
+    "${git_home}/gitlab/public/uploads":
       ensure  => directory,
       mode    => '0755',
       owner   => $git_user,
       group   => $git_user,
-      require   => File["${git_home}/gitlab/public"];
+      require => File["${git_home}/gitlab/public"];
     ["${git_home}/gitlab/tmp/pids","${git_home}/gitlab/tmp/sockets"]:
       ensure    => directory,
       mode      => '0755',
@@ -204,16 +204,12 @@ class gitlab::server {
   }
 
   file {
-    '/etc/nginx/sites-available/gitlab':
+    '/etc/nginx/conf.d/gitlab.conf':
       ensure  => file,
       content => template('gitlab/nginx-gitlab.conf.erb'),
       owner   => root,
       group   => root,
       mode    => '0644';
-    '/etc/nginx/sites-enabled/gitlab':
-      ensure  => link,
-      target  => '/etc/nginx/sites-available/gitlab',
-      require => File['/etc/nginx/sites-available/gitlab'];
   }
 
 } # Class:: gitlab::server
