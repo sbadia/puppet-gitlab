@@ -138,16 +138,21 @@ class gitlab::server {
     ["${git_home}/gitlab/tmp",
       "${git_home}/gitlab/log",
       "${git_home}/gitlab-satellites",
-      "${git_home}/public/uploads"]:
+      "${git_home}/public"]:
       ensure  => directory,
       mode    => '0755',
       owner   => $git_user,
       group   => $git_user,
       require => Exec['Get gitlab'];
+    "${git_home}/public/uploads":
+      ensure  => directory,
+      mode    => '0755',
+      owner   => $git_user,
+      group   => $git_user,
+      require   => File["${git_home}/gitlab/public"];
     ["${git_home}/gitlab/tmp/pids","${git_home}/gitlab/tmp/sockets"]:
       ensure    => directory,
       mode      => '0755',
-      recursive => true,
       owner     => $git_user,
       group     => $git_user,
       require   => File["${git_home}/gitlab/tmp"];
