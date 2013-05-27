@@ -106,8 +106,4 @@ class gitlab::pre {
       ensure => installed;
   }
 
-  # Manage redis and nginx server
-  class { 'redis': }
-  class { 'nginx': }
-
 } # Class:: gitlab::pre
