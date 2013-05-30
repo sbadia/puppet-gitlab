@@ -44,37 +44,6 @@ class gitlab::pre {
           'libxml2-dev','libxslt1-dev','python-dev','postfix']:
             ensure  => installed;
       }
-
-      # Ruby settings
-      case $::lsbdistcodename {
-
-        precise: {
-          package {
-            'ruby1.9.3':
-              ensure => installed;
-          }
-
-          exec {
-            'ruby-version':
-              command     => '/usr/bin/update-alternatives --set ruby /usr/bin/ruby1.9.1',
-              user        => root,
-              logoutput   => 'on_failure',
-              require     => Package['ruby1.9.3'];
-            'gem-version':
-              command     => '/usr/bin/update-alternatives --set gem /usr/bin/gem1.9.1',
-              user        => root,
-              logoutput   => 'on_failure',
-              require     => Package['ruby1.9.3'];
-          }
-        } # Ubuntu precise
-        default: {
-          # Assuming default ruby 1.9.x (wheezy,quantal,raring)
-          package {
-            ['ruby','ruby-dev','rake']:
-              ensure  => installed;
-          }
-        } # Default
-      } # Case:: $::operatingsystem (ruby settings)
     } # Debian pre-requists
     'Redhat': {
       $db_packages = $gitlab_dbtype ? {
