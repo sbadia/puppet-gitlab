@@ -63,7 +63,7 @@ class gitlab::pre {
         default: {
           # Assuming default ruby 1.9.x (wheezy,quantal,raring)
           package {
-            ['ruby','ruby-dev','rubygems','rake']:
+            ['ruby','ruby-dev','rake']:
               ensure  => installed;
           }
         } # Default
