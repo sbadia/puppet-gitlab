@@ -21,6 +21,15 @@ class gitlab::pre {
       system     => true;
   }
 
+  file {
+    $git_home:
+      ensure  => present,
+      owner   => $git_user,
+      group   => $git_user,
+      require => User[$git_user],
+      recurse => true,
+  }
+
   # try and decide about the family here,
   # deal with version/dist specifics within the class
   case $::osfamily {
