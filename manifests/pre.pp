@@ -16,7 +16,6 @@ class gitlab::pre {
       shell      => '/bin/bash',
       password   => '*',
       home       => $git_home,
-      managehome => true,
       comment    => $git_comment,
       system     => true;
   }
@@ -27,7 +26,8 @@ class gitlab::pre {
       owner   => $git_user,
       group   => $git_user,
       require => User[$git_user],
-      recurse => true,
+      mode    => '0750',
+      recurse => true;
   }
 
   # try and decide about the family here,
@@ -67,8 +67,7 @@ class gitlab::pre {
               logoutput   => 'on_failure',
               require     => Package['ruby1.9.3'];
           }
-        }
-
+        } # Ubuntu precise
         default: {
           # Assuming default ruby 1.9.x (wheezy,quantal,raring)
           package {
@@ -93,13 +92,7 @@ class gitlab::pre {
             provider => yum;
       }
 
-      file {
-        $git_home:
-          mode    => '0750',
-          recurse => false,
-          require => User[$git_user];
-      }
-    }
+    } # Redhat pre-requists
     default: {
       err "${::osfamily} not supported yet"
     }
