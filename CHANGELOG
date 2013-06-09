@@ -1,3 +1,6 @@
+* 2013-06-10 - 0.0.8
+- Use nginx,ruby,redis,mysql external modules
+- Clean pre.pp file
 * 2013-04-27 - 0.0.6
 - Fix packaging issue (https://github.com/sbadia/puppet-gitlab/issues/33) wait for a cleaner way to do that (http://projects.puppetlabs.com/issues/14651)
 - Bump to GitLab 5.1 (switch from unicorn to puma)
