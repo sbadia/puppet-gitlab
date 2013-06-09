@@ -22,12 +22,11 @@ class gitlab::pre {
 
   file {
     $git_home:
-      ensure  => present,
+      ensure  => directory,
       owner   => $git_user,
       group   => $git_user,
       require => User[$git_user],
-      mode    => '0750',
-      recurse => true;
+      mode    => '0755',
   }
 
   # try and decide about the family here,
