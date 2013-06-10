@@ -52,8 +52,8 @@ _Note:_ Assume that a database server is already installed on your server/infras
 * ldap\_bind\_password: Password for LDN bind auth (default: nil)
 
 ## Dependencys
-- [puppetlabs/mysql](https://github.com/puppetlabs/mysql) >= 0.6.1
-- [puppetlabs/stdlib](https://github.com/puppetlabs/stdlib) >= 4.1.0
+- [puppetlabs/puppetlabs-mysql](https://github.com/puppetlabs/puppetlabs-mysql) >= 0.6.1
+- [puppetlabs/puppetlabs-stdlib](https://github.com/puppetlabs/puppetlabs-stdlib) >= 4.1.0
 - [fsalum/puppet-redis](https://github.com/fsalum/puppet-redis) >= 0.0.5
 - [jfryman/puppet-nginx](https://github.com/jfryman/puppet-nginx) >= 0.0.1
 - [puppetlabs/puppetlabs-ruby](https://github.com/puppetlabs/puppetlabs-ruby) >= 0.0.2
