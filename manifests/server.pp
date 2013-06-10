@@ -13,6 +13,7 @@ class gitlab::server {
   $gitlab_dbhost      = $gitlab::gitlab_dbhost
   $gitlab_dbport      = $gitlab::gitlab_dbport
   $gitlab_domain      = $gitlab::gitlab_domain
+  $gitlab_repodir     = $gitlab::gitlab_repodir
   $gitlab_branch      = $gitlab::gitlab_branch
   $gitlab_sources     = $gitlab::gitlab_sources
   $git_home           = $gitlab::git_home

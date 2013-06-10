@@ -18,6 +18,7 @@ class gitlab::params {
   $gitlab_dbhost       = 'localhost'
   $gitlab_dbport       = '3306'
   $gitlab_domain       = $::fqdn
+  $gitlab_repodir      = '/home/git'
   $ldap_enabled        = false
   $ldap_host           = 'ldap.domain.com'
   $ldap_base           = 'dc=domain,dc=com'
