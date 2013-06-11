@@ -17,6 +17,7 @@
 # [gitlab_dbhost] Gitlab database host (default: localhost)
 # [gitlab_dbport] Gitlab database port (default: 3306)
 # [gitlab_domain] Gitlab domain (default $fqdn)
+# [gitlab_repodir] Gitlab repository directory (default /home/git)
 # [ldap_enabled] Enable LDAP backend for gitlab web (see bellow) (default: false)
 # [ldap_host] FQDN of LDAP server (default: ldap.domain.com)
 # [ldap_base] LDAP base dn (default: dc=domain,dc=com)
@@ -67,6 +68,7 @@ class gitlab(
     $gitlab_dbhost       = $gitlab::params::gitlab_dbhost,
     $gitlab_dbport       = $gitlab::params::gitlab_dbport,
     $gitlab_domain       = $gitlab::params::gitlab_domain,
+    $gitlab_repodir      = $gitlab::params::gitlab_repodir,
     $ldap_enabled        = $gitlab::params::ldap_enabled,
     $ldap_host           = $gitlab::params::ldap_host,
     $ldap_base           = $gitlab::params::ldap_base,

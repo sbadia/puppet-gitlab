@@ -9,6 +9,7 @@ class gitlab::gitlabshell {
   $git_user         = $gitlab::git_user
   $git_home         = $gitlab::git_home
   $gitlab_domain    = $gitlab::gitlab_domain
+  $gitlab_repodir   = $gitlab::gitlab_repodir
 
   file {
     "${git_home}/gitlab-shell/config.yml":
@@ -37,7 +38,7 @@ class gitlab::gitlabshell {
       cwd       => $git_home,
       require   => File["${git_home}/gitlab-shell/config.yml"],
       logoutput => 'on_failure',
-      creates   => "${git_home}/repositories";
+      creates   => "${gitlab_repodir}/repositories";
   }
 
 } # Class:: gitlab::gitolite
