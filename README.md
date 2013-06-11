@@ -42,7 +42,7 @@ _Note:_ Assume that a database server is already installed on your server/infras
 * gitlab\_dbhost: Gitlab database host (default: localhost)
 * gitlab\_dbport: Gitlab database port (default: 3306)
 * gitlab\_domain: Gitlab domain (default $fqdn)
-* gitlab\_repodir: Gitlab repository directory (default: /home/git)
+* gitlab\_repodir: Gitlab repository directory (default: $git\_home)
 * ldap\_enabled: Enable LDAP backend for gitlab web (see bellow) (default: false)
 * ldap\_host: FQDN of LDAP server (default: ldap.domain.com)
 * ldap\_base: LDAP base dn (default: dc=domain,dc=com)
