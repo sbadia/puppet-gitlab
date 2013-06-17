@@ -19,6 +19,10 @@ class gitlab::params {
   $gitlab_dbport       = '3306'
   $gitlab_domain       = $::fqdn
   $gitlab_repodir      = $git_home
+  $gitlab_ssl          = false
+  $gitlab_ssl_cert     = '/etc/ssl/certs/ss-cert-snakeoil.pem'
+  $gitlab_ssl_key      = '/etc/ssl/private/ssl-cert-snakeoil.key'
+  $gitlab_projects     = '10'
   $ldap_enabled        = false
   $ldap_host           = 'ldap.domain.com'
   $ldap_base           = 'dc=domain,dc=com'
