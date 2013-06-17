@@ -39,8 +39,7 @@ class gitlab::pre {
       }
 
       package {
-        ['git-core',
-          'libicu-dev','python2.7',
+        ['libicu-dev','python2.7',
           'libxml2-dev','libxslt1-dev','python-dev','postfix']:
             ensure  => installed;
       }
