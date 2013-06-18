@@ -19,8 +19,8 @@ production: &base
   gitlab:
     ## Web server settings
     host: <%= @gitlab_domain %>
-    port: 80
-    https: false
+    port: <%= @gitlab_ssl ? '443' : '80' %>
+    https: <%= @gitlab_ssl %>
     # Uncomment and customize to run in non-root path
     # Note that ENV['RAILS_RELATIVE_URL_ROOT'] in config/puma.rb may need to be changed
     # relative_url_root: /gitlab
@@ -36,7 +36,7 @@ production: &base
     support_email: support@localhost
 
     ## Project settings
-    default_projects_limit: 10
+    default_projects_limit: <%= @gitlab_projects %>
 
     ## Users management
     # signup_enabled: true          # default: false - Account passwords are not sent via the email if signup is enabled.
