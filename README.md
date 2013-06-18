@@ -34,7 +34,7 @@ _Note:_ Assume that a database server is already installed on your server/infras
 * gitlab\_sources: Gitlab sources (default: git://github.com/gitlabhq/gitlabhq.git)
 * gitlab\_branch: Gitlab branch (default: 5-2-stable)
 * gitlabshell\_sources: Gitlab-shell sources (default: git://github.com/gitlabhq/gitlab-shell.git)
-* gitlabshell\_banch: Gitlab-shell branch (default: v1.3.0)
+* gitlabshell\_banch: Gitlab-shell branch (default: v1.4.0)
 * gitlab\_dbtype: Gitlab database type (default: mysql)
 * gitlab\_dbname: Gitlab database name (default: gitlabdb)
 * gitlab\_dbuser: Gitlab database user (default: gitlabu)

@@ -9,7 +9,7 @@
 # [gitlab_sources] Gitlab sources (default: git://github.com/gitlabhq/gitlabhq.git)
 # [gitlab_branch] Gitlab branch (default: 5-2-stable)
 # [gitlabshell_sources] Gitlab-shell sources (default: git://github.com/gitlabhq/gitlab-shell.git)
-# [gitlabshell_banch] Gitlab-shell branch (default: v1.3.0)
+# [gitlabshell_banch] Gitlab-shell branch (default: v1.4.0)
 # [gitlab_dbtype] Gitlab database type (default: mysql)
 # [gitlab_dbname] Gitlab database name (default: gitlabdb)
 # [gitlab_dbuser] Gitlab database user (default: gitlabu)
@@ -17,6 +17,11 @@
 # [gitlab_dbhost] Gitlab database host (default: localhost)
 # [gitlab_dbport] Gitlab database port (default: 3306)
 # [gitlab_domain] Gitlab domain (default $fqdn)
+# [gitlab_repodir] Gitlab repository directory (default: $git_home)
+# [gitlab_ssl] Enable SSL for GitLab (default: false)
+# [gitlab_ssl_cert] SSL Certificate location (default: /etc/ssl/certs/ssl-cert-snakeoil.pem)
+# [gitlab_ssl_key] SSL Key location (default: /etc/ssl/private/ssl-cert-snakeoil.key)
+# [gitlab_projects] GitLab default number of projects for new users (default: 10)
 # [gitlab_repodir] Gitlab repository directory (default $git_home)
 # [ldap_enabled] Enable LDAP backend for gitlab web (see bellow) (default: false)
 # [ldap_host] FQDN of LDAP server (default: ldap.domain.com)
@@ -41,9 +46,10 @@
 # === Authors
 #
 # Sebastien Badia <seb@sebian.fr>
+# Steffen Roegner <steffen@sroegner.org>
+# Andrew Tomaka <atomaka@gmail.com>
 # Uwe Kleinmann <uwe@kleinmann.org>
 # Matt Klich <matt@elementalvoid.com>
-# Steffen Roegner <steffen@sroegner.org>
 #
 # === Copyright
 #
