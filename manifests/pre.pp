@@ -40,12 +40,15 @@ class gitlab::pre {
 
       package {
         ['libicu-dev','python2.7',
-          'libxml2-dev','libxslt1-dev','python-dev','postfix']:
+          'libxml2-dev','libxslt1-dev','python-dev']:
             ensure  => installed;
       }
 
       if !defined(Package['git-core']) {
         package { 'git-core': ensure => present; }
+      }
+      if !defined(Package['postfix']) {
+        package { 'postfix': ensure => present; }
       }
     } # Debian pre-requists
     'Redhat': {
