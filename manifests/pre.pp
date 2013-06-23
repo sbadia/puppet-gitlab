@@ -39,10 +39,13 @@ class gitlab::pre {
       }
 
       package {
-        ['git-core',
-          'libicu-dev','python2.7',
+        ['libicu-dev','python2.7',
           'libxml2-dev','libxslt1-dev','python-dev','postfix']:
             ensure  => installed;
+      }
+
+      if !defined(Package['git-core']) {
+        package { 'git-core': ensure => present; }
       }
     } # Debian pre-requists
     'Redhat': {
@@ -71,9 +74,13 @@ class gitlab::pre {
       ensure   => installed;
   }
 
-  package {
-    ['openssh-server','git','curl']:
-      ensure => installed;
+  if !defined(Package['openssh-server']) {
+    package { 'openssh-server': ensure => present; }
   }
-
+  if !defined(Package['git']) {
+    package { 'git': ensure => present; }
+  }
+  if !defined(Package['curl']) {
+    package { 'curl': ensure => present; }
+  }
 } # Class:: gitlab::pre
