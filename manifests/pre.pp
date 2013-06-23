@@ -43,6 +43,10 @@ class gitlab::pre {
           'libxml2-dev','libxslt1-dev','python-dev','postfix']:
             ensure  => installed;
       }
+
+      if !defined(Package['git-core']) {
+        package { 'git-core': ensure => present; }
+      }
     } # Debian pre-requists
     'Redhat': {
       $db_packages = $gitlab_dbtype ? {
