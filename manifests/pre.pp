@@ -38,6 +38,12 @@ class gitlab::pre {
         pgsql => ['libpq-dev', 'postgresql-client'],
       }
 
+      file {
+        '/usr/bin/python2':
+          ensure => link,
+          target => '/usr/bin/python';
+      }
+
       package {
         ['libicu-dev','python2.7',
           'libxml2-dev','libxslt1-dev','python-dev']:
