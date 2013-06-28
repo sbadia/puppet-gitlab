@@ -25,7 +25,7 @@ describe 'gitlab::server' do
 
     it { should contain_package('charlock_holmes').with(
       :provider   => 'gem',
-      :ensure => '0.6.9'
+      :ensure => '0.6.9.4'
     )}
 
     it { should contain_package('Pygments').with(

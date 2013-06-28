@@ -62,15 +62,33 @@ class gitlab::pre {
         mysql => ['mysql-devel'],
         pgsql => ['postgresql-devel'],
       }
-
-      package {
-        ['perl-Time-HiRes',
-          'libicu-devel','libxml2-devel','libxslt-devel',
-          'python-devel','libcurl-devel','readline-devel','openssl-devel',
-          'zlib-devel','libyaml-devel']:
-            ensure   => latest,
-            provider => yum;
+      $devel_pkgs = [ 'libcurl-devel', 'libicu-devel', 'libxml2-devel', 'libxslt-devel', 'libyaml-devel', 'openssl-devel', 'perl-Time-HiRes', 'python-devel', 'readline-devel', 'zlib-devel' ]
+      $compilers  = [ 'gcc', 'gcc-c++' ]
+      @package { $devel_pkgs:
+        ensure   => 'latest',
+        provider => 'yum',
+        tag      => 'rhel-dev-pkgs'
       }
+      @package { $compilers:
+        ensure => 'present',
+        provider => 'yum',
+        tag      => 'rhel-compiler-pkgs'
+      }
+      Package <| tag == 'rhel-dev-pkgs' |>
+      Package <| tag == 'rhel-compiler-pkgs' |>
+
+      if !defined(Package['nginx']){
+        package{ 'nginx': ensure => 'present';}
+      }
+      if !defined(Package['postfix']){
+        package{ 'postfix': ensure => 'present';}
+      }
+      #requirements not handled by this module
+      #mysql setup (can be satiated with puppetlabs-mysql)
+      #redis (can be satiated with )
+      #nginx (can be satiated with puppetlabs-nginx)
+
+
 
     } # Redhat pre-requists
     default: {
