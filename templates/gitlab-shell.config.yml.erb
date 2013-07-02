@@ -7,7 +7,7 @@ gitlab_url: "<%= @gitlab_ssl ? 'https' : 'http' %>://<%= @gitlab_domain %>/"
 http_settings:
 #  user: someone
 #  password: somepass
-  self_signed_cert: false
+  self_signed_cert: <%= @gitlab_ssl_self_signed %>
 
 # Repositories path
 repos_path: "<%= @gitlab_repodir %>/repositories"
