@@ -21,6 +21,7 @@
 # [gitlab_ssl] Enable SSL for GitLab (default: false)
 # [gitlab_ssl_cert] SSL Certificate location (default: /etc/ssl/certs/ssl-cert-snakeoil.pem)
 # [gitlab_ssl_key] SSL Key location (default: /etc/ssl/private/ssl-cert-snakeoil.key)
+# [gitlab_ssl_self_signed] Set true if your SSL Cert is self signed (default: false)
 # [gitlab_projects] GitLab default number of projects for new users (default: 10)
 # [gitlab_repodir] Gitlab repository directory (default $git_home)
 # [ldap_enabled] Enable LDAP backend for gitlab web (see bellow) (default: false)
@@ -59,34 +60,35 @@
 #
 #
 class gitlab(
-    $git_user            = $gitlab::params::git_user,
-    $git_home            = $gitlab::params::git_home,
-    $git_email           = $gitlab::params::git_email,
-    $git_comment         = $gitlab::params::git_comment,
-    $gitlab_sources      = $gitlab::params::gitlab_sources,
-    $gitlab_branch       = $gitlab::params::gitlab_branch,
-    $gitlabshell_branch  = $gitlab::params::gitlabshell_branch,
-    $gitlabshell_sources = $gitlab::params::gitlabshell_sources,
-    $gitlab_dbtype       = $gitlab::params::gitlab_dbtype,
-    $gitlab_dbname       = $gitlab::params::gitlab_dbname,
-    $gitlab_dbuser       = $gitlab::params::gitlab_dbuser,
-    $gitlab_dbpwd        = $gitlab::params::gitlab_dbpwd,
-    $gitlab_dbhost       = $gitlab::params::gitlab_dbhost,
-    $gitlab_dbport       = $gitlab::params::gitlab_dbport,
-    $gitlab_domain       = $gitlab::params::gitlab_domain,
-    $gitlab_repodir      = $gitlab::params::gitlab_repodir,
-    $gitlab_ssl          = $gitlab::params::gitlab_ssl,
-    $gitlab_ssl_cert     = $gitlab::params::gitlab_ssl_cert,
-    $gitlab_ssl_key      = $gitlab::params::gitlab_ssl_key,
-    $gitlab_projects     = $gitlab::params::gitlab_projects,
-    $ldap_enabled        = $gitlab::params::ldap_enabled,
-    $ldap_host           = $gitlab::params::ldap_host,
-    $ldap_base           = $gitlab::params::ldap_base,
-    $ldap_uid            = $gitlab::params::ldap_uid,
-    $ldap_port           = $gitlab::params::ldap_port,
-    $ldap_method         = $gitlab::params::ldap_method,
-    $ldap_bind_dn        = $gitlab::params::ldap_bind_dn,
-    $ldap_bind_password  = $gitlab::params::ldap_bind_password
+    $git_user               = $gitlab::params::git_user,
+    $git_home               = $gitlab::params::git_home,
+    $git_email              = $gitlab::params::git_email,
+    $git_comment            = $gitlab::params::git_comment,
+    $gitlab_sources         = $gitlab::params::gitlab_sources,
+    $gitlab_branch          = $gitlab::params::gitlab_branch,
+    $gitlabshell_branch     = $gitlab::params::gitlabshell_branch,
+    $gitlabshell_sources    = $gitlab::params::gitlabshell_sources,
+    $gitlab_dbtype          = $gitlab::params::gitlab_dbtype,
+    $gitlab_dbname          = $gitlab::params::gitlab_dbname,
+    $gitlab_dbuser          = $gitlab::params::gitlab_dbuser,
+    $gitlab_dbpwd           = $gitlab::params::gitlab_dbpwd,
+    $gitlab_dbhost          = $gitlab::params::gitlab_dbhost,
+    $gitlab_dbport          = $gitlab::params::gitlab_dbport,
+    $gitlab_domain          = $gitlab::params::gitlab_domain,
+    $gitlab_repodir         = $gitlab::params::gitlab_repodir,
+    $gitlab_ssl             = $gitlab::params::gitlab_ssl,
+    $gitlab_ssl_cert        = $gitlab::params::gitlab_ssl_cert,
+    $gitlab_ssl_key         = $gitlab::params::gitlab_ssl_key,
+    $gitlab_ssl_self_signed = $gitlab::params::gitlab_ssl_self_signed,
+    $gitlab_projects        = $gitlab::params::gitlab_projects,
+    $ldap_enabled           = $gitlab::params::ldap_enabled,
+    $ldap_host              = $gitlab::params::ldap_host,
+    $ldap_base              = $gitlab::params::ldap_base,
+    $ldap_uid               = $gitlab::params::ldap_uid,
+    $ldap_port              = $gitlab::params::ldap_port,
+    $ldap_method            = $gitlab::params::ldap_method,
+    $ldap_bind_dn           = $gitlab::params::ldap_bind_dn,
+    $ldap_bind_password     = $gitlab::params::ldap_bind_password
   ) inherits gitlab::params {
   # FIXME class inheriting from params class
   case $::osfamily {
