@@ -20,7 +20,7 @@ class gitlab::params {
   $gitlab_domain          = $::fqdn
   $gitlab_repodir         = $git_home
   $gitlab_ssl             = false
-  $gitlab_ssl_cert        = '/etc/ssl/certs/ss-cert-snakeoil.pem'
+  $gitlab_ssl_cert        = '/etc/ssl/certs/ssl-cert-snakeoil.pem'
   $gitlab_ssl_key         = '/etc/ssl/private/ssl-cert-snakeoil.key'
   $gitlab_ssl_self_signed = false
   $gitlab_projects        = '10'
