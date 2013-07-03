@@ -48,6 +48,7 @@ _Note:_ Assume that a database server is already installed on your server/infras
 * gitlab\_ssl\_key: SSL Key location (default: /etc/ssl/private/ssl-cert-snakeoil.key)
 * gitlab\_ssl\_self_signed: Set true if your SSL Cert is self signed (default: false)
 * gitlab\_projects: GitLab default number of projects for new users (default: 10)
+* gitlab\_username\_change: Manage username changing in GitLab (default: true)
 * ldap\_enabled: Enable LDAP backend for gitlab web (see bellow) (default: false)
 * ldap\_host: FQDN of LDAP server (default: ldap.domain.com)
 * ldap\_base: LDAP base dn (default: dc=domain,dc=com)
