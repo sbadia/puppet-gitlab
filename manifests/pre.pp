@@ -81,9 +81,6 @@ class gitlab::pre(
       Package <| tag == 'rhel-dev-pkgs' |>
       Package <| tag == 'rhel-compiler-pkgs' |>
 
-      if !defined(Package['nginx']){
-        package{ 'nginx': ensure => 'present';}
-      }
       if !defined(Package['postfix']){
         package{ 'postfix': ensure => 'present';}
       }
