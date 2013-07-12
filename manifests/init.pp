@@ -31,6 +31,8 @@
 # [ldap_method] Method to use (default: ssl)
 # [ldap_bind_dn] User for LDAP bind auth (default: nil)
 # [ldap_bind_password] Password for LDN bind auth (default: nil)
+# [mysql_dev_pkg_names] Name of the mysql devel package to install
+# [pg_dev_pkg_names] Name of the Postgres devel package to install 
 #
 # === Examples
 #
@@ -86,7 +88,9 @@ class gitlab(
     $ldap_port           = $gitlab::params::ldap_port,
     $ldap_method         = $gitlab::params::ldap_method,
     $ldap_bind_dn        = $gitlab::params::ldap_bind_dn,
-    $ldap_bind_password  = $gitlab::params::ldap_bind_password
+    $ldap_bind_password  = $gitlab::params::ldap_bind_password,
+    $mysql_dev_pkg_names = $gitlab::params::mysql_dev_pkg_names,
+    $pg_dev_pkg_names    = $gitlab::params::pg_dev_pkg_names
   ) inherits gitlab::params {
   # FIXME class inheriting from params class
   case $::osfamily {

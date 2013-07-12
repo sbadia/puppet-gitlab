@@ -1,14 +1,18 @@
 # Class:: gitlab::pre
 #
 #
-class gitlab::pre {
+class gitlab::pre(
+  $git_comment         = $gitlab::git_comment,
+  $git_home            = $gitlab::git_home,
+  $git_user            = $gitlab::git_user,
+  $gitlab_dbtype       = $gitlab::gitlab_dbtype,
+  $mysql_dev_pkg_names = $gitlab::mysql_dev_pkg_names,
+  $pg_dev_pkg_names    = $gitlab::pg_dev_pkg_names
+  ) {
 
   include gitlab
 
-  $git_home       = $gitlab::git_home
-  $git_user       = $gitlab::git_user
-  $git_comment    = $gitlab::git_comment
-  $gitlab_dbtype  = $gitlab::gitlab_dbtype
+
 
   user {
     $git_user:
@@ -34,8 +38,8 @@ class gitlab::pre {
   case $::osfamily {
     'Debian': {
       $db_packages = $gitlab_dbtype ? {
-        mysql => ['libmysql++-dev','libmysqlclient-dev'],
-        pgsql => ['libpq-dev', 'postgresql-client'],
+        mysql => $mysql_dev_pkg_names,
+        pgsql => $pg_dev_pkg_names,
       }
 
       file {
@@ -59,8 +63,8 @@ class gitlab::pre {
     } # Debian pre-requists
     'Redhat': {
       $db_packages = $gitlab_dbtype ? {
-        mysql => ['mysql-devel'],
-        pgsql => ['postgresql-devel'],
+        mysql => $mysql_dev_pkg_names,
+        pgsql => $pg_dev_pkg_names,
       }
       $devel_pkgs = [ 'libcurl-devel', 'libicu-devel', 'libxml2-devel', 'libxslt-devel', 'libyaml-devel', 'openssl-devel', 'perl-Time-HiRes', 'python-devel', 'readline-devel', 'zlib-devel' ]
       $compilers  = [ 'gcc', 'gcc-c++' ]
