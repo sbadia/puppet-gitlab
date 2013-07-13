@@ -1,32 +1,33 @@
 # Class:: gitlab::server
 #
 #
-class gitlab::server {
+class gitlab::server(
+  $git_email          = $gitlab::git_email,
+  $git_home           = $gitlab::git_home,
+  $git_user           = $gitlab::git_user,
+  $gitlab_branch      = $gitlab::gitlab_branch,
+  $gitlab_dbhost      = $gitlab::gitlab_dbhost,
+  $gitlab_dbname      = $gitlab::gitlab_dbname,
+  $gitlab_dbport      = $gitlab::gitlab_dbport,
+  $gitlab_dbpwd       = $gitlab::gitlab_dbpwd,
+  $gitlab_dbtype      = $gitlab::gitlab_dbtype,
+  $gitlab_dbuser      = $gitlab::gitlab_dbuser,
+  $gitlab_domain      = $gitlab::gitlab_domain,
+  $gitlab_repodir     = $gitlab::gitlab_repodir,
+  $gitlab_sources     = $gitlab::gitlab_sources,
+  $nginx_service_name = $gitlab::nginx_service_name,
+  $ldap_base          = $gitlab::ldap_base,
+  $ldap_bind_dn       = $gitlab::ldap_bind_dn,
+  $ldap_bind_password = $gitlab::ldap_bind_password,
+  $ldap_enabled       = $gitlab::ldap_enabled,
+  $ldap_host          = $gitlab::ldap_host,
+  $ldap_method        = $gitlab::ldap_method,
+  $ldap_port          = $gitlab::ldap_port,
+  $ldap_uid           = $gitlab::ldap_uid,
+  ) {
 
   include gitlab
   require gitlab::gitlabshell
-
-  $gitlab_dbtype      = $gitlab::gitlab_dbtype
-  $gitlab_dbname      = $gitlab::gitlab_dbname
-  $gitlab_dbuser      = $gitlab::gitlab_dbuser
-  $gitlab_dbpwd       = $gitlab::gitlab_dbpwd
-  $gitlab_dbhost      = $gitlab::gitlab_dbhost
-  $gitlab_dbport      = $gitlab::gitlab_dbport
-  $gitlab_domain      = $gitlab::gitlab_domain
-  $gitlab_repodir     = $gitlab::gitlab_repodir
-  $gitlab_branch      = $gitlab::gitlab_branch
-  $gitlab_sources     = $gitlab::gitlab_sources
-  $git_home           = $gitlab::git_home
-  $git_user           = $gitlab::git_user
-  $git_email          = $gitlab::git_email
-  $ldap_enabled       = $gitlab::ldap_enabled
-  $ldap_host          = $gitlab::ldap_host
-  $ldap_base          = $gitlab::ldap_base
-  $ldap_uid           = $gitlab::ldap_uid
-  $ldap_port          = $gitlab::ldap_port
-  $ldap_method        = $gitlab::ldap_method
-  $ldap_bind_dn       = $gitlab::ldap_bind_dn
-  $ldap_bind_password = $gitlab::ldap_bind_password
 
 
   package {
@@ -210,7 +211,8 @@ class gitlab::server {
       content => template('gitlab/nginx-gitlab.conf.erb'),
       owner   => root,
       group   => root,
-      mode    => '0644';
+      mode    => '0644',
+      notify  => Service[$nginx_service_name];
   }
 
 } # Class:: gitlab::server

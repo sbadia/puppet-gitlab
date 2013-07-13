@@ -74,7 +74,7 @@ class gitlab::pre(
         tag      => 'rhel-dev-pkgs'
       }
       @package { $compilers:
-        ensure => 'present',
+        ensure   => 'present',
         provider => 'yum',
         tag      => 'rhel-compiler-pkgs'
       }

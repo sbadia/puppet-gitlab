@@ -30,6 +30,7 @@ class gitlab::params {
   $ldap_method         = 'ssl'
   $ldap_port           = '636'
   $ldap_uid            = 'uid'
+  $nginx_service_name  = 'nginx'
   case $::osfamily {
     RedHat: {
       $mysql_dev_pkg_names = ['mysql-devel']
