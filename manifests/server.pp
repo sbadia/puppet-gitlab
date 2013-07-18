@@ -188,7 +188,7 @@ class gitlab::server(
   file {
     '/etc/init.d/gitlab':
       ensure  => file,
-      content => template('gitlab/gitlab.init.erb'),
+      content => template('gitlab/etc/init.d/gitlab.erb'),
       owner   => root,
       group   => root,
       mode    => '0755',
@@ -196,15 +196,35 @@ class gitlab::server(
       require => Exec['Setup gitlab DB'];
   }
 
+  file {
+    '/etc/init.d/sidekiq':
+      ensure  => file,
+      content => template('gitlab/etc/init.d/sidekiq.erb'),
+      owner   => root,
+      group   => root,
+      mode    => '0755',
+      notify  => Service['sidekiq'],
+      require => [Exec['Setup gitlab DB'],Service['gitlab']];
+  }
+
   service {
     'gitlab':
       ensure     => running,
-      require    => File['/etc/init.d/gitlab'],
-      pattern    => 'puma',
+      enable     => true,
       hasrestart => true,
-      enable     => true;
+      notify     => Service['sidekiq'],
+      pattern    => 'puma',
+      require    => File['/etc/init.d/gitlab'];
   }
-
+  service {
+    'sidekiq':
+      ensure     => running,
+      enable     => true,
+      hasrestart => true,
+      pattern    => 'sidekiq',
+      require    => [File['/etc/init.d/sidekiq'],Service['gitlab']],
+      subscribe  => Service['gitlab'];
+  }
   file {
     '/etc/nginx/conf.d/gitlab.conf':
       ensure  => file,

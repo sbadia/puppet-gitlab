@@ -1,8 +1,13 @@
+<% git_home = scope.lookupvar('gitlab::git_home') -%>
 #! /bin/bash
 
 # GITLAB
 # Maintainer: @randx
 # App Version: 5.2
+
+### BEGIN CHKCONFIG INFO2
+# chkconfig 2345 95 302
+#### END CHKCONFIG INFO
 
 ### BEGIN INIT INFO
 # Provides:          gitlab
@@ -15,22 +20,19 @@
 ### END INIT INFO
 
 
-APP_ROOT="<%= @git_home %>/gitlab"
+APP_ROOT="<%= git_home -%>/gitlab"
 APP_USER="git"
-DAEMON_OPTS="-C $APP_ROOT/config/puma.rb"
 PID_PATH="$APP_ROOT/tmp/pids"
 SOCKET_PATH="$APP_ROOT/tmp/sockets"
-WEB_SERVER_PID="$PID_PATH/puma.pid"
 SIDEKIQ_PID="$PID_PATH/sidekiq.pid"
 STOP_SIDEKIQ="RAILS_ENV=production bundle exec rake sidekiq:stop"
 START_SIDEKIQ="RAILS_ENV=production bundle exec rake sidekiq:start"
-NAME="gitlab"
-DESC="GitLab service"
+NAME="sidekiq"
+DESC="Sidekiq service"
 
 check_pid(){
-  if [ -f $WEB_SERVER_PID ]; then
-    PID=`cat $WEB_SERVER_PID`
-    SPID=`cat $SIDEKIQ_PID`
+  if [ -f $SIDEKIQ_PID ]; then
+    PID=`cat $SIDEKIQ_PID`
     STATUS=`ps aux | grep $PID | grep -v grep | wc -l`
   else
     STATUS=0
@@ -51,8 +53,6 @@ start() {
     exit 1
   else
     if [ `whoami` = root ]; then
-      execute "rm $SOCKET_PATH/gitlab.socket"
-      execute "RAILS_ENV=production bundle exec puma $DAEMON_OPTS"
       execute "mkdir -p $PID_PATH && $START_SIDEKIQ  > /dev/null  2>&1 &"
       echo "$DESC started"
     fi
@@ -64,9 +64,7 @@ stop() {
   check_pid
   if [ "$PID" -ne 0 -a "$STATUS" -ne 0 ]; then
     ## Program is running, stop it.
-    kill -QUIT `cat $WEB_SERVER_PID`
     execute "mkdir -p $PID_PATH && $STOP_SIDEKIQ  > /dev/null  2>&1 &"
-    rm "$WEB_SERVER_PID" >> /dev/null
     echo "$DESC stopped"
   else
     ## Program is not running, exit with error.
@@ -79,16 +77,12 @@ restart() {
   cd $APP_ROOT
   check_pid
   if [ "$PID" -ne 0 -a "$STATUS" -ne 0 ]; then
-    echo "Restarting $DESC..."
-    kill -USR2 `cat $WEB_SERVER_PID`
-    execute "mkdir -p $PID_PATH && $STOP_SIDEKIQ  > /dev/null  2>&1 &"
-    if [ `whoami` = root ]; then
-      execute "mkdir -p $PID_PATH && $START_SIDEKIQ  > /dev/null  2>&1 &"
-    fi
+    stop
+    start
     echo "$DESC restarted."
   else
-    echo "Error, $NAME not running!"
-    exit 1
+    echo "$NAME not running!"
+    start
   fi
 }
 
@@ -97,7 +91,6 @@ status() {
   check_pid
   if [ "$PID" -ne 0 -a "$STATUS" -ne 0 ]; then
     echo "$DESC / Puma with PID $PID is running."
-    echo "$DESC / Sidekiq with PID $SPID is running."
   else
     echo "$DESC is not running."
     exit 1
@@ -130,7 +123,7 @@ case "$1" in
         status
         ;;
   *)
-        echo "Usage: sudo service gitlab {start|stop|restart|reload}" >&2
+        echo "Usage: sudo service sidekiq {start|stop|restart|reload}" >&2
         exit 1
         ;;
 esac
