@@ -25,11 +25,11 @@ class gitlab::server(
   $ldap_port          = $gitlab::ldap_port,
   $ldap_uid           = $gitlab::ldap_uid,
   ) {
-
+  #deps
   include gitlab
   require gitlab::gitlabshell
-
-
+  
+  #Ordering
   package {
     'bundler':
       ensure   => installed,
@@ -45,11 +45,16 @@ class gitlab::server(
     default  => '',
   }
 
+  #needed, at least on rh/cent to permit the init script to run
+  augeas {'gitlab_nuke_requiretty':
+    context => '/files/etc/sudoers',
+    changes => ['set Defaults[type=":root"]/type :root', 'set Defaults[type=":root"]/requiretty/negate ""'],
+  }
+
   Exec{
     path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     logoutput   => 'on_failure',
   }
-
   exec {
     'Get gitlab':
       command     => "git clone -b ${gitlab_branch} ${gitlab_sources} ./gitlab",
@@ -93,7 +98,6 @@ class gitlab::server(
       group   => 'root',
       require => Exec['Setup gitlab DB'];
   }
-
 
   # fixing eventmachine and thin gem build problems
   # on newer debian/ubuntu versions
@@ -196,34 +200,13 @@ class gitlab::server(
       require => Exec['Setup gitlab DB'];
   }
 
-  file {
-    '/etc/init.d/sidekiq':
-      ensure  => file,
-      content => template('gitlab/etc/init.d/sidekiq.erb'),
-      owner   => root,
-      group   => root,
-      mode    => '0755',
-      notify  => Service['sidekiq'],
-      require => [Exec['Setup gitlab DB'],Service['gitlab']];
-  }
-
   service {
     'gitlab':
       ensure     => running,
       enable     => true,
       hasrestart => true,
-      notify     => Service['sidekiq'],
       pattern    => 'puma',
-      require    => File['/etc/init.d/gitlab'];
-  }
-  service {
-    'sidekiq':
-      ensure     => running,
-      enable     => true,
-      hasrestart => true,
-      pattern    => 'sidekiq',
-      require    => [File['/etc/init.d/sidekiq'],Service['gitlab']],
-      subscribe  => Service['gitlab'];
+      require    => [Augeas['gitlab_nuke_requiretty'],File['/etc/init.d/gitlab',"${git_home}/gitlab/tmp/pids","${git_home}/gitlab/tmp/sockets"]];
   }
   file {
     '/etc/nginx/conf.d/gitlab.conf':
@@ -236,3 +219,4 @@ class gitlab::server(
   }
 
 } # Class:: gitlab::server
+

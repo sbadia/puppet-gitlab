@@ -23,15 +23,21 @@
 APP_ROOT="<%= git_home -%>/gitlab"
 APP_USER="git"
 DAEMON_OPTS="-C $APP_ROOT/config/puma.rb"
-PID_PATH="$APP_ROOT/tmp/pids"
-SOCKET_PATH="$APP_ROOT/tmp/sockets"
-WEB_SERVER_PID="$PID_PATH/puma.pid"
-NAME="gitlab"
 DESC="GitLab service"
+NAME="gitlab"
+PID_PATH="$APP_ROOT/tmp/pids"
+SIDEKIQ_PID="$PID_PATH/sidekiq.pid"
+SOCKET_PATH="$APP_ROOT/tmp/sockets"
+START_SIDEKIQ="RAILS_ENV=production bundle exec rake sidekiq:start"
+STOP_SIDEKIQ="RAILS_ENV=production bundle exec rake sidekiq:stop"
+TIMEOUT="30"
+WEB_SERVER_PID="$PID_PATH/puma.pid"
+
 
 check_pid(){
   if [ -f $WEB_SERVER_PID ]; then
     PID=`cat $WEB_SERVER_PID`
+    SPID=`cat $SIDEKIQ_PID`
     STATUS=`ps aux | grep $PID | grep -v grep | wc -l`
   else
     STATUS=0
@@ -56,6 +62,37 @@ start() {
         execute "rm $SOCKET_PATH/gitlab.socket"
       fi
       execute "RAILS_ENV=production bundle exec puma $DAEMON_OPTS"
+           C=0
+      #the helper script will also be in the process list
+      #giving us a clear indication of once it's actually started
+      while [[ `ps auxwww|grep <%=git_user-%>|grep -c puma` -gt 2 ]]; do
+        sleep 1;
+        let C=(C+1);
+        echo -n .;
+        #break if for some reason we don't die by the time we expect to
+        if [ $C -gt $TIMEOUT ]; then
+          echo
+          echo "Something's wrong"
+          break
+        fi
+      done
+      #Start sidekiq
+      execute "mkdir -p $PID_PATH && $START_SIDEKIQ  > /dev/null  2>&1 &"
+      SC=0
+      #the helper script will also be in the process list
+      #giving us a clear indication of once it's actually started
+      while [[ `ps auxwww|grep <%=git_user-%>|grep -c sidekiq` -gt 2 ]]; do
+        sleep 1;
+        let SC=(SC+1);
+        echo -n .;
+        #break if for some reason we don't die by the time we expect to
+        if [ $SC -gt $TIMEOUT ]; then
+          echo
+          echo "Something's wrong"
+          break
+        fi
+      done
+      echo
       echo "$DESC started"
     fi
   fi
@@ -67,6 +104,35 @@ stop() {
   if [ "$PID" -ne 0 -a "$STATUS" -ne 0 ]; then
     ## Program is running, stop it.
     kill -QUIT `cat $WEB_SERVER_PID`
+    echo -n "Stopping Gitlab:"
+    C=0
+    while [[ `ps auxwww|grep <%=git_user-%>|grep -c puma` -gt 0 ]]; do
+      sleep 1
+      let C=(C+1)
+      echo -n .
+      #break if for some reason we don't die by the time we expect to
+      if [ $C -gt $TIMEOUT ]; then
+        echo
+        echo "Something's wrong"
+        break
+      fi
+    done
+    echo
+    execute "mkdir -p $PID_PATH && $STOP_SIDEKIQ  > /dev/null  2>&1 &"
+    C=0
+    echo -n "Stopping Sidekiq"
+    while [[ `ps auxwww|grep <%=git_user-%>|grep -c sidekiq` -gt 2 ]]; do
+      sleep 1
+      let C=(C+1)
+      echo -n .
+      #break if for some reason we don't die by the time we expect to
+      if [ $C -gt $TIMEOUT ]; then
+        echo
+        echo "Something's wrong"
+        break
+      fi
+    done
+    echo
     rm "$WEB_SERVER_PID" >> /dev/null
     echo "$DESC stopped"
   else
@@ -98,6 +164,11 @@ status() {
   check_pid
   if [ "$PID" -ne 0 -a "$STATUS" -ne 0 ]; then
     echo "$DESC / Puma with PID $PID is running."
+    if [ "$SPID" -ne 0 ]; then
+      echo "$DESC / Sidekiq with PID $SPID is running."
+    else
+      echo "$DESC / Sidekiq is NOT running"
+    fi
   elif [ -S "$SOCKET_PATH/gitlab.socket" ]; then
     echo "${DESC} is not running, but ${SOCKET_PATH}/gitlab.socket exists"
     exit 1
@@ -139,3 +210,4 @@ case "$1" in
 esac
 
 exit 0
+
