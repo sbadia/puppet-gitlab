@@ -16,6 +16,7 @@ class gitlab::server(
   $gitlab_repodir     = $gitlab::gitlab_repodir,
   $gitlab_sources     = $gitlab::gitlab_sources,
   $nginx_service_name = $gitlab::nginx_service_name,
+  $nginx_group        = $gitlab::nginx_group,
   $ldap_base          = $gitlab::ldap_base,
   $ldap_bind_dn       = $gitlab::ldap_bind_dn,
   $ldap_bind_password = $gitlab::ldap_bind_password,
@@ -173,12 +174,6 @@ class gitlab::server(
       host_aliases => $::fqdn,
       key          => $::sshrsakey,
       type         => 'ssh-rsa'
-  }
-
-  case $::osfamily {
-    Redhat:   { $nginx_group = 'nginx' }
-    Debian:   { $nginx_group = 'www-data' }
-    default:  { warning "${::osfamily} not supported yet" }
   }
 
   file {

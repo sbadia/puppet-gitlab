@@ -9,10 +9,7 @@ class gitlab::pre(
   $mysql_dev_pkg_names = $gitlab::mysql_dev_pkg_names,
   $pg_dev_pkg_names    = $gitlab::pg_dev_pkg_names
   ) {
-
   include gitlab
-
-
 
   user {
     $git_user:
@@ -57,9 +54,6 @@ class gitlab::pre(
       if !defined(Package['git-core']) {
         package { 'git-core': ensure => present; }
       }
-      if !defined(Package['postfix']) {
-        package { 'postfix': ensure => present; }
-      }
     } # Debian pre-requists
     'Redhat': {
       $db_packages = $gitlab_dbtype ? {
@@ -81,9 +75,6 @@ class gitlab::pre(
       Package <| tag == 'rhel-dev-pkgs' |>
       Package <| tag == 'rhel-compiler-pkgs' |>
 
-      if !defined(Package['postfix']){
-        package{ 'postfix': ensure => 'present';}
-      }
       #requirements not handled by this module
       #mysql setup (can be satiated with puppetlabs-mysql)
       #redis (can be satiated with )
@@ -101,14 +92,20 @@ class gitlab::pre(
     $db_packages:
       ensure   => installed;
   }
-
-  if !defined(Package['openssh-server']) {
-    package { 'openssh-server': ensure => present; }
+  if !defined(Package['curl']) {
+    package { 'curl': ensure => present; }
   }
   if !defined(Package['git']) {
     package { 'git': ensure => present; }
   }
-  if !defined(Package['curl']) {
-    package { 'curl': ensure => present; }
+
+  if !defined(Package['openssh-server']) {
+    package { 'openssh-server': ensure => present; }
   }
+
+  if !defined(Package['postfix']){
+    package{ 'postfix': ensure => 'present';}
+  }
+
+
 } # Class:: gitlab::pre

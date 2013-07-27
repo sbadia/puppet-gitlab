@@ -1,22 +1,21 @@
-require 'rspec-puppet'
-require 'rubygems'
-require 'puppetlabs_spec_helper/module_spec_helper'
-require 'rspec/expectations'
-require 'puppetlabs_spec_helper/module_spec_helper'
-require 'gitlab_shared'
-
-fixture_path = File.expand_path(File.join(__FILE__, '..', 'fixtures'))
-
 dir = File.expand_path(File.dirname(__FILE__))
 $LOAD_PATH.unshift File.join(dir, 'lib')
 
 # Don't want puppet getting the command line arguments for rake or autotest
 ARGV.clear
 
+require 'puppet'
+require 'facter'
+#require 'mocha'
+gem 'rspec', '>=2.0.0'
+require 'rspec/expectations'
+require 'rspec-puppet'
+require 'puppetlabs_spec_helper/module_spec_helper'
+require 'gitlab_shared'
+
 RSpec.configure do |config|
-  @gitlab_variables    = "$abc=123"
-  config.module_path   = File.join(fixture_path, 'modules')
-  config.manifest_dir  = File.join(fixture_path, 'manifests')
+  @gitlab_variables = "$abc=123"
+
   config.color_enabled = true
   config.before :each do
     # Ensure that we don't accidentally cache facts and environment between

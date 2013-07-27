@@ -12,6 +12,9 @@ This module is based on the admin guides for [gitlab](https://github.com/gitlabh
 
 _Note:_ Assume that a database server is already installed on your server/infrastructure (see: [vagrant-gitlab](https://github.com/sbadia/vagrant-gitlab/blob/master/examples/gitlab.pp)).
 
+_Note:_ the init script requires that /etc/sudoers have requiretty disabled ( !requiretty )
+
+
 ```
   class {
     'gitlab':

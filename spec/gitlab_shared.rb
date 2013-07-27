@@ -3,7 +3,7 @@ shared_context "gitlab_shared", :a => :b do
   def global_gitlab_variables
    "$git_user           = 'git'
     $git_home           = '/home/git'
-    $git_email          = 'git@someserver.net'
+    $git_email          = 'git@someserver.net123'
     $git_comment        = 'git version control'
     $git_admin_pubkey   = '#Not configured'
     $git_admin_privkey  = '#Not configured'
@@ -18,7 +18,7 @@ shared_context "gitlab_shared", :a => :b do
     $gitlab_dbtype      = 'mysql'
     $gitlab_dbname      = 'gitladb'
     $gitlab_dbuser      = 'gitladbu'
-    $gitlab_dbpwd       = 'changeme'
+    $gitlab_dbpwd       = 'change-me123'
     $ldap_enabled       = false
     $ldap_host          = 'ldap.domain.com'
     $ldap_base          = 'dc=domain,dc=com'

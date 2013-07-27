@@ -34,10 +34,12 @@ class gitlab::params {
   case $::osfamily {
     RedHat: {
       $mysql_dev_pkg_names = ['mysql-devel']
+      $nginx_group         = 'nginx'
       $pg_dev_pkg_names    = ['postgresql-devel']
     }
     Debian: {
       $mysql_dev_pkg_names = ['libmysql++-dev','libmysqlclient-dev']
+      $nginx_group         = 'www-data'
       $pg_dev_pkg_names    = ['libpq-dev', 'postgresql-client']
     }
     default: {}

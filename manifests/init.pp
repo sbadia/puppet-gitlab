@@ -32,6 +32,7 @@
 # [ldap_bind_dn] User for LDAP bind auth (default: nil)
 # [ldap_bind_password] Password for LDN bind auth (default: nil)
 # [mysql_dev_pkg_names] Name of the mysql devel package to install
+# [nginx_group] The group which nginx runs as.
 # [nginx_service_name] Name of the nginx service to notify about the config file
 # [pg_dev_pkg_names] Name of the Postgres devel package to install
 #
@@ -91,9 +92,11 @@ class gitlab(
     $ldap_bind_dn        = $gitlab::params::ldap_bind_dn,
     $ldap_bind_password  = $gitlab::params::ldap_bind_password,
     $mysql_dev_pkg_names = $gitlab::params::mysql_dev_pkg_names,
+    $nginx_group         = $gitlab::params::nginx_group,
     $nginx_service_name  = $gitlab::params::nginx_service_name,
     $pg_dev_pkg_names    = $gitlab::params::pg_dev_pkg_names
   ) inherits gitlab::params {
+  include gitlab::input_validation
   # FIXME class inheriting from params class
   case $::osfamily {
     Debian: {
