@@ -151,6 +151,14 @@ describe 'gitlab', :type => :class do
           #  end
           #}
         end
+        context 'Services:' do
+          it { should contain_service('gitlab').with(
+            :ensure=>'running',
+            :enable=>true,
+            :hasrestart=>true,
+            :pattern=>'puma',
+          )}
+        end
       end
     end
     context 'While on Debian (specific tests)' do
