@@ -8,7 +8,7 @@ class gitlab::params {
   $git_email              = 'git@someserver.net'
   $git_comment            = 'GitLab'
   $gitlab_sources         = 'git://github.com/gitlabhq/gitlabhq.git'
-  $gitlab_branch          = '5-3-stable'
+  $gitlab_branch          = '5-4-stable'
   $gitlabshell_sources    = 'git://github.com/gitlabhq/gitlab-shell.git'
   $gitlabshell_branch     = 'v1.5.0'
   $gitlab_dbtype          = 'mysql'
