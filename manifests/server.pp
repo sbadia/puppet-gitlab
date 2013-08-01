@@ -66,9 +66,6 @@ class gitlab::server {
         Exec['Get gitlab'],
         Package['bundler']
       ];
-    # FIXME sudo ln -s /usr/bin/python /usr/bin/python2
-    # recommanded by gitlab (bundle exec rake gitlab:check RAILS_ENV=production)
-    # but it's a bit ugly...
     'Setup gitlab DB':
       command     => '/usr/bin/yes yes | bundle exec rake gitlab:setup RAILS_ENV=production',
       provider    => 'shell',
