@@ -1,6 +1,6 @@
 # Puppet-gitlab [![Build Status](https://travis-ci.org/sbadia/puppet-gitlab.png)](https://travis-ci.org/sbadia/puppet-gitlab)
 
-Tested successfully with Gitlab 5.4-stable on Ubuntu 12.04 (Debian Wheezy not yet tested with latest update) with Puppet 3
+Tested successfully with Gitlab 5.4-stable on Ubuntu 12.04 and Debian Wheezy (7.1) with Puppet 3
 
 [GitLab](http://gitlab.org/) is a free project and repository management application
 
@@ -46,7 +46,7 @@ _Note:_ Assume that a database server is already installed on your server/infras
 * gitlab\_ssl: Enable SSL for GitLab (default: false)
 * gitlab\_ssl\_cert: SSL Certificate location (default: /etc/ssl/certs/ssl-cert-snakeoil.pem)
 * gitlab\_ssl\_key: SSL Key location (default: /etc/ssl/private/ssl-cert-snakeoil.key)
-* gitlab\_ssl\_self_signed: Set true if your SSL Cert is self signed (default: false)
+* gitlab\_ssl\_self\_signed: Set true if your SSL Cert is self signed (default: false)
 * gitlab\_projects: GitLab default number of projects for new users (default: 10)
 * gitlab\_username\_change: Manage username changing in GitLab (default: true)
 * ldap\_enabled: Enable LDAP backend for gitlab web (see bellow) (default: false)
