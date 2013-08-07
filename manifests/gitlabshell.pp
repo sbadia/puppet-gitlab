@@ -24,7 +24,7 @@ class gitlab::gitlabshell {
 
   exec {
     'Get gitlab-shell':
-      command   => "git clone -b ${gitlab::gitlabshell_branch} ${gitlab::gitlabshell_sources} ${git_home}/gitlab-shell",
+      command   => "git clone ${gitlab::gitlabshell_sources} ${git_home}/gitlab-shell && cd gitlab-shell && git checkout ${gitlab::gitlabshell_branch}",
       path      => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       logoutput => 'on_failure',
       user      => $git_user,
