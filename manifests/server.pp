@@ -52,38 +52,45 @@ class gitlab::server {
     logoutput   => 'on_failure',
   }
 
-  exec {
-    'Get gitlab':
-      command     => "git clone -b ${gitlab_branch} ${gitlab_sources} ./gitlab",
-      creates     => "${git_home}/gitlab",
-      cwd         => $git_home,
-      user        => $git_user;
-    'Install gitlab':
-      command  => "bundle install --without development test ${gitlab_without_gems} --deployment",
-      provider => 'shell',
-      cwd      => "${git_home}/gitlab",
-      user     => $git_user,
-      unless   => "/usr/bin/test -f ${git_home}/.gitlab_setup_done",
-      timeout  => 0,
-      require  => [
-        Exec['Get gitlab'],
-        Package['bundler'],
-	Package[$prereqs]
-      ];
-    'Setup gitlab DB':
-      command     => '/usr/bin/yes yes | bundle exec rake gitlab:setup RAILS_ENV=production',
-      provider    => 'shell',
-      cwd         => "${git_home}/gitlab",
-      user        => $git_user,
-      creates     => "${git_home}/.gitlab_setup_done",
-      require     => [
-        Exec['Install gitlab'],
-        File["${git_home}/gitlab/config/database.yml"],
-        File["${git_home}/gitlab/tmp"],
-        Sshkey['localhost'],
-        Package['bundler']
+  if defined('redis') {
+    class { 'redis': stage => main; }
+    exec {
+      'Get gitlab':
+        command     => "git clone -b ${gitlab_branch} ${gitlab_sources} ./gitlab",
+        creates     => "${git_home}/gitlab",
+        cwd         => $git_home,
+        user        => $git_user;
+      'Install gitlab':
+        command  => "bundle install --without development test ${gitlab_without_gems} --deployment",
+        provider => 'shell',
+        cwd      => "${git_home}/gitlab",
+        user     => $git_user,
+        unless   => "/usr/bin/test -f ${git_home}/.gitlab_setup_done",
+        timeout  => 0,
+        require  => [
+          Exec['Get gitlab'],
+          Package['bundler'],
+	  Package[$prereqs],
+	  Class['redis']
+        ];
+      'Setup gitlab DB':
+        command     => '/usr/bin/yes yes | bundle exec rake gitlab:setup RAILS_ENV=production',
+        provider    => 'shell',
+        cwd         => "${git_home}/gitlab",
+        user        => $git_user,
+        creates     => "${git_home}/.gitlab_setup_done",
+        require     => [
+          Exec['Install gitlab'],
+          File["${git_home}/gitlab/config/database.yml"],
+          File["${git_home}/gitlab/tmp"],
+          Sshkey['localhost'],
+          Package['bundler'],
+	  Class['redis']
         ],
-      refreshonly => true;
+        refreshonly => true;
+    }
+  } else {
+    fail('Module fsalum/puppet-redis required and missing!')
   }
 
   file {
@@ -112,6 +119,18 @@ class gitlab::server {
         owner   => $git_user,
         group   => $git_user,
         before  => Exec['Install gitlab']; }
+    if defined('alternatives') {
+      alternatives {
+        'ruby':
+          path    => '/usr/bin/ruby1.9.1',
+          require => Package['ruby1.9.1'];
+        'gem':
+          path    => '/usr/bin/gem1.9.1';
+      }
+    } else {
+	warning('Puppet module Alternatives not found. Need to set ruby and gem alternatives to version 1.9.1 by hand.')
+    }
+
   }
 
   file {
