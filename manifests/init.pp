@@ -95,9 +95,11 @@ class gitlab(
   # FIXME class inheriting from params class
   case $::osfamily {
     Debian: {
+      $prereqs = ['build-essential','libssl-dev','libgdbm-dev','libreadline-dev', 'libncurses5-dev','libffi-dev','libcurl4-openssl-dev']
       include gitlab::server
     }
     Redhat: {
+      $prereqs = [] ### Needs to be filled
       warning("${::osfamily} not fully tested with gitlab 5.0")
       include gitlab::server
     }

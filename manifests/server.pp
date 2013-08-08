@@ -27,6 +27,7 @@ class gitlab::server {
   $ldap_method        = $gitlab::ldap_method
   $ldap_bind_dn       = $gitlab::ldap_bind_dn
   $ldap_bind_password = $gitlab::ldap_bind_password
+  $prereqs            = $gitlab::prereqs
 
 
   package {
@@ -36,6 +37,8 @@ class gitlab::server {
     'charlock_holmes':
       ensure   => '0.6.9.4',
       provider => gem;
+    $prereqs:
+      ensure   => installed;
   }
 
   $gitlab_without_gems = $gitlab_dbtype ? {
@@ -64,7 +67,8 @@ class gitlab::server {
       timeout  => 0,
       require  => [
         Exec['Get gitlab'],
-        Package['bundler']
+        Package['bundler'],
+	Package[$prereqs]
       ];
     'Setup gitlab DB':
       command     => '/usr/bin/yes yes | bundle exec rake gitlab:setup RAILS_ENV=production',
@@ -167,47 +171,55 @@ class gitlab::server {
       type         => 'ssh-rsa'
   }
 
-  case $::osfamily {
-    Redhat:   { $nginx_group = 'nginx' }
-    Debian:   { $nginx_group = 'www-data' }
-    default:  { warning "${::osfamily} not supported yet" }
-  }
+  if defined("nginx") {
 
-  file {
-    '/var/lib/gitlab':
-      ensure => directory,
-      owner  => $git_user,
-      group  => $nginx_group,
-      mode   => '0775';
-  }
+    class { 'nginx': stage => main; }
 
-  file {
-    '/etc/init.d/gitlab':
-      ensure  => file,
-      content => template('gitlab/gitlab.init.erb'),
-      owner   => root,
-      group   => root,
-      mode    => '0755',
-      notify  => Service['gitlab'],
-      require => Exec['Setup gitlab DB'];
-  }
+    case $::osfamily {
+      Redhat:   { $nginx_group = 'nginx' }
+      Debian:   { $nginx_group = 'www-data' }
+      default:  { warning "${::osfamily} not supported yet" }
+    }
 
-  service {
-    'gitlab':
-      ensure     => running,
-      require    => File['/etc/init.d/gitlab'],
-      pattern    => 'puma',
-      hasrestart => true,
-      enable     => true;
-  }
+    file {
+      '/var/lib/gitlab':
+        ensure => directory,
+        owner  => $git_user,
+        group  => $nginx_group,
+        mode   => '0775';
+    }
 
-  file {
-    '/etc/nginx/conf.d/gitlab.conf':
-      ensure  => file,
-      content => template('gitlab/nginx-gitlab.conf.erb'),
-      owner   => root,
-      group   => root,
-      mode    => '0644';
+    file {
+      '/etc/init.d/gitlab':
+        ensure  => file,
+        content => template('gitlab/gitlab.init.erb'),
+        owner   => root,
+        group   => root,
+        mode    => '0755',
+        notify  => Service['gitlab'],
+        require => Exec['Setup gitlab DB'];
+    }
+
+    service {
+      'gitlab':
+        ensure     => running,
+        require    => File['/etc/init.d/gitlab'],
+        pattern    => 'puma',
+        hasrestart => true,
+        enable     => true;
+    }
+
+    file {
+      '/etc/nginx/conf.d/gitlab.conf':
+        ensure  => file,
+        content => template('gitlab/nginx-gitlab.conf.erb'),
+        owner   => root,
+        group   => root,
+        mode    => '0644',
+	require => Class["nginx"];
+    }
+  } else {
+    fail("jfryman/puppet-nginx module required!")
   }
 
 } # Class:: gitlab::server
