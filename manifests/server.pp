@@ -201,14 +201,16 @@ class gitlab::server {
       enable     => true;
   }
 
-  file {
-    '/etc/nginx/conf.d/gitlab.conf':
-      ensure  => file,
-      content => template('gitlab/nginx-gitlab.conf.erb'),
-      owner   => root,
-      group   => root,
-      mode    => '0644',
-      notify  => Service['nginx'];
+  if(defined(Class['nginx'])) {
+    file {
+      '/etc/nginx/conf.d/gitlab.conf':
+        ensure  => file,
+        content => template('gitlab/nginx-gitlab.conf.erb'),
+        owner   => root,
+        group   => root,
+        mode    => '0644',
+        notify  => Service['nginx'];
+    }
   }
 
 } # Class:: gitlab::server
