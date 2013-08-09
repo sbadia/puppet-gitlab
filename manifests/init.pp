@@ -90,7 +90,8 @@ class gitlab(
     $ldap_port              = $gitlab::params::ldap_port,
     $ldap_method            = $gitlab::params::ldap_method,
     $ldap_bind_dn           = $gitlab::params::ldap_bind_dn,
-    $ldap_bind_password     = $gitlab::params::ldap_bind_password
+    $ldap_bind_password     = $gitlab::params::ldap_bind_password,
+    $redis_server	    = $gitlab::params::redis_server
   ) inherits gitlab::params {
   # FIXME class inheriting from params class
   case $::osfamily {

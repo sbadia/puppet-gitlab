@@ -28,6 +28,7 @@ class gitlab::server {
   $ldap_bind_dn       = $gitlab::ldap_bind_dn
   $ldap_bind_password = $gitlab::ldap_bind_password
   $prereqs            = $gitlab::prereqs
+  $redis_server       = $gitlab::redis_server
 
 
   package {
@@ -53,7 +54,9 @@ class gitlab::server {
   }
 
   if defined('redis') {
-    class { 'redis': stage => main; }
+    if $redis_server == "localhost" {
+    	class { 'redis': stage => main; }
+    }
     exec {
       'Get gitlab':
         command     => "git clone -b ${gitlab_branch} ${gitlab_sources} ./gitlab",
@@ -70,8 +73,7 @@ class gitlab::server {
         require  => [
           Exec['Get gitlab'],
           Package['bundler'],
-	  Package[$prereqs],
-	  Class['redis']
+	  Package[$prereqs]
         ];
       'Setup gitlab DB':
         command     => '/usr/bin/yes yes | bundle exec rake gitlab:setup RAILS_ENV=production',
@@ -84,8 +86,7 @@ class gitlab::server {
           File["${git_home}/gitlab/config/database.yml"],
           File["${git_home}/gitlab/tmp"],
           Sshkey['localhost'],
-          Package['bundler'],
-	  Class['redis']
+          Package['bundler']
         ],
         refreshonly => true;
     }
@@ -180,6 +181,15 @@ class gitlab::server {
     "${git_home}/.gitconfig":
       content => template('gitlab/git.gitconfig.erb'),
       mode    => '0644';
+    "${git_home}/gitlab/config/resque.yml":
+      ensure  => file,
+      content => template('gitlab/resque.yml.erb'),
+      owner   => $git_user,
+      group   => $git_user,
+      require => [Exec['Get gitlab'],
+                  File["${git_home}/gitlab/config/gitlab.yml"]],
+      notify  => Service["gitlab"];
+
   }
 
   sshkey {
