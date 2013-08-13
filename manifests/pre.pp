@@ -9,6 +9,7 @@ class gitlab::pre {
   $git_user       = $gitlab::git_user
   $git_comment    = $gitlab::git_comment
   $gitlab_dbtype  = $gitlab::gitlab_dbtype
+  $prereqs        = $gitlab::prereqs
 
   user {
     $git_user:
@@ -56,6 +57,20 @@ class gitlab::pre {
       if !defined(Package['postfix']) {
         package { 'postfix': ensure => present; }
       }
+
+    if defined('alternatives') {
+      alternatives {
+        'ruby':
+          path    => '/usr/bin/ruby1.9.1',
+          require => Package['ruby1.9.1'];
+        'gem':
+          path    => '/usr/bin/gem1.9.1';
+      }
+    } else {
+        warning('Puppet module Alternatives not found. Need to set ruby and gem alternatives to version 1.9.1 by hand.')
+    }
+
+
     } # Debian pre-requists
     'Redhat': {
       $db_packages = $gitlab_dbtype ? {
@@ -92,4 +107,12 @@ class gitlab::pre {
   if !defined(Package['curl']) {
     package { 'curl': ensure => present; }
   }
+  
+  ## Install package requirements
+  define pkgpreq {
+    if !defined(Package[$title]) {
+      package { $title: ensure => present; }
+    }
+  }
+  pkgpreq {$prereqs: } 
 } # Class:: gitlab::pre

@@ -9,7 +9,6 @@ class gitlab::gitlabshell {
   $git_user         = $gitlab::git_user
   $git_home         = $gitlab::git_home
   $gitlab_domain    = $gitlab::gitlab_domain
-  $gitlab_repodir   = $gitlab::gitlab_repodir
 
   file {
     "${git_home}/gitlab-shell/config.yml":
@@ -24,7 +23,7 @@ class gitlab::gitlabshell {
 
   exec {
     'Get gitlab-shell':
-      command   => "git clone -b ${gitlab::gitlabshell_branch} ${gitlab::gitlabshell_sources} ${git_home}/gitlab-shell",
+      command   => "git clone ${gitlab::gitlabshell_sources} ${git_home}/gitlab-shell && cd gitlab-shell && git checkout ${gitlab::gitlabshell_branch}",
       path      => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       logoutput => 'on_failure',
       user      => $git_user,
@@ -38,7 +37,7 @@ class gitlab::gitlabshell {
       cwd       => $git_home,
       require   => File["${git_home}/gitlab-shell/config.yml"],
       logoutput => 'on_failure',
-      creates   => "${gitlab_repodir}/repositories";
+      creates   => $gitlab_authkeys_path;
   }
 
 } # Class:: gitlab::gitolite

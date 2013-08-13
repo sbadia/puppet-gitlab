@@ -17,13 +17,11 @@
 # [gitlab_dbhost] Gitlab database host (default: localhost)
 # [gitlab_dbport] Gitlab database port (default: 3306)
 # [gitlab_domain] Gitlab domain (default $fqdn)
-# [gitlab_repodir] Gitlab repository directory (default: $git_home)
 # [gitlab_ssl] Enable SSL for GitLab (default: false)
 # [gitlab_ssl_cert] SSL Certificate location (default: /etc/ssl/certs/ssl-cert-snakeoil.pem)
 # [gitlab_ssl_key] SSL Key location (default: /etc/ssl/private/ssl-cert-snakeoil.key)
 # [gitlab_ssl_self_signed] Set true if your SSL Cert is self signed (default: false)
 # [gitlab_projects] GitLab default number of projects for new users (default: 10)
-# [gitlab_repodir] Gitlab repository directory (default $git_home)
 # [gitlab_username_change] Gitlab username changing (default: true)
 # [ldap_enabled] Enable LDAP backend for gitlab web (see bellow) (default: false)
 # [ldap_host] FQDN of LDAP server (default: ldap.domain.com)
@@ -76,7 +74,6 @@ class gitlab(
     $gitlab_dbhost          = $gitlab::params::gitlab_dbhost,
     $gitlab_dbport          = $gitlab::params::gitlab_dbport,
     $gitlab_domain          = $gitlab::params::gitlab_domain,
-    $gitlab_repodir         = $gitlab::params::gitlab_repodir,
     $gitlab_ssl             = $gitlab::params::gitlab_ssl,
     $gitlab_ssl_cert        = $gitlab::params::gitlab_ssl_cert,
     $gitlab_ssl_key         = $gitlab::params::gitlab_ssl_key,
@@ -90,14 +87,22 @@ class gitlab(
     $ldap_port              = $gitlab::params::ldap_port,
     $ldap_method            = $gitlab::params::ldap_method,
     $ldap_bind_dn           = $gitlab::params::ldap_bind_dn,
-    $ldap_bind_password     = $gitlab::params::ldap_bind_password
+    $ldap_bind_password     = $gitlab::params::ldap_bind_password,
+    $redis_server	    = $gitlab::params::redis_server,
+    $gitlab_satellites_path = $gitlab::params::gitlab_satellites_path,
+    $gitlab_repos_path      = $gitlab::params::gitlab_repos_path,
+    $gitlab_hooks_path      = $gitlab::params::gitlab_hooks_path,
+    $gitlab_uploads_path    = $gitlab::params::gitlab_uploads_path,
+    $gitlab_authkeys_path   = $gitlab::params::gitlab_authkeys_path
   ) inherits gitlab::params {
   # FIXME class inheriting from params class
   case $::osfamily {
     Debian: {
+      $prereqs = ['build-essential','libssl-dev','libgdbm-dev','libreadline-dev', 'libncurses5-dev','libffi-dev','libcurl4-openssl-dev', 'ruby1.9.1', 'ruby1.9.1-dev', 'libhiredis-dev', 'redis-server']
       include gitlab::server
     }
     Redhat: {
+      $prereqs = [] ### Needs to be filled
       warning("${::osfamily} not fully tested with gitlab 5.0")
       include gitlab::server
     }
