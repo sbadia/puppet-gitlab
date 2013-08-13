@@ -37,5 +37,6 @@ class gitlab::params {
   $gitlab_repos_path      = "$git_home/repositories/"
   $gitlab_hooks_path      = undef
   $gitlab_uploads_path    = "$git_home/gitlab/public/uploads"
+  $gitlab_authkeys_path   = "$git_home/.ssh/authorized_keys"
 
 } # Class:: gitlab::params

@@ -13,4 +13,13 @@ http_settings:
 repos_path: "<%= @gitlab_repos_path %>"
 
 # File used as authorized_keys for gitlab user
-auth_file: "<%= @git_home %>/.ssh/authorized_keys"
+auth_file: "<%= @gitlab_authkeys_path %>"
+
+# Redis settings used for pushing commit notices to gitlab
+redis:
+  bin: /usr/bin/redis-cli
+  host: <%=@redis_server%>
+  port: 6379
+  # socket: /tmp/redis.socket # Only define this if you want to use sockets
+  namespace: resque:gitlab
+

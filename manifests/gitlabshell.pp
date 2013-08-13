@@ -37,7 +37,7 @@ class gitlab::gitlabshell {
       cwd       => $git_home,
       require   => File["${git_home}/gitlab-shell/config.yml"],
       logoutput => 'on_failure',
-      creates   => $gitlab_repos_path;
+      creates   => $gitlab_authkeys_path;
   }
 
 } # Class:: gitlab::gitolite

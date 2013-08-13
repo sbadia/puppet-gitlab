@@ -139,6 +139,13 @@ class gitlab::server {
       group   => $git_user,
       require => [Exec['Get gitlab'],
                   File["${git_home}/gitlab/config/gitlab.yml"]];
+    "${git_home}/gitlab/config/environments/production.rb":
+      ensure  => file,
+      content => template('gitlab/production.rb.erb'),
+      owner   => $git_user,
+      group   => $git_user,
+      require => [Exec['Get gitlab'],
+                  File["${git_home}/gitlab/config/gitlab.yml"]];
     "${git_home}/gitlab/config/gitlab.yml":
       ensure  => file,
       content => template('gitlab/gitlab.yml.erb'),

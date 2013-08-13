@@ -92,7 +92,8 @@ class gitlab(
     $gitlab_satellites_path = $gitlab::params::gitlab_satellites_path,
     $gitlab_repos_path      = $gitlab::params::gitlab_repos_path,
     $gitlab_hooks_path      = $gitlab::params::gitlab_hooks_path,
-    $gitlab_uploads_path    = $gitlab::params::gitlab_uploads_path
+    $gitlab_uploads_path    = $gitlab::params::gitlab_uploads_path,
+    $gitlab_authkeys_path   = $gitlab::params::gitlab_authkeys_path
   ) inherits gitlab::params {
   # FIXME class inheriting from params class
   case $::osfamily {
