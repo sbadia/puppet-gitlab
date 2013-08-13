@@ -6,29 +6,33 @@ class gitlab::server {
   include gitlab
   require gitlab::gitlabshell
 
-  $gitlab_dbtype      = $gitlab::gitlab_dbtype
-  $gitlab_dbname      = $gitlab::gitlab_dbname
-  $gitlab_dbuser      = $gitlab::gitlab_dbuser
-  $gitlab_dbpwd       = $gitlab::gitlab_dbpwd
-  $gitlab_dbhost      = $gitlab::gitlab_dbhost
-  $gitlab_dbport      = $gitlab::gitlab_dbport
-  $gitlab_domain      = $gitlab::gitlab_domain
-  $gitlab_repodir     = $gitlab::gitlab_repodir
-  $gitlab_branch      = $gitlab::gitlab_branch
-  $gitlab_sources     = $gitlab::gitlab_sources
-  $git_home           = $gitlab::git_home
-  $git_user           = $gitlab::git_user
-  $git_email          = $gitlab::git_email
-  $ldap_enabled       = $gitlab::ldap_enabled
-  $ldap_host          = $gitlab::ldap_host
-  $ldap_base          = $gitlab::ldap_base
-  $ldap_uid           = $gitlab::ldap_uid
-  $ldap_port          = $gitlab::ldap_port
-  $ldap_method        = $gitlab::ldap_method
-  $ldap_bind_dn       = $gitlab::ldap_bind_dn
-  $ldap_bind_password = $gitlab::ldap_bind_password
-  $prereqs            = $gitlab::prereqs
-  $redis_server       = $gitlab::redis_server
+  $gitlab_dbtype          = $gitlab::gitlab_dbtype
+  $gitlab_dbname          = $gitlab::gitlab_dbname
+  $gitlab_dbuser          = $gitlab::gitlab_dbuser
+  $gitlab_dbpwd           = $gitlab::gitlab_dbpwd
+  $gitlab_dbhost          = $gitlab::gitlab_dbhost
+  $gitlab_dbport          = $gitlab::gitlab_dbport
+  $gitlab_domain          = $gitlab::gitlab_domain
+  $gitlab_branch          = $gitlab::gitlab_branch
+  $gitlab_sources         = $gitlab::gitlab_sources
+  $git_home               = $gitlab::git_home
+  $git_user               = $gitlab::git_user
+  $git_email              = $gitlab::git_email
+  $ldap_enabled           = $gitlab::ldap_enabled
+  $ldap_host              = $gitlab::ldap_host
+  $ldap_base              = $gitlab::ldap_base
+  $ldap_uid               = $gitlab::ldap_uid
+  $ldap_port              = $gitlab::ldap_port
+  $ldap_method            = $gitlab::ldap_method
+  $ldap_bind_dn           = $gitlab::ldap_bind_dn
+  $ldap_bind_password     = $gitlab::ldap_bind_password
+  $prereqs                = $gitlab::prereqs
+  $redis_server           = $gitlab::redis_server
+  $gitlab_satellites_path = $gitlab::gitlab_satellites_path
+  $gitlab_repos_path      = $gitlab::gitlab_repos_path
+  $gitlab_hooks_path      = $gitlab::gitlab_hooks_path
+  $gitlab_uploads_path    = $gitlab::gitlab_uploads_path
+
 
 
   package {
@@ -38,8 +42,6 @@ class gitlab::server {
     'charlock_holmes':
       ensure   => '0.6.9.4',
       provider => gem;
-    $prereqs:
-      ensure   => installed;
   }
 
   $gitlab_without_gems = $gitlab_dbtype ? {
@@ -120,18 +122,6 @@ class gitlab::server {
         owner   => $git_user,
         group   => $git_user,
         before  => Exec['Install gitlab']; }
-    if defined('alternatives') {
-      alternatives {
-        'ruby':
-          path    => '/usr/bin/ruby1.9.1',
-          require => Package['ruby1.9.1'];
-        'gem':
-          path    => '/usr/bin/gem1.9.1';
-      }
-    } else {
-	warning('Puppet module Alternatives not found. Need to set ruby and gem alternatives to version 1.9.1 by hand.')
-    }
-
   }
 
   file {
@@ -159,19 +149,12 @@ class gitlab::server {
       notify  => Exec['Setup gitlab DB'];
     ["${git_home}/gitlab/tmp",
       "${git_home}/gitlab/log",
-      "${git_home}/gitlab-satellites",
       "${git_home}/gitlab/public"]:
       ensure  => directory,
       mode    => '0755',
       owner   => $git_user,
       group   => $git_user,
       require => Exec['Get gitlab'];
-    "${git_home}/gitlab/public/uploads":
-      ensure  => directory,
-      mode    => '0755',
-      owner   => $git_user,
-      group   => $git_user,
-      require => File["${git_home}/gitlab/public"];
     ["${git_home}/gitlab/tmp/pids","${git_home}/gitlab/tmp/sockets"]:
       ensure    => directory,
       mode      => '0755',
@@ -190,6 +173,23 @@ class gitlab::server {
                   File["${git_home}/gitlab/config/gitlab.yml"]],
       notify  => Service["gitlab"];
 
+  }
+  
+  if ($gitlab_uploads_path == "${git_home}/gitlab/public/uploads") {
+    file {"${git_home}/gitlab/public/uploads":
+      ensure  => directory,
+      mode    => '0755',
+      owner   => $git_user,
+      group   => $git_user,
+      require => File["${git_home}/gitlab/public"];
+    }
+  } else {
+    file { "${git_home}/gitlab/public/uploads":
+      ensure => link,
+      force => true,
+      target => "$gitlab_uploads_path",
+      require => File["${git_home}/gitlab/public"];
+    }
   }
 
   sshkey {
