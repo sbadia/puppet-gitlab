@@ -195,7 +195,8 @@ class gitlab::server {
   service {
     'gitlab':
       ensure     => running,
-      require    => File['/etc/init.d/gitlab'],
+      require    => [File['/etc/init.d/gitlab'],
+                     File["${git_home}/gitlab/tmp/pids"]],
       pattern    => 'puma',
       hasrestart => true,
       enable     => true;
