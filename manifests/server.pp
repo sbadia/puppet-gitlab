@@ -196,7 +196,7 @@ class gitlab::server {
     'gitlab':
       ensure     => running,
       require    => [File['/etc/init.d/gitlab'],
-                     File["${git_home}/gitlab/tmp/pids"]],
+                      File["${git_home}/gitlab/tmp/pids"]],
       pattern    => 'puma',
       hasrestart => true,
       enable     => true;
@@ -209,7 +209,7 @@ class gitlab::server {
       owner   => root,
       group   => root,
       mode    => '0644',
-      notify  => Service["nginx"];
+      notify  => Service['nginx'];
   }
 
 } # Class:: gitlab::server
