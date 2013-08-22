@@ -98,7 +98,7 @@ class gitlab(
       include gitlab::server
     }
     Redhat: {
-      warning("${::osfamily} not fully tested with gitlab 5.0")
+      warning("${::osfamily} not fully tested with ${gitlab_branch}")
       include gitlab::server
     }
     default: {
