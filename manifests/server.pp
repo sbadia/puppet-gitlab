@@ -118,9 +118,9 @@ class gitlab::server {
       group   => $git_user,
       require => [Exec['Get gitlab'],
                   File["${git_home}/gitlab/config/gitlab.yml"]];
-    "${git_home}/gitlab/config/puma.rb":
+    "${git_home}/gitlab/config/unicorn.rb":
       ensure  => file,
-      content => template('gitlab/puma.rb.erb'),
+      content => template('gitlab/unicorn.rb.erb'),
       owner   => $git_user,
       group   => $git_user,
       require => [Exec['Get gitlab'],
@@ -197,19 +197,20 @@ class gitlab::server {
       ensure     => running,
       require    => [File['/etc/init.d/gitlab'],
                       File["${git_home}/gitlab/tmp/pids"]],
-      pattern    => 'puma',
       hasrestart => true,
       enable     => true;
   }
 
-  file {
-    '/etc/nginx/conf.d/gitlab.conf':
-      ensure  => file,
-      content => template('gitlab/nginx-gitlab.conf.erb'),
-      owner   => root,
-      group   => root,
-      mode    => '0644',
-      notify  => Service['nginx'];
+  if(defined(Class['nginx'])) {
+    file {
+      '/etc/nginx/conf.d/gitlab.conf':
+        ensure  => file,
+        content => template('gitlab/nginx-gitlab.conf.erb'),
+        owner   => root,
+        group   => root,
+        mode    => '0644',
+        notify  => Service['nginx'];
+    }
   }
 
 } # Class:: gitlab::server
