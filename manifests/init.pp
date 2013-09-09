@@ -92,17 +92,29 @@ class gitlab(
     $ldap_bind_dn           = $gitlab::params::ldap_bind_dn,
     $ldap_bind_password     = $gitlab::params::ldap_bind_password
   ) inherits gitlab::params {
-  # FIXME class inheriting from params class
   case $::osfamily {
-    Debian: {
-      include gitlab::server
-    }
+    Debian: {}
     Redhat: {
       warning("${::osfamily} not fully tested with ${gitlab_branch}")
-      include gitlab::server
     }
     default: {
       fail("${::osfamily} not supported yet")
     }
   } # case
+
+  include '::gitlab::dependencies'
+  include '::gitlab::setup'
+  include '::gitlab::package'
+  include '::gitlab::install'
+  include '::gitlab::config'
+  include '::gitlab::service'
+
+  anchor { 'gitlab::begin': }
+  anchor { 'gitlab::end': }
+
+  Anchor['gitlab::begin'] -> Class['::gitlab::dependencies']
+    -> Class['::gitlab::setup']
+    -> Class['::gitlab::package']-> Class['::gitlab::install']
+    -> Class['::gitlab::config']-> Class['::gitlab::service']
+    -> Anchor['gitlab::end']
 } # Class:: gitlab
