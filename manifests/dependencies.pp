@@ -4,10 +4,10 @@
 class gitlab::dependencies inherits gitlab {
 
   # database dependencies
-  package { $db_packages: }
+  package { $gitlab::params::db_packages: }
 
   # system packages
-  package { $system_packages: } ->
+  package { $gitlab::params::system_packages: } ->
   package { 'bundler':
     ensure    => installed,
     provider  => gem,

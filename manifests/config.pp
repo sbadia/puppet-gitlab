@@ -3,8 +3,8 @@
 #
 class gitlab::config inherits gitlab {
   File {
-    owner     => $git_user,
-    group     => $git_user,
+    owner     => $gitlab::params::git_user,
+    group     => $gitlab::params::git_user,
   }
 
   # gitlab
@@ -25,33 +25,33 @@ class gitlab::config inherits gitlab {
   }
 
   # directories
-  file { "${git_home}/gitlab/tmp":
+  file { "${gitlab::params::git_home}/gitlab/tmp":
     ensure    => directory,
-    mode      => "0755",
+    mode      => '0755',
   }
 
-  file { "${git_home}/gitlab/tmp/pids":
+  file { "${gitlab::params::git_home}/gitlab/tmp/pids":
     ensure    => directory,
-    mode      => "0755",
+    mode      => '0755',
   }
 
-  file { "${git_home}/gitlab/tmp/sockets":
+  file { "${gitlab::params::git_home}/gitlab/tmp/sockets":
     ensure    => directory,
-    mode      => "0755",
+    mode      => '0755',
   }
 
-  file { "${git_home}/gitlab/log":
+  file { "${gitlab::params::git_home}/gitlab/log":
     ensure    => directory,
-    mode      => "0755",
+    mode      => '0755',
   }
 
-  file { "${git_home}/gitlab/public":
+  file { "${gitlab::params::git_home}/gitlab/public":
     ensure    => directory,
-    mode      => "0755",
+    mode      => '0755',
   }
 
-  file { "${git_home}/gitlab/public/uploads":
+  file { "${gitlab::params::git_home}/gitlab/public/uploads":
     ensure    => directory,
-    mode      => "0755",
+    mode      => '0755',
   }
 }

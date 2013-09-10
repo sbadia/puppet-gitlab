@@ -63,6 +63,9 @@ class gitlab::params {
                           'readline-devel','openssl-devel','zlib-devel',
                           'libyaml-devel']
     }
+    default: {
+      err "${::osfamily} not supported yet"
+    }
   }
 
 } # Class:: gitlab::params
