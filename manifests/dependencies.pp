@@ -3,6 +3,14 @@
 #
 class gitlab::dependencies inherits gitlab {
 
+  # ensure puppet version meets minimum requirements
+  if $puppetversion <= '3.2.0' {
+        fail ( "puppet 3.2 or greater is required for gem provider, you have ${puppetversion}" )
+  }
+  else {
+        debug ( " puppet ${puppetversion} supports gem provider" )
+  }
+
   # database dependencies
   package { $gitlab::params::db_packages: }
 
