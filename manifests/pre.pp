@@ -44,18 +44,11 @@ class gitlab::pre {
           target => '/usr/bin/python';
       }
 
-      package {
+      ensure_packages(
         ['libicu-dev','python2.7','python-docutils',
-          'libxml2-dev','libxslt1-dev','python-dev']:
-            ensure  => installed;
-      }
+          'libxml2-dev','libxslt1-dev','python-dev',
+          'git-core','postfix'])
 
-      if !defined(Package['git-core']) {
-        package { 'git-core': ensure => present; }
-      }
-      if !defined(Package['postfix']) {
-        package { 'postfix': ensure => present; }
-      }
     } # Debian pre-requists
     'Redhat': {
       $db_packages = $gitlab_dbtype ? {
@@ -63,14 +56,11 @@ class gitlab::pre {
         pgsql => ['postgresql-devel'],
       }
 
-      package {
+      ensure_packages(
         ['perl-Time-HiRes',
           'libicu-devel','libxml2-devel','libxslt-devel',
           'python-devel','libcurl-devel','readline-devel','openssl-devel',
-          'zlib-devel','libyaml-devel']:
-            ensure   => latest,
-            provider => yum;
-      }
+          'zlib-devel','libyaml-devel'])
 
     } # Redhat pre-requists
     default: {
@@ -78,18 +68,7 @@ class gitlab::pre {
     }
   }
 
-  package {
-    $db_packages:
-      ensure   => installed;
-  }
-
-  if !defined(Package['openssh-server']) {
-    package { 'openssh-server': ensure => present; }
-  }
-  if !defined(Package['git']) {
-    package { 'git': ensure => present; }
-  }
-  if !defined(Package['curl']) {
-    package { 'curl': ensure => present; }
-  }
+  ensure_packages($db_packages)
+  ensure_packages(['openssh-server','git','curl'])
+  
 } # Class:: gitlab::pre
