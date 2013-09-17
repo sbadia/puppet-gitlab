@@ -33,7 +33,7 @@ class gitlab::gitlabshell {
       unless    => "/usr/bin/test -d ${git_home}/gitlab-shell";
     'Setup gitlab-shell':
       command   => "ruby ${git_home}/gitlab-shell/bin/install",
-      path      => '/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+      path      => '/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/rvm/wrappers/default/',
       user      => $git_user,
       cwd       => $git_home,
       require   => File["${git_home}/gitlab-shell/config.yml"],
