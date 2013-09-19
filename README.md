@@ -1,6 +1,6 @@
 # Puppet-gitlab [![Build Status](https://travis-ci.org/sbadia/puppet-gitlab.png)](https://travis-ci.org/sbadia/puppet-gitlab)
 
-Tested successfully with Gitlab 6-0-stable on Ubuntu 12.04 and Debian Wheezy (7.1) with Puppet 3
+Tested successfully with Gitlab 6-0-stable on Ubuntu 12.04 and Debian Wheezy (7.1) with Puppet 3.2 or newer.
 
 [GitLab](http://gitlab.org/) is a free project and repository management application
 
