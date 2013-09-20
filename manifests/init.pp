@@ -102,7 +102,15 @@ class gitlab(
     }
   } # case
 
-  include '::gitlab::dependencies'
+
+  # ensure puppet version meets minimum requirements
+  if $::puppetversion <= '3.2.0' {
+    fail ("puppet >= 3.2 required for gem provider, you have ${::puppetversion}")
+  }
+  else {
+    debug ("puppet ${::puppetversion} supports gem provider")
+  }
+
   include '::gitlab::setup'
   include '::gitlab::package'
   include '::gitlab::install'
@@ -112,8 +120,7 @@ class gitlab(
   anchor { 'gitlab::begin': }
   anchor { 'gitlab::end': }
 
-  Anchor['gitlab::begin'] -> Class['::gitlab::dependencies']
-    -> Class['::gitlab::setup']
+  Anchor['gitlab::begin'] -> Class['::gitlab::setup']
     -> Class['::gitlab::package']-> Class['::gitlab::install']
     -> Class['::gitlab::config']-> Class['::gitlab::service']
     -> Anchor['gitlab::end']
