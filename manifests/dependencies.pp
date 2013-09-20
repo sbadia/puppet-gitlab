@@ -1,7 +1,7 @@
 # Class:: gitlab::dependencies
 #
 #
-class gitlab::dependencies inherits gitlab {
+class gitlab::dependencies {
 
   # ensure puppet version meets minimum requirements
   if $::puppetversion <= '3.2.0' {

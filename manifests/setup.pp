@@ -1,7 +1,7 @@
 # Class:: gitlab::setup
 #
 #
-class gitlab::setup inherits gitlab {
+class gitlab::setup {
   File {
     owner     => $gitlab::params::git_user,
     group     => $gitlab::params::git_user,

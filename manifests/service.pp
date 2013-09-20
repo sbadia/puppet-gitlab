@@ -1,7 +1,7 @@
 # Class:: gitlab::service
 #
 #
-class gitlab::service inherits gitlab {
+class gitlab::service {
   service { 'gitlab':
     ensure     => running,
     hasstatus  => true,

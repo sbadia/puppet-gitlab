@@ -1,7 +1,7 @@
 # Class:: gitlab::package
 #
 #
-class gitlab::package inherits gitlab {
+class gitlab::package {
   Exec {
     cwd  => $gitlab::params::git_home,
     user => $gitlab::params::git_user,
