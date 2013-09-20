@@ -25,32 +25,14 @@ class gitlab::config {
   }
 
   # directories
-  file { "${gitlab::params::git_home}/gitlab/tmp":
-    ensure    => directory,
-    mode      => '0755',
-  }
-
-  file { "${gitlab::params::git_home}/gitlab/tmp/pids":
-    ensure    => directory,
-    mode      => '0755',
-  }
-
-  file { "${gitlab::params::git_home}/gitlab/tmp/sockets":
-    ensure    => directory,
-    mode      => '0755',
-  }
-
-  file { "${gitlab::params::git_home}/gitlab/log":
-    ensure    => directory,
-    mode      => '0755',
-  }
-
-  file { "${gitlab::params::git_home}/gitlab/public":
-    ensure    => directory,
-    mode      => '0755',
-  }
-
-  file { "${gitlab::params::git_home}/gitlab/public/uploads":
+  file { [
+      "${gitlab::params::git_home}/gitlab/tmp",
+      "${gitlab::params::git_home}/gitlab/tmp/pids",
+      "${gitlab::params::git_home}/gitlab/tmp/sockets",
+      "${gitlab::params::git_home}/gitlab/log",
+      "${gitlab::params::git_home}/gitlab/public",
+      "${gitlab::params::git_home}/gitlab/public/uploads"
+    ]:
     ensure    => directory,
     mode      => '0755',
   }
