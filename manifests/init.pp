@@ -10,6 +10,8 @@
 # [gitlab_branch] Gitlab branch (default: 6.1-stable)
 # [gitlabshell_sources] Gitlab-shell sources (default: git://github.com/gitlabhq/gitlab-shell.git)
 # [gitlabshell_banch] Gitlab-shell branch (default: v1.7.1)
+# [gitlab_redishost] Redis host used for Sidekiq (default: localhost)
+# [gitlab_redisport] Redis host used for Sidekiq (default: 6379)
 # [gitlab_dbtype] Gitlab database type (default: mysql)
 # [gitlab_dbname] Gitlab database name (default: gitlabdb)
 # [gitlab_dbuser] Gitlab database user (default: gitlabu)
@@ -69,6 +71,8 @@ class gitlab(
     $gitlab_branch          = $gitlab::params::gitlab_branch,
     $gitlabshell_branch     = $gitlab::params::gitlabshell_branch,
     $gitlabshell_sources    = $gitlab::params::gitlabshell_sources,
+    $gitlab_redishost       = $gitlab::params::gitlab_redishost,
+    $gitlab_redisport       = $gitlab::params::gitlab_redisport,
     $gitlab_dbtype          = $gitlab::params::gitlab_dbtype,
     $gitlab_dbname          = $gitlab::params::gitlab_dbname,
     $gitlab_dbuser          = $gitlab::params::gitlab_dbuser,

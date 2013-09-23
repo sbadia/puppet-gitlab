@@ -43,6 +43,11 @@ class gitlab::install {
     mode    => '0640',
   }
 
+  file { "${gitlab::params::git_home}/gitlab/config/resque.yml":
+    ensure  => file,
+    content => template('gitlab/resque.yml.erb'),
+  }
+
   exec { 'install gitlab':
     command => "bundle install --without development test ${gitlab::params::gitlab_without_gems} --deployment",
     cwd     => "${gitlab::params::git_home}/gitlab",
@@ -52,6 +57,7 @@ class gitlab::install {
       File["${gitlab::params::git_home}/gitlab/config/database.yml"],
       File["${gitlab::params::git_home}/gitlab/config/unicorn.rb"],
       File["${gitlab::params::git_home}/gitlab/config/gitlab.yml"],
+      File["${gitlab::params::git_home}/gitlab/config/resque.yml"],
     ],
   }
 
