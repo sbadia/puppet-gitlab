@@ -8,7 +8,7 @@ upstream gitlab {
 
 <% if @gitlab_ssl %>
 server {
-  listen 80;
+  listen <%= @gitlab_http_port %>;
   server_name <%= @gitlab_domain %>;
   server_tokens off;
   root /nowhere;
@@ -17,7 +17,7 @@ server {
 <% end %>
 
 server {
-  listen <%= @gitlab_ssl ? '443' : '80' %>;         # e.g., listen 192.168.1.1:80;
+  listen <%= @gitlab_ssl ? @gitlab_ssl_port : @gitlab_http_port %>;         # e.g., listen 192.168.1.1:80;
   server_name <%= @gitlab_domain %>;     # e.g., server_name source.example.com;
   server_tokens off;
   root <%= @git_home %>/gitlab/public;

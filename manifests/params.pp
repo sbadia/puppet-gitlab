@@ -11,6 +11,8 @@ class gitlab::params {
   $gitlab_branch          = '6-1-stable'
   $gitlabshell_sources    = 'git://github.com/gitlabhq/gitlab-shell.git'
   $gitlabshell_branch     = 'v1.7.1'
+  $gitlab_http_port       = '80'
+  $gitlab_ssl_port        = '443'
   $gitlab_redishost       = 'localhost'
   $gitlab_redisport       = '6379'
   $gitlab_dbtype          = 'mysql'
