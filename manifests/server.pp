@@ -6,6 +6,8 @@ class gitlab::server {
   include gitlab
   require gitlab::gitlabshell
 
+  $gitlab_http_port   = $gitlab::gitlab_http_port
+  $gitlab_ssl_port    = $gitlab::gitlab_ssl_port
   $gitlab_redishost   = $gitlab::gitlab_redishost
   $gitlab_redisport   = $gitlab::gitlab_redisport
   $gitlab_dbtype      = $gitlab::gitlab_dbtype

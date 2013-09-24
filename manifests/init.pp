@@ -10,6 +10,8 @@
 # [gitlab_branch] Gitlab branch (default: 5-3-stable)
 # [gitlabshell_sources] Gitlab-shell sources (default: git://github.com/gitlabhq/gitlab-shell.git)
 # [gitlabshell_banch] Gitlab-shell branch (default: v1.5.0)
+# [gitlab_http_port] Port that NGINX listens on for HTTP traffic (default: 80)
+# [gitlab_ssl_port] Port that NGINX listens on for HTTPS traffic (default: 443)
 # [gitlab_redishost] Redis host used for Sidekiq (default: localhost)
 # [gitlab_redisport] Redis host used for Sidekiq (default: 6379)
 # [gitlab_dbtype] Gitlab database type (default: mysql)
@@ -71,6 +73,8 @@ class gitlab(
     $gitlab_branch          = $gitlab::params::gitlab_branch,
     $gitlabshell_branch     = $gitlab::params::gitlabshell_branch,
     $gitlabshell_sources    = $gitlab::params::gitlabshell_sources,
+    $gitlab_http_port       = $gitlab::params::gitlab_http_port,
+    $gitlab_ssl_port        = $gitlab::params::gitlab_ssl_port,
     $gitlab_redishost       = $gitlab::params::gitlab_redishost,
     $gitlab_redisport       = $gitlab::params::gitlab_redisport,
     $gitlab_dbtype          = $gitlab::params::gitlab_dbtype,
