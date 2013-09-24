@@ -6,6 +6,10 @@ class gitlab::server {
   include gitlab
   require gitlab::gitlabshell
 
+  $gitlab_http_port   = $gitlab::gitlab_http_port
+  $gitlab_ssl_port    = $gitlab::gitlab_ssl_port
+  $gitlab_redishost   = $gitlab::gitlab_redishost
+  $gitlab_redisport   = $gitlab::gitlab_redisport
   $gitlab_dbtype      = $gitlab::gitlab_dbtype
   $gitlab_dbname      = $gitlab::gitlab_dbname
   $gitlab_dbuser      = $gitlab::gitlab_dbuser
@@ -111,6 +115,13 @@ class gitlab::server {
   }
 
   file {
+    "${git_home}/gitlab/config/resque.yml":
+      ensure  => file,
+      content => template('gitlab/resque.yml.erb'),
+      owner   => $git_user,
+      group   => $git_user,
+      require => [Exec['Get gitlab'],
+                  File["${git_home}/gitlab/config/gitlab.yml"]];
     "${git_home}/gitlab/config/database.yml":
       ensure  => file,
       content => template('gitlab/database.yml.erb'),
