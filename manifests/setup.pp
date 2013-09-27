@@ -10,7 +10,7 @@ class gitlab::setup inherits gitlab {
   # user
   user { $gitlab::params::git_user:
     ensure   => present,
-    shell    => '/bin/bash',
+    shell    => '/bin/false',
     password => '*',
     home     => $gitlab::params::git_home,
     comment  => $gitlab::params::git_comment,
