@@ -49,7 +49,7 @@ class gitlab::install {
   }
 
   exec { 'install gitlab':
-    command => "bundle install --without development test ${gitlab::params::gitlab_without_gems} --deployment",
+    command => "bundle install --without development aws test ${gitlab::params::gitlab_without_gems} --deployment",
     cwd     => "${gitlab::params::git_home}/gitlab",
     unless  => "/usr/bin/test -f ${gitlab::params::git_home}/.git_setup_done",
     timeout => 0,

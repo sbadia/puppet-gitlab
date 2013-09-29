@@ -43,7 +43,15 @@ production: &base
     ## User settings
     default_projects_limit: <%= @gitlab_projects %>
     # default_can_create_group: false  # default: true
-    username_changing_enabled: <%= @gitlab_username_change ? 'true' : 'false' %> # default: true - User can change her username/namespace
+	username_changing_enabled: <%= @gitlab_username_change ? 'true' : 'false' %> # default: true - User can change her username/namespace
+    ## Default theme
+    ##   BASIC  = 1
+    ##   MARS   = 2
+    ##   MODERN = 3
+    ##   GRAY   = 4
+    ##   COLOR  = 5
+    # default_theme: 2 # default: 2
+
 
     ## Users management
     # signup_enabled: true          # default: false - Account passwords are not sent via the email if signup is enabled.
@@ -111,6 +119,7 @@ production: &base
     bind_dn: '<%= @ldap_bind_dn %>'
     password: '<%= @ldap_bind_password %>'
 <% end -%>
+	allow_username_or_email_login: true
 
   ## OmniAuth settings
   omniauth:

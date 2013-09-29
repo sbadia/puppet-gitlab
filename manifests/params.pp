@@ -91,6 +91,7 @@ class gitlab::params {
         mysql => ['mysql-devel'],
         pgsql => ['postgresql-devel'],
       }
+
       $system_packages = ['perl-Time-HiRes','libicu-devel','libxml2-devel',
                           'libxslt-devel','python-devel','libcurl-devel',
                           'readline-devel','openssl-devel','zlib-devel',

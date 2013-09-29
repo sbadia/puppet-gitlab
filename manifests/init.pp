@@ -110,7 +110,6 @@ class gitlab(
     }
   } # case
 
-
   # ensure puppet version meets minimum requirements
   if $::puppetversion <= '3.2.0' {
     fail ("puppet >= 3.2 required for gem provider, you have ${::puppetversion}")

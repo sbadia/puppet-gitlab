@@ -21,7 +21,7 @@ RAILS_ENV="production"
 # Script variable names should be lower-case not to conflict with internal
 # /bin/sh variables such as PATH, EDITOR or SHELL.
 app_root="<%= @git_home %>/gitlab"
-app_user="git"
+app_user="<%= @git_user %>"
 unicorn_conf="$app_root/config/unicorn.rb"
 pid_path="$app_root/tmp/pids"
 socket_path="$app_root/tmp/sockets"

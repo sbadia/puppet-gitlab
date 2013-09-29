@@ -56,16 +56,5 @@ class gitlab::setup {
   }
 
   # other packages
-  # FIXME: defined poor form
-  if !defined(Package['git-core']) {
-    package { 'git-core': }
-  }
-  # FIXME: defined poor form
-  if !defined(Package['postfix']) {
-    package { 'postfix': }
-  }
-  # FIXME: defined poor form
-  if !defined(Package['curl']) {
-    package { 'curl': ensure => present; }
-  }
+  ensure_packages(['git-core','postfix','curl'])
 }
