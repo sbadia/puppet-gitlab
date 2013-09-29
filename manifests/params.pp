@@ -38,6 +38,35 @@ class gitlab::params {
   $ldap_bind_dn           = ''
   $ldap_bind_password     = ''
 
+  validate_absolute_path($git_home)
+  validate_absolute_path($gitlab_ssl_cert)
+  validate_absolute_path($gitlab_ssl_key)
+
+  validate_bool($gitlab_ssl)
+  validate_bool($gitlab_ssl_self_signed)
+  validate_bool($gitlab_username_change)
+  validate_bool($ldap_enabled)
+
+  validate_string($git_user)
+  validate_string($git_email)
+  validate_string($git_comment)
+  validate_string($gitlab_sources)
+  validate_string($gitlab_branch)
+  validate_string($gitlabshell_sources)
+  validate_string($gitlabshell_branch)
+  validate_string($gitlab_dbtype)
+  validate_string($gitlab_dbname)
+  validate_string($gitlab_dbuser)
+  validate_string($gitlab_dbpwd)
+  validate_string($gitlab_dbhost)
+  validate_string($gitlab_dbport)
+  validate_string($gitlab_projects)
+  validate_string($ldap_host)
+  validate_string($ldap_base)
+  validate_string($ldap_uid)
+  validate_string($ldap_port)
+  validate_string($ldap_method)
+
   $gitlab_without_gems = $gitlab_dbtype ? {
     mysql => 'postgres',
     pgsql => 'mysql',
@@ -71,5 +100,7 @@ class gitlab::params {
       err "${::osfamily} not supported yet"
     }
   }
+
+  validate_array($system_packages)
 
 } # Class:: gitlab::params
