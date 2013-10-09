@@ -1,7 +1,8 @@
+# Sample verbose configuration file for Unicorn (not Rack)
 # MANAGED BY PUPPET
+#
 # Module:: gitlab
 #
-# Sample verbose configuration file for Unicorn (not Rack)
 #
 # This configuration file documents many features of Unicorn
 # that may not be needed for some applications. See
@@ -38,7 +39,7 @@ timeout 30
 pid "<%= @git_home %>/gitlab/tmp/pids/unicorn.pid"
 
 # By default, the Unicorn logger will write to stderr.
-# Additionally, ome applications/frameworks log to stderr or stdout,
+# Additionally, some applications/frameworks log to stderr or stdout,
 # so prevent them from going to /dev/null when daemonized here:
 stderr_path "<%= @git_home %>/gitlab/log/unicorn.stderr.log"
 stdout_path "<%= @git_home %>/gitlab/log/unicorn.stdout.log"
@@ -67,11 +68,11 @@ before_fork do |server, worker|
   # installations.  It is not needed if your system can house
   # twice as many worker_processes as you have configured.
   #
-  # # This allows a new master process to incrementally
-  # # phase out the old master process with SIGTTOU to avoid a
-  # # thundering herd (especially in the "preload_app false" case)
-  # # when doing a transparent upgrade.  The last worker spawned
-  # # will then kill off the old master process with a SIGQUIT.
+  # This allows a new master process to incrementally
+  # phase out the old master process with SIGTTOU to avoid a
+  # thundering herd (especially in the "preload_app false" case)
+  # when doing a transparent upgrade.  The last worker spawned
+  # will then kill off the old master process with a SIGQUIT.
   # old_pid = "#{server.config[:pid]}.oldbin"
   # if old_pid != server.pid
   #   begin
