@@ -36,4 +36,10 @@ class gitlab::config {
     ensure    => directory,
     mode      => '0755',
   }
+
+  # symlink fix for python
+  file { '/usr/bin/python2':
+    ensure  => link,
+    target  => '/usr/bin/python',
+  }
 }

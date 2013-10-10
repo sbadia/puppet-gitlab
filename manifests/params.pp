@@ -82,8 +82,8 @@ class gitlab::params {
       }
 
       # system packages
-      $system_packages = ['libicu-dev','python2.7','python-docutils',
-                          'libxml2-dev','libxslt1-dev','python-dev']
+      $system_packages = ['libicu-dev', 'python2.7','python-docutils',
+                          'libxml2-dev', 'libxslt1-dev','python-dev']
     }
     'RedHat': {
       # database packages
@@ -92,7 +92,7 @@ class gitlab::params {
         pgsql => ['postgresql-devel'],
       }
 
-      $system_packages = ['perl-Time-HiRes','libicu-devel','libxml2-devel',
+      $system_packages = ['libicu-devel', 'perl-Time-HiRes','libxml2-devel',
                           'libxslt-devel','python-devel','libcurl-devel',
                           'readline-devel','openssl-devel','zlib-devel',
                           'libyaml-devel']
