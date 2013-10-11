@@ -1,7 +1,6 @@
 # MANAGED BY PUPPET
-# Module:: gitlab
 #
-# # # # # # # # # # # # # # # # # #
+# Module:: gitlab
 # GitLab application config file  #
 # # # # # # # # # # # # # # # # # #
 #
@@ -45,9 +44,22 @@ production: &base
     default_projects_limit: <%= @gitlab_projects %>
     # default_can_create_group: false  # default: true
     username_changing_enabled: <%= @gitlab_username_change ? 'true' : 'false' %> # default: true - User can change her username/namespace
+    ## Default theme
+    ##   BASIC  = 1
+    ##   MARS   = 2
+    ##   MODERN = 3
+    ##   GRAY   = 4
+    ##   COLOR  = 5
+    # default_theme: 2 # default: 2
+
 
     ## Users management
     # signup_enabled: true          # default: false - Account passwords are not sent via the email if signup is enabled.
+
+    ## Automatic issue closing
+    # If a commit message matches this regular express, all issues referenced from the matched text will be closed
+    # if it's pushed to a project's default branch.
+    # issue_closing_pattern: ^([Cc]loses|[Ff]ixes) +#\d+
 
     ## Default project features settings
     default_projects_features:
@@ -56,6 +68,7 @@ production: &base
       wiki: true
       wall: false
       snippets: false
+      public: false
 
   ## External issues trackers
   issues_tracker:
@@ -78,7 +91,7 @@ production: &base
     #   ##  :project_id        - GitLab project identifier
     #   ##  :issues_tracker_id - Project Name or Id in external issue tracker
     #   new_issue_url: "http://redmine.sample/projects/:issues_tracker_id/issues/new"
-    #
+    # 
     # jira:
     #   project_url: "http://jira.sample/issues/?jql=project=:issues_tracker_id"
     #   issues_url: "http://jira.sample/browse/:id"
@@ -106,6 +119,7 @@ production: &base
     bind_dn: '<%= @ldap_bind_dn %>'
     password: '<%= @ldap_bind_password %>'
 <% end -%>
+    allow_username_or_email_login: true
 
   ## OmniAuth settings
   omniauth:

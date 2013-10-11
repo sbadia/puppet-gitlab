@@ -7,9 +7,9 @@
 # [git_email] Email address for gitlab user (default: git@someserver.net)
 # [git_comment] Gitlab user comment (default: GitLab)
 # [gitlab_sources] Gitlab sources (default: git://github.com/gitlabhq/gitlabhq.git)
-# [gitlab_branch] Gitlab branch (default: 5-3-stable)
+# [gitlab_branch] Gitlab branch (default: 6.1-stable)
 # [gitlabshell_sources] Gitlab-shell sources (default: git://github.com/gitlabhq/gitlab-shell.git)
-# [gitlabshell_banch] Gitlab-shell branch (default: v1.5.0)
+# [gitlabshell_banch] Gitlab-shell branch (default: v1.7.1)
 # [gitlab_http_port] Port that NGINX listens on for HTTP traffic (default: 80)
 # [gitlab_ssl_port] Port that NGINX listens on for HTTPS traffic (default: 443)
 # [gitlab_redishost] Redis host used for Sidekiq (default: localhost)
@@ -100,17 +100,35 @@ class gitlab(
     $ldap_bind_dn           = $gitlab::params::ldap_bind_dn,
     $ldap_bind_password     = $gitlab::params::ldap_bind_password
   ) inherits gitlab::params {
-  # FIXME class inheriting from params class
   case $::osfamily {
-    Debian: {
-      include gitlab::server
-    }
+    Debian: {}
     Redhat: {
       warning("${::osfamily} not fully tested with ${gitlab_branch}")
-      include gitlab::server
     }
     default: {
       fail("${::osfamily} not supported yet")
     }
   } # case
+
+  # ensure puppet version meets minimum requirements
+  if $::puppetversion <= '3.2.0' {
+    fail ("puppet >= 3.2 required for gem provider, you have ${::puppetversion}")
+  }
+  else {
+    debug ("puppet ${::puppetversion} supports gem provider")
+  }
+
+  include '::gitlab::setup'
+  include '::gitlab::package'
+  include '::gitlab::install'
+  include '::gitlab::config'
+  include '::gitlab::service'
+
+  anchor { 'gitlab::begin': }
+  anchor { 'gitlab::end': }
+
+  Anchor['gitlab::begin'] -> Class['::gitlab::setup']
+    -> Class['::gitlab::package']-> Class['::gitlab::install']
+    -> Class['::gitlab::config']-> Class['::gitlab::service']
+    -> Anchor['gitlab::end']
 } # Class:: gitlab
