@@ -68,8 +68,8 @@ class gitlab::params {
   validate_string($ldap_method)
 
   $gitlab_without_gems = $gitlab_dbtype ? {
-    mysql => 'postgres',
-    pgsql => 'mysql',
+    mysql => 'mysql',
+    pgsql => 'postgres',
   }
 
   # determine pre-requisite packages
