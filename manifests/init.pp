@@ -7,7 +7,7 @@
 # [git_email] Email address for gitlab user (default: git@someserver.net)
 # [git_comment] Gitlab user comment (default: GitLab)
 # [gitlab_sources] Gitlab sources (default: git://github.com/gitlabhq/gitlabhq.git)
-# [gitlab_branch] Gitlab branch (default: 6.1-stable)
+# [gitlab_branch] Gitlab branch (default: 6-2-stable)
 # [gitlabshell_sources] Gitlab-shell sources (default: git://github.com/gitlabhq/gitlab-shell.git)
 # [gitlabshell_banch] Gitlab-shell branch (default: v1.7.1)
 # [gitlab_http_port] Port that NGINX listens on for HTTP traffic (default: 80)

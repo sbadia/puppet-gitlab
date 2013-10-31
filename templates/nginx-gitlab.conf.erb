@@ -42,7 +42,7 @@ server {
   }
 
   # if a file, which is not found in the root folder is requested,
-  # then the proxy pass the request to the upsteam (gitlab puma)
+  # then the proxy pass the request to the upsteam (gitlab unicorn)
   location @gitlab {
     proxy_read_timeout 300; # https://github.com/gitlabhq/gitlabhq/issues/694
     proxy_connect_timeout 300; # https://github.com/gitlabhq/gitlabhq/issues/694

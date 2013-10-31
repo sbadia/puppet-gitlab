@@ -1,6 +1,6 @@
 # Puppet-gitlab [![Build Status](https://travis-ci.org/sbadia/puppet-gitlab.png)](https://travis-ci.org/sbadia/puppet-gitlab)
 
-Tested successfully with Gitlab 6-1-stable on Ubuntu 12.04 and Debian Wheezy (7.1) with Puppet 3.2 or newer.
+Tested successfully with Gitlab 6-2-stable on Ubuntu 12.04 and Debian Wheezy (7.1) with Puppet 3.2 or newer.
 
 [GitLab](http://gitlab.org/) is a free project and repository management application
 
@@ -32,7 +32,7 @@ _Note:_ Assume that a database server is already installed on your server/infras
 * git\_email: Email address for gitlab user (default: git@someserver.net)
 * git\_comment: Gitlab user comment (default: GitLab)
 * gitlab\_sources: Gitlab sources (default: git://github.com/gitlabhq/gitlabhq.git)
-* gitlab\_branch: Gitlab branch (default: 6-1-stable)
+* gitlab\_branch: Gitlab branch (default: 6-2-stable)
 * gitlabshell\_sources: Gitlab-shell sources (default: git://github.com/gitlabhq/gitlab-shell.git)
 * gitlabshell\_banch: Gitlab-shell branch (default: v1.7.1)
 * gitlab\_http\_port Port that NGINX listens on for HTTP traffic (default: 80)
