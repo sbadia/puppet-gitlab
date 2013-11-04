@@ -13,14 +13,14 @@ class gitlab::params {
   $gitlabshell_branch     = 'v1.7.1'
   $gitlab_http_port       = '80'
   $gitlab_ssl_port        = '443'
-  $gitlab_redishost       = 'localhost'
+  $gitlab_redishost       = '127.0.0.1'
   $gitlab_redisport       = '6379'
   $gitlab_dbtype          = 'mysql'
   $gitlab_dbname          = 'gitladb'
   $gitlab_dbuser          = 'gitladbu'
   $gitlab_dbpwd           = 'changeme'
   $gitlab_dbhost          = 'localhost'
-  $gitlab_dbport          = '3306'
+  $gitlab_dbport          = '5432'
   $gitlab_domain          = $::fqdn
   $gitlab_repodir         = $git_home
   $gitlab_ssl             = false
