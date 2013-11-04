@@ -1,42 +1,148 @@
 # == Class: gitlab
 #
+# Install and configure a GitLab server using puppet.
+#
 # === Parameters
 #
-# [git_user] Name of the gitlab (default: git)
-# [git_home] Home directory for gitlab repository (default: /home/git)
-# [git_email] Email address for gitlab user (default: git@someserver.net)
-# [git_comment] Gitlab user comment (default: GitLab)
-# [gitlab_sources] Gitlab sources (default: git://github.com/gitlabhq/gitlabhq.git)
-# [gitlab_branch] Gitlab branch (default: 6-2-stable)
-# [gitlabshell_sources] Gitlab-shell sources (default: git://github.com/gitlabhq/gitlab-shell.git)
-# [gitlabshell_banch] Gitlab-shell branch (default: v1.7.1)
-# [gitlab_http_port] Port that NGINX listens on for HTTP traffic (default: 80)
-# [gitlab_ssl_port] Port that NGINX listens on for HTTPS traffic (default: 443)
-# [gitlab_redishost] Redis host used for Sidekiq (default: localhost)
-# [gitlab_redisport] Redis host used for Sidekiq (default: 6379)
-# [gitlab_dbtype] Gitlab database type (default: mysql)
-# [gitlab_dbname] Gitlab database name (default: gitlabdb)
-# [gitlab_dbuser] Gitlab database user (default: gitlabu)
-# [gitlab_dbpwd] Gitlab database password (default: changeme)
-# [gitlab_dbhost] Gitlab database host (default: localhost)
-# [gitlab_dbport] Gitlab database port (default: 3306)
-# [gitlab_domain] Gitlab domain (default $fqdn)
-# [gitlab_repodir] Gitlab repository directory (default: $git_home)
-# [gitlab_ssl] Enable SSL for GitLab (default: false)
-# [gitlab_ssl_cert] SSL Certificate location (default: /etc/ssl/certs/ssl-cert-snakeoil.pem)
-# [gitlab_ssl_key] SSL Key location (default: /etc/ssl/private/ssl-cert-snakeoil.key)
-# [gitlab_ssl_self_signed] Set true if your SSL Cert is self signed (default: false)
-# [gitlab_projects] GitLab default number of projects for new users (default: 10)
-# [gitlab_repodir] Gitlab repository directory (default $git_home)
-# [gitlab_username_change] Gitlab username changing (default: true)
-# [ldap_enabled] Enable LDAP backend for gitlab web (see bellow) (default: false)
-# [ldap_host] FQDN of LDAP server (default: ldap.domain.com)
-# [ldap_base] LDAP base dn (default: dc=domain,dc=com)
-# [ldap_uid] Uid for LDAP auth (default: uid)
-# [ldap_port] LDAP port (default: 636)
-# [ldap_method] Method to use (default: ssl)
-# [ldap_bind_dn] User for LDAP bind auth (default: nil)
-# [ldap_bind_password] Password for LDN bind auth (default: nil)
+# [*git_user*]
+#   Name of gitlab user
+#   default: git
+#
+# [*git_home*]
+#   Home directory for gitlab repository
+#   default: /home/git
+#
+# [*git_email*]
+#   Email address for gitlab user
+#   default: git@someserver.net
+#
+# [*git_comment*]
+#   Gitlab user comment
+#   default: GitLab
+#
+# [*gitlab_sources*]
+#   Gitlab sources
+#   default: git://github.com/gitlabhq/gitlabhq.git
+#
+# [*gitlab_branch*]
+#   Gitlab branch
+#   default: 6.2-stable
+#
+# [*gitlabshell_sources*]
+#   Gitlab-shell sources
+#   default: git://github.com/gitlabhq/gitlab-shell.git
+#
+# [*gitlabshell_banch*]
+#   Gitlab-shell branch
+#   default: v1.7.1
+#
+# [*gitlab_http_port*]
+#   Port that NGINX listens on for HTTP traffic
+#   default: 80
+#
+# [*gitlab_ssl_port*]
+#   Port that NGINX listens on for HTTPS traffic
+#   default: 443
+#
+# [*gitlab_redishost*]
+#   Redis host used for Sidekiq
+#   default: localhost
+#
+# [*gitlab_redisport*]
+#   Redis host used for Sidekiq
+#   default: 6379
+#
+# [*gitlab_dbtype*]
+#   Gitlab database type
+#   default: mysql
+#
+# [*gitlab_dbname*]
+#   Gitlab database name
+#   default: gitlabdb
+#
+# [*gitlab_dbuser*]
+#   Gitlab database user
+#   default: gitlabu
+#
+# [*gitlab_dbpwd*]
+#   Gitlab database password
+#   default: changeme
+#
+# [*gitlab_dbhost*]
+#   Gitlab database host
+#   default: localhost
+#
+# [*gitlab_dbport*]
+#   Gitlab database port
+#   default: 3306
+#
+# [*gitlab_domain*]
+#   Gitlab domain
+#   default: $fqdn
+#
+# [*gitlab_repodir*]
+#   Gitlab repository directory
+#   default: $git_home
+#
+# [*gitlab_ssl*]
+#   Enable SSL for GitLab
+#   default: false
+#
+# [*gitlab_ssl_cert*]
+#   SSL Certificate location
+#   default: /etc/ssl/certs/ssl-cert-snakeoil.pem
+#
+# [*gitlab_ssl_key*]
+#   SSL Key location
+#   default: /etc/ssl/private/ssl-cert-snakeoil.key
+#
+# [*gitlab_ssl_self_signed*]
+#   Set true if your SSL Cert is self signed
+#   default: false
+#
+# [*gitlab_projects*]
+#   GitLab default number of projects for new users
+#   default: 10
+#
+# [*gitlab_repodir*]
+#   Gitlab repository directory
+#   default: $git_home
+#
+# [*gitlab_username_change*]
+#   Gitlab username changing
+#   default: true
+#
+# [*ldap_enabled*]
+#   Enable LDAP backend for gitlab web (see bellow)
+#   default: false
+#
+# [*ldap_host*]
+#   FQDN of LDAP server
+#   default: ldap.domain.com
+#
+# [*ldap_base*]
+#   LDAP base dn
+#   default: dc=domain,dc=com
+#
+# [*ldap_uid*]
+#   Uid for LDAP auth
+#   default: uid
+#
+# [*ldap_port*]
+#   LDAP port
+#   default: 636
+#
+# [*ldap_method*]
+#   Method to use
+#   default: ssl
+#
+# [*ldap_bind_dn*]
+#   User for LDAP bind auth
+#   default: nil
+#
+# [*ldap_bind_password*]
+#   Password for LDN bind auth
+#   default: nil
 #
 # === Examples
 #
@@ -59,10 +165,8 @@
 #
 # === Copyright
 #
-# See LICENSE file, Sebastien Badia (c) 2013
-
-# Class:: gitlab
-#
+# See LICENSE file
+# Andrew Tomaka, Sebastien Badia (c) 2013
 #
 class gitlab(
     $git_user               = $gitlab::params::git_user,
