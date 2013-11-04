@@ -1,19 +1,19 @@
 # Class:: gitlab::setup
 #
 #
-class gitlab::setup {
+class gitlab::setup inherits gitlab {
   File {
-    owner     => $gitlab::params::git_user,
-    group     => $gitlab::params::git_user,
+    owner     => $git_user,
+    group     => $git_user,
   }
 
   # user
-  user { $gitlab::params::git_user:
+  user { $git_user:
     ensure   => present,
     shell    => '/bin/bash',
     password => '*',
-    home     => $gitlab::params::git_home,
-    comment  => $gitlab::params::git_comment,
+    home     => $git_home,
+    comment  => $git_comment,
     system   => true,
   }
 
@@ -24,19 +24,19 @@ class gitlab::setup {
     type         => 'ssh-rsa',
   }
 
-  file { "${gitlab::params::git_home}/.gitconfig":
+  file { "${git_home}/.gitconfig":
     ensure    => file,
     content   => template('gitlab/git.gitconfig.erb'),
     mode      => '0644',
   }
 
   # directories
-  file { $gitlab::params::git_home:
+  file { $git_home:
     ensure => directory,
     mode   => '0755',
   }
 
-  file { "${gitlab::params::git_home}/gitlab-satellites":
+  file { "${git_home}/gitlab-satellites":
     ensure    => directory,
     mode      => '0755',
   }
@@ -80,7 +80,9 @@ class gitlab::setup {
     provider  => gem,
   }
 
-  ensure_packages($gitlab::params::system_packages)
+  # dev. dependencies
+  ensure_packages($system_packages)
+
   package { 'charlock_holmes':
     ensure    => '0.6.9.4',
     provider  => gem,

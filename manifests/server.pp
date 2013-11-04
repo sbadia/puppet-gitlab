@@ -3,36 +3,6 @@
 #
 class gitlab::server {
 
-  include gitlab
-  require gitlab::gitlabshell
-
-  $gitlab_http_port    = $gitlab::gitlab_http_port
-  $gitlab_ssl_port     = $gitlab::gitlab_ssl_port
-  $gitlab_redishost    = $gitlab::gitlab_redishost
-  $gitlab_redisport    = $gitlab::gitlab_redisport
-  $gitlab_dbtype       = $gitlab::gitlab_dbtype
-  $gitlab_dbname       = $gitlab::gitlab_dbname
-  $gitlab_dbuser       = $gitlab::gitlab_dbuser
-  $gitlab_dbpwd        = $gitlab::gitlab_dbpwd
-  $gitlab_dbhost       = $gitlab::gitlab_dbhost
-  $gitlab_dbport       = $gitlab::gitlab_dbport
-  $gitlab_domain       = $gitlab::gitlab_domain
-  $gitlab_repodir      = $gitlab::gitlab_repodir
-  $gitlab_branch       = $gitlab::gitlab_branch
-  $gitlab_sources      = $gitlab::gitlab_sources
-  $gitlab_without_gems = $gitlab::params::gitlab_without_gems
-  $git_home            = $gitlab::git_home
-  $git_user            = $gitlab::git_user
-  $git_email           = $gitlab::git_email
-  $ldap_enabled        = $gitlab::ldap_enabled
-  $ldap_host           = $gitlab::ldap_host
-  $ldap_base           = $gitlab::ldap_base
-  $ldap_uid            = $gitlab::ldap_uid
-  $ldap_port           = $gitlab::ldap_port
-  $ldap_method         = $gitlab::ldap_method
-  $ldap_bind_dn        = $gitlab::ldap_bind_dn
-  $ldap_bind_password  = $gitlab::ldap_bind_password
-
   $gitlab_without_gems = $gitlab_dbtype ? {
     'mysql' => 'postgres',
     'pgsql' => 'mysql',
