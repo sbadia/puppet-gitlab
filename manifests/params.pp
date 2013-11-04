@@ -67,39 +67,22 @@ class gitlab::params {
   validate_string($ldap_port)
   validate_string($ldap_method)
 
-  $gitlab_without_gems = $gitlab_dbtype ? {
-    mysql   => 'postgres',
-    pgsql   => 'mysql',
-    default => '',
-  }
-
   # determine pre-requisite packages
   case $::osfamily {
     'Debian': {
-      # database packages
-      $db_packages = $gitlab_dbtype ? {
-        mysql => ['libmysql++-dev','libmysqlclient-dev'],
-        pgsql => ['libpq-dev', 'postgresql-client'],
-      }
-
       # system packages
       $system_packages = ['libicu-dev', 'python2.7','python-docutils',
                           'libxml2-dev', 'libxslt1-dev','python-dev']
     }
     'RedHat': {
-      # database packages
-      $db_packages = $gitlab_dbtype ? {
-        mysql => ['mysql-devel'],
-        pgsql => ['postgresql-devel'],
-      }
-
+      # system packages
       $system_packages = ['libicu-devel', 'perl-Time-HiRes','libxml2-devel',
                           'libxslt-devel','python-devel','libcurl-devel',
                           'readline-devel','openssl-devel','zlib-devel',
                           'libyaml-devel']
     }
     default: {
-      err "${::osfamily} not supported yet"
+      fail("${::osfamily} not supported yet")
     }
   }
 

@@ -42,7 +42,37 @@ class gitlab::setup {
   }
 
   # database dependencies
-  ensure_packages($gitlab::params::db_packages)
+  case $::osfamily {
+    'Debian': {
+      case $gitlab_dbtype {
+        'mysql': {
+          ensure_packages(['libmysql++-dev','libmysqlclient-dev'])
+        }
+        'pgsql': {
+          ensure_packages(['libpq-dev','postgresql-client'])
+        }
+        default: {
+          fail("unknow dbtype (${gitlab_dbtype})")
+        }
+      }
+    }
+    'RedHat': {
+      case $gitlab_dbtype {
+        'mysql': {
+          ensure_packages(['mysql-devel'])
+        }
+        'pgsql': {
+          ensure_packages(['postgresql-devel'])
+        }
+        default: {
+          fail("unknow dbtype (${gitlab_dbtype})")
+        }
+      }
+    }
+    default: {
+      fail("${::osfamily} not supported yet")
+    }
+  } # Case $::osfamily
 
   # system packages
   package { 'bundler':
