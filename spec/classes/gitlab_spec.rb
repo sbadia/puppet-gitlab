@@ -240,6 +240,15 @@ describe 'gitlab' do
           it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/port: 5432/)}
         end # pgsql
       end # database config
+      describe 'unicorn config' do
+        it { should contain_file('/home/git/gitlab/config/unicorn.rb').with(:ensure => 'file',:owner => 'git',:group => 'git')}
+        it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/worker_processes 2/)}
+        it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/working_directory "\/home\/git\/gitlab"/)}
+        it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/listen "\/home\/git\/gitlab\/tmp\/sockets\/gitlab.socket"/)}
+        it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/pid "\/home\/git\/gitlab\/tmp\/pids\/unicorn.pid"/)}
+        it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/stderr_path "\/home\/git\/gitlab\/log\/unicorn.stderr.log"/)}
+        it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/stdout_path "\/home\/git\/gitlab\/log\/unicorn.stdout.log"/)}
+      end # unicorn config
     end # defaults params
     context 'with specifics params' do
       let(:params) { params_set }
@@ -293,6 +302,15 @@ describe 'gitlab' do
           it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/port: #{params_set[:gitlab_dbport]}/)}
         end # pgsql
       end # database config
+      describe 'unicorn config' do
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with(:ensure => 'file',:owner => params_set[:git_user],:group => params_set[:git_user])}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/worker_processes 2/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/working_directory "#{params_set[:git_home]}\/gitlab"/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/listen "#{params_set[:git_home]}\/gitlab\/tmp\/sockets\/gitlab.socket"/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/pid "#{params_set[:git_home]}\/gitlab\/tmp\/pids\/unicorn.pid"/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/stderr_path "#{params_set[:git_home]}\/gitlab\/log\/unicorn.stderr.log"/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/stdout_path "#{params_set[:git_home]}\/gitlab\/log\/unicorn.stdout.log"/)}
+      end # unicorn config
     end # with params
   end # gitlab::install
 
