@@ -112,6 +112,10 @@
 #   Gitlab username changing
 #   default: true
 #
+# [*gitlab_unicorn_port*]
+#   Port that unicorn listens on 172.0.0.1 for HTTP traffic
+#   (default: 8080)
+#
 # [*ldap_enabled*]
 #   Enable LDAP backend for gitlab web (see bellow)
 #   default: false
@@ -195,6 +199,7 @@ class gitlab(
     $gitlab_ssl_self_signed = $gitlab::params::gitlab_ssl_self_signed,
     $gitlab_projects        = $gitlab::params::gitlab_projects,
     $gitlab_username_change = $gitlab::params::gitlab_username_change,
+    $gitlab_unicorn_port    = $gitlab::params::gitlab_unicorn_port,
     $ldap_enabled           = $gitlab::params::ldap_enabled,
     $ldap_host              = $gitlab::params::ldap_host,
     $ldap_base              = $gitlab::params::ldap_base,
@@ -232,6 +237,7 @@ class gitlab(
   validate_re($gitlab_redisport, '^\d+$', 'gitlab_redisport is not a valid port')
   validate_re($ldap_method, '(ssl|tls)', 'ldap_method is not supported (ssl or tls)')
   validate_re($gitlab_projects, '^\d+$', 'gitlab_projects is not valid')
+  validate_re($gitlab_unicorn_port, '^\d+$', 'gitlab_unicorn_port is not valid')
 
   validate_string($git_user)
   validate_string($git_email)

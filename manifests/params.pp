@@ -29,6 +29,7 @@ class gitlab::params {
   $gitlab_ssl_self_signed = false
   $gitlab_projects        = '10'
   $gitlab_username_change = true
+  $gitlab_unicorn_port    = '8080'
   $ldap_enabled           = false
   $ldap_host              = 'ldap.domain.com'
   $ldap_base              = 'dc=domain,dc=com'
