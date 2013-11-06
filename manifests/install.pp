@@ -2,6 +2,13 @@
 #
 #
 class gitlab::install inherits gitlab {
+
+  $gitlab_without_gems = $gitlab_dbtype ? {
+    'mysql' => 'postgres',
+    'pgsql' => 'mysql',
+    default => '',
+  }
+
   Exec {
     user => $git_user,
     path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
