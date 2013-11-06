@@ -76,10 +76,17 @@ class gitlab::install inherits gitlab {
     require => Exec['install gitlab'],
   }
 
-  file { "${git_home}/.gitlab_setup_done":
-    ensure  => present,
-    owner   => 'root',
-    group   => 'root',
-    require => Exec['setup gitlab database'],
+  file {
+    "${git_home}/.gitlab_setup_done":
+      ensure  => present,
+      owner   => 'root',
+      group   => 'root',
+      require => Exec['setup gitlab database'];
+    "${git_home}/.git_setup_done":
+      ensure  => present,
+      owner   => 'root',
+      group   => 'root',
+      require => Exec['install gitlab'];
   }
+
 }
