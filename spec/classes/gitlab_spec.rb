@@ -3,6 +3,7 @@ require 'spec_helper'
 # validate params (init) bool/string
 # ensure fail osfamily/dbtype
 # regexp for gitlab/shell versions
+# logrotate
 
 # Gitlab
 describe 'gitlab' do
@@ -16,22 +17,31 @@ describe 'gitlab' do
   # a non-default common parameter set
   let :params_set do
     {
-      :git_user             => 'gitlab',
-      :git_home             => '/srv/gitlab',
-      :git_comment          => 'Labfooboozoo',
-      :git_email            => 'gitlab@fooboozoo.fr',
-      :gitlab_sources       => 'https://github.com/gitlabhq/gitlabhq',
-      :gitlab_branch        => '4-2-woots',
-      :gitlabshell_sources  => 'https://github.com/gitlabhq/gitlab-shell',
-      :gitlabshell_branch   => 'v1.2.3',
-      :gitlab_repodir       => '/mnt/nas',
-      :gitlab_redishost     => 'redis.fooboozoo.fr',
-      :gitlab_redisport     => '9736',
-      :gitlab_dbname        => 'gitlab_production',
-      :gitlab_dbuser        => 'baltig',
-      :gitlab_dbpwd         => 'Cie7cheewei<ngi3',
-      :gitlab_dbhost        => 'sql.fooboozoo.fr',
-      :gitlab_dbport        => '2345'
+      :git_user               => 'gitlab',
+      :git_home               => '/srv/gitlab',
+      :git_comment            => 'Labfooboozoo',
+      :git_email              => 'gitlab@fooboozoo.fr',
+      :gitlab_sources         => 'https://github.com/gitlabhq/gitlabhq',
+      :gitlab_branch          => '4-2-woots',
+      :gitlabshell_sources    => 'https://github.com/gitlabhq/gitlab-shell',
+      :gitlabshell_branch     => 'v1.2.3',
+      :gitlab_repodir         => '/mnt/nas',
+      :gitlab_redishost       => 'redis.fooboozoo.fr',
+      :gitlab_redisport       => '9736',
+      :gitlab_dbname          => 'gitlab_production',
+      :gitlab_dbuser          => 'baltig',
+      :gitlab_dbpwd           => 'Cie7cheewei<ngi3',
+      :gitlab_dbhost          => 'sql.fooboozoo.fr',
+      :gitlab_dbport          => '2345',
+      :gitlab_projects        => '42',
+      :gitlab_username_change => false,
+      :ldap_host              => 'ldap.fooboozoo.fr',
+      :ldap_base              => 'dc=fooboozoo,dc=fr',
+      :ldap_port              => '666',
+      :ldap_uid               => 'cn',
+      :ldap_method            => 'tls',
+      :ldap_bind_dn           => 'uid=gitlab,o=bots,dc=fooboozoo,dc=fr',
+      :ldap_bind_password     => 'aV!oo1ier5ahch;a'
     }
   end
 
@@ -39,9 +49,7 @@ describe 'gitlab' do
   let :params_ssl do
     {
       :gitlab_ssl             => true,
-      :gitlab_ssl_self_signed => true,
-      :gitlab_ssl_cert        => '/srv/ssl/gitlab.pem',
-      :gitlab_ssl_key         => '/srv/ssl/gitlab.key'
+      :gitlab_ssl_self_signed => true
     }
   end
 
@@ -249,6 +257,79 @@ describe 'gitlab' do
         it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/stderr_path "\/home\/git\/gitlab\/log\/unicorn.stderr.log"/)}
         it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/stdout_path "\/home\/git\/gitlab\/log\/unicorn.stdout.log"/)}
       end # unicorn config
+      describe 'gitlab config' do
+        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with(:ensure => 'file',:owner => 'git',:group => 'git')}
+        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/host: gitlab.fooboozoo.fr/)}
+        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/port: 80/)}
+        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/https: false/)}
+        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/email_from: git@someserver.net/)}
+        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/default_projects_limit: 10/)}
+        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/username_changing_enabled: true/)}
+        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/host: 'ldap.domain.com'/)}
+        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/base: 'dc=domain,dc=com'/)}
+        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/port: 636/)}
+        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/uid: 'uid'/)}
+        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/method: 'ssl'/)}
+        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/path: \/home\/git\/gitlab-satellites\//)}
+        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/repos_path: \/home\/git\/repositories\//)}
+        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/hooks_path: \/home\/git\/gitlab-shell\/hooks\//)}
+      end # gitlab config
+      describe 'resque config' do
+        it { should contain_file('/home/git/gitlab/config/resque.yml').with(:ensure => 'file',:owner => 'git',:group => 'git')}
+        it { should contain_file('/home/git/gitlab/config/resque.yml').with_content(/production: redis:\/\/127.0.0.1/)}
+      end # resque config
+      describe 'install gitlab' do
+        it { should contain_exec('install gitlab').with(
+          :user    => 'git',
+          :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+          :command => 'bundle install --without development aws test postgres --deployment',
+          :cwd     => '/home/git/gitlab',
+          :unless  => '/usr/bin/test -f /home/git/.git_setup_done',
+          :timeout => 0,
+          :require => ['File[/home/git/gitlab/config/database.yml]',
+                        'File[/home/git/gitlab/config/unicorn.rb]',
+                        'File[/home/git/gitlab/config/gitlab.yml]',
+                        'File[/home/git/gitlab/config/resque.yml]']
+        )}
+        it { should contain_file("/home/git/.git_setup_done").with(
+          :ensure   => 'present',
+          :owner    => 'root',
+          :group    => 'root',
+          :require  => 'Exec[install gitlab]'
+        )}
+        context 'postgresql' do
+          let(:params) {{ :gitlab_dbtype => 'pgsql' }}
+          it { should contain_exec('install gitlab').with(
+            :user    => 'git',
+            :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+            :command => 'bundle install --without development aws test mysql --deployment',
+            :cwd     => '/home/git/gitlab',
+            :unless  => '/usr/bin/test -f /home/git/.git_setup_done',
+            :timeout => 0,
+            :require => ['File[/home/git/gitlab/config/database.yml]',
+                          'File[/home/git/gitlab/config/unicorn.rb]',
+                          'File[/home/git/gitlab/config/gitlab.yml]',
+                          'File[/home/git/gitlab/config/resque.yml]']
+          )}
+        end # pgsql
+      end # install gitlab
+      describe 'setup gitlab database' do
+        it { should contain_exec('setup gitlab database').with(
+          :user    => 'git',
+          :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+          :command => '/usr/bin/yes yes | bundle exec rake gitlab:setup RAILS_ENV=production',
+          :cwd     => '/home/git/gitlab',
+          :unless  => '/usr/bin/test -f /home/git/.gitlab_setup_done',
+          :creates => '/home/git/.gitlab_setup_done',
+          :require => 'Exec[install gitlab]'
+        )}
+        it { should contain_file("/home/git/.gitlab_setup_done").with(
+          :ensure   => 'present',
+          :owner    => 'root',
+          :group    => 'root',
+          :require  => 'Exec[setup gitlab database]'
+        )}
+      end # setup gitlab database
     end # defaults params
     context 'with specifics params' do
       let(:params) { params_set }
@@ -311,17 +392,175 @@ describe 'gitlab' do
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/stderr_path "#{params_set[:git_home]}\/gitlab\/log\/unicorn.stderr.log"/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/stdout_path "#{params_set[:git_home]}\/gitlab\/log\/unicorn.stdout.log"/)}
       end # unicorn config
+      describe 'gitlab config' do
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with(:ensure => 'file',:owner => params_set[:git_user],:group => params_set[:git_user])}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/host: gitlab.fooboozoo.fr/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/port: 80/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/https: false/)}
+        context 'with ssl' do
+          let(:params) { params_set.merge(params_ssl) }
+          it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/port: 443/)}
+          it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/https: true/)}
+        end
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/email_from: #{params_set[:git_email]}/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/default_projects_limit: #{params_set[:gitlab_projects]}/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/username_changing_enabled: #{params_set[:gitlab_username_change]}/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/host: '#{params_set[:ldap_host]}'/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/base: '#{params_set[:ldap_base]}'/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/port: #{params_set[:ldap_port]}/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/uid: '#{params_set[:ldap_uid]}'/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/method: '#{params_set[:ldap_method]}'/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/bind_dn: '#{params_set[:ldap_bind_dn]}'/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/password: '#{params_set[:ldap_bind_password]}'/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/path: #{params_set[:git_home]}\/gitlab-satellites\//)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/repos_path: #{params_set[:gitlab_repodir]}\/repositories\//)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/hooks_path: #{params_set[:git_home]}\/gitlab-shell\/hooks\//)}
+      end # gitlab config
+      describe 'resque config' do
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/resque.yml").with(:ensure => 'file',:owner => params_set[:git_user],:group => params_set[:git_user])}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/resque.yml").with_content(/production: redis:\/\/redis.fooboozoo.fr/)}
+      end # gitlab config
+      describe 'install gitlab' do
+        it { should contain_exec('install gitlab').with(
+          :user    => params_set[:git_user],
+          :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+          :command => 'bundle install --without development aws test postgres --deployment',
+          :cwd     => "#{params_set[:git_home]}/gitlab",
+          :unless  => "/usr/bin/test -f #{params_set[:git_home]}/.git_setup_done",
+          :timeout => 0,
+          :require => ["File[#{params_set[:git_home]}/gitlab/config/database.yml]",
+                        "File[#{params_set[:git_home]}/gitlab/config/unicorn.rb]",
+                        "File[#{params_set[:git_home]}/gitlab/config/gitlab.yml]",
+                        "File[#{params_set[:git_home]}/gitlab/config/resque.yml]"]
+        )}
+        it { should contain_file("#{params_set[:git_home]}/.git_setup_done").with(
+          :ensure   => 'present',
+          :owner    => 'root',
+          :group    => 'root',
+          :require  => 'Exec[install gitlab]'
+        )}
+        context 'postgresql' do
+          let(:params) { params_set.merge({ :gitlab_dbtype => 'pgsql' }) }
+          it { should contain_exec('install gitlab').with(
+            :user    => params_set[:git_user],
+            :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+            :command => 'bundle install --without development aws test mysql --deployment',
+            :cwd     => "#{params_set[:git_home]}/gitlab",
+            :unless  => "/usr/bin/test -f #{params_set[:git_home]}/.git_setup_done",
+            :timeout => 0,
+            :require => ["File[#{params_set[:git_home]}/gitlab/config/database.yml]",
+                          "File[#{params_set[:git_home]}/gitlab/config/unicorn.rb]",
+                          "File[#{params_set[:git_home]}/gitlab/config/gitlab.yml]",
+                          "File[#{params_set[:git_home]}/gitlab/config/resque.yml]"]
+          )}
+        end # pgsql
+      end # install gitlab
+      describe 'setup gitlab database' do
+        it { should contain_exec('setup gitlab database').with(
+          :user    => params_set[:git_user],
+          :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+          :command => '/usr/bin/yes yes | bundle exec rake gitlab:setup RAILS_ENV=production',
+          :cwd     => "#{params_set[:git_home]}/gitlab",
+          :unless  => "/usr/bin/test -f #{params_set[:git_home]}/.gitlab_setup_done",
+          :creates => "#{params_set[:git_home]}/.gitlab_setup_done",
+          :require => 'Exec[install gitlab]'
+        )}
+        it { should contain_file("#{params_set[:git_home]}/.gitlab_setup_done").with(
+          :ensure   => 'present',
+          :owner    => 'root',
+          :group    => 'root',
+          :require  => 'Exec[setup gitlab database]'
+        )}
+      end # setup gitlab database
     end # with params
   end # gitlab::install
 
   ### Gitlab::config
   describe 'gitlab::config' do
     context 'with default params' do
-
-    end
+      describe 'nginx config' do
+        it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with(
+          :ensure => 'file',
+          :owner  => 'root',
+          :group  => 'root',
+          :mode   => '0644'
+        )}
+        it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/server unix:\/home\/git\/gitlab\/tmp\/sockets\/gitlab.socket;/)}
+        it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/listen 80;/)}
+        it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/server_name gitlab.fooboozoo.fr;/)}
+        it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/server_tokens off;/)}
+        it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/root \/home\/git\/gitlab\/public;/)}
+      end # nginx config
+      describe 'gitlab init' do
+        it { should contain_file('/etc/init.d/gitlab').with(
+          :ensure => 'file',
+          :owner  => 'root',
+          :group  => 'root',
+          :mode   => '0755'
+        )}
+        it { should contain_file('/etc/init.d/gitlab').with_content(/app_root="\/home\/git\/gitlab"/)}
+        it { should contain_file('/etc/init.d/gitlab').with_content(/app_user="git"/)}
+      end # gitlab init
+      describe 'gitlab directories' do
+        ['gitlab/tmp','gitlab/tmp/pids','gitlab/tmp/sockets','gitlab/log','gitlab/public','gitlab/public/uploads'].each do |dir|
+          it { should contain_file("/home/git/#{dir}").with(
+            :ensure => 'directory',
+            :mode   => '0755'
+          )}
+        end
+      end # gitlab directories
+      describe 'python2 symlink' do
+        it { should contain_file('/usr/bin/python2').with(:ensure => 'link',:target => '/usr/bin/python')}
+      end # python2 symlink
+    end # default params
     context 'with specifics params' do
       let(:params) { params_set }
-    end
+      describe 'nginx config' do
+        it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with(
+          :ensure => 'file',
+          :owner  => 'root',
+          :group  => 'root',
+          :mode   => '0644'
+        )}
+        it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/server unix:#{params_set[:git_home]}\/gitlab\/tmp\/sockets\/gitlab.socket;/)}
+        it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/server_name gitlab.fooboozoo.fr;/)}
+        it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/server_tokens off;/)}
+        it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/root #{params_set[:git_home]}\/gitlab\/public;/)}
+        context 'with ssl' do
+          let(:params) { params_set.merge(params_ssl) }
+          it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/listen 443;/)}
+          it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/ssl_certificate               \/etc\/ssl\/certs\/ssl-cert-snakeoil.pem;/)}
+          it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/ssl_certificate_key           \/etc\/ssl\/private\/ssl-cert-snakeoil.key;/)}
+          it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/proxy_set_header   X-Forwarded-Ssl   on;/)}
+        end
+        context 'with ssl and custom certs' do
+          let(:params) { params_set.merge(params_ssl.merge({:gitlab_ssl_cert => '/srv/ssl/gitlab.pem',:gitlab_ssl_key => '/srv/ssl/gitlab.key'})) }
+            it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/ssl_certificate               \/srv\/ssl\/gitlab.pem;/)}
+            it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/ssl_certificate_key           \/srv\/ssl\/gitlab.key;/)}
+        end
+      end # nginx config
+      describe 'gitlab init' do
+        it { should contain_file('/etc/init.d/gitlab').with(
+          :ensure => 'file',
+          :owner  => 'root',
+          :group  => 'root',
+          :mode   => '0755'
+        )}
+        it { should contain_file('/etc/init.d/gitlab').with_content(/app_root="#{params_set[:git_home]}\/gitlab"/)}
+        it { should contain_file('/etc/init.d/gitlab').with_content(/app_user="#{params_set[:git_user]}"/)}
+      end # gitlab init
+      describe 'gitlab directories' do
+        ['gitlab/tmp','gitlab/tmp/pids','gitlab/tmp/sockets','gitlab/log','gitlab/public','gitlab/public/uploads'].each do |dir|
+          it { should contain_file("#{params_set[:git_home]}/#{dir}").with(
+            :ensure => 'directory',
+            :mode   => '0755'
+          )}
+        end
+      end # gitlab directories
+      describe 'python2 symlink' do
+        it { should contain_file('/usr/bin/python2').with(:ensure => 'link',:target => '/usr/bin/python')}
+      end # python2 symlink
+    end # specifics params
   end # gitlab::config
 
   ### Gitlab::service
