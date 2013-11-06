@@ -214,6 +214,38 @@ class gitlab(
     }
   } # case
 
+  validate_absolute_path($git_home)
+  validate_absolute_path($gitlab_ssl_cert)
+  validate_absolute_path($gitlab_ssl_key)
+
+  validate_bool($gitlab_ssl)
+  validate_bool($gitlab_ssl_self_signed)
+  validate_bool($gitlab_username_change)
+  validate_bool($ldap_enabled)
+
+  validate_re($gitlab_branch, '^\d-\d-stable', 'gitlab_branch is not valid (1-1-stable)')
+  validate_re($gitlabshell_branch, '^v\d.\d.\d$', 'gitlabshell_branch is not valid (v1.1.1)')
+  validate_re($gitlab_dbtype, '(mysql|pgsql)', 'gitlab_dbtype is not supported (mysql or pgsql)')
+  validate_re($gitlab_dbport, '^\d+$', 'gitlab_dbport is not a valid port')
+  validate_re($ldap_port, '^\d+$', 'ldap_port is not a valid port')
+  validate_re($gitlab_ssl_port, '^\d+$', 'gitlab_ssl_port is not a valid port')
+  validate_re($gitlab_redisport, '^\d+$', 'gitlab_redisport is not a valid port')
+  validate_re($ldap_method, '(ssl|tls)', 'ldap_method is not supported (ssl or tls)')
+  validate_re($gitlab_projects, '^\d+$', 'gitlab_projects is not valid')
+
+  validate_string($git_user)
+  validate_string($git_email)
+  validate_string($git_comment)
+  validate_string($gitlab_sources)
+  validate_string($gitlabshell_sources)
+  validate_string($gitlab_dbname)
+  validate_string($gitlab_dbuser)
+  validate_string($gitlab_dbpwd)
+  validate_string($gitlab_dbhost)
+  validate_string($ldap_base)
+  validate_string($ldap_uid)
+  validate_string($ldap_host)
+
   anchor { 'gitlab::begin': } ->
   class { '::gitlab::setup': } ->
   class { '::gitlab::package': } ->
