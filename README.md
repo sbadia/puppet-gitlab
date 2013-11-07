@@ -65,6 +65,7 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 * `gitlab_ssl_self_signed`: Set true if your SSL Cert is self signed (default: false)
 * `gitlab_projects`: GitLab default number of projects for new users (default: 10)
 * `gitlab_username_change`: Manage username changing in GitLab (default: true)
+* `gitlab_unicorn_port`: Port that unicorn listens on 172.0.0.1 for HTTP traffic (default: 8080)
 * `ldap_enabled`: Enable LDAP backend for gitlab web (see bellow) (default: false)
 * `ldap_host`: FQDN of LDAP server (default: ldap.domain.com)
 * `ldap_base`: LDAP base dn (default: dc=domain,dc=com)
