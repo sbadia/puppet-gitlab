@@ -1,10 +1,10 @@
 # Class:: gitlab::config
 #
 #
-class gitlab::config {
+class gitlab::config inherits gitlab {
   File {
-    owner     => $gitlab::params::git_user,
-    group     => $gitlab::params::git_user,
+    owner     => $git_user,
+    group     => $git_user,
   }
 
   # gitlab
@@ -26,12 +26,12 @@ class gitlab::config {
 
   # directories
   file { [
-      "${gitlab::params::git_home}/gitlab/tmp",
-      "${gitlab::params::git_home}/gitlab/tmp/pids",
-      "${gitlab::params::git_home}/gitlab/tmp/sockets",
-      "${gitlab::params::git_home}/gitlab/log",
-      "${gitlab::params::git_home}/gitlab/public",
-      "${gitlab::params::git_home}/gitlab/public/uploads"
+      "${git_home}/gitlab/tmp",
+      "${git_home}/gitlab/tmp/pids",
+      "${git_home}/gitlab/tmp/sockets",
+      "${git_home}/gitlab/log",
+      "${git_home}/gitlab/public",
+      "${git_home}/gitlab/public/uploads"
     ]:
     ensure    => directory,
     mode      => '0755',
@@ -39,7 +39,9 @@ class gitlab::config {
 
   # symlink fix for python
   file { '/usr/bin/python2':
-    ensure  => link,
-    target  => '/usr/bin/python',
+    ensure => link,
+    owner  => root,
+    group  => root,
+    target => '/usr/bin/python';
   }
 }
