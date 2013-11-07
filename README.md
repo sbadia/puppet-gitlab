@@ -23,6 +23,8 @@ A [Puppet Module](http://docs.puppetlabs.com/learning/modules1.html#modules) is 
 
 This module is based on the admin guides for [gitlab](https://github.com/gitlabhq/gitlabhq/wiki), stable version.
 
+- [puppet-gitlab](http://forge.puppetlabs.com/sbadia/gitlab) on puppet forge.
+
 ## Dependencies
 - [puppetlabs/puppetlabs-stdlib](https://github.com/puppetlabs/puppetlabs-stdlib) >= 4.1.0
 See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/examples/gitlab.pp).
@@ -35,7 +37,6 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 1. Add an ssh key to your account, or create another account
 2. Create a project
 3. Play !
-
 
 # Parameters
 
