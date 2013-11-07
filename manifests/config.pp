@@ -39,7 +39,9 @@ class gitlab::config inherits gitlab {
 
   # symlink fix for python
   file { '/usr/bin/python2':
-    ensure  => link,
-    target  => '/usr/bin/python',
+    ensure => link,
+    owner  => root,
+    group  => root,
+    target => '/usr/bin/python';
   }
 }
