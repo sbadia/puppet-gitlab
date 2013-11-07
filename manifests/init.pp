@@ -225,7 +225,7 @@ class gitlab(
 
   validate_re($gitlab_branch, '^\d-\d-stable', 'gitlab_branch is not valid (1-1-stable)')
   validate_re($gitlabshell_branch, '^v\d.\d.\d$', 'gitlabshell_branch is not valid (v1.1.1)')
-  validate_re($gitlab_dbtype, '(mysql|pgsql)', 'gitlab_dbtype is not supported (mysql or pgsql)')
+  validate_re($gitlab_dbtype, '(mysql|pgsql)', 'gitlab_dbtype is not supported')
   validate_re($gitlab_dbport, '^\d+$', 'gitlab_dbport is not a valid port')
   validate_re($ldap_port, '^\d+$', 'ldap_port is not a valid port')
   validate_re($gitlab_ssl_port, '^\d+$', 'gitlab_ssl_port is not a valid port')

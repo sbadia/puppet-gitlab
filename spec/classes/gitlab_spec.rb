@@ -1,9 +1,4 @@
 require 'spec_helper'
-#TODO
-# validate params (init) bool/string
-# ensure fail osfamily/dbtype
-# regexp for gitlab/shell versions
-# logrotate
 
 # Gitlab
 describe 'gitlab' do
@@ -53,9 +48,17 @@ describe 'gitlab' do
     }
   end
 
-
   ## Gitlab
-
+  describe 'input validation' do
+    describe 'on a unsupported os' do
+      let(:facts) {{ :osfamily => 'Rainbow' }}
+      it { expect { subject }.to raise_error(Puppet::Error, /Rainbow not supported yet/)}
+    end
+    describe 'unknown dbtype' do
+      let(:params) {{ :gitlab_dbtype => 'yatta' }}
+      it { expect { subject }.to raise_error(Puppet::Error, /gitlab_dbtype is not supported/)}
+    end
+  end
 
   ## Gitlab::setup
   describe 'gitlab::setup' do
