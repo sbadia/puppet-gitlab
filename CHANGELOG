@@ -1,3 +1,11 @@
+* 2013-11-08 - 0.0.9
+- huge changes/re-factorization by atomaka ! (many thanks !!)
+- Use anchors and refactoring of args/class
+- Add ssl support for nginx
+- Add extra params (repodir,username_changing,redis,unicorn)
+- Better management of extra packages (thx stdlib)
+- Bump to gitlab 6.2.3
+- Add spec and travis testing
 * 2013-06-10 - 0.0.8
 - Use nginx,ruby,redis,mysql external modules
 - Clean pre.pp file
