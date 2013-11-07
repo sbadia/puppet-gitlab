@@ -1,6 +1,7 @@
 - pkg/
 - spec/
 - Rakefile
+- coverage/
 - .git/
 - .forgeignore
 - .travis.yml
