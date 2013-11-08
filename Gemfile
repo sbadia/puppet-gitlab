@@ -11,3 +11,6 @@ gem 'puppet-lint'
 gem 'rspec-puppet'
 gem 'puppet', puppetversion
 gem 'puppetlabs_spec_helper'
+gem 'rspec-system'
+gem 'rspec-system-puppet'
+gem 'rspec-system-serverspec'
