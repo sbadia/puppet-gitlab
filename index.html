@@ -1,46 +1,172 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Puppet-gitlab by sbadia</title>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Puppet-gitlab : Puppet module for manage GitLab installation" />
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="javascripts/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Puppet-gitlab</title>
   </head>
+
   <body>
-    <div class="wrapper">
-      <header>
-        <h1 class="header">Puppet-gitlab</h1>
-        <p class="header">Puppet module for manage GitLab installation</p>
 
-        <ul>
-          <li class="download"><a class="buttons" href="https://github.com/sbadia/puppet-gitlab/zipball/master">Download ZIP</a></li>
-          <li class="download"><a class="buttons" href="https://github.com/sbadia/puppet-gitlab/tarball/master">Download TAR</a></li>
-          <li><a class="buttons github" href="https://github.com/sbadia/puppet-gitlab">View On GitHub</a></li>
-        </ul>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/sbadia/puppet-gitlab">View on GitHub</a>
 
-        <p class="header">This project is maintained by <a class="header name" href="https://github.com/sroegner">sroegner</a> and <a class="header name" href="https://github.com/sbadia">sbadia</a></p>
+          <h1 id="project_title">Puppet-gitlab</h1>
+          <h2 id="project_tagline">Puppet module for manage GitLab installation</h2>
 
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/sbadia/puppet-gitlab/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/sbadia/puppet-gitlab/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
 
-      </header>
-      <section>
-        <h1>Puppet-gitlab</h1>
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="puppet-gitlab-" class="anchor" href="#puppet-gitlab-"><span class="octicon octicon-link"></span></a>Puppet-gitlab <a href="https://travis-ci.org/sbadia/puppet-gitlab"><img src="https://travis-ci.org/sbadia/puppet-gitlab.png?branch=master" alt="Build Status"></a>
+</h1>
 
-<p>Tested successfully with Gitlab 5.1-stable <a href="https://github.com/gitlabhq/gitlabhq/commit/09b915799d3c06dcf63ebab606f05d81ab4589a8">b4589a8</a> on debian wheezy with puppet 3</p>
+<p>Tested successfully with Gitlab 6-2-stable on Ubuntu 12.04 and Debian Wheezy (7.2) with Puppet 3.2 or newer.</p>
 
-<p><a href="http://gitlabhq.org/">GitLab</a> is a free project and repository management application</p>
+<h4>
+<a name="table-of-contents" class="anchor" href="#table-of-contents"><span class="octicon octicon-link"></span></a>Table of contents</h4>
+
+<ol>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#module-description">Module description</a></li>
+<li><a href="#parameters">Parameters</a></li>
+<li>
+<a href="#usage">Usage</a>
+
+<ul>
+<li><a href="#basic-usage">Basic usage</a></li>
+<li><a href="#with-ldap">With LDAP</a></li>
+</ul>
+</li>
+<li><a href="#limitation">Limitation</a></li>
+<li><a href="#development">Development</a></li>
+</ol><h1>
+<a name="overview" class="anchor" href="#overview"><span class="octicon octicon-link"></span></a>Overview</h1>
+
+<p><a href="http://gitlab.org/">GitLab</a> is a free project and repository management application</p>
 
 <p>A <a href="http://docs.puppetlabs.com/learning/modules1.html#modules">Puppet Module</a> is a collection of related content that can be used to model the configuration of a discrete service.</p>
 
-<p>This module is based on the admin guides for <a href="https://github.com/gitlabhq/gitlabhq/wiki">gitlab</a>, <a href="https://github.com/gitlabhq/gitlabhq/blob/5-1-stable/doc/install/installation.md">stable</a> version.</p>
+<h1>
+<a name="module-description" class="anchor" href="#module-description"><span class="octicon octicon-link"></span></a>Module description</h1>
 
-<h2>Usage</h2>
+<p>This module is based on the admin guides for <a href="https://github.com/gitlabhq/gitlabhq/wiki">gitlab</a>, stable version.</p>
+
+<ul>
+<li>
+<a href="http://forge.puppetlabs.com/sbadia/gitlab">puppet-gitlab</a> on puppet forge.</li>
+</ul><h2>
+<a name="dependencies" class="anchor" href="#dependencies"><span class="octicon octicon-link"></span></a>Dependencies</h2>
+
+<ul>
+<li>
+<a href="https://github.com/puppetlabs/puppetlabs-stdlib">puppetlabs/puppetlabs-stdlib</a> &gt;= 4.1.0
+See <a href="https://github.com/sbadia/vagrant-gitlab/blob/master/examples/gitlab.pp">gitlab example</a>.</li>
+</ul><h2>
+<a name="gitlab-web-interface" class="anchor" href="#gitlab-web-interface"><span class="octicon octicon-link"></span></a>GitLab web interface</h2>
+
+<ul>
+<li>access via your browser under the hostname (e.g. <a href="http://gitlab.domain.tld">http://gitlab.domain.tld</a>)</li>
+<li>
+<strong>Login</strong>: <a href="mailto:admin@local.host">admin@local.host</a>
+</li>
+<li><p><strong>Password</strong>: 5iveL!fe</p></li>
+</ul><ol>
+<li>Add an ssh key to your account, or create another account</li>
+<li>Create a project</li>
+<li>Play !</li>
+</ol><h1>
+<a name="parameters" class="anchor" href="#parameters"><span class="octicon octicon-link"></span></a>Parameters</h1>
+
+<ul>
+<li>
+<code>git_user</code>: Name of the gitlab (default: git)</li>
+<li>
+<code>git_home</code>: Home directory for gitlab repository (default: /home/git)</li>
+<li>
+<code>git_email</code>: Email address for gitlab user (default: <a href="mailto:git@someserver.net">git@someserver.net</a>)</li>
+<li>
+<code>git_comment</code>: Gitlab user comment (default: GitLab)</li>
+<li>
+<code>gitlab_sources</code>: Gitlab sources (default: git://github.com/gitlabhq/gitlabhq.git)</li>
+<li>
+<code>gitlab_branch</code>: Gitlab branch (default: 6-2-stable)</li>
+<li>
+<code>gitlabshell_sources</code>: Gitlab-shell sources (default: git://github.com/gitlabhq/gitlab-shell.git)</li>
+<li>
+<code>gitlabshell_banch</code>: Gitlab-shell branch (default: v1.7.1)</li>
+<li>
+<code>gitlab_http_port</code>: Port that NGINX listens on for HTTP traffic (default: 80)</li>
+<li>
+<code>gitlab_ssl_port</code>: Port that NGINX listens on for HTTPS traffic (default: 443)</li>
+<li>
+<code>gitlab_redishost</code>: Redis host used for Sidekiq (default: localhost)</li>
+<li>
+<code>gitlab_redisport</code>: Redis host used for Sidekiq (default: 6379)</li>
+<li>
+<code>gitlab_dbtype</code>: Gitlab database type (default: mysql)</li>
+<li>
+<code>gitlab_dbname</code>: Gitlab database name (default: gitlabdb)</li>
+<li>
+<code>gitlab_dbuser</code>: Gitlab database user (default: gitlabu)</li>
+<li>
+<code>gitlab_dbpwd</code>: Gitlab database password (default: changeme)</li>
+<li>
+<code>gitlab_dbhost</code>: Gitlab database host (default: localhost)</li>
+<li>
+<code>gitlab_dbport</code>: Gitlab database port (default: 3306)</li>
+<li>
+<code>gitlab_domain</code>: Gitlab domain (default $fqdn)</li>
+<li>
+<code>gitlab_repodir</code>: Gitlab repository directory (default: $git_home)</li>
+<li>
+<code>gitlab_ssl</code>: Enable SSL for GitLab (default: false)</li>
+<li>
+<code>gitlab_ssl_cert</code>: SSL Certificate location (default: /etc/ssl/certs/ssl-cert-snakeoil.pem)</li>
+<li>
+<code>gitlab_ssl_key</code>: SSL Key location (default: /etc/ssl/private/ssl-cert-snakeoil.key)</li>
+<li>
+<code>gitlab_ssl_self_signed</code>: Set true if your SSL Cert is self signed (default: false)</li>
+<li>
+<code>gitlab_projects</code>: GitLab default number of projects for new users (default: 10)</li>
+<li>
+<code>gitlab_username_change</code>: Manage username changing in GitLab (default: true)</li>
+<li>
+<code>gitlab_unicorn_port</code>: Port that unicorn listens on 172.0.0.1 for HTTP traffic (default: 8080)</li>
+<li>
+<code>ldap_enabled</code>: Enable LDAP backend for gitlab web (see bellow) (default: false)</li>
+<li>
+<code>ldap_host</code>: FQDN of LDAP server (default: ldap.domain.com)</li>
+<li>
+<code>ldap_base</code>: LDAP base dn (default: dc=domain,dc=com)</li>
+<li>
+<code>ldap_uid</code>: Uid for LDAP auth (default: uid)</li>
+<li>
+<code>ldap_port</code>: LDAP port (default: 636)</li>
+<li>
+<code>ldap_method</code>: Method to use (default: ssl)</li>
+<li>
+<code>ldap_bind_dn</code>: User for LDAP bind auth (default: nil)</li>
+<li>
+<code>ldap_bind_password</code>: Password for LDN bind auth (default: nil)</li>
+</ul><h1>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h1>
+
+<p><em>Note:</em> Assume that a database server is already installed on your server/infrastructure (see: <a href="https://github.com/sbadia/vagrant-gitlab/blob/master/examples/gitlab.pp">vagrant-gitlab</a>).</p>
 
 <pre><code>  class {
     'gitlab':
@@ -55,59 +181,30 @@
   }
 </code></pre>
 
-<h2>Testing with vagrant</h2>
+<h1>
+<a name="limitations" class="anchor" href="#limitations"><span class="octicon octicon-link"></span></a>Limitations</h1>
 
-<h3>Setup</h3>
-
-<p>After cloning this repository, you will have to</p>
-
-<pre><code>git submodule init
-</code></pre>
-
-<p>and</p>
-
-<pre><code>git submodule update
-</code></pre>
-
-<p>in order to add the modules that puppet-gitlab depends on to your local copy.</p>
-
-<h3>Using Debian Wheezy (the default)</h3>
-
-<p>$ vagrant up
-or
-$ GUEST_OS=debian7 vagrant up</p>
-
-<h3>Using Centos 6</h3>
-
-<p>$ GUEST_OS=centos6 vagrant up</p>
-
-<h3>Using Ubuntu Quantal Quetzal (12.10)</h3>
-
-<p>$ GUEST_OS=ubuntu vagrant up</p>
-
-<h2>GitLab web interface</h2>
-
-<ul>
-<li>add the ip and name to your /etc/hosts file (192.168.111.10 gitlab.localdomain.local)</li>
-<li>access via your browser under the hostname (e.g. <a href="http://gitlab.localdomain.local">http://gitlab.localdomain.local</a>)</li>
-<li>
-<strong>Login</strong>: <a href="mailto:admin@local.host">admin@local.host</a>
-</li>
-<li>
-<strong>Password</strong>: 5iveL!fe</li>
-</ul><ol>
-<li>Add an ssh key to your account, or create another account</li>
-<li>Create a project</li>
-<li>Play !</li>
-</ol><h2>Contribute</h2>
+<h1>
+<a name="development" class="anchor" href="#development"><span class="octicon octicon-link"></span></a>Development</h1>
 
 <p>Want to help - send a pull request.</p>
+
+<h2>
+<a name="development-environment-with-vagrant" class="anchor" href="#development-environment-with-vagrant"><span class="octicon octicon-link"></span></a>Development environment with vagrant</h2>
+
+<p>See <a href="https://github.com/sbadia/vagrant-gitlab">vagrant-gitlab</a>.</p>
       </section>
-      <footer>
-        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Puppet-gitlab maintained by <a href="https://github.com/sbadia">sbadia</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
 
   </body>
 </html>
