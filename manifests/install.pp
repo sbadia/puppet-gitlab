@@ -59,6 +59,7 @@ class gitlab::install inherits gitlab {
     command => "bundle install --without development aws test ${gitlab_without_gems} --deployment",
     cwd     => "${git_home}/gitlab",
     unless  => "/usr/bin/test -f ${git_home}/.git_setup_done",
+    creates => "${git_home}/.git_setup_done",
     timeout => 0,
     require => [
       File["${git_home}/gitlab/config/database.yml"],
