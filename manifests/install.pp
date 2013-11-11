@@ -58,7 +58,6 @@ class gitlab::install inherits gitlab {
   exec { 'install gitlab':
     command => "bundle install --without development aws test ${gitlab_without_gems} --deployment",
     cwd     => "${git_home}/gitlab",
-    unless  => "/usr/bin/test -f ${git_home}/.git_setup_done",
     creates => "${git_home}/.git_setup_done",
     timeout => 0,
     require => [
@@ -72,7 +71,6 @@ class gitlab::install inherits gitlab {
   exec { 'setup gitlab database':
     command => '/usr/bin/yes yes | bundle exec rake gitlab:setup RAILS_ENV=production',
     cwd     => "${git_home}/gitlab",
-    unless  => "/usr/bin/test -f ${git_home}/.gitlab_setup_done",
     creates => "${git_home}/.gitlab_setup_done",
     require => Exec['install gitlab'],
   }

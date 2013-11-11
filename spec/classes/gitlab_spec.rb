@@ -289,7 +289,7 @@ describe 'gitlab' do
           :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
           :command => 'bundle install --without development aws test postgres --deployment',
           :cwd     => '/home/git/gitlab',
-          :unless  => '/usr/bin/test -f /home/git/.git_setup_done',
+          :creates => '/home/git/.git_setup_done',
           :timeout => 0,
           :require => ['File[/home/git/gitlab/config/database.yml]',
                         'File[/home/git/gitlab/config/unicorn.rb]',
@@ -309,7 +309,7 @@ describe 'gitlab' do
             :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
             :command => 'bundle install --without development aws test mysql --deployment',
             :cwd     => '/home/git/gitlab',
-            :unless  => '/usr/bin/test -f /home/git/.git_setup_done',
+            :creates => '/home/git/.git_setup_done',
             :timeout => 0,
             :require => ['File[/home/git/gitlab/config/database.yml]',
                           'File[/home/git/gitlab/config/unicorn.rb]',
@@ -324,7 +324,6 @@ describe 'gitlab' do
           :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
           :command => '/usr/bin/yes yes | bundle exec rake gitlab:setup RAILS_ENV=production',
           :cwd     => '/home/git/gitlab',
-          :unless  => '/usr/bin/test -f /home/git/.gitlab_setup_done',
           :creates => '/home/git/.gitlab_setup_done',
           :require => 'Exec[install gitlab]'
         )}
@@ -433,7 +432,7 @@ describe 'gitlab' do
           :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
           :command => 'bundle install --without development aws test postgres --deployment',
           :cwd     => "#{params_set[:git_home]}/gitlab",
-          :unless  => "/usr/bin/test -f #{params_set[:git_home]}/.git_setup_done",
+          :creates => "#{params_set[:git_home]}/.git_setup_done",
           :timeout => 0,
           :require => ["File[#{params_set[:git_home]}/gitlab/config/database.yml]",
                         "File[#{params_set[:git_home]}/gitlab/config/unicorn.rb]",
@@ -453,7 +452,7 @@ describe 'gitlab' do
             :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
             :command => 'bundle install --without development aws test mysql --deployment',
             :cwd     => "#{params_set[:git_home]}/gitlab",
-            :unless  => "/usr/bin/test -f #{params_set[:git_home]}/.git_setup_done",
+            :creates => "#{params_set[:git_home]}/.git_setup_done",
             :timeout => 0,
             :require => ["File[#{params_set[:git_home]}/gitlab/config/database.yml]",
                           "File[#{params_set[:git_home]}/gitlab/config/unicorn.rb]",
@@ -468,7 +467,6 @@ describe 'gitlab' do
           :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
           :command => '/usr/bin/yes yes | bundle exec rake gitlab:setup RAILS_ENV=production',
           :cwd     => "#{params_set[:git_home]}/gitlab",
-          :unless  => "/usr/bin/test -f #{params_set[:git_home]}/.gitlab_setup_done",
           :creates => "#{params_set[:git_home]}/.gitlab_setup_done",
           :require => 'Exec[install gitlab]'
         )}
