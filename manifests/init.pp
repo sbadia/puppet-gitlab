@@ -34,7 +34,7 @@
 #
 # [*gitlabshell_banch*]
 #   Gitlab-shell branch
-#   default: v1.7.1
+#   default: v1.7.8
 #
 # [*gitlab_http_port*]
 #   Port that NGINX listens on for HTTP traffic

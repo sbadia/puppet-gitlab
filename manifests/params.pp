@@ -10,7 +10,7 @@ class gitlab::params {
   $gitlab_sources         = 'git://github.com/gitlabhq/gitlabhq.git'
   $gitlab_branch          = '6-2-stable'
   $gitlabshell_sources    = 'git://github.com/gitlabhq/gitlab-shell.git'
-  $gitlabshell_branch     = 'v1.7.4'
+  $gitlabshell_branch     = 'v1.7.8'
   $gitlab_http_port       = '80'
   $gitlab_ssl_port        = '443'
   $gitlab_redishost       = '127.0.0.1'

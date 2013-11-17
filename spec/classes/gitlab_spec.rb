@@ -188,7 +188,7 @@ describe 'gitlab' do
           :cwd     => '/home/git',
           :user    => 'git',
           :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          :command => 'git clone -b v1.7.4 git://github.com/gitlabhq/gitlab-shell.git ./gitlab-shell',
+          :command => 'git clone -b v1.7.8 git://github.com/gitlabhq/gitlab-shell.git ./gitlab-shell',
           :creates => '/home/git/gitlab-shell'
         )}
       end
