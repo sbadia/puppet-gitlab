@@ -1,3 +1,6 @@
+* 2013-11-17 - 0.0.10
+- bugfix https://github.com/sbadia/puppet-gitlab/pull/80
+- bump gitlab-shell to 1.7.8 (multiple security fix)
 * 2013-11-08 - 0.0.9
 - huge changes/re-factorization by atomaka ! (many thanks !!)
 - Use anchors and refactoring of args/class
