@@ -80,18 +80,18 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 
 _Note:_ Assume that a database server is already installed on your server/infrastructure (see: [vagrant-gitlab](https://github.com/sbadia/vagrant-gitlab/blob/master/examples/gitlab.pp)).
 
-```
-  class {
-    'gitlab':
-      git_email         => 'notifs@foobar.fr',
-      git_comment       => 'GitLab',
-      gitlab_domain     => 'gitlab.foobar.fr',
-      gitlab_dbtype     => 'mysql',
-      gitlab_dbname     => $gitlab_dbname,
-      gitlab_dbuser     => $gitlab_dbuser,
-      gitlab_dbpwd      => $gitlab_dbpwd,
-      ldap_enabled      => false,
-  }
+```puppet
+class {
+  'gitlab':
+    git_email         => 'notifs@foobar.fr',
+    git_comment       => 'GitLab',
+    gitlab_domain     => 'gitlab.foobar.fr',
+    gitlab_dbtype     => 'mysql',
+    gitlab_dbname     => $gitlab_dbname,
+    gitlab_dbuser     => $gitlab_dbuser,
+    gitlab_dbpwd      => $gitlab_dbpwd,
+    ldap_enabled      => false,
+}
 ```
 
 # Limitations
