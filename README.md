@@ -26,7 +26,7 @@ This module is based on the admin guides for [gitlab](https://github.com/gitlabh
 - [puppet-gitlab](http://forge.puppetlabs.com/sbadia/gitlab) on puppet forge.
 
 ## Dependencies
-- [puppetlabs/puppetlabs-stdlib](https://github.com/puppetlabs/puppetlabs-stdlib) >= 4.1.0
+- [puppetlabs/puppetlabs-stdlib](https://github.com/puppetlabs/puppetlabs-stdlib)
 See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/examples/gitlab.pp).
 
 ## GitLab web interface
