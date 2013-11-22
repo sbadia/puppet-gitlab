@@ -166,7 +166,7 @@ describe 'gitlab' do
       end
       #### Commons packages (all dist.)
       describe 'commons packages' do
-        ['git-core','postfix','curl'].each do |pkg|
+        ['git-core','postfix','curl','logrotate'].each do |pkg|
           it { should contain_package(pkg) }
         end
       end
@@ -181,14 +181,14 @@ describe 'gitlab' do
           :cwd     => '/home/git',
           :user    => 'git',
           :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          :command => 'git clone -b 6-2-stable git://github.com/gitlabhq/gitlabhq.git ./gitlab',
+          :command => 'git clone -b 6-3-stable git://github.com/gitlabhq/gitlabhq.git ./gitlab',
           :creates => '/home/git/gitlab'
         )}
         it { should contain_exec('download gitlab-shell').with(
           :cwd     => '/home/git',
           :user    => 'git',
           :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          :command => 'git clone -b v1.7.8 git://github.com/gitlabhq/gitlab-shell.git ./gitlab-shell',
+          :command => 'git clone -b v1.7.9 git://github.com/gitlabhq/gitlab-shell.git ./gitlab-shell',
           :creates => '/home/git/gitlab-shell'
         )}
       end

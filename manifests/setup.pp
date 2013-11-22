@@ -89,5 +89,5 @@ class gitlab::setup inherits gitlab {
   }
 
   # other packages
-  ensure_packages(['git-core','postfix','curl'])
+  ensure_packages(['git-core','postfix','curl','logrotate'])
 }
