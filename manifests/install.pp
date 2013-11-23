@@ -37,6 +37,7 @@ class gitlab::install inherits gitlab {
   file { "${git_home}/gitlab/config/database.yml":
     ensure  => file,
     content => template('gitlab/database.yml.erb'),
+    mode    => '0640',
   }
 
   file { "${git_home}/gitlab/config/unicorn.rb":
@@ -53,6 +54,11 @@ class gitlab::install inherits gitlab {
   file { "${git_home}/gitlab/config/resque.yml":
     ensure  => file,
     content => template('gitlab/resque.yml.erb'),
+  }
+
+  file { "${git_home}/gitlab/config/initializers/rack_attack.rb":
+    ensure => file,
+    source => "${git_home}/gitlab/config/initializers/rack_attack.rb.example"
   }
 
   exec { 'install gitlab':
