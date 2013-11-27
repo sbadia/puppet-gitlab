@@ -166,7 +166,7 @@ describe 'gitlab' do
       end
       #### Commons packages (all dist.)
       describe 'commons packages' do
-        ['git-core','postfix','curl','logrotate'].each do |pkg|
+        ['git-core','postfix','curl'].each do |pkg|
           it { should contain_package(pkg) }
         end
       end
