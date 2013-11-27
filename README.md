@@ -1,6 +1,6 @@
 # Puppet-gitlab [![Build Status](https://travis-ci.org/sbadia/puppet-gitlab.png?branch=master)](https://travis-ci.org/sbadia/puppet-gitlab)
 
-Tested successfully with Gitlab 6-2-stable on Ubuntu 12.04 and Debian Wheezy (7.2) with Puppet 3.2 or newer.
+Tested successfully with Gitlab 6-3-stable on Ubuntu 12.04 and Debian Wheezy (7.2) with Puppet 3.2 or newer.
 
 #### Table of contents
 
@@ -45,9 +45,9 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 * `git_email`: Email address for gitlab user (default: git@someserver.net)
 * `git_comment`: Gitlab user comment (default: GitLab)
 * `gitlab_sources`: Gitlab sources (default: git://github.com/gitlabhq/gitlabhq.git)
-* `gitlab_branch`: Gitlab branch (default: 6-2-stable)
+* `gitlab_branch`: Gitlab branch (default: 6-3-stable)
 * `gitlabshell_sources`: Gitlab-shell sources (default: git://github.com/gitlabhq/gitlab-shell.git)
-* `gitlabshell_banch`: Gitlab-shell branch (default: v1.7.8)
+* `gitlabshell_banch`: Gitlab-shell branch (default: v1.7.9)
 * `gitlab_http_port`: Port that NGINX listens on for HTTP traffic (default: 80)
 * `gitlab_ssl_port`: Port that NGINX listens on for HTTPS traffic (default: 443)
 * `gitlab_redishost`: Redis host used for Sidekiq (default: localhost)

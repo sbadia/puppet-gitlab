@@ -24,6 +24,14 @@ class gitlab::config inherits gitlab {
     mode    => '0755',
   }
 
+  file { '/etc/logrotate.d/gitlab':
+      ensure  => file,
+      source  => "${git_home}/gitlab/lib/support/logrotate/gitlab",
+      owner   => root,
+      group   => root,
+      mode    => '0644';
+  }
+
   # directories
   file { [
       "${git_home}/gitlab/tmp",
