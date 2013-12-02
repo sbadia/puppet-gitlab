@@ -54,7 +54,7 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 * `gitlab_redisport`: Redis host used for Sidekiq (default: 6379)
 * `gitlab_dbtype`: Gitlab database type (default: mysql)
 * `gitlab_dbname`: Gitlab database name (default: gitlabdb)
-* `gitlab_dbuser`: Gitlab database user (default: gitlabu)
+* `gitlab_dbuser`: Gitlab database user (default: gitlabdbu)
 * `gitlab_dbpwd`: Gitlab database password (default: changeme)
 * `gitlab_dbhost`: Gitlab database host (default: localhost)
 * `gitlab_dbport`: Gitlab database port (default: 3306)
