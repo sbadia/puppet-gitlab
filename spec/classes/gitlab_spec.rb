@@ -237,16 +237,16 @@ describe 'gitlab' do
         it { should contain_file('/home/git/gitlab/config/database.yml').with(:ensure => 'file',:owner => 'git',:group => 'git')}
         it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/adapter: mysql2/)}
         it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/encoding: utf8/)}
-        it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/database: gitladb/)}
-        it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/username: gitladbu/)}
+        it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/database: gitlab_db/)}
+        it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/username: gitlab_user/)}
         it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/password: changeme/)}
         it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/host: localhost/)}
         context 'postgresql' do
           let(:params) {{ :gitlab_dbtype => 'pgsql' }}
           it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/adapter: postgresql/)}
           it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/encoding: unicode/)}
-          it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/database: gitladb/)}
-          it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/username: gitladbu/)}
+          it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/database: gitlab_db/)}
+          it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/username: gitlab_user/)}
           it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/password: changeme/)}
           it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/host: localhost/)}
           it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/port: 5432/)}

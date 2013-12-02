@@ -58,11 +58,11 @@
 #
 # [*gitlab_dbname*]
 #   Gitlab database name
-#   default: gitlabdb
+#   default: gitlab_db
 #
 # [*gitlab_dbuser*]
 #   Gitlab database user
-#   default: gitlabu
+#   default: gitlab_user
 #
 # [*gitlab_dbpwd*]
 #   Gitlab database password
