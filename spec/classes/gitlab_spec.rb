@@ -49,6 +49,22 @@ describe 'gitlab' do
     }
   end
 
+  # a non-default parameter set for SSL support with a non-default port
+  let :params_ssl_non do
+    {
+      :gitlab_ssl             => true,
+      :gitlab_ssl_self_signed => true,
+      :gitlab_ssl_port        => '4443'
+    }
+  end
+
+  # a non-default parameter set with non-default http port
+  let :params_non do
+    {
+      :gitlab_http_port       => '81'
+    }
+  end
+
   ## Gitlab
   describe 'input validation' do
     describe 'on a unsupported os' do
@@ -413,6 +429,16 @@ describe 'gitlab' do
           let(:params) { params_set.merge(params_ssl) }
           it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/port: 443/)}
           it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/https: true/)}
+        end
+        context 'with non-default http ports' do
+          let(:params) { params_set.merge(params_non) }
+          it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/port: #{params_set[:gitlab_http_port]}/)}
+          it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/https: false/)}
+          context 'with non-default https ports' do
+            let(:params) { params_set.merge(params_ssl_non) }
+            it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/port: #{params_set[:gitlab_ssl_port]}/)}
+            it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/https: true/)}
+          end
         end
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/email_from: #{params_set[:git_email]}/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/default_projects_limit: #{params_set[:gitlab_projects]}/)}

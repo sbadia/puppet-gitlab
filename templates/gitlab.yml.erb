@@ -18,7 +18,7 @@ production: &base
   gitlab:
     ## Web server settings
     host: <%= @gitlab_domain %>
-    port: <%= @gitlab_ssl ? @gitlab_ssl_port : '80' %>
+    port: <%= @gitlab_ssl ? @gitlab_ssl_port : @gitlab_http_port %>
     https: <%= @gitlab_ssl %>
 
     # Uncomment and customize the last line to run in a non-root path
