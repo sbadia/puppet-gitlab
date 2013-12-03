@@ -170,7 +170,7 @@
 # === Copyright
 #
 # See LICENSE file
-# Andrew Tomaka, Sebastien Badia (c) 2013
+# Andrew Tomaka, Sebastien Badia, Steffen Roegner (c) 2013
 #
 class gitlab(
     $git_user               = $gitlab::params::git_user,

@@ -1,3 +1,7 @@
+* 2013-12-03 - 0.1.1
+- fix params in gitlab.yml (http/https with non-default port)
+- fix stdlib dependency (librarian require a version number)
+- improve documentation (typos)
 * 2013-11-27 - 0.1.0
 - bump to GitLab 6.3 and gitlab-shell v1.7.9
 - add rack_attack and logrotate configurations
