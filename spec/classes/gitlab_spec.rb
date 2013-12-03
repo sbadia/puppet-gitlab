@@ -281,6 +281,11 @@ describe 'gitlab' do
       describe 'gitlab config' do
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with(:ensure => 'file',:owner => 'git',:group => 'git')}
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/host: gitlab.fooboozoo.fr/)}
+        context 'with ssl' do
+          let(:params) {{ :gitlab_ssl => true }}
+          it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/port: 443/)}
+          it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/https: true/)}
+        end
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/port: 80/)}
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/https: false/)}
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/email_from: git@someserver.net/)}
