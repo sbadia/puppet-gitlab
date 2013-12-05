@@ -193,36 +193,36 @@ describe 'gitlab' do
   describe 'gitlab::package' do
     describe 'get gitlab{-shell} sources' do
       context 'with default params' do
-        it { should contain_exec('download gitlab').with(
-          :cwd     => '/home/git',
-          :user    => 'git',
-          :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          :command => 'git clone -b 6-3-stable git://github.com/gitlabhq/gitlabhq.git ./gitlab',
-          :creates => '/home/git/gitlab'
+        it { should contain_vcsrepo('/home/git/gitlab').with(
+          :ensure   => 'present',
+          :user     => 'git',
+          :provider => 'git',
+          :source   => 'git://github.com/gitlabhq/gitlabhq.git',
+          :revision => '6-3-stable'
         )}
-        it { should contain_exec('download gitlab-shell').with(
-          :cwd     => '/home/git',
-          :user    => 'git',
-          :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          :command => 'git clone -b v1.7.9 git://github.com/gitlabhq/gitlab-shell.git ./gitlab-shell',
-          :creates => '/home/git/gitlab-shell'
+        it { should contain_vcsrepo('/home/git/gitlab-shell').with(
+          :ensure   => 'present',
+          :user     => 'git',
+          :provider => 'git',
+          :source   => 'git://github.com/gitlabhq/gitlab-shell.git',
+          :revision => 'v1.7.9'
         )}
       end
       context 'with specifics params' do
         let(:params) { params_set }
-        it { should contain_exec('download gitlab').with(
-          :cwd     => params_set[:git_home],
-          :command => "git clone -b #{params_set[:gitlab_branch]} #{params_set[:gitlab_sources]} ./gitlab",
-          :user    => params_set[:git_user],
-          :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          :creates => "#{params_set[:git_home]}/gitlab"
+        it { should contain_vcsrepo("#{params_set[:git_home]}/gitlab").with(
+          :ensure   => 'present',
+          :user     => params_set[:git_user],
+          :provider => 'git',
+          :source   => params_set[:gitlab_sources],
+          :revision => params_set[:gitlab_branch]
         )}
-        it { should contain_exec('download gitlab-shell').with(
-          :cwd     => params_set[:git_home],
-          :command => "git clone -b #{params_set[:gitlabshell_branch]} #{params_set[:gitlabshell_sources]} ./gitlab-shell",
-          :user    => params_set[:git_user],
-          :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          :creates => "#{params_set[:git_home]}/gitlab-shell"
+        it { should contain_vcsrepo("#{params_set[:git_home]}/gitlab-shell").with(
+          :ensure   => 'present',
+          :user     => params_set[:git_user],
+          :provider => 'git',
+          :source   => params_set[:gitlabshell_sources],
+          :revision => params_set[:gitlabshell_branch]
         )}
       end
     end # get gitlab sources

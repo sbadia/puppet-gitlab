@@ -2,19 +2,18 @@
 #
 #
 class gitlab::package inherits gitlab {
-  Exec {
-    cwd  => $git_home,
-    user => $git_user,
-    path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+  Vcsrepo {
+    ensure   => $ensure,
+    provider => 'git',
+    user     => $git_user,
   }
 
-  exec { 'download gitlab':
-    command   => "git clone -b ${gitlab_branch} ${gitlab_sources} ./gitlab",
-    creates   => "${git_home}/gitlab",
+  vcsrepo { "${git_home}/gitlab":
+    source   => $gitlab_sources,
+    revision => $gitlab_branch,
   }
-
-  exec { 'download gitlab-shell':
-    command   => "git clone -b ${gitlabshell_branch} ${gitlabshell_sources} ./gitlab-shell",
-    creates   => "${git_home}/gitlab-shell",
+  vcsrepo { "${git_home}/gitlab-shell":
+    source   => $gitlabshell_sources,
+    revision => $gitlabshell_branch,
   }
 }

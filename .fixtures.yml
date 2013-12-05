@@ -3,3 +3,4 @@ fixtures:
     "gitlab": "#{source_dir}"
   repositories:
     "stdlib": "git://github.com/puppetlabs/puppetlabs-stdlib.git"
+    "vcsrepo": "git://github.com/puppetlabs/puppetlabs-vcsrepo.git"
