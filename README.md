@@ -40,6 +40,7 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 
 # Parameters
 
+* `ensure`:  Ensure gitlab/gitlab-shell repo are present, latest. absent is not yet supported (default: present)
 * `git_user`: Name of the gitlab (default: git)
 * `git_home`: Home directory for gitlab repository (default: /home/git)
 * `git_email`: Email address for gitlab user (default: git@someserver.net)
@@ -50,6 +51,7 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 * `gitlabshell_banch`: Gitlab-shell branch (default: v1.7.9)
 * `gitlab_http_port`: Port that NGINX listens on for HTTP traffic (default: 80)
 * `gitlab_ssl_port`: Port that NGINX listens on for HTTPS traffic (default: 443)
+* `gitlab_http_timeout`: HTTP timeout in seconds (unicorn/nginx) (default: 60)
 * `gitlab_redishost`: Redis host used for Sidekiq (default: localhost)
 * `gitlab_redisport`: Redis host used for Sidekiq (default: 6379)
 * `gitlab_dbtype`: Gitlab database type (default: mysql)

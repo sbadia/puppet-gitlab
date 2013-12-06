@@ -14,6 +14,7 @@ class gitlab::params {
   $gitlabshell_branch     = 'v1.7.9'
   $gitlab_http_port       = '80'
   $gitlab_ssl_port        = '443'
+  $gitlab_http_timeout    = '60'
   $gitlab_redishost       = '127.0.0.1'
   $gitlab_redisport       = '6379'
   $gitlab_dbtype          = 'mysql'
