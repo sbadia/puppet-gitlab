@@ -4,6 +4,10 @@
 #
 # === Parameters
 #
+# [*ensure*]
+#   Ensure present, latest. absent is not yet supported
+#   default: present
+#
 # [*git_user*]
 #   Name of gitlab user
 #   default: git
@@ -173,6 +177,7 @@
 # Andrew Tomaka, Sebastien Badia, Steffen Roegner (c) 2013
 #
 class gitlab(
+    $ensure                 = $gitlab::params::ensure,
     $git_user               = $gitlab::params::git_user,
     $git_home               = $gitlab::params::git_home,
     $git_email              = $gitlab::params::git_email,
@@ -238,6 +243,7 @@ class gitlab(
   validate_re($ldap_method, '(ssl|tls)', 'ldap_method is not supported (ssl or tls)')
   validate_re($gitlab_projects, '^\d+$', 'gitlab_projects is not valid')
   validate_re($gitlab_unicorn_port, '^\d+$', 'gitlab_unicorn_port is not valid')
+  validate_re($ensure, '(present|latest)', 'ensure is not valid (present|latest)')
 
   validate_string($git_user)
   validate_string($git_email)

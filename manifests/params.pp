@@ -3,6 +3,7 @@
 #
 class gitlab::params {
 
+  $ensure                 = 'present'
   $git_user               = 'git'
   $git_home               = '/home/git'
   $git_email              = 'git@someserver.net'
