@@ -205,6 +205,7 @@ class gitlab(
     $gitlab_projects        = $gitlab::params::gitlab_projects,
     $gitlab_username_change = $gitlab::params::gitlab_username_change,
     $gitlab_unicorn_port    = $gitlab::params::gitlab_unicorn_port,
+    $exec_path              = $gitlab::params::exec_path,
     $ldap_enabled           = $gitlab::params::ldap_enabled,
     $ldap_host              = $gitlab::params::ldap_host,
     $ldap_base              = $gitlab::params::ldap_base,
