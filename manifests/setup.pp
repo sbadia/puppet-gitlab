@@ -87,6 +87,14 @@ class gitlab::setup inherits gitlab {
     ensure    => '0.6.9.4',
     provider  => gem,
   }
+  package { 'rake':
+    ensure    => '10.1.0',
+    provider  => gem,
+  }
+  package { 'i18n':
+    ensure    => '0.6.9',
+    provider  => gem,
+  }
 
   # other packages
   ensure_packages(['git-core','postfix','curl'])
