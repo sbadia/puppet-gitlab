@@ -180,6 +180,10 @@ describe 'gitlab' do
           :ensure   => '0.6.9.4',
           :provider => 'gem'
         )}
+        it { should contain_package('rake').with(
+          :ensure   => '10.1.0',
+          :provider => 'gem'
+        )}
       end
       #### Commons packages (all dist.)
       describe 'commons packages' do
