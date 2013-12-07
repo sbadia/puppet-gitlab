@@ -11,7 +11,7 @@ class gitlab::install inherits gitlab {
 
   Exec {
     user => $git_user,
-    path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+    path => $exec_path,
   }
 
   File {

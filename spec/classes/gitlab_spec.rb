@@ -31,6 +31,7 @@ describe 'gitlab' do
       :gitlab_projects        => '42',
       :gitlab_username_change => false,
       :gitlab_unicorn_port    => '8888',
+      :exec_path              => '/opt/bw/bin:/bin:/usr/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/sbin',
       :ldap_host              => 'ldap.fooboozoo.fr',
       :ldap_base              => 'dc=fooboozoo,dc=fr',
       :ldap_port              => '666',
@@ -383,7 +384,7 @@ describe 'gitlab' do
         it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/port: #{params_set[:gitlab_redisport]}/)}
         it { should contain_exec('install gitlab-shell').with(
           :user     => params_set[:git_user],
-          :path     => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+          :path     => params_set[:exec_path],
           :command  => "ruby #{params_set[:git_home]}/gitlab-shell/bin/install",
           :cwd      => params_set[:git_home],
           :creates  => "#{params_set[:gitlab_repodir]}/repositories",
@@ -472,7 +473,7 @@ describe 'gitlab' do
       describe 'install gitlab' do
         it { should contain_exec('install gitlab').with(
           :user    => params_set[:git_user],
-          :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+          :path    => params_set[:exec_path],
           :command => 'bundle install --without development aws test postgres --deployment',
           :cwd     => "#{params_set[:git_home]}/gitlab",
           :creates => "#{params_set[:git_home]}/.git_setup_done",
@@ -492,7 +493,7 @@ describe 'gitlab' do
           let(:params) { params_set.merge({ :gitlab_dbtype => 'pgsql' }) }
           it { should contain_exec('install gitlab').with(
             :user    => params_set[:git_user],
-            :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+            :path    => params_set[:exec_path],
             :command => 'bundle install --without development aws test mysql --deployment',
             :cwd     => "#{params_set[:git_home]}/gitlab",
             :creates => "#{params_set[:git_home]}/.git_setup_done",
@@ -507,7 +508,7 @@ describe 'gitlab' do
       describe 'setup gitlab database' do
         it { should contain_exec('setup gitlab database').with(
           :user    => params_set[:git_user],
-          :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+          :path    => params_set[:exec_path],
           :command => '/usr/bin/yes yes | bundle exec rake gitlab:setup RAILS_ENV=production',
           :cwd     => "#{params_set[:git_home]}/gitlab",
           :creates => "#{params_set[:git_home]}/.gitlab_setup_done",
