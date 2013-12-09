@@ -234,8 +234,6 @@ class gitlab(
   validate_bool($gitlab_username_change)
   validate_bool($ldap_enabled)
 
-  validate_re($gitlab_branch, '^\d-\d-stable', 'gitlab_branch is not valid (1-1-stable)')
-  validate_re($gitlabshell_branch, '^v\d.\d.\d$', 'gitlabshell_branch is not valid (v1.1.1)')
   validate_re($gitlab_dbtype, '(mysql|pgsql)', 'gitlab_dbtype is not supported')
   validate_re($gitlab_dbport, '^\d+$', 'gitlab_dbport is not a valid port')
   validate_re($ldap_port, '^\d+$', 'ldap_port is not a valid port')
@@ -250,7 +248,9 @@ class gitlab(
   validate_string($git_email)
   validate_string($git_comment)
   validate_string($gitlab_sources)
+  validate_string($gitlab_branch)
   validate_string($gitlabshell_sources)
+  validate_string($gitlabshell_branch)
   validate_string($gitlab_dbname)
   validate_string($gitlab_dbuser)
   validate_string($gitlab_dbpwd)
