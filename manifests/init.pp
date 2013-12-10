@@ -239,7 +239,7 @@ class gitlab(
   validate_re($ldap_port, '^\d+$', 'ldap_port is not a valid port')
   validate_re($gitlab_ssl_port, '^\d+$', 'gitlab_ssl_port is not a valid port')
   validate_re($gitlab_redisport, '^\d+$', 'gitlab_redisport is not a valid port')
-  validate_re($ldap_method, '(ssl|tls)', 'ldap_method is not supported (ssl or tls)')
+  validate_re($ldap_method, '(ssl|tls|plain)', 'ldap_method is not supported (ssl, tls or plain)')
   validate_re($gitlab_projects, '^\d+$', 'gitlab_projects is not valid')
   validate_re($gitlab_unicorn_port, '^\d+$', 'gitlab_unicorn_port is not valid')
   validate_re($ensure, '(present|latest)', 'ensure is not valid (present|latest)')
