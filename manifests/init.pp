@@ -210,6 +210,7 @@ class gitlab(
     $gitlab_projects        = $gitlab::params::gitlab_projects,
     $gitlab_username_change = $gitlab::params::gitlab_username_change,
     $gitlab_unicorn_port    = $gitlab::params::gitlab_unicorn_port,
+    $gitlab_unicorn_worker  = $gitlab::params::gitlab_unicorn_worker,
     $exec_path              = $gitlab::params::exec_path,
     $ldap_enabled           = $gitlab::params::ldap_enabled,
     $ldap_host              = $gitlab::params::ldap_host,
@@ -249,6 +250,7 @@ class gitlab(
   validate_re($ldap_method, '(ssl|tls)', 'ldap_method is not supported (ssl or tls)')
   validate_re($gitlab_projects, '^\d+$', 'gitlab_projects is not valid')
   validate_re($gitlab_unicorn_port, '^\d+$', 'gitlab_unicorn_port is not valid')
+  validate_re($gitlab_unicorn_worker, '^\d+$', 'gitlab_unicorn_worker is not valid')
   validate_re($ensure, '(present|latest)', 'ensure is not valid (present|latest)')
 
   validate_string($git_user)

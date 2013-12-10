@@ -32,6 +32,7 @@ class gitlab::params {
   $gitlab_projects        = '10'
   $gitlab_username_change = true
   $gitlab_unicorn_port    = '8080'
+  $gitlab_unicorn_worker  = '2'
   $exec_path              = '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   $ldap_enabled           = false
   $ldap_host              = 'ldap.domain.com'

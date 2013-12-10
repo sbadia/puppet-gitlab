@@ -32,6 +32,7 @@ describe 'gitlab' do
       :gitlab_projects        => '42',
       :gitlab_username_change => false,
       :gitlab_unicorn_port    => '8888',
+      :gitlab_unicorn_worker  => '8',
       :exec_path              => '/opt/bw/bin:/bin:/usr/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/sbin',
       :ldap_host              => 'ldap.fooboozoo.fr',
       :ldap_base              => 'dc=fooboozoo,dc=fr',
@@ -419,7 +420,7 @@ describe 'gitlab' do
       end # database config
       describe 'unicorn config' do
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with(:ensure => 'file',:owner => params_set[:git_user],:group => params_set[:git_user])}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/worker_processes 2/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/worker_processes #{params_set[:gitlab_unicorn_worker]}/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/working_directory "#{params_set[:git_home]}\/gitlab"/)}
 
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/listen "127.0.0.1:#{params_set[:gitlab_unicorn_port]}"/)}
