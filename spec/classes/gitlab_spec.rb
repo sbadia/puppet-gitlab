@@ -316,19 +316,13 @@ describe 'gitlab' do
           :user    => 'git',
           :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
           :command => 'bundle install --without development aws test postgres --deployment',
+          :unless  => 'bundle check',
           :cwd     => '/home/git/gitlab',
-          :creates => '/home/git/.git_setup_done',
           :timeout => 0,
           :require => ['File[/home/git/gitlab/config/database.yml]',
                         'File[/home/git/gitlab/config/unicorn.rb]',
                         'File[/home/git/gitlab/config/gitlab.yml]',
                         'File[/home/git/gitlab/config/resque.yml]']
-        )}
-        it { should contain_file("/home/git/.git_setup_done").with(
-          :ensure   => 'present',
-          :owner    => 'root',
-          :group    => 'root',
-          :require  => 'Exec[install gitlab]'
         )}
         context 'postgresql' do
           let(:params) {{ :gitlab_dbtype => 'pgsql' }}
@@ -336,8 +330,8 @@ describe 'gitlab' do
             :user    => 'git',
             :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
             :command => 'bundle install --without development aws test mysql --deployment',
+            :unless  => 'bundle check',
             :cwd     => '/home/git/gitlab',
-            :creates => '/home/git/.git_setup_done',
             :timeout => 0,
             :require => ['File[/home/git/gitlab/config/database.yml]',
                           'File[/home/git/gitlab/config/unicorn.rb]',
@@ -475,19 +469,13 @@ describe 'gitlab' do
           :user    => params_set[:git_user],
           :path    => params_set[:exec_path],
           :command => 'bundle install --without development aws test postgres --deployment',
+          :unless  => 'bundle check',
           :cwd     => "#{params_set[:git_home]}/gitlab",
-          :creates => "#{params_set[:git_home]}/.git_setup_done",
           :timeout => 0,
           :require => ["File[#{params_set[:git_home]}/gitlab/config/database.yml]",
                         "File[#{params_set[:git_home]}/gitlab/config/unicorn.rb]",
                         "File[#{params_set[:git_home]}/gitlab/config/gitlab.yml]",
                         "File[#{params_set[:git_home]}/gitlab/config/resque.yml]"]
-        )}
-        it { should contain_file("#{params_set[:git_home]}/.git_setup_done").with(
-          :ensure   => 'present',
-          :owner    => 'root',
-          :group    => 'root',
-          :require  => 'Exec[install gitlab]'
         )}
         context 'postgresql' do
           let(:params) { params_set.merge({ :gitlab_dbtype => 'pgsql' }) }
@@ -495,8 +483,8 @@ describe 'gitlab' do
             :user    => params_set[:git_user],
             :path    => params_set[:exec_path],
             :command => 'bundle install --without development aws test mysql --deployment',
+            :unless  => 'bundle check',
             :cwd     => "#{params_set[:git_home]}/gitlab",
-            :creates => "#{params_set[:git_home]}/.git_setup_done",
             :timeout => 0,
             :require => ["File[#{params_set[:git_home]}/gitlab/config/database.yml]",
                           "File[#{params_set[:git_home]}/gitlab/config/unicorn.rb]",
