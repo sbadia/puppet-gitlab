@@ -14,6 +14,7 @@ class gitlab::params {
   $gitlabshell_branch     = 'v1.7.9'
   $gitlab_http_port       = '80'
   $gitlab_ssl_port        = '443'
+  $gitlab_http_timeout    = '60'
   $gitlab_redishost       = '127.0.0.1'
   $gitlab_redisport       = '6379'
   $gitlab_dbtype          = 'mysql'
@@ -31,6 +32,7 @@ class gitlab::params {
   $gitlab_projects        = '10'
   $gitlab_username_change = true
   $gitlab_unicorn_port    = '8080'
+  $gitlab_unicorn_worker  = '2'
   $exec_path              = '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   $ldap_enabled           = false
   $ldap_host              = 'ldap.domain.com'

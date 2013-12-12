@@ -40,6 +40,7 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 
 # Parameters
 
+* `ensure`:  Ensure gitlab/gitlab-shell repo are present, latest. absent is not yet supported (default: present)
 * `git_user`: Name of the gitlab (default: git)
 * `git_home`: Home directory for gitlab repository (default: /home/git)
 * `git_email`: Email address for gitlab user (default: git@someserver.net)
@@ -50,6 +51,7 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 * `gitlabshell_banch`: Gitlab-shell branch (default: v1.7.9)
 * `gitlab_http_port`: Port that NGINX listens on for HTTP traffic (default: 80)
 * `gitlab_ssl_port`: Port that NGINX listens on for HTTPS traffic (default: 443)
+* `gitlab_http_timeout`: HTTP timeout in seconds (unicorn/nginx) (default: 60)
 * `gitlab_redishost`: Redis host used for Sidekiq (default: localhost)
 * `gitlab_redisport`: Redis host used for Sidekiq (default: 6379)
 * `gitlab_dbtype`: Gitlab database type (default: mysql)
@@ -67,6 +69,7 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 * `gitlab_projects`: GitLab default number of projects for new users (default: 10)
 * `gitlab_username_change`: Manage username changing in GitLab (default: true)
 * `gitlab_unicorn_port`: Port that unicorn listens on 172.0.0.1 for HTTP traffic (default: 8080)
+* `gitlab_unicorn_worker`: Number of unicorn workers (default: 2)
 * `exec_path`: PATH of executtion (default: `/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin`)
 * `ldap_enabled`: Enable LDAP backend for gitlab web (see bellow) (default: false)
 * `ldap_host`: FQDN of LDAP server (default: ldap.domain.com)

@@ -28,9 +28,11 @@ describe 'gitlab' do
       :gitlab_dbpwd           => 'Cie7cheewei<ngi3',
       :gitlab_dbhost          => 'sql.fooboozoo.fr',
       :gitlab_dbport          => '2345',
+      :gitlab_http_timeout    => '300',
       :gitlab_projects        => '42',
       :gitlab_username_change => false,
       :gitlab_unicorn_port    => '8888',
+      :gitlab_unicorn_worker  => '8',
       :exec_path              => '/opt/bw/bin:/bin:/usr/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/sbin',
       :ldap_host              => 'ldap.fooboozoo.fr',
       :ldap_base              => 'dc=fooboozoo,dc=fr',
@@ -275,6 +277,7 @@ describe 'gitlab' do
         it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/working_directory "\/home\/git\/gitlab"/)}
         it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/listen "127.0.0.1:8080"/)}
         it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/listen "\/home\/git\/gitlab\/tmp\/sockets\/gitlab.socket"/)}
+        it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/timeout 60/)}
         it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/pid "\/home\/git\/gitlab\/tmp\/pids\/unicorn.pid"/)}
         it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/stderr_path "\/home\/git\/gitlab\/log\/unicorn.stderr.log"/)}
         it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/stdout_path "\/home\/git\/gitlab\/log\/unicorn.stdout.log"/)}
@@ -411,10 +414,11 @@ describe 'gitlab' do
       end # database config
       describe 'unicorn config' do
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with(:ensure => 'file',:owner => params_set[:git_user],:group => params_set[:git_user])}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/worker_processes 2/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/worker_processes #{params_set[:gitlab_unicorn_worker]}/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/working_directory "#{params_set[:git_home]}\/gitlab"/)}
 
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/listen "127.0.0.1:#{params_set[:gitlab_unicorn_port]}"/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/timeout #{params_set[:gitlab_http_timeout]}/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/listen "#{params_set[:git_home]}\/gitlab\/tmp\/sockets\/gitlab.socket"/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/pid "#{params_set[:git_home]}\/gitlab\/tmp\/pids\/unicorn.pid"/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/stderr_path "#{params_set[:git_home]}\/gitlab\/log\/unicorn.stderr.log"/)}
@@ -527,6 +531,8 @@ describe 'gitlab' do
         it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/server_name gitlab.fooboozoo.fr;/)}
         it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/server_tokens off;/)}
         it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/root \/home\/git\/gitlab\/public;/)}
+        it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/proxy_read_timeout 60;/)}
+        it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/proxy_connect_timeout 60;/)}
       end # nginx config
       describe 'gitlab init' do
         it { should contain_file('/etc/init.d/gitlab').with(
@@ -572,6 +578,8 @@ describe 'gitlab' do
         it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/server_name gitlab.fooboozoo.fr;/)}
         it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/server_tokens off;/)}
         it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/root #{params_set[:git_home]}\/gitlab\/public;/)}
+        it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/proxy_read_timeout #{params_set[:gitlab_http_timeout]};/)}
+        it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/proxy_connect_timeout #{params_set[:gitlab_http_timeout]};/)}
         context 'with ssl' do
           let(:params) { params_set.merge(params_ssl) }
           it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/listen 443;/)}

@@ -48,6 +48,10 @@
 #   Port that NGINX listens on for HTTPS traffic
 #   default: 443
 #
+# [*gitlab_http_timeout*]
+#   HTTP timeout (unicorn and nginx)
+#   default: 60
+#
 # [*gitlab_redishost*]
 #   Redis host used for Sidekiq
 #   default: localhost
@@ -188,6 +192,7 @@ class gitlab(
     $gitlabshell_sources    = $gitlab::params::gitlabshell_sources,
     $gitlab_http_port       = $gitlab::params::gitlab_http_port,
     $gitlab_ssl_port        = $gitlab::params::gitlab_ssl_port,
+    $gitlab_http_timeout    = $gitlab::params::gitlab_http_timeout,
     $gitlab_redishost       = $gitlab::params::gitlab_redishost,
     $gitlab_redisport       = $gitlab::params::gitlab_redisport,
     $gitlab_dbtype          = $gitlab::params::gitlab_dbtype,
@@ -205,6 +210,7 @@ class gitlab(
     $gitlab_projects        = $gitlab::params::gitlab_projects,
     $gitlab_username_change = $gitlab::params::gitlab_username_change,
     $gitlab_unicorn_port    = $gitlab::params::gitlab_unicorn_port,
+    $gitlab_unicorn_worker  = $gitlab::params::gitlab_unicorn_worker,
     $exec_path              = $gitlab::params::exec_path,
     $ldap_enabled           = $gitlab::params::ldap_enabled,
     $ldap_host              = $gitlab::params::ldap_host,
@@ -238,10 +244,13 @@ class gitlab(
   validate_re($gitlab_dbport, '^\d+$', 'gitlab_dbport is not a valid port')
   validate_re($ldap_port, '^\d+$', 'ldap_port is not a valid port')
   validate_re($gitlab_ssl_port, '^\d+$', 'gitlab_ssl_port is not a valid port')
+  validate_re($gitlab_http_port, '^\d+$', 'gitlab_http_port is not a valid port')
+  validate_re($gitlab_http_timeout, '^\d+$', 'gitlab_http_timeout is not a number')
   validate_re($gitlab_redisport, '^\d+$', 'gitlab_redisport is not a valid port')
   validate_re($ldap_method, '(ssl|tls|plain)', 'ldap_method is not supported (ssl, tls or plain)')
   validate_re($gitlab_projects, '^\d+$', 'gitlab_projects is not valid')
   validate_re($gitlab_unicorn_port, '^\d+$', 'gitlab_unicorn_port is not valid')
+  validate_re($gitlab_unicorn_worker, '^\d+$', 'gitlab_unicorn_worker is not valid')
   validate_re($ensure, '(present|latest)', 'ensure is not valid (present|latest)')
 
   validate_string($git_user)
