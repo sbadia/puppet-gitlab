@@ -48,7 +48,7 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 * `gitlab_sources`: Gitlab sources (default: git://github.com/gitlabhq/gitlabhq.git)
 * `gitlab_branch`: Gitlab branch (default: 6-3-stable)
 * `gitlabshell_sources`: Gitlab-shell sources (default: git://github.com/gitlabhq/gitlab-shell.git)
-* `gitlabshell_banch`: Gitlab-shell branch (default: v1.7.9)
+* `gitlabshell_branch`: Gitlab-shell branch (default: v1.7.9)
 * `gitlab_http_port`: Port that NGINX listens on for HTTP traffic (default: 80)
 * `gitlab_ssl_port`: Port that NGINX listens on for HTTPS traffic (default: 443)
 * `gitlab_http_timeout`: HTTP timeout in seconds (unicorn/nginx) (default: 60)
