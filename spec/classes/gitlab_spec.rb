@@ -201,14 +201,14 @@ describe 'gitlab' do
           :user     => 'git',
           :provider => 'git',
           :source   => 'git://github.com/gitlabhq/gitlabhq.git',
-          :revision => '6-3-stable'
+          :revision => '6-4-stable'
         )}
         it { should contain_vcsrepo('/home/git/gitlab-shell').with(
           :ensure   => 'present',
           :user     => 'git',
           :provider => 'git',
           :source   => 'git://github.com/gitlabhq/gitlab-shell.git',
-          :revision => 'v1.7.9'
+          :revision => 'v1.8.0'
         )}
       end
       context 'with specifics params' do
@@ -535,15 +535,15 @@ describe 'gitlab' do
         it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/proxy_connect_timeout 60;/)}
       end # nginx config
       describe 'gitlab init' do
-        it { should contain_file('/etc/init.d/gitlab').with(
+        it { should contain_file('/etc/default/gitlab').with(
           :ensure => 'file',
           :owner  => 'root',
           :group  => 'root',
-          :mode   => '0755'
+          :mode   => '0644'
         )}
-        it { should contain_file('/etc/init.d/gitlab').with_content(/app_root="\/home\/git\/gitlab"/)}
-        it { should contain_file('/etc/init.d/gitlab').with_content(/app_user="git"/)}
-      end # gitlab init
+        it { should contain_file('/etc/default/gitlab').with_content(/app_root="\/home\/git\/gitlab"/)}
+        it { should contain_file('/etc/default/gitlab').with_content(/app_user="git"/)}
+      end # gitlab default
       describe 'gitlab logrotate' do
         it { should contain_file("/etc/logrotate.d/gitlab").with(
           :ensure => 'file',
@@ -594,14 +594,14 @@ describe 'gitlab' do
         end
       end # nginx config
       describe 'gitlab init' do
-        it { should contain_file('/etc/init.d/gitlab').with(
+        it { should contain_file('/etc/default/gitlab').with(
           :ensure => 'file',
           :owner  => 'root',
           :group  => 'root',
-          :mode   => '0755'
+          :mode   => '0644'
         )}
-        it { should contain_file('/etc/init.d/gitlab').with_content(/app_root="#{params_set[:git_home]}\/gitlab"/)}
-        it { should contain_file('/etc/init.d/gitlab').with_content(/app_user="#{params_set[:git_user]}"/)}
+        it { should contain_file('/etc/default/gitlab').with_content(/app_root="#{params_set[:git_home]}\/gitlab"/)}
+        it { should contain_file('/etc/default/gitlab').with_content(/app_user="#{params_set[:git_user]}"/)}
       end # gitlab init
       describe 'gitlab logrotate' do
         it { should contain_file("/etc/logrotate.d/gitlab").with(
