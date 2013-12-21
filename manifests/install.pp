@@ -79,6 +79,13 @@ class gitlab::install inherits gitlab {
     cwd     => "${git_home}/gitlab",
     creates => "${git_home}/.gitlab_setup_done",
     require => Exec['install gitlab'],
+    notify  => Exec['precompile assets'],
+  }
+
+  exec { 'precompile assets':
+    command     => 'bundle exec rake assets:precompile RAILS_ENV=production',
+    cwd         =>  "${git_home}/gitlab",
+    refreshonly =>  true,
   }
 
   file {
