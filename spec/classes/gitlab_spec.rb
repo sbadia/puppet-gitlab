@@ -544,6 +544,16 @@ describe 'gitlab' do
         it { should contain_file('/etc/default/gitlab').with_content(/app_root="\/home\/git\/gitlab"/)}
         it { should contain_file('/etc/default/gitlab').with_content(/app_user="git"/)}
       end # gitlab default
+      describe 'gitlab init' do
+        it { should contain_file('/etc/init.d/gitlab').with(
+          :ensure  => 'file',
+          :owner   => 'root',
+          :group   => 'root',
+          :mode    => '0755',
+          :require => 'File[/etc/default/gitlab]',
+          :source  => '/home/git/gitlab/lib/support/init.d/gitlab'
+        )}
+      end # gitlab init
       describe 'gitlab logrotate' do
         it { should contain_file("/etc/logrotate.d/gitlab").with(
           :ensure => 'file',
@@ -593,7 +603,7 @@ describe 'gitlab' do
             it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/ssl_certificate_key           \/srv\/ssl\/gitlab.key;/)}
         end
       end # nginx config
-      describe 'gitlab init' do
+      describe 'gitlab default' do
         it { should contain_file('/etc/default/gitlab').with(
           :ensure => 'file',
           :owner  => 'root',
@@ -602,6 +612,16 @@ describe 'gitlab' do
         )}
         it { should contain_file('/etc/default/gitlab').with_content(/app_root="#{params_set[:git_home]}\/gitlab"/)}
         it { should contain_file('/etc/default/gitlab').with_content(/app_user="#{params_set[:git_user]}"/)}
+      end # gitlab default
+      describe 'gitlab init' do
+        it { should contain_file('/etc/init.d/gitlab').with(
+          :ensure  => 'file',
+          :owner   => 'root',
+          :group   => 'root',
+          :mode    => '0755',
+          :require => 'File[/etc/default/gitlab]',
+          :source  => "#{params_set[:git_home]}/gitlab/lib/support/init.d/gitlab"
+        )}
       end # gitlab init
       describe 'gitlab logrotate' do
         it { should contain_file("/etc/logrotate.d/gitlab").with(
