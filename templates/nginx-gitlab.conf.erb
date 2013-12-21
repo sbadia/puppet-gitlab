@@ -26,6 +26,7 @@ server {
   ssl                           on;
   ssl_certificate               <%= @gitlab_ssl_cert %>;
   ssl_certificate_key           <%= @gitlab_ssl_key %>;
+  # please see https://github.com/sbadia/puppet-gitlab/pull/104
   ssl_protocols                 TLSv1.2 TLSv1.1 TLSv1;
   ssl_ciphers                   AES:HIGH:!aNULL:!RC4:!MD5:!ADH:!MDF;
   ssl_prefer_server_ciphers     on;
