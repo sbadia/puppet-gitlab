@@ -16,12 +16,21 @@ class gitlab::config inherits gitlab {
     mode    => '0644',
   }
 
+  file { '/etc/default/gitlab':
+    ensure  => file,
+    content => template('gitlab/gitlab.default.erb'),
+    owner   => root,
+    group   => root,
+    mode    => '0644',
+  }
+
   file { '/etc/init.d/gitlab':
     ensure  => file,
-    content => template('gitlab/gitlab.init.erb'),
+    source  => "${git_home}/gitlab/lib/support/init.d/gitlab",
     owner   => root,
     group   => root,
     mode    => '0755',
+    require => File['/etc/default/gitlab'],
   }
 
   file { '/etc/logrotate.d/gitlab':

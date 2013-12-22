@@ -30,7 +30,7 @@
 #
 # [*gitlab_branch*]
 #   Gitlab branch
-#   default: 6-3-stable
+#   default: 6-4-stable
 #
 # [*gitlabshell_sources*]
 #   Gitlab-shell sources
@@ -38,7 +38,7 @@
 #
 # [*gitlabshell_banch*]
 #   Gitlab-shell branch
-#   default: v1.7.9
+#   default: v1.8.0
 #
 # [*gitlab_http_port*]
 #   Port that NGINX listens on for HTTP traffic
