@@ -66,6 +66,7 @@ class gitlab::install inherits gitlab {
     cwd     => "${git_home}/gitlab",
     unless  => 'bundle check',
     timeout => 0,
+    tries => 3,
     require => [
       File["${git_home}/gitlab/config/database.yml"],
       File["${git_home}/gitlab/config/unicorn.rb"],
