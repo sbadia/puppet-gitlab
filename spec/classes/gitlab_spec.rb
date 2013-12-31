@@ -318,7 +318,7 @@ describe 'gitlab' do
         it { should contain_exec('install gitlab').with(
           :user    => 'git',
           :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          :command => 'bundle install --without development aws test postgres --deployment',
+          :command => 'bundle install --jobs 3 --retry 5 --without development aws test postgres --deployment',
           :unless  => 'bundle check',
           :cwd     => '/home/git/gitlab',
           :timeout => 0,
@@ -332,7 +332,7 @@ describe 'gitlab' do
           it { should contain_exec('install gitlab').with(
             :user    => 'git',
             :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-            :command => 'bundle install --without development aws test mysql --deployment',
+            :command => 'bundle install --jobs 3 --retry 5 --without development aws test mysql --deployment',
             :unless  => 'bundle check',
             :cwd     => '/home/git/gitlab',
             :timeout => 0,
@@ -472,7 +472,7 @@ describe 'gitlab' do
         it { should contain_exec('install gitlab').with(
           :user    => params_set[:git_user],
           :path    => params_set[:exec_path],
-          :command => 'bundle install --without development aws test postgres --deployment',
+          :command => 'bundle install --jobs 3 --retry 5 --without development aws test postgres --deployment',
           :unless  => 'bundle check',
           :cwd     => "#{params_set[:git_home]}/gitlab",
           :timeout => 0,
@@ -486,7 +486,7 @@ describe 'gitlab' do
           it { should contain_exec('install gitlab').with(
             :user    => params_set[:git_user],
             :path    => params_set[:exec_path],
-            :command => 'bundle install --without development aws test mysql --deployment',
+            :command => 'bundle install --jobs 3 --retry 5 --without development aws test mysql --deployment',
             :unless  => 'bundle check',
             :cwd     => "#{params_set[:git_home]}/gitlab",
             :timeout => 0,
