@@ -1,6 +1,7 @@
-# MANAGED BY PUPPET
+# Managed by Puppet
+# Module gitlab
 #
-# Module:: gitlab
+# # # # # # # # # # # # # # # # # #
 # GitLab application config file  #
 # # # # # # # # # # # # # # # # # #
 #
@@ -22,11 +23,13 @@ production: &base
     https: <%= @gitlab_ssl %>
 
     # Uncomment and customize the last line to run in a non-root path
-    # WARNING: This feature is known to work, but unsupported
-    # Note that three settings need to be changed for this to work.
+    # WARNING: We recommend creating a FQDN to host GitLab in a root path instead of this. 
+    # Note that four settings need to be changed for this to work.
     # 1) In your application.rb file: config.relative_url_root = "/gitlab"
     # 2) In your gitlab.yml file: relative_url_root: /gitlab
     # 3) In your unicorn.rb: ENV['RAILS_RELATIVE_URL_ROOT'] = "/gitlab"
+    # 4) In ../gitlab-shell/config.yml: gitlab_url: "http://127.0.0.1/gitlab"
+    # To update the path, run: sudo -u git -H bundle exec rake assets:precompile RAILS_ENV=production
     #
     # relative_url_root: /gitlab
 
@@ -57,11 +60,15 @@ production: &base
     # default: false - Account passwords are not sent via the email if signup is enabled. 
     # signup_enabled: true
 
+    # Restrict setting visibility levels for non-admin users.
+    # The default is to allow all levels.
+    #restricted_visibility_levels: [ "public" ]
+
     ## Automatic issue closing
     # If a commit message matches this regular expression, all issues referenced from the matched text will be closed.
     # This happens when the commit is pushed or merged into the default branch of a project.
     # When not specified the default issue_closing_pattern as specified below will be used.
-    # issue_closing_pattern: ([Cc]lose[sd]|[Ff]ixe[sd]) +#\d+
+    # issue_closing_pattern: '([Cc]lose[sd]|[Ff]ixe[sd]) +#\d+'
 
     ## Default project features settings
     default_projects_features:
@@ -112,6 +119,8 @@ production: &base
   # ==========================
 
   ## LDAP settings
+  # You can inspect a sample of the LDAP users with login access by running:
+  #   bundle exec rake gitlab:ldap:check RAILS_ENV=production
   ldap:
     enabled: <%= @ldap_enabled %>
     host: '<%= @ldap_host %>'
@@ -123,6 +132,15 @@ production: &base
     bind_dn: '<%= @ldap_bind_dn %>'
     password: '<%= @ldap_bind_password %>'
 <% end -%>
+    # If allow_username_or_email_login is enabled, GitLab will ignore everything
+    # after the first '@' in the LDAP username submitted by the user on login.
+    #
+    # Example:
+    # - the user enters 'jane.doe@example.com' and 'p@ssw0rd' as LDAP credentials;
+    # - GitLab queries the LDAP server with 'jane.doe' and 'p@ssw0rd'.
+    #
+    # If you are using "uid: 'userPrincipalName'" on ActiveDirectory you need to
+    # disable this setting, because the userPrincipalName contains an '@'.
     allow_username_or_email_login: true
 
   ## OmniAuth settings
@@ -150,7 +168,8 @@ production: &base
       # - { name: 'twitter', app_id: 'YOUR APP ID',
       #     app_secret: 'YOUR APP SECRET'}
       # - { name: 'github', app_id: 'YOUR APP ID',
-      #     app_secret: 'YOUR APP SECRET' }
+      #     app_secret: 'YOUR APP SECRET',
+      #     args: { scope: 'user:email' } }
 
 
 
@@ -170,6 +189,8 @@ production: &base
 
   ## GitLab Shell settings
   gitlab_shell:
+    path: <%= @git_home %>/gitlab-shell/
+
     # REPOS_PATH MUST NOT BE A SYMLINK!!!
     repos_path: <%= @gitlab_repodir %>/repositories/
     hooks_path: <%= @git_home %>/gitlab-shell/hooks/

@@ -14,7 +14,6 @@ production:
   username: <%= @gitlab_dbuser %>
   password: <%= @gitlab_dbpwd %>
   host: <%= @gitlab_dbhost %>
-  # host: localhost
   # socket: /tmp/mysql.sock
 <% when 'pgsql' -%>
 production:
@@ -26,7 +25,5 @@ production:
   password: <%= @gitlab_dbpwd %>
   host: <%= @gitlab_dbhost %>
   port: <%= @gitlab_dbport %>
-  # host: localhost
-  # port: 5432
   # socket: /tmp/postgresql.sock
 <% end -%>
