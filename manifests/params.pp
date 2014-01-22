@@ -42,17 +42,18 @@ class gitlab::params {
   $ldap_method            = 'ssl'
   $ldap_bind_dn           = ''
   $ldap_bind_password     = ''
-  $git_package_name       = 'git-core'
 
 
   # determine pre-requisite packages
   case $::osfamily {
     'Debian': {
+      $git_package_name = 'git-core'
       # system packages
       $system_packages = ['libicu-dev', 'python2.7','python-docutils',
                           'libxml2-dev', 'libxslt1-dev','python-dev']
     }
     'RedHat': {
+      $git_package_name = 'git'
       # system packages
       $system_packages = ['libicu-devel', 'perl-Time-HiRes','libxml2-devel',
                           'libxslt-devel','python-devel','libcurl-devel',
