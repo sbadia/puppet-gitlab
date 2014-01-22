@@ -79,6 +79,7 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 * `ldap_method`: Method to use (default: ssl)
 * `ldap_bind_dn`: User for LDAP bind auth (default: nil)
 * `ldap_bind_password`: Password for LDN bind auth (default: nil)
+* `git_package_name`: Package name for git (default: git-core)
 
 # Usage
 

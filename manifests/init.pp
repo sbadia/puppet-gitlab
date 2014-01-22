@@ -156,6 +156,10 @@
 #   Password for LDN bind auth
 #   default: nil
 #
+# [*git_package_name*]
+#   Package name for git install
+#   default: git-core (Debian)
+#
 # === Examples
 #
 # See examples/gitlab.pp
@@ -219,7 +223,8 @@ class gitlab(
     $ldap_port              = $gitlab::params::ldap_port,
     $ldap_method            = $gitlab::params::ldap_method,
     $ldap_bind_dn           = $gitlab::params::ldap_bind_dn,
-    $ldap_bind_password     = $gitlab::params::ldap_bind_password
+    $ldap_bind_password     = $gitlab::params::ldap_bind_password,
+    $git_package_name       = $gitlab::params::git_package_name,
   ) inherits gitlab::params {
   case $::osfamily {
     Debian: {}
