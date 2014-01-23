@@ -1,15 +1,20 @@
 # GitLab user. git by default
 user: <%= @git_user %>
 
-# Url to gitlab instance. Used for api calls. Should be ends with slash.
+# Url to gitlab instance. Used for api calls. Should end with a slash.
 gitlab_url: "<%= @gitlab_ssl ? 'https' : 'http' %>://<%= @gitlab_domain %>/"
 
 http_settings:
 #  user: someone
 #  password: somepass
+#  ca_file: /etc/ssl/cert.pem
+#  ca_path: /etc/pki/tls/certs
   self_signed_cert: <%= @gitlab_ssl_self_signed %>
 
 # Repositories path
+# Give the canonicalized absolute pathname,
+# REPOS_PATH MUST NOT CONTAIN ANY SYMLINK!!!
+# Check twice that none of the components is a symlink, including "/home".
 repos_path: "<%= @gitlab_repodir %>/repositories"
 
 # File used as authorized_keys for gitlab user
