@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
-if ENV.key?('PUPPET_VERSION')
-  puppetversion = "= #{ENV['PUPPET_VERSION']}"
+if ENV.key?('PUPPET_GEM_VERSION')
+  puppetversion = ENV['PUPPET_GEM_VERSION']
 else
   puppetversion = ['>= 3.0']
 end
