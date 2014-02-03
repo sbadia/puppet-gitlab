@@ -88,7 +88,7 @@ class gitlab::setup inherits gitlab {
     home   => $git_home,
     ruby   => '2.0.0-p247',
     global => true,
-    before => [ Exec['install gitlab-shell'],
+    notify => [ Exec['install gitlab-shell'],
                 Exec['install gitlab'] ],
   }
 
