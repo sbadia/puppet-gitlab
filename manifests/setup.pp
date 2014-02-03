@@ -86,10 +86,10 @@ class gitlab::setup inherits gitlab {
     rc      => '.bashrc', # read by non-interactive shells (e.g. ssh)
   }
 
-  rbenv::compile { 'gitlab/2.0.0-p247':
+  rbenv::compile { 'gitlab/2.0.0-p353':
     user   => $git_user,
     home   => $git_home,
-    ruby   => '2.0.0-p247',
+    ruby   => '2.0.0-p353',
     global => true,
     notify => [ Exec['install gitlab-shell'],
                 Exec['install gitlab'] ],
@@ -98,7 +98,7 @@ class gitlab::setup inherits gitlab {
   rbenv::gem { 'charlock_holmes':
     user   => $git_user,
     home   => $git_home,
-    ruby   => '2.0.0-p247',
+    ruby   => '2.0.0-p353',
     ensure => '0.6.9.4',
   }
 
