@@ -1,0 +1,12 @@
+#!/bin/sh
+PATH=<%= @exec_path %>
+export PATH
+
+cd <%= @git_home %>/gitlab
+rake RAILS_ENV=production gitlab:backup:create >/dev/null
+
+<% if @gitlab_backup_postscript -%>
+  <%- [@gitlab_backup_postscript].flatten.compact.each do |script|%>
+<%= script %>
+  <%- end -%>
+<% end -%>
