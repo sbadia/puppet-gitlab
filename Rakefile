@@ -98,4 +98,4 @@ namespace :module do
 end
 
 task(:default).clear
-task :default => [:spec, :lint]
+task :default => [:spec_prep, :spec_standalone, :lint]
