@@ -68,6 +68,18 @@ describe 'gitlab' do
     }
   end
 
+  # a non-default parameter set with non-default http port
+  let :params_backup do
+    {
+      :gitlab_backup            => true,
+      :gitlab_backup_time       => '7',
+      :gitlab_backup_keep_time  => "#{ 60*60*24*30 }",
+      :gitlab_backup_postscript => [
+        'rsync -a --delete --max-delete=15 /home/git/gitlab/tmp/backups/ backup@backup01.esat:/queue/in/git01.esat',
+      ],
+    }
+  end
+
   ## Gitlab
   describe 'input validation' do
     describe 'on a unsupported os' do
@@ -571,6 +583,10 @@ describe 'gitlab' do
           )}
         end
       end # gitlab directories
+      describe 'no gitlab backup by default' do
+        it { should_not contain_file("/usr/local/sbin/gitlab-backup.sh") }
+        it { should_not contain_cron("gitlab backup ") }
+      end # no gitlab backup by default
       describe 'python2 symlink' do
         it { should contain_file('/usr/bin/python2').with(:ensure => 'link',:target => '/usr/bin/python')}
       end # python2 symlink
@@ -601,6 +617,17 @@ describe 'gitlab' do
           let(:params) { params_set.merge(params_ssl.merge({:gitlab_ssl_cert => '/srv/ssl/gitlab.pem',:gitlab_ssl_key => '/srv/ssl/gitlab.key'})) }
             it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/ssl_certificate               \/srv\/ssl\/gitlab.pem;/)}
             it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/ssl_certificate_key           \/srv\/ssl\/gitlab.key;/)}
+        end
+        context 'with backup' do
+          let(:params) { params_set.merge(params_backup) }
+          it { should contain_file('/usr/local/sbin/backup-gitlab.sh').with_content(/rsync -a --delete --max-delete=15.*/)}
+          it { should contain_file('/usr/local/sbin/backup-gitlab.sh').with_content(/cd #{params_set[:git_home]}\/gitlab/)}
+          it { should contain_cron('gitlab backup').with(
+            :command => '/usr/local/sbin/backup-gitlab.sh',
+            :hour    => '7',
+            :user    => params_set[:git_user]
+          )}
+          it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/keep_time: 2592000/)}
         end
       end # nginx config
       describe 'gitlab default' do
