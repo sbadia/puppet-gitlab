@@ -30,7 +30,7 @@
 #
 # [*gitlab_branch*]
 #   Gitlab branch
-#   default: 6-5-stable
+#   default: 6-6-stable
 #
 # [*gitlabshell_sources*]
 #   Gitlab-shell sources
