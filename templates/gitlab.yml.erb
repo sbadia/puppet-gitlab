@@ -32,6 +32,7 @@ production: &base
     # To update the path, run: sudo -u git -H bundle exec rake assets:precompile RAILS_ENV=production
     #
     # relative_url_root: /gitlab
+    relative_url_root: <%= @gitlab_relative_url_root %>
 
     # Uncomment and customize if you can't use the default user to run GitLab (default: 'git')
     # user: git

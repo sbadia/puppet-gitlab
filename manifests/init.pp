@@ -112,6 +112,10 @@
 #   Path to one or more shell scripts to be executed after the backup
 #   default: false
 #
+# [*gitlab_relative_url_root*]
+#   run in a non-root path
+#   default: /
+#
 # [*gitlab_ssl*]
 #   Enable SSL for GitLab
 #   default: false
@@ -232,6 +236,7 @@ class gitlab(
     $gitlab_backup_keep_time  = $gitlab::params::gitlab_backup_keep_time,
     $gitlab_backup_time       = $gitlab::params::gitlab_backup_time,
     $gitlab_backup_postscript = $gitlab::params::gitlab_backup_postscript,
+    $gitlab_relative_url_root = $gitlab::params::gitlab_relative_url_root,
     $gitlab_ssl               = $gitlab::params::gitlab_ssl,
     $gitlab_ssl_cert          = $gitlab::params::gitlab_ssl_cert,
     $gitlab_ssl_key           = $gitlab::params::gitlab_ssl_key,
