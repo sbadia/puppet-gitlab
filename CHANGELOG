@@ -1,8 +1,9 @@
 * 2014-02-22 - 0.1.2
+- manage gitlab relative URL (thanks Vincent)
 - add backups support + external script (thanks Igor)
 - internals: fix spec tests and travis config (thanks Lee)
 - fix git package name in RedHat* (thanks Stefan)
-- bump to gitlab 6.5 (6.3 → 6.4 → 6.5)
+- bump to gitlab 6.6 (6.3 → 6.4 → 6.5 → 6.6)
 - securing SSL configuration (thanks Andrew, Igor)
 - allow « plain » for ldap_method (thanks sven)
 - manage http timeout and unicorn workers as parameter
