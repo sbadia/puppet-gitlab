@@ -30,7 +30,7 @@ class gitlab::params {
   $gitlab_backup_keep_time  = '0'
   $gitlab_backup_time       = fqdn_rand(5)+1
   $gitlab_backup_postscript = false
-  $gitlab_relative_url_root = '/'
+  $gitlab_relative_url_root = false
   $gitlab_ssl               = false
   $gitlab_ssl_cert          = '/etc/ssl/certs/ssl-cert-snakeoil.pem'
   $gitlab_ssl_key           = '/etc/ssl/private/ssl-cert-snakeoil.key'

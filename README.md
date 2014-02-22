@@ -67,6 +67,7 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 * `gitlab_backup_keep_time`: Retention time of Gitlab's backups (in seconds) (default: 0 == forever)
 * `gitlab_backup_time`: Time (hour) when the Gitlab backup task is run from cron (default: fqdn\_rand(5)+1)
 * `gitlab_backup_postscript`: Path to one or more shell scripts to be executed after the backup (default: false)
+* `gitlab_relative_url_root`: Run GitLab in a non-root path (default: false, dont't forget the first slash)
 * `gitlab_ssl`: Enable SSL for GitLab (default: false)
 * `gitlab_ssl_cert`: SSL Certificate location (default: /etc/ssl/certs/ssl-cert-snakeoil.pem)
 * `gitlab_ssl_key`: SSL Key location (default: /etc/ssl/private/ssl-cert-snakeoil.key)
