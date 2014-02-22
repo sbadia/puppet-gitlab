@@ -7,3 +7,4 @@ metadata.json
 .redcar
 Gemfile.lock
 coverage/
+spec/fixtures/modules/
