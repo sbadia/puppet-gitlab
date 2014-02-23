@@ -138,7 +138,7 @@ describe 'gitlab' do
       end # gitlab config
       describe 'resque config' do
         it { should contain_file('/home/git/gitlab/config/resque.yml').with(:ensure => 'file',:owner => 'git',:group => 'git')}
-        it { should contain_file('/home/git/gitlab/config/resque.yml').with_content(/production: redis:\/\/127.0.0.1/)}
+        it { should contain_file('/home/git/gitlab/config/resque.yml').with_content(/production: redis:\/\/127.0.0.1:6379/)}
       end # resque config
       describe 'rack_attack config' do
         it { should contain_file('/home/git/gitlab/config/initializers/rack_attack.rb').with(
@@ -293,7 +293,7 @@ describe 'gitlab' do
       end # gitlab config
       describe 'resque config' do
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/resque.yml").with(:ensure => 'file',:owner => params_set[:git_user],:group => params_set[:git_user])}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/resque.yml").with_content(/production: redis:\/\/redis.fooboozoo.fr/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/resque.yml").with_content(/production: redis:\/\/#{params_set[:gitlab_redishost]}:#{params_set[:gitlab_redisport]}/)}
       end # gitlab config
       describe 'rack_attack config' do
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/initializers/rack_attack.rb").with(
