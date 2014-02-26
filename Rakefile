@@ -50,7 +50,7 @@ end # def:: bump_version(level)
 namespace :module do
   desc "New #{NAME} GIT release (v#{get_version})"
   task :release do
-    sh "git tag #{get_version} -m \"New release: #{get_version}\""
+    sh "git tag #{get_version} -m \"New release: #{get_version}\" -s"
     sh "git push --tag"
   end
 
