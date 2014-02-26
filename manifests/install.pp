@@ -61,6 +61,13 @@ class gitlab::install inherits gitlab {
     source => "${git_home}/gitlab/config/initializers/rack_attack.rb.example"
   }
 
+  if $gitlab_relative_url_root {
+    file { "${git_home}/gitlab/config/application.rb":
+      ensure  => file,
+      content => template('gitlab/application.rb.erb'),
+    }
+  }
+
   exec { 'install gitlab':
     command => "bundle install --without development aws test ${gitlab_without_gems} --deployment",
     cwd     => "${git_home}/gitlab",

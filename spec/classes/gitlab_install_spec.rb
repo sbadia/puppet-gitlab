@@ -123,7 +123,8 @@ describe 'gitlab' do
         end
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/port: 80/)}
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/https: false/)}
-        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/relative_url_root: \//)}
+        it { should_not contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/relative_url_root: \/myfoobooforge/)}
+        it { should_not contain_file('/home/git/gitlab/config/application.rb')}
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/email_from: git@someserver.net/)}
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/default_projects_limit: 10/)}
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/username_changing_enabled: true/)}
@@ -197,10 +198,10 @@ describe 'gitlab' do
       describe 'gitlab-shell' do
         it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with(:ensure => 'file',:mode => '0644',:group => 'gitlab',:owner => 'gitlab')}
         it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/user: #{params_set[:git_user]}/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/gitlab_url: "http:\/\/gitlab.fooboozoo.fr\/"/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/gitlab_url: "http:\/\/gitlab.fooboozoo.fr#{params_set[:gitlab_relative_url_root]}"/)}
         context 'with ssl' do
           let(:params) { params_set.merge(params_ssl) }
-          it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/gitlab_url: "https:\/\/gitlab.fooboozoo.fr\/"/)}
+          it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/gitlab_url: "https:\/\/gitlab.fooboozoo.fr#{params_set[:gitlab_relative_url_root]}"/)}
         end
         it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/self_signed_cert: false/)}
         context 'with self signed ssl cert' do
@@ -277,6 +278,7 @@ describe 'gitlab' do
           end
         end
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/relative_url_root: #{params_set[:gitlab_relative_url_root]}/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/application.rb").with_content(/config.relative_url_root = "#{params_set[:gitlab_relative_url_root]}"/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/email_from: #{params_set[:git_email]}/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/default_projects_limit: #{params_set[:gitlab_projects]}/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/username_changing_enabled: #{params_set[:gitlab_username_change]}/)}
