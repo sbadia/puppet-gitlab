@@ -196,6 +196,10 @@
 #   Google analytics tracking ID
 #   default: nil
 #
+# [*git_proxy*]
+#   Proxy for git access
+#   default: ''
+#
 # === Examples
 #
 # See examples/gitlab.pp
@@ -269,7 +273,8 @@ class gitlab(
     $ldap_bind_password       = $gitlab::params::ldap_bind_password,
     $git_package_name         = $gitlab::params::git_package_name,
     $ssh_port                 = $gitlab::params::ssh_port,
-    $google_analytics_id      = $gitlab::params::google_analytics_id
+    $google_analytics_id      = $gitlab::params::google_analytics_id,
+    $git_proxy                = $gitlab::params::git_proxy,
   ) inherits gitlab::params {
   case $::osfamily {
     Debian: {}

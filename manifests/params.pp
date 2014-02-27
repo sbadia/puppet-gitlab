@@ -51,7 +51,7 @@ class gitlab::params {
   $ldap_bind_password       = ''
   $ssh_port                 = '22'
   $google_analytics_id      = ''
-
+  $git_proxy                = undef
 
   # determine pre-requisite packages
   case $::osfamily {
