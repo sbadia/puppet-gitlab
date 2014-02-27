@@ -184,6 +184,10 @@
 #   Package name for git install
 #   default: git-core (Debian)
 #
+# [*git_proxy*]
+#   Proxy for git access
+#   default: ''
+#
 # === Examples
 #
 # See examples/gitlab.pp
@@ -255,6 +259,7 @@ class gitlab(
     $ldap_bind_dn             = $gitlab::params::ldap_bind_dn,
     $ldap_bind_password       = $gitlab::params::ldap_bind_password,
     $git_package_name         = $gitlab::params::git_package_name,
+    $git_proxy                = $gitlab::params::git_proxy,
   ) inherits gitlab::params {
   case $::osfamily {
     Debian: {}
