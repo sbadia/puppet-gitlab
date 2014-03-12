@@ -48,6 +48,7 @@ class gitlab::params {
   $ldap_method              = 'ssl'
   $ldap_bind_dn             = ''
   $ldap_bind_password       = ''
+  $ssh_port                 = '22'
 
 
   # determine pre-requisite packages

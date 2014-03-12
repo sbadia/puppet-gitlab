@@ -184,6 +184,10 @@
 #   Package name for git install
 #   default: git-core (Debian)
 #
+# [*ssh_port*]
+#   Port accepting ssh connections
+#   default: 22
+#
 # === Examples
 #
 # See examples/gitlab.pp
@@ -255,6 +259,7 @@ class gitlab(
     $ldap_bind_dn             = $gitlab::params::ldap_bind_dn,
     $ldap_bind_password       = $gitlab::params::ldap_bind_password,
     $git_package_name         = $gitlab::params::git_package_name,
+    $ssh_port                 = $gitlab::params::ssh_port,
   ) inherits gitlab::params {
   case $::osfamily {
     Debian: {}
@@ -287,6 +292,7 @@ class gitlab(
   validate_re($gitlab_unicorn_port, '^\d+$', 'gitlab_unicorn_port is not valid')
   validate_re($gitlab_unicorn_worker, '^\d+$', 'gitlab_unicorn_worker is not valid')
   validate_re($ensure, '(present|latest)', 'ensure is not valid (present|latest)')
+  validate_re($ssh_port, '^\d+$', 'ssh_port is not a valid port')
 
   validate_string($git_user)
   validate_string($git_email)

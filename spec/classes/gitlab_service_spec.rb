@@ -40,7 +40,8 @@ describe 'gitlab' do
       :ldap_uid               => 'cn',
       :ldap_method            => 'tls',
       :ldap_bind_dn           => 'uid=gitlab,o=bots,dc=fooboozoo,dc=fr',
-      :ldap_bind_password     => 'aV!oo1ier5ahch;a'
+      :ldap_bind_password     => 'aV!oo1ier5ahch;a',
+      :ssh_port               => '2223'
     }
   end
 
