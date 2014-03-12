@@ -160,7 +160,14 @@ describe 'gitlab' do
           :require => ['File[/home/git/gitlab/config/database.yml]',
                         'File[/home/git/gitlab/config/unicorn.rb]',
                         'File[/home/git/gitlab/config/gitlab.yml]',
-                        'File[/home/git/gitlab/config/resque.yml]']
+                        'File[/home/git/gitlab/config/resque.yml]'],
+          :notify  => 'Exec[run migrations]'
+        )}
+        it { should contain_exec('run migrations').with(
+          :command     => 'bundle exec rake db:migrate RAILS_ENV=production',
+          :cwd         => '/home/git/gitlab',
+          :refreshonly => 'true',
+          :notify      => 'Exec[precompile assets]'
         )}
         context 'postgresql' do
           let(:params) {{ :gitlab_dbtype => 'pgsql' }}
@@ -185,7 +192,14 @@ describe 'gitlab' do
           :command => '/usr/bin/yes yes | bundle exec rake gitlab:setup RAILS_ENV=production',
           :cwd     => '/home/git/gitlab',
           :creates => '/home/git/.gitlab_setup_done',
-          :require => 'Exec[install gitlab]'
+          :before  => 'Exec[run migrations]',
+          :require => 'Exec[install gitlab]',
+          :notify  => 'Exec[precompile assets]'
+        )}
+        it { should contain_exec('precompile assets').with(
+          :command     => 'bundle exec rake assets:clean assets:precompile cache:clear RAILS_ENV=production',
+          :cwd         => '/home/git/gitlab',
+          :refreshonly => 'true'
         )}
         it { should contain_file("/home/git/.gitlab_setup_done").with(
           :ensure   => 'present',
