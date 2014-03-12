@@ -20,4 +20,9 @@
   br = branch
   st = status
   ch = checkout
-  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%%an>%Creset' --abbrev-commit --date=relative
+
+<% if @git_proxy %>
+[http]
+  proxy = <%= @git_proxy %>
+<% end %>

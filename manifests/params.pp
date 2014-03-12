@@ -48,7 +48,7 @@ class gitlab::params {
   $ldap_method              = 'ssl'
   $ldap_bind_dn             = ''
   $ldap_bind_password       = ''
-
+  $git_proxy                = undef
 
   # determine pre-requisite packages
   case $::osfamily {
