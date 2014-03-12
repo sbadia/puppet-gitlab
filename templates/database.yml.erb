@@ -12,7 +12,7 @@ production:
   database: <%= @gitlab_dbname %>
   pool: 10
   username: <%= @gitlab_dbuser %>
-  password: <%= @gitlab_dbpwd %>
+  password: '<%= @gitlab_dbpwd %>'
   host: <%= @gitlab_dbhost %>
   # socket: /tmp/mysql.sock
 <% when 'pgsql' -%>
@@ -22,7 +22,7 @@ production:
   database: <%= @gitlab_dbname %>
   pool: 10
   username: <%= @gitlab_dbuser %>
-  password: <%= @gitlab_dbpwd %>
+  password: '<%= @gitlab_dbpwd %>'
   host: <%= @gitlab_dbhost %>
   port: <%= @gitlab_dbport %>
   # socket: /tmp/postgresql.sock

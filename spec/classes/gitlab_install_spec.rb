@@ -89,7 +89,7 @@ describe 'gitlab' do
         it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/encoding: utf8/)}
         it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/database: gitlab_db/)}
         it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/username: gitlab_user/)}
-        it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/password: changeme/)}
+        it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/password: 'changeme'/)}
         it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/host: localhost/)}
         context 'postgresql' do
           let(:params) {{ :gitlab_dbtype => 'pgsql' }}
@@ -97,7 +97,7 @@ describe 'gitlab' do
           it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/encoding: unicode/)}
           it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/database: gitlab_db/)}
           it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/username: gitlab_user/)}
-          it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/password: changeme/)}
+          it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/password: 'changeme'/)}
           it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/host: localhost/)}
           it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/port: 5432/)}
         end # pgsql
@@ -232,7 +232,7 @@ describe 'gitlab' do
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/encoding: utf8/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/database: #{params_set[:gitlab_dbname]}/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/username: #{params_set[:gitlab_dbuser]}/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/password: #{params_set[:gitlab_dbpwd]}/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/password: '#{params_set[:gitlab_dbpwd]}'/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/host: #{params_set[:gitlab_dbhost]}/)}
         context 'postgresql' do
           let(:params) { params_set.merge({ :gitlab_dbtype => 'pgsql' }) }
@@ -240,7 +240,7 @@ describe 'gitlab' do
           it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/encoding: unicode/)}
           it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/database: #{params_set[:gitlab_dbname]}/)}
           it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/username: #{params_set[:gitlab_dbuser]}/)}
-          it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/password: #{params_set[:gitlab_dbpwd]}/)}
+          it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/password: '#{params_set[:gitlab_dbpwd]}'/)}
           it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/host: #{params_set[:gitlab_dbhost]}/)}
           it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/port: #{params_set[:gitlab_dbport]}/)}
         end # pgsql
