@@ -41,7 +41,8 @@ describe 'gitlab' do
       :ldap_uid                 => 'cn',
       :ldap_method              => 'tls',
       :ldap_bind_dn             => 'uid=gitlab,o=bots,dc=fooboozoo,dc=fr',
-      :ldap_bind_password       => 'aV!oo1ier5ahch;a'
+      :ldap_bind_password       => 'aV!oo1ier5ahch;a',
+      :ssh_port                 => '2223'
     }
   end
 
@@ -136,6 +137,7 @@ describe 'gitlab' do
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/path: \/home\/git\/gitlab-satellites\//)}
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/repos_path: \/home\/git\/repositories\//)}
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/hooks_path: \/home\/git\/gitlab-shell\/hooks\//)}
+        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/ssh_port: 22/)}
       end # gitlab config
       describe 'resque config' do
         it { should contain_file('/home/git/gitlab/config/resque.yml').with(:ensure => 'file',:owner => 'git',:group => 'git')}
@@ -292,6 +294,7 @@ describe 'gitlab' do
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/path: #{params_set[:git_home]}\/gitlab-satellites\//)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/repos_path: #{params_set[:gitlab_repodir]}\/repositories\//)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/hooks_path: #{params_set[:git_home]}\/gitlab-shell\/hooks\//)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/ssh_port: #{params_set[:ssh_port]}/)}
       end # gitlab config
       describe 'resque config' do
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/resque.yml").with(:ensure => 'file',:owner => params_set[:git_user],:group => params_set[:git_user])}
