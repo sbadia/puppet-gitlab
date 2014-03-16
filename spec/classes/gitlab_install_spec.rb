@@ -34,6 +34,7 @@ describe 'gitlab' do
       :gitlab_username_change   => false,
       :gitlab_unicorn_port      => '8888',
       :gitlab_unicorn_worker    => '8',
+      :gitlab_bundler_flags     => '--no-deployment',
       :exec_path                => '/opt/bw/bin:/bin:/usr/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/sbin',
       :ldap_host                => 'ldap.fooboozoo.fr',
       :ldap_base                => 'dc=fooboozoo,dc=fr',
@@ -324,7 +325,7 @@ describe 'gitlab' do
         it { should contain_exec('install gitlab').with(
           :user    => params_set[:git_user],
           :path    => params_set[:exec_path],
-          :command => 'bundle install --without development aws test postgres --deployment',
+          :command => "bundle install --without development aws test postgres #{params_set[:gitlab_bundler_flags]}",
           :unless  => 'bundle check',
           :cwd     => "#{params_set[:git_home]}/gitlab",
           :timeout => 0,
@@ -338,7 +339,7 @@ describe 'gitlab' do
           it { should contain_exec('install gitlab').with(
             :user    => params_set[:git_user],
             :path    => params_set[:exec_path],
-            :command => 'bundle install --without development aws test mysql --deployment',
+            :command => "bundle install --without development aws test mysql #{params_set[:gitlab_bundler_flags]}",
             :unless  => 'bundle check',
             :cwd     => "#{params_set[:git_home]}/gitlab",
             :timeout => 0,
