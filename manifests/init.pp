@@ -148,6 +148,10 @@
 #   Port that unicorn listens on 172.0.0.1 for HTTP traffic
 #   (default: 8080)
 #
+# [*gitlab_bundler_flags*]
+#   Flags that should be passed to bundler when installing gems
+#   (default: --deployment)
+#
 # [*ldap_enabled*]
 #   Enable LDAP backend for gitlab web (see bellow)
 #   default: false
@@ -249,6 +253,7 @@ class gitlab(
     $gitlab_username_change   = $gitlab::params::gitlab_username_change,
     $gitlab_unicorn_port      = $gitlab::params::gitlab_unicorn_port,
     $gitlab_unicorn_worker    = $gitlab::params::gitlab_unicorn_worker,
+    $gitlab_bundler_flags     = $gitlab::params::gitlab_bundler_flags,
     $exec_path                = $gitlab::params::exec_path,
     $ldap_enabled             = $gitlab::params::ldap_enabled,
     $ldap_host                = $gitlab::params::ldap_host,
@@ -305,6 +310,7 @@ class gitlab(
   validate_string($gitlab_dbuser)
   validate_string($gitlab_dbpwd)
   validate_string($gitlab_dbhost)
+  validate_string($gitlab_bundler_flags)
   validate_string($ldap_base)
   validate_string($ldap_uid)
   validate_string($ldap_host)
