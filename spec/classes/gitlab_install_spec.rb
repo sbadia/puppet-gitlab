@@ -14,12 +14,7 @@ describe 'gitlab' do
     {
       :git_user                 => 'gitlab',
       :git_home                 => '/srv/gitlab',
-      :git_comment              => 'Labfooboozoo',
       :git_email                => 'gitlab@fooboozoo.fr',
-      :gitlab_sources           => 'https://github.com/gitlabhq/gitlabhq',
-      :gitlab_branch            => '4-2-stable',
-      :gitlabshell_sources      => 'https://github.com/gitlabhq/gitlab-shell',
-      :gitlabshell_branch       => 'v1.2.3',
       :gitlab_repodir           => '/mnt/nas',
       :gitlab_redishost         => 'redis.fooboozoo.fr',
       :gitlab_redisport         => '9736',
