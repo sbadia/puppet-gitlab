@@ -1,3 +1,7 @@
+* 2014-xx-xx - 0.1.3
+- add ssh_port parameter (thanks Kalman)
+- allow special characters in db passwords (thanks Thomas)
+- fixed asset compilation and db migrations (thanks Thomas)
 * 2014-02-22 - 0.1.2
 - manage gitlab relative URL (thanks Vincent)
 - add backups support + external script (thanks Igor)
