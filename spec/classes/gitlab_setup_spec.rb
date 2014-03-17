@@ -33,8 +33,8 @@ describe 'gitlab' do
           :comment  => 'GitLab',
           :system   => true
         )}
-        it { should contain_file('/home/git/.gitconfig').with_content(/name = "GitLab"/)}
-        it { should contain_file('/home/git/.gitconfig').with_content(/email = git@someserver.net/)}
+        it { should contain_file('/home/git/.gitconfig').with_content(/^\s*name = "GitLab"$/)}
+        it { should contain_file('/home/git/.gitconfig').with_content(/^\s*email = git@someserver.net$/)}
         ['/home/git','/home/git/gitlab-satellites'].each do |file|
           it { should contain_file(file).with(:ensure => 'directory',:mode => '0755')}
         end
@@ -49,8 +49,8 @@ describe 'gitlab' do
           :comment  => params_set[:git_comment],
           :system   => true
         )}
-        it { should contain_file('/srv/gitlab/.gitconfig').with_content(/name = "GitLab"/)}
-        it { should contain_file('/srv/gitlab/.gitconfig').with_content(/email = #{params_set[:git_email]}/)}
+        it { should contain_file('/srv/gitlab/.gitconfig').with_content(/^\s*name = "GitLab"$/)}
+        it { should contain_file('/srv/gitlab/.gitconfig').with_content(/^\s*email = #{params_set[:git_email]}$/)}
         ['/srv/gitlab','/srv/gitlab/gitlab-satellites'].each do |file|
           it { should contain_file(file).with(:ensure => 'directory',:mode => '0755')}
         end

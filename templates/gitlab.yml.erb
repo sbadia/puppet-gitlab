@@ -49,7 +49,8 @@ production: &base
     ## User settings
     default_projects_limit: <%= @gitlab_projects %>
     # default_can_create_group: false  # default: true
-    username_changing_enabled: <%= @gitlab_username_change ? 'true' : 'false' %> # default: true - User can change her username/namespace
+    # default: true - User can change her username/namespace
+    username_changing_enabled: <%= @gitlab_username_change ? 'true' : 'false' %>
     ## Default theme
     ##   BASIC  = 1
     ##   MARS   = 2
@@ -80,7 +81,8 @@ production: &base
       wiki: true
       wall: false
       snippets: false
-      visibility_level: "private"  # can be "private" | "internal" | "public"
+      # can be "private" | "internal" | "public"
+      visibility_level: "private"
 
   ## External issues trackers
   issues_tracker:
@@ -130,7 +132,8 @@ production: &base
     base: '<%= @ldap_base %>'
     port: <%= @ldap_port %>
     uid: '<%= @ldap_uid %>'
-    method: '<%= @ldap_method %>' # "ssl" or "plain"
+    # "ssl" or "plain"
+    method: '<%= @ldap_method %>'
 <% if @ldap_bind_dn != '' -%>
     bind_dn: '<%= @ldap_bind_dn %>'
     password: '<%= @ldap_bind_password %>'
@@ -187,8 +190,10 @@ production: &base
 
   ## Backup settings
   backup:
-    path: <%= @gitlab_backup_path %>   # Relative paths are relative to Rails.root (default: tmp/backups/)
-    keep_time: <%= @gitlab_backup_keep_time %>   # default: 0 (forever) (in seconds)
+    # Relative paths are relative to Rails.root (default: tmp/backups/)
+    path: <%= @gitlab_backup_path %>
+    # default: 0 (forever) (in seconds)
+    keep_time: <%= @gitlab_backup_keep_time %>
 
   ## GitLab Shell settings
   gitlab_shell:
@@ -213,7 +218,8 @@ production: &base
     # The next value is the maximum memory size grit can use
     # Given in number of bytes per git object (e.g. a commit)
     # This value can be increased if you have very large commits
-    max_size: 5242880 # 5.megabytes
+    # 5.megabytes
+    max_size: 5242880
     # Git timeout to read a commit, in seconds
     timeout: 10
 
