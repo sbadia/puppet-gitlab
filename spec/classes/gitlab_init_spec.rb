@@ -12,12 +12,12 @@ describe 'gitlab' do
 
     describe 'on a unsupported os' do
       let(:facts) {{ :osfamily => 'Rainbow' }}
-      it { expect { subject }.to raise_error(Puppet::Error, /Rainbow not supported yet/)}
+      it { should compile.and_raise_error(/Rainbow not supported yet/)}
     end
 
     describe 'unknown dbtype' do
       let(:params) {{ :gitlab_dbtype => 'yatta' }}
-      it { expect { subject }.to raise_error(Puppet::Error, /gitlab_dbtype is not supported/)}
+      it { should compile.and_raise_error(/gitlab_dbtype is not supported/)}
     end
   end
 
