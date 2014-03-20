@@ -21,4 +21,17 @@ describe 'gitlab' do
     end
   end
 
+  describe 'gitlab internal' do
+    it { should contain_anchor('gitlab::begin') }
+    it { should contain_class('gitlab::setup') }
+    it { should contain_class('gitlab::package') }
+    it { should contain_class('gitlab::install') }
+    it { should contain_class('gitlab::config') }
+    it { should contain_class('gitlab::service') }
+    it { should contain_anchor('gitlab::end') }
+
+    it { should contain_class('gitlab::params') }
+    it { should contain_class('gitlab') }
+  end
+
 end # gitlab
