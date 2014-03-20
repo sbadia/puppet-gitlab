@@ -192,6 +192,10 @@
 #   Port accepting ssh connections
 #   default: 22
 #
+# [*google_analytics_id*]
+#   Google analytics tracking ID
+#   default: nil
+#
 # === Examples
 #
 # See examples/gitlab.pp
@@ -265,6 +269,7 @@ class gitlab(
     $ldap_bind_password       = $gitlab::params::ldap_bind_password,
     $git_package_name         = $gitlab::params::git_package_name,
     $ssh_port                 = $gitlab::params::ssh_port,
+    $google_analytics_id      = $gitlab::params::google_analytics_id
   ) inherits gitlab::params {
   case $::osfamily {
     Debian: {}
@@ -314,6 +319,7 @@ class gitlab(
   validate_string($ldap_base)
   validate_string($ldap_uid)
   validate_string($ldap_host)
+  validate_string($google_analytics_id)
 
   anchor { 'gitlab::begin': } ->
   class { '::gitlab::setup': } ->

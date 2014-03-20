@@ -50,6 +50,7 @@ class gitlab::params {
   $ldap_bind_dn             = ''
   $ldap_bind_password       = ''
   $ssh_port                 = '22'
+  $google_analytics_id      = ''
 
 
   # determine pre-requisite packages
