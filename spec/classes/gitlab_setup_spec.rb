@@ -76,7 +76,8 @@ describe 'gitlab' do
           'pgsql' => ['libpq-dev', 'postgresql-client']
         },
         'system_packages' => ['libicu-dev', 'python2.7','python-docutils',
-                              'libxml2-dev','libxslt1-dev','python-dev']
+                              'libxml2-dev','libxslt1-dev','python-dev'],
+        'git_packages' => ['git-core']
       },
       'RedHat' => {
         'db_packages' => {
@@ -86,7 +87,8 @@ describe 'gitlab' do
         'system_packages' => ['libicu-devel','perl-Time-HiRes','libxml2-devel',
                               'libxslt-devel','python-devel','libcurl-devel',
                               'readline-devel','openssl-devel','zlib-devel',
-                              'libyaml-devel','patch','gcc-c++']
+                              'libyaml-devel','patch','gcc-c++'],
+        'git_packages' => ['git']
       }
     }
 
@@ -107,6 +109,9 @@ describe 'gitlab' do
         context "for devel dependencies on #{distro}" do
           let(:facts) {{ :osfamily => distro }}
           p[distro]['system_packages'].each do |pkg|
+            it { should contain_package(pkg) }
+          end
+          p[distro]['git_packages'].each do |pkg|
             it { should contain_package(pkg) }
           end
         end
