@@ -87,6 +87,7 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 * `ldap_bind_dn`: User for LDAP bind auth (default: nil)
 * `ldap_bind_password`: Password for LDN bind auth (default: nil)
 * `git_package_name`: Package name for git (default: git-core)
+* `google_analytics_id`: Google Analytics tracking ID (default: nil)
 
 # Usage
 

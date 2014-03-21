@@ -229,7 +229,12 @@ production: &base
 
   extra:
     ## Google analytics. Uncomment if you want it
+<% if @google_analytics_id != '' %>
+    google_analytics_id: <%= @google_analytics_id %>
+<% else %>
     # google_analytics_id: '_your_tracking_id'
+<% end %>
+
 
     ## Text under sign-in page (Markdown enabled)
     # sign_in_text: |
