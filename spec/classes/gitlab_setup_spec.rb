@@ -12,10 +12,11 @@ describe 'gitlab' do
   # a non-default common parameter set
   let :params_set do
     {
-      :git_user               => 'gitlab',
-      :git_home               => '/srv/gitlab',
-      :git_comment            => 'Labfooboozoo',
-      :git_email              => 'gitlab@fooboozoo.fr',
+      :git_user    => 'gitlab',
+      :git_home    => '/srv/gitlab',
+      :git_comment => 'Labfooboozoo',
+      :git_email   => 'gitlab@fooboozoo.fr',
+      :git_proxy   => 'http://proxy.fooboozoo.fr:3128'
     }
   end
 
@@ -35,6 +36,7 @@ describe 'gitlab' do
         )}
         it { should contain_file('/home/git/.gitconfig').with_content(/^\s*name = "GitLab"$/)}
         it { should contain_file('/home/git/.gitconfig').with_content(/^\s*email = git@someserver.net$/)}
+        it { should_not contain_file('/srv/gitlab/.gitconfig').with_content(/^\s*proxy$/)}
         ['/home/git','/home/git/gitlab-satellites'].each do |file|
           it { should contain_file(file).with(:ensure => 'directory',:mode => '0755')}
         end
@@ -51,6 +53,7 @@ describe 'gitlab' do
         )}
         it { should contain_file('/srv/gitlab/.gitconfig').with_content(/^\s*name = "GitLab"$/)}
         it { should contain_file('/srv/gitlab/.gitconfig').with_content(/^\s*email = #{params_set[:git_email]}$/)}
+        it { should contain_file('/srv/gitlab/.gitconfig').with_content(/^\s*proxy = #{params_set[:git_proxy]}$/)}
         ['/srv/gitlab','/srv/gitlab/gitlab-satellites'].each do |file|
           it { should contain_file(file).with(:ensure => 'directory',:mode => '0755')}
         end
