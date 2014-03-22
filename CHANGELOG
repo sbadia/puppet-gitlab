@@ -1,7 +1,10 @@
-* 2014-xx-xx - 0.1.3
-- add ssh_port parameter (thanks Kalman)
+* 2014-03-22 - 0.1.3
+- added ssh_port parameter (thanks Kalman)
 - allow special characters in db passwords (thanks Thomas)
 - fixed asset compilation and db migrations (thanks Thomas)
+- added git_proxy parameter (thanks Stefan)
+- added google_analytics_id parameter (thanks Andrew)
+- internals unit-tests refactoring, better coverage and regexp
 * 2014-02-22 - 0.1.2
 - manage gitlab relative URL (thanks Vincent)
 - add backups support + external script (thanks Igor)
