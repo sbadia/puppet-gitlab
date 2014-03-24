@@ -1,6 +1,6 @@
 # Puppet-gitlab [![Build Status](https://travis-ci.org/sbadia/puppet-gitlab.png?branch=master)](https://travis-ci.org/sbadia/puppet-gitlab)
 
-Tested successfully with Gitlab 6-6-stable on Ubuntu 12.04 and Debian Wheezy (7.2) with Puppet 3.2 or newer.
+Tested successfully with Gitlab 6-7-stable on Ubuntu 12.04 and Debian Wheezy (7.2) with Puppet 3.2 or newer.
 
 #### Table of contents
 
@@ -46,9 +46,9 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 * `git_email`: Email address for gitlab user (default: git@someserver.net)
 * `git_comment`: Gitlab user comment (default: GitLab)
 * `gitlab_sources`: Gitlab sources (default: git://github.com/gitlabhq/gitlabhq.git)
-* `gitlab_branch`: Gitlab branch (default: 6-6-stable)
+* `gitlab_branch`: Gitlab branch (default: 6-7-stable)
 * `gitlabshell_sources`: Gitlab-shell sources (default: git://github.com/gitlabhq/gitlab-shell.git)
-* `gitlabshell_branch`: Gitlab-shell branch (default: v1.8.0)
+* `gitlabshell_branch`: Gitlab-shell branch (default: v1.9.1)
 * `gitlab_http_port`: Port that NGINX listens on for HTTP traffic (default: 80)
 * `gitlab_ssl_port`: Port that NGINX listens on for HTTPS traffic (default: 443)
 * `gitlab_http_timeout`: HTTP timeout in seconds (unicorn/nginx) (default: 60)
