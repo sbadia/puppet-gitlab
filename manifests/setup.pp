@@ -89,5 +89,9 @@ class gitlab::setup inherits gitlab {
   }
 
   # other packages
-  ensure_packages([$git_package_name,'postfix','curl','ruby-dev','build-essential','redis-server'])
+  ensure_packages([$git_package_name,'postfix','curl','ruby-dev','build-essential'])
+  
+  if $gitlab_redishost == '127.0.0.1' {
+    ensure_packages(['redis-server'])
+  }
 }
