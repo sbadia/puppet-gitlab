@@ -1,5 +1,5 @@
 name    'sbadia-gitlab'
-version '0.1.2'
+version '0.1.3'
 source  'https://github.com/sbadia/puppet-gitlab'
 author  'Andrew Tomaka, Steffen Roegner, Igor Galic, Uwe Kleinmann, Matt Klich, Sebastien Badia'
 license 'GPLv3'
