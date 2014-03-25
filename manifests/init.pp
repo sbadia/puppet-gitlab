@@ -168,6 +168,10 @@
 #   Uid for LDAP auth
 #   default: uid
 #
+# [*ldap_user_filter*]
+#   RFC 4515 style filter
+#   default: ''
+#
 # [*ldap_port*]
 #   LDAP port
 #   default: 636
@@ -267,6 +271,7 @@ class gitlab(
     $ldap_host                = $gitlab::params::ldap_host,
     $ldap_base                = $gitlab::params::ldap_base,
     $ldap_uid                 = $gitlab::params::ldap_uid,
+    $ldap_user_filter         = $gitlab::params::ldap_user_filter,
     $ldap_port                = $gitlab::params::ldap_port,
     $ldap_method              = $gitlab::params::ldap_method,
     $ldap_bind_dn             = $gitlab::params::ldap_bind_dn,

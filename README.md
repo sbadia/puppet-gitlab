@@ -82,6 +82,7 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 * `ldap_host`: FQDN of LDAP server (default: ldap.domain.com)
 * `ldap_base`: LDAP base dn (default: dc=domain,dc=com)
 * `ldap_uid`: Uid for LDAP auth (default: uid)
+* `ldap_user_filter`: RFC 4515 style filter for the user (default: '')
 * `ldap_port`: LDAP port (default: 636)
 * `ldap_method`: Method to use (default: ssl)
 * `ldap_bind_dn`: User for LDAP bind auth (default: nil)

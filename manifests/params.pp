@@ -45,6 +45,7 @@ class gitlab::params {
   $ldap_host                = 'ldap.domain.com'
   $ldap_base                = 'dc=domain,dc=com'
   $ldap_uid                 = 'uid'
+  $ldap_user_filter         = ''
   $ldap_port                = '636'
   $ldap_method              = 'ssl'
   $ldap_bind_dn             = ''

@@ -35,6 +35,7 @@ describe 'gitlab' do
       :ldap_base                => 'dc=fooboozoo,dc=fr',
       :ldap_port                => '666',
       :ldap_uid                 => 'cn',
+      :ldap_user_filter         => 'employeeType=developer',
       :ldap_method              => 'tls',
       :ldap_bind_dn             => 'uid=gitlab,o=bots,dc=fooboozoo,dc=fr',
       :ldap_bind_password       => 'aV!oo1ier5ahch;a',
@@ -130,6 +131,7 @@ describe 'gitlab' do
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*base: 'dc=domain,dc=com'$/)}
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*port: 636$/)}
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*uid: 'uid'$/)}
+        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*user_filter: ''$/)}
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*method: 'ssl'$/)}
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*path: \/home\/git\/gitlab-satellites\/$/)}
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*repos_path: \/home\/git\/repositories\/$/)}
@@ -300,6 +302,7 @@ describe 'gitlab' do
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*base: '#{params_set[:ldap_base]}'$/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*port: #{params_set[:ldap_port]}$/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*uid: '#{params_set[:ldap_uid]}'$/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*user_filter: '#{params_set[:ldap_user_filter]}'$/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*method: '#{params_set[:ldap_method]}'$/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*bind_dn: '#{params_set[:ldap_bind_dn]}'$/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*password: '#{params_set[:ldap_bind_password]}'$/)}
