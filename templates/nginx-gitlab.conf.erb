@@ -22,6 +22,7 @@ upstream gitlab {
 <% if @gitlab_ssl %>
 server {
   listen <%= @gitlab_http_port %>;
+  listen [::]:<%= @gitlab_http_port %> ipv6only=on;
   server_name <%= @gitlab_domain %>;
   server_tokens off;
   root /nowhere;
@@ -32,6 +33,7 @@ server {
 server {
   # e.g., listen 192.168.1.1:80;
   listen <%= @gitlab_ssl ? @gitlab_ssl_port : @gitlab_http_port %>;
+  listen [::]:<%= @gitlab_ssl ? @gitlab_ssl_port : @gitlab_http_port %> ipv6only=on;
   # e.g., server_name source.example.com;
   server_name <%= @gitlab_domain %>;
   server_tokens off;
