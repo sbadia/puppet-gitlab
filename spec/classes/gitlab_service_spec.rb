@@ -2,11 +2,6 @@ require 'spec_helper'
 
 # Gitlab
 describe 'gitlab' do
-  let(:facts) {{
-    :osfamily  => 'Debian',
-    :fqdn      => 'gitlab.fooboozoo.fr',
-    :sshrsakey => 'AAAAB3NzaC1yc2EAAAA'
-  }}
 
   ### Gitlab::service
   describe 'gitlab::service' do
