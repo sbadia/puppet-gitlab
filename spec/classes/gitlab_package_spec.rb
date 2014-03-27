@@ -2,12 +2,6 @@ require 'spec_helper'
 
 # Gitlab
 describe 'gitlab' do
-  let(:facts) {{
-    :osfamily  => 'Debian',
-    :fqdn      => 'gitlab.fooboozoo.fr',
-    :processorcount => '2',
-    :sshrsakey => 'AAAAB3NzaC1yc2EAAAA'
-  }}
 
   ## Parameter set
   # a non-default common parameter set

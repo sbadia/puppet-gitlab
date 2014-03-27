@@ -1,10 +1,6 @@
 require 'spec_helper'
 
 describe 'gitlab::ci::runner' do
-  let(:facts) {{
-    :osfamily  => 'Debian',
-    :fqdn      => 'runner.fooboozoo.fr'
-  }}
 
   let :params do
     {
