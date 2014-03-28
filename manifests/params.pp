@@ -4,6 +4,8 @@
 class gitlab::params {
 
   $ensure                   = 'present'
+  #$gitlab_preinstall        = 'gitlab::preinstall'
+  $gitlab_preinstall        = 'gitlab::dummy'
   $gitlab_dependency        = 'gitlab::dependency'
   $git_user                 = 'git'
   $git_home                 = '/home/git'

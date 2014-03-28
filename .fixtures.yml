@@ -1,6 +1,14 @@
 fixtures:
   symlinks:
-    "gitlab": "#{source_dir}"
+    'gitlab': "#{source_dir}"
   repositories:
-    "stdlib": "git://github.com/puppetlabs/puppetlabs-stdlib.git"
-    "vcsrepo": "git://github.com/puppetlabs/puppetlabs-vcsrepo.git"
+    'stdlib': 'git://github.com/puppetlabs/puppetlabs-stdlib.git'
+    'vcsrepo': 'git://github.com/puppetlabs/puppetlabs-vcsrepo.git'
+    'redis': 'git://github.com/fsalum/puppet-redis.git'
+    'nginx': 'git://github.com/jfryman/puppet-nginx.git'
+    'concat': 'git://github.com/puppetlabs/puppetlabs-concat.git'
+    'mysql': 'git://github.com/puppetlabs/puppetlabs-mysql.git'
+    'postgresql': 'git://github.com/puppetlabs/puppetlabs-postgresql.git'
+    'ruby': 'git://github.com/puppetlabs/puppetlabs-ruby.git'
+    'apt': 'git://github.com/puppetlabs/puppetlabs-apt.git'
+    'logrotate': 'git://github.com/evenup/evenup-logrotate.git'

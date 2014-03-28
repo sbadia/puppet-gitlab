@@ -230,6 +230,7 @@
 #
 class gitlab(
     $ensure                   = $gitlab::params::ensure,
+    $gitlab_preinstall        = $gitlab::params::gitlab_preinstall,
     $gitlab_dependency        = $gitlab::params::gitlab_dependency,
     $git_user                 = $gitlab::params::git_user,
     $git_home                 = $gitlab::params::git_home,
@@ -333,6 +334,7 @@ class gitlab(
   validate_string($google_analytics_id)
 
   anchor { 'gitlab::begin': } ->
+  class { $gitlab_preinstall: } ->
   class { $gitlab_dependency: } ->
   class { '::gitlab::setup': } ->
   class { '::gitlab::package': } ->
