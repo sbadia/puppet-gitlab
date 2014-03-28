@@ -25,9 +25,104 @@ This module is based on the admin guides for [gitlab](https://github.com/gitlabh
 
 - [puppet-gitlab](http://forge.puppetlabs.com/sbadia/gitlab) on puppet forge.
 
+# Usage
+
+## Use-cases
+
+### Use-case 1
+
+I deploy puppet-gitlab on a bare server/vm and I want that puppet-gitlab manage all things (I have no other class in my node declaration)
+
+```puppet
+node 'gitlab.fooboozoo.fr' {
+  class {
+    'gitlab':
+      git_email         => 'notifs@foobar.fr',
+      git_comment       => 'GitLab',
+      gitlab_domain     => 'gitlab.foobar.fr',
+      gitlab_preinstall => 'gitlab::preinstall',
+      gitlab_dbtype     => 'mysql',
+      gitlab_dbname     => 'gitlab_production',
+      gitlab_dbuser     => 'gitlab_user',
+      gitlab_dbpwd      => 'Ve4Yßtr0ngPa€w0rd',
+      ldap_enabled      => false,
+  }
+}
+```
+
+### Use-case 2
+
+I manage my database server and my redis server on another node (not on gitlab server)
+
+```puppet
+node 'gitlab.fooboozoo.fr' {
+  class {'nginx': }
+
+  class {
+    'gitlab':
+      git_email         => 'notifs@foobar.fr',
+      git_comment       => 'GitLab',
+      gitlab_domain     => 'gitlab.foobar.fr',
+      gitlab_preinstall => 'gitlab::dummy',
+      gitlab_dbtype     => 'mysql',
+      gitlab_dbname     => 'gitlab_production',
+      gitlab_dbuser     => 'gitlab_user',
+      gitlab_dbpwd      => 'Ve4Yßtr0ngPa€w0rd',
+      gitlab_dbhost     => 'db.fooboozoo.fr',
+      gitlab_redishost  => 'redis.fooboozoo.fr',
+      ldap_enabled      => false,
+  }
+}
+
+node 'db.fooboozoo.fr' {
+  class {'mysql::server':
+    root_password => 'ChangeMe42',
+  }
+
+  mysql::db {'gitlab_production':
+    user     => 'gitlab_user',
+    password => 'Ve4Yßtr0ngPa€w0rd',
+  }
+}
+
+node 'redis.fooboozoo.fr' {
+  class {'redis': }
+}
+```
+
+### Use-case 3
+
+I want to manage dependency and preinstall things outside puppet-gitlab
+
+```puppet
+node 'gitlab.fooboozoo.fr' {
+  class {
+    'gitlab':
+      git_email         => 'notifs@foobar.fr',
+      git_comment       => 'GitLab',
+      gitlab_domain     => 'gitlab.foobar.fr',
+      gitlab_dependency => 'gitlab::dummy'
+      gitlab_dbtype     => 'mysql',
+      gitlab_dbname     => 'gitlab_production',
+      gitlab_dbuser     => 'gitlab_user',
+      gitlab_dbpwd      => 'Ve4Yßtr0ngPa€w0rd',
+      ldap_enabled      => false,
+  }
+
+  class {'myrubyclass':
+    ruby_version => '2.0.0',
+  }
+
+  class {'mysql::dev': }
+  class {'postfix': }
+}
+```
+
 ## Dependencies
 - [puppetlabs/puppetlabs-stdlib](https://github.com/puppetlabs/puppetlabs-stdlib)
 See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/examples/gitlab.pp).
+
+TODO
 
 ## GitLab web interface
 - access via your browser under the hostname (e.g. http://gitlab.domain.tld)
@@ -92,31 +187,17 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 * `ssh_port`: Port accepting SSH connections (default: 22)
 * `google_analytics_id`: Google Analytics tracking ID (default: nil)
 
-# Usage
-
-_Note:_ Assume that a database server is already installed on your server/infrastructure (see: [vagrant-gitlab](https://github.com/sbadia/vagrant-gitlab/blob/master/examples/gitlab.pp)).
-
-```puppet
-class {
-  'gitlab':
-    git_email         => 'notifs@foobar.fr',
-    git_comment       => 'GitLab',
-    gitlab_domain     => 'gitlab.foobar.fr',
-    gitlab_dbtype     => 'mysql',
-    gitlab_dbname     => $gitlab_dbname,
-    gitlab_dbuser     => $gitlab_dbuser,
-    gitlab_dbpwd      => $gitlab_dbpwd,
-    ldap_enabled      => false,
-}
-```
-
 # Limitations
 
-- TBF
+This module has been built on and tested against Puppet 2.7 and higher.
 
 # Development
 
 Want to help - send a pull request.
+
+## Contributors
+
+The list of contributors can be found at: [https://github.com/sbadia/puppet-gitlab/graphs/contributors](https://github.com/sbadia/puppet-gitlab/graphs/contributors)
 
 ## Development environment with vagrant
 
