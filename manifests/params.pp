@@ -4,6 +4,7 @@
 class gitlab::params {
 
   $ensure                   = 'present'
+  $gitlab_dependency        = 'gitlab::dependency'
   $git_user                 = 'git'
   $git_home                 = '/home/git'
   $git_email                = 'git@someserver.net'

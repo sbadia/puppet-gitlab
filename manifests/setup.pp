@@ -41,53 +41,15 @@ class gitlab::setup inherits gitlab {
     mode      => '0755',
   }
 
-  # database dependencies
-  case $::osfamily {
-    'Debian': {
-      case $gitlab_dbtype {
-        'mysql': {
-          ensure_packages(['libmysql++-dev','libmysqlclient-dev'])
-        }
-        'pgsql': {
-          ensure_packages(['libpq-dev','postgresql-client'])
-        }
-        default: {
-          fail("unknow dbtype (${gitlab_dbtype})")
-        }
-      }
-    }
-    'RedHat': {
-      case $gitlab_dbtype {
-        'mysql': {
-          ensure_packages(['mysql-devel'])
-        }
-        'pgsql': {
-          ensure_packages(['postgresql-devel'])
-        }
-        default: {
-          fail("unknow dbtype (${gitlab_dbtype})")
-        }
-      }
-    }
-    default: {
-      fail("${::osfamily} not supported yet")
-    }
-  } # Case $::osfamily
-
   # system packages
   package { 'bundler':
     ensure    => installed,
     provider  => gem,
   }
 
-  # dev. dependencies
-  ensure_packages($system_packages)
-
   package { 'charlock_holmes':
     ensure    => '0.6.9.4',
     provider  => gem,
   }
 
-  # other packages
-  ensure_packages([$git_package_name,'postfix','curl'])
-}
+} # Class:: gitlab::setup inherits gitlab

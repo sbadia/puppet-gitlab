@@ -230,6 +230,7 @@
 #
 class gitlab(
     $ensure                   = $gitlab::params::ensure,
+    $gitlab_dependency        = $gitlab::params::gitlab_dependency,
     $git_user                 = $gitlab::params::git_user,
     $git_home                 = $gitlab::params::git_home,
     $git_email                = $gitlab::params::git_email,
@@ -332,6 +333,7 @@ class gitlab(
   validate_string($google_analytics_id)
 
   anchor { 'gitlab::begin': } ->
+  class { $gitlab_dependency: } ->
   class { '::gitlab::setup': } ->
   class { '::gitlab::package': } ->
   class { '::gitlab::install': } ->
