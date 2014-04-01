@@ -93,6 +93,11 @@
 #   Gitlab domain
 #   default: $fqdn
 #
+# [*gitlab_domain_alias*]
+#   Gitlab domain aliases for nginx
+#   default: false (does not configure any alias)
+#   examples: "hostname1" or "hostname1 hostname2 hostname3.example.com"
+#
 # [*gitlab_repodir*]
 #   Gitlab repository directory
 #   default: $git_home
@@ -256,6 +261,7 @@ class gitlab(
     $gitlab_dbhost            = $gitlab::params::gitlab_dbhost,
     $gitlab_dbport            = $gitlab::params::gitlab_dbport,
     $gitlab_domain            = $gitlab::params::gitlab_domain,
+    $gitlab_domain_alias      = $gitlab::params::gitlab_domain_alias,
     $gitlab_repodir           = $gitlab::params::gitlab_repodir,
     $gitlab_backup            = $gitlab::params::gitlab_backup,
     $gitlab_backup_path       = $gitlab::params::gitlab_backup_path,

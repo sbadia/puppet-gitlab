@@ -25,6 +25,7 @@ class gitlab::params {
   $gitlab_dbhost            = 'localhost'
   $gitlab_dbport            = '5432'
   $gitlab_domain            = $::fqdn
+  $gitlab_domain_alias      = false
   $gitlab_repodir           = $git_home
   $gitlab_backup            = false
   $gitlab_backup_path       = 'tmp/backups/'

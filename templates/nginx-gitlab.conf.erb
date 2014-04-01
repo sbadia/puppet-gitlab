@@ -23,7 +23,7 @@ upstream gitlab {
 server {
   listen <%= @gitlab_http_port %>;
   listen [::]:<%= @gitlab_http_port %> ipv6only=on;
-  server_name <%= @gitlab_domain %>;
+  server_name <%= @gitlab_domain_alias ? @gitlab_domain+' '+@gitlab_domain_alias : @gitlab_domain %>;
   server_tokens off;
   root /nowhere;
   rewrite ^ https://$server_name$request_uri permanent;
@@ -35,7 +35,7 @@ server {
   listen <%= @gitlab_ssl ? @gitlab_ssl_port : @gitlab_http_port %>;
   listen [::]:<%= @gitlab_ssl ? @gitlab_ssl_port : @gitlab_http_port %> ipv6only=on;
   # e.g., server_name source.example.com;
-  server_name <%= @gitlab_domain %>;
+  server_name <%= @gitlab_domain_alias ? @gitlab_domain+' '+@gitlab_domain_alias : @gitlab_domain %>;
   server_tokens off;
   root <%= @git_home %>/gitlab/public;
 
