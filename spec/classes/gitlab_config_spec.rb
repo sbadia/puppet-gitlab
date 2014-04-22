@@ -46,7 +46,8 @@ describe 'gitlab' do
           :ensure => 'file',
           :owner  => 'root',
           :group  => 'root',
-          :mode   => '0644'
+          :mode   => '0644',
+          :notify => 'Service[nginx]'
         )}
         it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/^\s*server unix:\/home\/git\/gitlab\/tmp\/sockets\/gitlab.socket;$/)}
         it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/^\s*listen 80;$/)}

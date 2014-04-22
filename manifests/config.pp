@@ -14,6 +14,7 @@ class gitlab::config inherits gitlab {
     owner   => root,
     group   => root,
     mode    => '0644',
+    notify  => Service['nginx']
   }
 
   file { '/etc/default/gitlab':
