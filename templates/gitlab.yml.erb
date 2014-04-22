@@ -113,6 +113,23 @@ production: &base
     #   issues_url: "http://jira.sample/browse/:id"
     #   new_issue_url: "http://jira.sample/secure/CreateIssue.jspa"
 
+<% if @gitlab_redmine_url != '' -%>
+  issues_tracker:
+    redmine:
+      title: "Redmine"
+      project_url: "<%= @gitlab_redmine_url %>/projects/:issues_tracker_id"
+      issues_url: "<%= @gitlab_redmine_url %>/issues/:id"
+      new_issue_url: "<%= @gitlab_redmine_url %>/projects/:issues_tracker_id/issues/new"
+<% end -%>
+
+<% if @gitlab_jira_url != '' -%>
+    jira:
+      title: "Atlassian Jira"
+      project_url: "<%= @gitlab_jira_url %>/issues/?jql=project=:issues_tracker_id"
+      issues_url: "<%= @gitlab_jira_url %>browse/:id"
+      new_issue_url: "<%= @gitlab_jira_url %>/secure/CreateIssue.jspa"
+<% end -%>
+
   ## Gravatar
   gravatar:
     enabled: true                 # Use user avatar image from Gravatar.com (default: true)
@@ -276,3 +293,4 @@ test:
 
 staging:
   <<: *base
+

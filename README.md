@@ -77,6 +77,8 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 * `gitlab_unicorn_port`: Port that unicorn listens on 172.0.0.1 for HTTP traffic (default: 8080)
 * `gitlab_unicorn_worker`: Number of unicorn workers (default: 2)
 * `gitlab_bundler_flags`: Flags to be passed to bundler when installing gems (default: --deployment)
+* `gitlab_redmine_url`: Enable Redmine as a custom issue tracker (default: nil)
+* `gitlab_jira_url`: Enable Jira as a custom issue tracker (default: nil)
 * `exec_path`: PATH of executtion (default: `/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin`)
 * `ldap_enabled`: Enable LDAP backend for gitlab web (see bellow) (default: false)
 * `ldap_host`: FQDN of LDAP server (default: ldap.domain.com)
