@@ -5,6 +5,9 @@
     - added ldap_user_filter parameter (RFC 4515 style filter for the
       user) (thanks Igor)
     - added nginx to listen ipv6 also
+    - allow end users to disable nginx (with the param.
+      manage_nginx) (thanks Andrew)
+    - added support for nginx domain aliases (thanks Leonardo )
 
   * bugfix:
     - Fix travis gate (ruby1.8 and rake > 10.1.0)
