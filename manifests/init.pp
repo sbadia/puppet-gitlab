@@ -146,11 +146,15 @@
 #
 # [*gitlab_unicorn_port*]
 #   Port that unicorn listens on 172.0.0.1 for HTTP traffic
-#   (default: 8080)
+#   default: 8080
 #
 # [*gitlab_bundler_flags*]
 #   Flags that should be passed to bundler when installing gems
-#   (default: --deployment)
+#   default: --deployment
+#
+# [*gitlab_ruby_version*]
+#   Ruby version to install with rbenv for Gitlab user
+#   default: 2.1.1
 #
 # [*ldap_enabled*]
 #   Enable LDAP backend for gitlab web (see bellow)
