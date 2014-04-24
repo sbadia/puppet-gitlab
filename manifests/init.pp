@@ -266,6 +266,7 @@ class gitlab(
     $gitlab_unicorn_port      = $gitlab::params::gitlab_unicorn_port,
     $gitlab_unicorn_worker    = $gitlab::params::gitlab_unicorn_worker,
     $gitlab_bundler_flags     = $gitlab::params::gitlab_bundler_flags,
+    $gitlab_ruby_version      = $gitlab::params::gitlab_ruby_version,
     $exec_path                = $gitlab::params::exec_path,
     $ldap_enabled             = $gitlab::params::ldap_enabled,
     $ldap_host                = $gitlab::params::ldap_host,
