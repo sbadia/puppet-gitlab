@@ -238,6 +238,7 @@ class gitlab(
     $gitlab_branch            = $gitlab::params::gitlab_branch,
     $gitlabshell_branch       = $gitlab::params::gitlabshell_branch,
     $gitlabshell_sources      = $gitlab::params::gitlabshell_sources,
+    $gitlab_manage_nginx      = $gitlab::params::gitlab_manage_nginx,
     $gitlab_http_port         = $gitlab::params::gitlab_http_port,
     $gitlab_ssl_port          = $gitlab::params::gitlab_ssl_port,
     $gitlab_http_timeout      = $gitlab::params::gitlab_http_timeout,
