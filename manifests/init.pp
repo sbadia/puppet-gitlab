@@ -40,6 +40,11 @@
 #   Gitlab-shell branch
 #   default: v1.8.0
 #
+# [*gitlab_manage_nginx*]
+#   Whether or not this module should install a templated Nginx
+#   configuration; set to false to manage separately
+#   default: true
+#
 # [*gitlab_http_port*]
 #   Port that NGINX listens on for HTTP traffic
 #   default: 80
