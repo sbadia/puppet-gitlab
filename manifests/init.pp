@@ -40,6 +40,11 @@
 #   Gitlab-shell branch
 #   default: v1.8.0
 #
+# [*gitlab_manage_nginx*]
+#   Whether or not this module should install a templated Nginx
+#   configuration; set to false to manage separately
+#   default: true
+#
 # [*gitlab_http_port*]
 #   Port that NGINX listens on for HTTP traffic
 #   default: 80
@@ -238,6 +243,7 @@ class gitlab(
     $gitlab_branch            = $gitlab::params::gitlab_branch,
     $gitlabshell_branch       = $gitlab::params::gitlabshell_branch,
     $gitlabshell_sources      = $gitlab::params::gitlabshell_sources,
+    $gitlab_manage_nginx      = $gitlab::params::gitlab_manage_nginx,
     $gitlab_http_port         = $gitlab::params::gitlab_http_port,
     $gitlab_ssl_port          = $gitlab::params::gitlab_ssl_port,
     $gitlab_http_timeout      = $gitlab::params::gitlab_http_timeout,
