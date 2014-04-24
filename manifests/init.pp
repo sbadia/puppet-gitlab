@@ -30,7 +30,7 @@
 #
 # [*gitlab_branch*]
 #   Gitlab branch
-#   default: 6-5-stable
+#   default: 6-6-stable
 #
 # [*gitlabshell_sources*]
 #   Gitlab-shell sources
@@ -92,6 +92,30 @@
 #   Gitlab repository directory
 #   default: $git_home
 #
+# [*gitlab_backup*]
+#   Whether to enable automatic backups
+#   dbackup efault: false
+#
+# [*gitlab_backup_path*]
+#   Path where Gitlab's backup rake task puts its files
+#   default: 'tmp/backups' (relative to $git_home)
+#
+# [*gitlab_backup_keep_time*]
+#   Retention time of Gitlab's backups (in seconds)
+#   default: 0 (forever)
+#
+# [*gitlab_backup_time*]
+#   Time when the Gitlab backup task is run from cron
+#   default: fqdn_rand(5)+1
+#
+# [*gitlab_backup_postscript*]
+#   Path to one or more shell scripts to be executed after the backup
+#   default: false
+#
+# [*gitlab_relative_url_root*]
+#   run in a non-root path
+#   default: /
+#
 # [*gitlab_ssl*]
 #   Enable SSL for GitLab
 #   default: false
@@ -124,6 +148,10 @@
 #   Port that unicorn listens on 172.0.0.1 for HTTP traffic
 #   (default: 8080)
 #
+# [*gitlab_bundler_flags*]
+#   Flags that should be passed to bundler when installing gems
+#   (default: --deployment)
+#
 # [*ldap_enabled*]
 #   Enable LDAP backend for gitlab web (see bellow)
 #   default: false
@@ -139,6 +167,10 @@
 # [*ldap_uid*]
 #   Uid for LDAP auth
 #   default: uid
+#
+# [*ldap_user_filter*]
+#   RFC 4515 style filter
+#   default: ''
 #
 # [*ldap_port*]
 #   LDAP port
@@ -159,6 +191,18 @@
 # [*git_package_name*]
 #   Package name for git install
 #   default: git-core (Debian)
+#
+# [*ssh_port*]
+#   Port accepting ssh connections
+#   default: 22
+#
+# [*google_analytics_id*]
+#   Google analytics tracking ID
+#   default: nil
+#
+# [*git_proxy*]
+#   Proxy for git access
+#   default: ''
 #
 # === Examples
 #
@@ -185,46 +229,57 @@
 # Andrew Tomaka, Sebastien Badia, Steffen Roegner (c) 2013
 #
 class gitlab(
-    $ensure                 = $gitlab::params::ensure,
-    $git_user               = $gitlab::params::git_user,
-    $git_home               = $gitlab::params::git_home,
-    $git_email              = $gitlab::params::git_email,
-    $git_comment            = $gitlab::params::git_comment,
-    $gitlab_sources         = $gitlab::params::gitlab_sources,
-    $gitlab_branch          = $gitlab::params::gitlab_branch,
-    $gitlabshell_branch     = $gitlab::params::gitlabshell_branch,
-    $gitlabshell_sources    = $gitlab::params::gitlabshell_sources,
-    $gitlab_http_port       = $gitlab::params::gitlab_http_port,
-    $gitlab_ssl_port        = $gitlab::params::gitlab_ssl_port,
-    $gitlab_http_timeout    = $gitlab::params::gitlab_http_timeout,
-    $gitlab_redishost       = $gitlab::params::gitlab_redishost,
-    $gitlab_redisport       = $gitlab::params::gitlab_redisport,
-    $gitlab_dbtype          = $gitlab::params::gitlab_dbtype,
-    $gitlab_dbname          = $gitlab::params::gitlab_dbname,
-    $gitlab_dbuser          = $gitlab::params::gitlab_dbuser,
-    $gitlab_dbpwd           = $gitlab::params::gitlab_dbpwd,
-    $gitlab_dbhost          = $gitlab::params::gitlab_dbhost,
-    $gitlab_dbport          = $gitlab::params::gitlab_dbport,
-    $gitlab_domain          = $gitlab::params::gitlab_domain,
-    $gitlab_repodir         = $gitlab::params::gitlab_repodir,
-    $gitlab_ssl             = $gitlab::params::gitlab_ssl,
-    $gitlab_ssl_cert        = $gitlab::params::gitlab_ssl_cert,
-    $gitlab_ssl_key         = $gitlab::params::gitlab_ssl_key,
-    $gitlab_ssl_self_signed = $gitlab::params::gitlab_ssl_self_signed,
-    $gitlab_projects        = $gitlab::params::gitlab_projects,
-    $gitlab_username_change = $gitlab::params::gitlab_username_change,
-    $gitlab_unicorn_port    = $gitlab::params::gitlab_unicorn_port,
-    $gitlab_unicorn_worker  = $gitlab::params::gitlab_unicorn_worker,
-    $exec_path              = $gitlab::params::exec_path,
-    $ldap_enabled           = $gitlab::params::ldap_enabled,
-    $ldap_host              = $gitlab::params::ldap_host,
-    $ldap_base              = $gitlab::params::ldap_base,
-    $ldap_uid               = $gitlab::params::ldap_uid,
-    $ldap_port              = $gitlab::params::ldap_port,
-    $ldap_method            = $gitlab::params::ldap_method,
-    $ldap_bind_dn           = $gitlab::params::ldap_bind_dn,
-    $ldap_bind_password     = $gitlab::params::ldap_bind_password,
-    $git_package_name       = $gitlab::params::git_package_name,
+    $ensure                   = $gitlab::params::ensure,
+    $git_user                 = $gitlab::params::git_user,
+    $git_home                 = $gitlab::params::git_home,
+    $git_email                = $gitlab::params::git_email,
+    $git_comment              = $gitlab::params::git_comment,
+    $gitlab_sources           = $gitlab::params::gitlab_sources,
+    $gitlab_branch            = $gitlab::params::gitlab_branch,
+    $gitlabshell_branch       = $gitlab::params::gitlabshell_branch,
+    $gitlabshell_sources      = $gitlab::params::gitlabshell_sources,
+    $gitlab_http_port         = $gitlab::params::gitlab_http_port,
+    $gitlab_ssl_port          = $gitlab::params::gitlab_ssl_port,
+    $gitlab_http_timeout      = $gitlab::params::gitlab_http_timeout,
+    $gitlab_redishost         = $gitlab::params::gitlab_redishost,
+    $gitlab_redisport         = $gitlab::params::gitlab_redisport,
+    $gitlab_dbtype            = $gitlab::params::gitlab_dbtype,
+    $gitlab_dbname            = $gitlab::params::gitlab_dbname,
+    $gitlab_dbuser            = $gitlab::params::gitlab_dbuser,
+    $gitlab_dbpwd             = $gitlab::params::gitlab_dbpwd,
+    $gitlab_dbhost            = $gitlab::params::gitlab_dbhost,
+    $gitlab_dbport            = $gitlab::params::gitlab_dbport,
+    $gitlab_domain            = $gitlab::params::gitlab_domain,
+    $gitlab_repodir           = $gitlab::params::gitlab_repodir,
+    $gitlab_backup            = $gitlab::params::gitlab_backup,
+    $gitlab_backup_path       = $gitlab::params::gitlab_backup_path,
+    $gitlab_backup_keep_time  = $gitlab::params::gitlab_backup_keep_time,
+    $gitlab_backup_time       = $gitlab::params::gitlab_backup_time,
+    $gitlab_backup_postscript = $gitlab::params::gitlab_backup_postscript,
+    $gitlab_relative_url_root = $gitlab::params::gitlab_relative_url_root,
+    $gitlab_ssl               = $gitlab::params::gitlab_ssl,
+    $gitlab_ssl_cert          = $gitlab::params::gitlab_ssl_cert,
+    $gitlab_ssl_key           = $gitlab::params::gitlab_ssl_key,
+    $gitlab_ssl_self_signed   = $gitlab::params::gitlab_ssl_self_signed,
+    $gitlab_projects          = $gitlab::params::gitlab_projects,
+    $gitlab_username_change   = $gitlab::params::gitlab_username_change,
+    $gitlab_unicorn_port      = $gitlab::params::gitlab_unicorn_port,
+    $gitlab_unicorn_worker    = $gitlab::params::gitlab_unicorn_worker,
+    $gitlab_bundler_flags     = $gitlab::params::gitlab_bundler_flags,
+    $exec_path                = $gitlab::params::exec_path,
+    $ldap_enabled             = $gitlab::params::ldap_enabled,
+    $ldap_host                = $gitlab::params::ldap_host,
+    $ldap_base                = $gitlab::params::ldap_base,
+    $ldap_uid                 = $gitlab::params::ldap_uid,
+    $ldap_user_filter         = $gitlab::params::ldap_user_filter,
+    $ldap_port                = $gitlab::params::ldap_port,
+    $ldap_method              = $gitlab::params::ldap_method,
+    $ldap_bind_dn             = $gitlab::params::ldap_bind_dn,
+    $ldap_bind_password       = $gitlab::params::ldap_bind_password,
+    $git_package_name         = $gitlab::params::git_package_name,
+    $ssh_port                 = $gitlab::params::ssh_port,
+    $google_analytics_id      = $gitlab::params::google_analytics_id,
+    $git_proxy                = $gitlab::params::git_proxy,
   ) inherits gitlab::params {
   case $::osfamily {
     Debian: {}
@@ -257,6 +312,7 @@ class gitlab(
   validate_re($gitlab_unicorn_port, '^\d+$', 'gitlab_unicorn_port is not valid')
   validate_re($gitlab_unicorn_worker, '^\d+$', 'gitlab_unicorn_worker is not valid')
   validate_re($ensure, '(present|latest)', 'ensure is not valid (present|latest)')
+  validate_re($ssh_port, '^\d+$', 'ssh_port is not a valid port')
 
   validate_string($git_user)
   validate_string($git_email)
@@ -269,9 +325,11 @@ class gitlab(
   validate_string($gitlab_dbuser)
   validate_string($gitlab_dbpwd)
   validate_string($gitlab_dbhost)
+  validate_string($gitlab_bundler_flags)
   validate_string($ldap_base)
   validate_string($ldap_uid)
   validate_string($ldap_host)
+  validate_string($google_analytics_id)
 
   anchor { 'gitlab::begin': } ->
   class { '::gitlab::setup': } ->

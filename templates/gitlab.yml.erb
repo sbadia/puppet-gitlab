@@ -17,13 +17,13 @@ production: &base
 
   ## GitLab settings
   gitlab:
-    ## Web server settings
+    ## Web server settings (note: host is the FQDN, do not include http://)
     host: <%= @gitlab_domain %>
     port: <%= @gitlab_ssl ? @gitlab_ssl_port : @gitlab_http_port %>
     https: <%= @gitlab_ssl %>
 
     # Uncomment and customize the last line to run in a non-root path
-    # WARNING: We recommend creating a FQDN to host GitLab in a root path instead of this. 
+    # WARNING: We recommend creating a FQDN to host GitLab in a root path instead of this.
     # Note that four settings need to be changed for this to work.
     # 1) In your application.rb file: config.relative_url_root = "/gitlab"
     # 2) In your gitlab.yml file: relative_url_root: /gitlab
@@ -32,6 +32,9 @@ production: &base
     # To update the path, run: sudo -u git -H bundle exec rake assets:precompile RAILS_ENV=production
     #
     # relative_url_root: /gitlab
+    <%- if @gitlab_relative_url_root %>
+    relative_url_root: <%= @gitlab_relative_url_root %>
+    <%- end %>
 
     # Uncomment and customize if you can't use the default user to run GitLab (default: 'git')
     # user: git
@@ -46,7 +49,8 @@ production: &base
     ## User settings
     default_projects_limit: <%= @gitlab_projects %>
     # default_can_create_group: false  # default: true
-    username_changing_enabled: <%= @gitlab_username_change ? 'true' : 'false' %> # default: true - User can change her username/namespace
+    # default: true - User can change her username/namespace
+    username_changing_enabled: <%= @gitlab_username_change ? 'true' : 'false' %>
     ## Default theme
     ##   BASIC  = 1
     ##   MARS   = 2
@@ -57,7 +61,7 @@ production: &base
 
 
     ## Users management
-    # default: false - Account passwords are not sent via the email if signup is enabled. 
+    # default: false - Account passwords are not sent via the email if signup is enabled.
     # signup_enabled: true
 
     # Restrict setting visibility levels for non-admin users.
@@ -77,7 +81,8 @@ production: &base
       wiki: true
       wall: false
       snippets: false
-      public: false
+      # can be "private" | "internal" | "public"
+      visibility_level: "private"
 
   ## External issues trackers
   issues_tracker:
@@ -101,7 +106,7 @@ production: &base
     #   ##  :project_id        - GitLab project identifier
     #   ##  :issues_tracker_id - Project Name or Id in external issue tracker
     #   new_issue_url: "http://redmine.sample/projects/:issues_tracker_id/issues/new"
-    # 
+    #
     # jira:
     #   title: "Atlassian Jira"
     #   project_url: "http://jira.sample/issues/?jql=project=:issues_tracker_id"
@@ -124,10 +129,10 @@ production: &base
   ldap:
     enabled: <%= @ldap_enabled %>
     host: '<%= @ldap_host %>'
-    base: '<%= @ldap_base %>'
     port: <%= @ldap_port %>
     uid: '<%= @ldap_uid %>'
-    method: '<%= @ldap_method %>' # "ssl" or "plain"
+    # "ssl" or "plain"
+    method: '<%= @ldap_method %>'
 <% if @ldap_bind_dn != '' -%>
     bind_dn: '<%= @ldap_bind_dn %>'
     password: '<%= @ldap_bind_password %>'
@@ -142,6 +147,20 @@ production: &base
     # If you are using "uid: 'userPrincipalName'" on ActiveDirectory you need to
     # disable this setting, because the userPrincipalName contains an '@'.
     allow_username_or_email_login: true
+
+    # Base where we can search for users
+    #
+    #   Ex. ou=People,dc=gitlab,dc=example
+    #
+    base: '<%= @ldap_base %>'
+
+    # Filter LDAP users
+    #
+    #   Format: RFC 4515
+    #   Ex. (employeeType=developer)
+    #
+    user_filter: '<%= @ldap_user_filter -%>'
+
 
   ## OmniAuth settings
   omniauth:
@@ -184,8 +203,10 @@ production: &base
 
   ## Backup settings
   backup:
-    path: "tmp/backups"   # Relative paths are relative to Rails.root (default: tmp/backups/)
-    # keep_time: 604800   # default: 0 (forever) (in seconds)
+    # Relative paths are relative to Rails.root (default: tmp/backups/)
+    path: <%= @gitlab_backup_path %>
+    # default: 0 (forever) (in seconds)
+    keep_time: <%= @gitlab_backup_keep_time %>
 
   ## GitLab Shell settings
   gitlab_shell:
@@ -200,16 +221,18 @@ production: &base
     receive_pack: true
 
     # If you use non-standard ssh port you need to specify it
-    # ssh_port: 22
+    ssh_port: <%= @ssh_port %>
 
   ## Git settings
   # CAUTION!
   # Use the default values unless you really know what you are doing
   git:
     bin_path: /usr/bin/git
-    # Max size of a git object (e.g. a commit), in bytes
+    # The next value is the maximum memory size grit can use
+    # Given in number of bytes per git object (e.g. a commit)
     # This value can be increased if you have very large commits
-    max_size: 5242880 # 5.megabytes
+    # 5.megabytes
+    max_size: 5242880
     # Git timeout to read a commit, in seconds
     timeout: 10
 
@@ -219,7 +242,15 @@ production: &base
 
   extra:
     ## Google analytics. Uncomment if you want it
+<% if @google_analytics_id != '' %>
+    google_analytics_id: <%= @google_analytics_id %>
+<% else %>
     # google_analytics_id: '_your_tracking_id'
+<% end %>
+
+    ## Piwik analytics.
+    # piwik_url: '_your_piwik_url'
+    # piwik_site_id: '_your_piwik_site_id'
 
     ## Text under sign-in page (Markdown enabled)
     # sign_in_text: |
@@ -231,6 +262,11 @@ development:
 
 test:
   <<: *base
+  gravatar:
+    enabled: true
+  gitlab:
+    host: localhost
+    port: 80
   issues_tracker:
     redmine:
       title: "Redmine"

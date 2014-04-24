@@ -21,7 +21,9 @@
 # 4) In ../gitlab-shell/config.yml: gitlab_url: "http://127.0.0.1/gitlab"
 # To update the path, run: sudo -u git -H bundle exec rake assets:precompile RAILS_ENV=production
 #
-# ENV['RAILS_RELATIVE_URL_ROOT'] = "/gitlab"
+<%- if @gitlab_relative_url_root %>
+ENV['RAILS_RELATIVE_URL_ROOT'] = "<%= @gitlab_relative_url_root %>"
+<%- end %>
 
 # Use at least one worker per core if you're on a dedicated server,
 # more will usually help for _short_ waits on databases/caches.
@@ -36,7 +38,8 @@ worker_processes <%= @gitlab_unicorn_worker %>
 
 # Help ensure your application will always spawn in the symlinked
 # "current" directory that Capistrano sets up.
-working_directory "<%= @git_home %>/gitlab" # available in 0.94.0+
+# available in 0.94.0+
+working_directory "<%= @git_home %>/gitlab"
 
 # listen on both a Unix domain socket and a TCP port,
 # we use a shorter backlog for quicker failover when busy

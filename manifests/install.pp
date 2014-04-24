@@ -62,8 +62,15 @@ class gitlab::install inherits gitlab {
     source => "${git_home}/gitlab/config/initializers/rack_attack.rb.example",
   }
 
+  if $gitlab_relative_url_root {
+    file { "${git_home}/gitlab/config/application.rb":
+      ensure  => file,
+      content => template('gitlab/application.rb.erb'),
+    }
+  }
+
   exec { 'install gitlab':
-    command => "bundle install --without development aws test ${gitlab_without_gems} --deployment",
+    command => "bundle install --without development aws test ${gitlab_without_gems} ${gitlab_bundler_flags}",
     cwd     => "${git_home}/gitlab",
     unless  => 'bundle check',
     timeout => 0,
@@ -73,6 +80,7 @@ class gitlab::install inherits gitlab {
       File["${git_home}/gitlab/config/gitlab.yml"],
       File["${git_home}/gitlab/config/resque.yml"],
     ],
+    notify  => Exec['run migrations'],
   }
 
   exec { 'setup gitlab database':
@@ -81,12 +89,20 @@ class gitlab::install inherits gitlab {
     creates => "${git_home}/.gitlab_setup_done",
     require => Exec['install gitlab'],
     notify  => Exec['precompile assets'],
+    before  => Exec['run migrations'],
   }
 
   exec { 'precompile assets':
-    command     => 'bundle exec rake assets:precompile RAILS_ENV=production',
+    command     => 'bundle exec rake assets:clean assets:precompile cache:clear RAILS_ENV=production',
     cwd         =>  "${git_home}/gitlab",
     refreshonly =>  true,
+  }
+
+  exec { 'run migrations':
+    command     => 'bundle exec rake db:migrate RAILS_ENV=production',
+    cwd         =>  "${git_home}/gitlab",
+    refreshonly =>  true,
+    notify      => Exec['precompile assets'],
   }
 
   file {

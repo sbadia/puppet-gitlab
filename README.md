@@ -1,6 +1,6 @@
 # Puppet-gitlab [![Build Status](https://travis-ci.org/sbadia/puppet-gitlab.png?branch=master)](https://travis-ci.org/sbadia/puppet-gitlab)
 
-Tested successfully with Gitlab 6-5-stable on Ubuntu 12.04 and Debian Wheezy (7.2) with Puppet 3.2 or newer.
+Tested successfully with Gitlab 6-7-stable on Ubuntu 12.04 and Debian Wheezy (7.2) with Puppet 3.2 or newer.
 
 #### Table of contents
 
@@ -46,9 +46,9 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 * `git_email`: Email address for gitlab user (default: git@someserver.net)
 * `git_comment`: Gitlab user comment (default: GitLab)
 * `gitlab_sources`: Gitlab sources (default: git://github.com/gitlabhq/gitlabhq.git)
-* `gitlab_branch`: Gitlab branch (default: 6-5-stable)
+* `gitlab_branch`: Gitlab branch (default: 6-7-stable)
 * `gitlabshell_sources`: Gitlab-shell sources (default: git://github.com/gitlabhq/gitlab-shell.git)
-* `gitlabshell_branch`: Gitlab-shell branch (default: v1.8.0)
+* `gitlabshell_branch`: Gitlab-shell branch (default: v1.9.1)
 * `gitlab_http_port`: Port that NGINX listens on for HTTP traffic (default: 80)
 * `gitlab_ssl_port`: Port that NGINX listens on for HTTPS traffic (default: 443)
 * `gitlab_http_timeout`: HTTP timeout in seconds (unicorn/nginx) (default: 60)
@@ -62,6 +62,12 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 * `gitlab_dbport`: Gitlab database port (default: 3306)
 * `gitlab_domain`: Gitlab domain (default $fqdn)
 * `gitlab_repodir`: Gitlab repository directory (default: $git\_home)
+* `gitlab_backup`: Whether to enable automatic backups (default: false)
+* `gitlab_backup_path`: Path where Gitlab's backup rake task puts its files (default: tmp/backups)
+* `gitlab_backup_keep_time`: Retention time of Gitlab's backups (in seconds) (default: 0 == forever)
+* `gitlab_backup_time`: Time (hour) when the Gitlab backup task is run from cron (default: fqdn\_rand(5)+1)
+* `gitlab_backup_postscript`: Path to one or more shell scripts to be executed after the backup (default: false)
+* `gitlab_relative_url_root`: Run GitLab in a non-root path (default: false, dont't forget the first slash)
 * `gitlab_ssl`: Enable SSL for GitLab (default: false)
 * `gitlab_ssl_cert`: SSL Certificate location (default: /etc/ssl/certs/ssl-cert-snakeoil.pem)
 * `gitlab_ssl_key`: SSL Key location (default: /etc/ssl/private/ssl-cert-snakeoil.key)
@@ -70,16 +76,21 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 * `gitlab_username_change`: Manage username changing in GitLab (default: true)
 * `gitlab_unicorn_port`: Port that unicorn listens on 172.0.0.1 for HTTP traffic (default: 8080)
 * `gitlab_unicorn_worker`: Number of unicorn workers (default: 2)
+* `gitlab_bundler_flags`: Flags to be passed to bundler when installing gems (default: --deployment)
 * `exec_path`: PATH of executtion (default: `/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin`)
 * `ldap_enabled`: Enable LDAP backend for gitlab web (see bellow) (default: false)
 * `ldap_host`: FQDN of LDAP server (default: ldap.domain.com)
 * `ldap_base`: LDAP base dn (default: dc=domain,dc=com)
 * `ldap_uid`: Uid for LDAP auth (default: uid)
+* `ldap_user_filter`: RFC 4515 style filter for the user (default: '')
 * `ldap_port`: LDAP port (default: 636)
 * `ldap_method`: Method to use (default: ssl)
 * `ldap_bind_dn`: User for LDAP bind auth (default: nil)
 * `ldap_bind_password`: Password for LDN bind auth (default: nil)
 * `git_package_name`: Package name for git (default: git-core)
+* `git_proxy`: Proxy for GIT access (default: undef)
+* `ssh_port`: Port accepting SSH connections (default: 22)
+* `google_analytics_id`: Google Analytics tracking ID (default: nil)
 
 # Usage
 
