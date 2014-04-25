@@ -162,6 +162,11 @@
 #   Flags that should be passed to bundler when installing gems
 #   (default: --deployment)
 #
+# [*gitlab_ensure_postfix*]
+#   Whether or not this module should ensure the postfix package is
+#   installed (used to manage conflicts with other modules)
+#   default: true
+#
 # [*ldap_enabled*]
 #   Enable LDAP backend for gitlab web (see bellow)
 #   default: false
@@ -278,6 +283,7 @@ class gitlab(
     $gitlab_unicorn_port      = $gitlab::params::gitlab_unicorn_port,
     $gitlab_unicorn_worker    = $gitlab::params::gitlab_unicorn_worker,
     $gitlab_bundler_flags     = $gitlab::params::gitlab_bundler_flags,
+    $gitlab_ensure_postfix    = $gitlab::params::gitlab_ensure_postfix,
     $exec_path                = $gitlab::params::exec_path,
     $ldap_enabled             = $gitlab::params::ldap_enabled,
     $ldap_host                = $gitlab::params::ldap_host,
