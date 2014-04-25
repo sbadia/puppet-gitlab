@@ -92,6 +92,6 @@ class gitlab::setup inherits gitlab {
   ensure_packages([$git_package_name, 'curl'])
 
   if $gitlab_ensure_postfix {
-    ensure_packages('postfix')
+    ensure_packages(['postfix'])
   }
 }
