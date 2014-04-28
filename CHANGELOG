@@ -8,6 +8,7 @@
     - allow end users to disable nginx (with the param.
       manage_nginx) (thanks Andrew)
     - added support for nginx domain aliases (thanks Leonardo )
+    - added gitlab_ensure_postfix parameter (to manage or not postfix package)
 
   * bugfix:
     - Fix travis gate (ruby1.8 and rake > 10.1.0)
