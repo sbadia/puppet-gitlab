@@ -65,9 +65,11 @@ class gitlab::config inherits gitlab {
   }
 
   # backup task
+  $backup_file = '/usr/local/sbin/backup-gitlab.sh'
+
   if $gitlab_backup {
 
-    file { '/usr/local/sbin/backup-gitlab.sh':
+    file { $backup_file:
       ensure  => present,
       content => template('gitlab/backup-gitlab.sh.erb'),
       mode    => '0755',
@@ -81,6 +83,17 @@ class gitlab::config inherits gitlab {
       minute  => fqdn_rand(60),
       user    => $git_user,
       require => File['/usr/local/sbin/backup-gitlab.sh'],
+    }
+  }
+  else {
+
+    file { $backup_file:
+      ensure => absent,
+    }
+
+    cron { 'gitlab backup':
+      ensure  => absent,
+      user    => $git_user,
     }
   }
 }
