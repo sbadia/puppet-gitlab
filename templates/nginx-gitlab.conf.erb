@@ -64,6 +64,14 @@ server {
     try_files $uri $uri/index.html $uri.html @gitlab;
   }
 
+  # Enable gzip compression as per rails guide: http://guides.rubyonrails.org/asset_pipeline.html#gzip-compression
+  location ~ ^/(assets)/  {
+    root /<%= @git_home %>/gitlab/public;
+    gzip_static on; # to serve pre-gzipped version
+    expires max;
+    add_header Cache-Control public;
+  }
+
   # if a file, which is not found in the root folder is requested,
   # then the proxy pass the request to the upsteam (gitlab unicorn)
   location @gitlab {
