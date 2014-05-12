@@ -44,6 +44,7 @@ server {
   client_max_body_size 20m;
 
 <% if @gitlab_ssl %>
+  gzip                          off;
   ssl                           on;
   ssl_certificate               <%= @gitlab_ssl_cert %>;
   ssl_certificate_key           <%= @gitlab_ssl_key %>;
