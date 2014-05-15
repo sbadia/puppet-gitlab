@@ -162,6 +162,10 @@
 #   Flags that should be passed to bundler when installing gems
 #   (default: --deployment)
 #
+# [*gitlab_bundler_jobs*]
+#   Number of jobs to use while installing gems.  Should match number of
+#   procs on your system (default: number of processors on system)
+#
 # [*gitlab_ensure_postfix*]
 #   Whether or not this module should ensure the postfix package is
 #   installed (used to manage conflicts with other modules)
@@ -283,6 +287,7 @@ class gitlab(
     $gitlab_unicorn_port      = $gitlab::params::gitlab_unicorn_port,
     $gitlab_unicorn_worker    = $gitlab::params::gitlab_unicorn_worker,
     $gitlab_bundler_flags     = $gitlab::params::gitlab_bundler_flags,
+    $gitlab_bundler_jobs      = $gitlab::params::gitlab_bundler_jobs,
     $gitlab_ensure_postfix    = $gitlab::params::gitlab_ensure_postfix,
     $exec_path                = $gitlab::params::exec_path,
     $ldap_enabled             = $gitlab::params::ldap_enabled,
@@ -329,6 +334,7 @@ class gitlab(
   validate_re($gitlab_projects, '^\d+$', 'gitlab_projects is not valid')
   validate_re($gitlab_unicorn_port, '^\d+$', 'gitlab_unicorn_port is not valid')
   validate_re($gitlab_unicorn_worker, '^\d+$', 'gitlab_unicorn_worker is not valid')
+  validate_re($gitlab_bundler_jobs, '^\d+$', 'gitlab_bundler_jobs is not valid')
   validate_re($ensure, '(present|latest)', 'ensure is not valid (present|latest)')
   validate_re($ssh_port, '^\d+$', 'ssh_port is not a valid port')
 
