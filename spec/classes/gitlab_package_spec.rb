@@ -30,7 +30,7 @@ describe 'gitlab' do
           :user     => 'git',
           :provider => 'git',
           :source   => 'git://github.com/gitlabhq/gitlabhq.git',
-          :revision => '6-7-stable'
+          :revision => '6-8-stable'
         )}
         it { should contain_vcsrepo('/home/git/gitlab-shell').with(
           :ensure   => 'present',
