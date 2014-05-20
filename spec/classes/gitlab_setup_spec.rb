@@ -80,7 +80,8 @@ describe 'gitlab' do
         },
         'system_packages' => ['libicu-dev', 'python2.7','python-docutils',
                               'libxml2-dev','libxslt1-dev','python-dev'],
-        'git_packages' => ['git-core']
+        'git_packages' => ['git-core'], 
+        'libicu_packages' => ['libicu-dev']
       },
       'RedHat' => {
         'db_packages' => {
@@ -91,7 +92,8 @@ describe 'gitlab' do
                               'libxslt-devel','python-devel','libcurl-devel',
                               'readline-devel','openssl-devel','zlib-devel',
                               'libyaml-devel','patch','gcc-c++'],
-        'git_packages' => ['git']
+        'git_packages' => ['git'],
+        'libicu_packages' => ['libicu-devel']
       }
     }
 
@@ -117,6 +119,9 @@ describe 'gitlab' do
           p[distro]['git_packages'].each do |pkg|
             it { should contain_package(pkg) }
           end
+          p[distro]['libicu_packages'].each do |pkg|
+            it { should contain_package(pkg) }
+          end
         end
       end
       #### Gems (all dist.)
@@ -127,7 +132,8 @@ describe 'gitlab' do
         )}
         it { should contain_package('charlock_holmes').with(
           :ensure   => '0.6.9.4',
-          :provider => 'gem'
+          :provider => 'gem',
+          :require  => 'Package[libicu-dev]'
         )}
       end
       #### Commons packages (all dist.)

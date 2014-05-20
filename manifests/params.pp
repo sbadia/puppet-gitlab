@@ -61,14 +61,16 @@ class gitlab::params {
   case $::osfamily {
     'Debian': {
       $git_package_name = 'git-core'
+      $libicu_package_name = 'libicu-dev'
       # system packages
-      $system_packages = ['libicu-dev', 'python2.7','python-docutils',
+      $system_packages = [$libicu_package_name, 'python2.7','python-docutils',
                           'libxml2-dev', 'libxslt1-dev','python-dev']
     }
     'RedHat': {
       $git_package_name = 'git'
+      $libicu_package_name = 'libicu-devel'
       # system packages
-      $system_packages = ['libicu-devel', 'perl-Time-HiRes','libxml2-devel',
+      $system_packages = [$libicu_package_name, 'perl-Time-HiRes','libxml2-devel',
                           'libxslt-devel','python-devel','libcurl-devel',
                           'readline-devel','openssl-devel','zlib-devel',
                           'libyaml-devel','patch','gcc-c++']

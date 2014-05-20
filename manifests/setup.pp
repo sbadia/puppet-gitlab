@@ -86,6 +86,7 @@ class gitlab::setup inherits gitlab {
   package { 'charlock_holmes':
     ensure    => '0.6.9.4',
     provider  => gem,
+    require   => Package[$libicu_package_name]
   }
 
   # other packages
