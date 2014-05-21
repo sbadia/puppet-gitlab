@@ -67,33 +67,24 @@ class gitlab::config inherits gitlab {
   # backup task
   $backup_file = '/usr/local/sbin/backup-gitlab.sh'
 
-  if $gitlab_backup {
-
-    file { $backup_file:
-      ensure  => present,
-      content => template('gitlab/backup-gitlab.sh.erb'),
-      mode    => '0755',
-      owner   => 'root',
-      group   => 'root',
-    }
-
-    cron { 'gitlab backup':
-      command => '/usr/local/sbin/backup-gitlab.sh',
-      hour    => $gitlab_backup_time,
-      minute  => fqdn_rand(60),
-      user    => $git_user,
-      require => File['/usr/local/sbin/backup-gitlab.sh'],
-    }
+  $backup_ensure = $gitlab_backup? {
+    true    => present,
+    default => absent,
   }
-  else {
 
-    file { $backup_file:
-      ensure => absent,
-    }
+  file { $backup_file:
+    ensure  => $backup_ensure,
+    content => template('gitlab/backup-gitlab.sh.erb'),
+    mode    => '0755',
+    owner   => 'root',
+    group   => 'root',
+  }
 
-    cron { 'gitlab backup':
-      ensure  => absent,
-      user    => $git_user,
-    }
+  cron { 'gitlab backup':
+    ensure  => $backup_ensure,
+    command => $backup_file,
+    hour    => $gitlab_backup_time,
+    minute  => fqdn_rand(60),
+    user    => $git_user,
   }
 }
