@@ -3,9 +3,10 @@ require 'spec_helper'
 # Gitlab
 describe 'gitlab' do
   let(:facts) {{
-    :osfamily  => 'Debian',
-    :fqdn      => 'gitlab.fooboozoo.fr',
-    :sshrsakey => 'AAAAB3NzaC1yc2EAAAA'
+    :osfamily       => 'Debian',
+    :fqdn           => 'gitlab.fooboozoo.fr',
+    :processorcount => '2',
+    :sshrsakey      => 'AAAAB3NzaC1yc2EAAAA'
   }}
 
   ## Parameter set
@@ -102,7 +103,7 @@ describe 'gitlab' do
         #= With each dbtype
         ['mysql','pgsql'].each do |dbtype|
           context "for #{dbtype} devel on #{distro}" do
-            let(:facts) {{ :osfamily => distro }}
+            let(:facts) {{ :osfamily => distro, :processorcount => '2' }}
             let(:params) {{ :gitlab_dbtype => dbtype }}
             p[distro]['db_packages'][dbtype].each do |pkg|
               it { should contain_package(pkg) }
@@ -110,7 +111,7 @@ describe 'gitlab' do
           end
         end
         context "for devel dependencies on #{distro}" do
-          let(:facts) {{ :osfamily => distro }}
+          let(:facts) {{ :osfamily => distro, :processorcount => '2' }}
           p[distro]['system_packages'].each do |pkg|
             it { should contain_package(pkg) }
           end

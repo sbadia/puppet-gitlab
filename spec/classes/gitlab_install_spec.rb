@@ -3,9 +3,10 @@ require 'spec_helper'
 # Gitlab
 describe 'gitlab' do
   let(:facts) {{
-    :osfamily  => 'Debian',
-    :fqdn      => 'gitlab.fooboozoo.fr',
-    :sshrsakey => 'AAAAB3NzaC1yc2EAAAA'
+    :osfamily       => 'Debian',
+    :fqdn           => 'gitlab.fooboozoo.fr',
+    :processorcount => '2',
+    :sshrsakey      => 'AAAAB3NzaC1yc2EAAAA'
   }}
 
   ## Parameter set
@@ -30,6 +31,7 @@ describe 'gitlab' do
       :gitlab_unicorn_port      => '8888',
       :gitlab_unicorn_worker    => '8',
       :gitlab_bundler_flags     => '--no-deployment',
+      :gitlab_bundler_jobs      => '1',
       :exec_path                => '/opt/bw/bin:/bin:/usr/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/sbin',
       :ldap_host                => 'ldap.fooboozoo.fr',
       :ldap_base                => 'dc=fooboozoo,dc=fr',
@@ -153,7 +155,7 @@ describe 'gitlab' do
         it { should contain_exec('install gitlab').with(
           :user    => 'git',
           :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          :command => 'bundle install --without development aws test postgres --deployment',
+          :command => "bundle install -j#{Facter['processorcount'].value} --without development aws test postgres --deployment",
           :unless  => 'bundle check',
           :cwd     => '/home/git/gitlab',
           :timeout => 0,
@@ -174,7 +176,7 @@ describe 'gitlab' do
           it { should contain_exec('install gitlab').with(
             :user    => 'git',
             :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-            :command => 'bundle install --without development aws test mysql --deployment',
+            :command => "bundle install -j#{Facter['processorcount'].value} --without development aws test mysql --deployment",
             :unless  => 'bundle check',
             :cwd     => '/home/git/gitlab',
             :timeout => 0,
@@ -326,7 +328,7 @@ describe 'gitlab' do
         it { should contain_exec('install gitlab').with(
           :user    => params_set[:git_user],
           :path    => params_set[:exec_path],
-          :command => "bundle install --without development aws test postgres #{params_set[:gitlab_bundler_flags]}",
+          :command => "bundle install -j#{params_set[:gitlab_bundler_jobs]} --without development aws test postgres #{params_set[:gitlab_bundler_flags]}",
           :unless  => 'bundle check',
           :cwd     => "#{params_set[:git_home]}/gitlab",
           :timeout => 0,
@@ -340,7 +342,7 @@ describe 'gitlab' do
           it { should contain_exec('install gitlab').with(
             :user    => params_set[:git_user],
             :path    => params_set[:exec_path],
-            :command => "bundle install --without development aws test mysql #{params_set[:gitlab_bundler_flags]}",
+            :command => "bundle install -j#{params_set[:gitlab_bundler_jobs]} --without development aws test mysql #{params_set[:gitlab_bundler_flags]}",
             :unless  => 'bundle check',
             :cwd     => "#{params_set[:git_home]}/gitlab",
             :timeout => 0,
