@@ -38,9 +38,8 @@ describe 'gitlab' do
         it { should contain_file('/home/git/.gitconfig').with_content(/^\s*name = "GitLab"$/)}
         it { should contain_file('/home/git/.gitconfig').with_content(/^\s*email = git@someserver.net$/)}
         it { should_not contain_file('/srv/gitlab/.gitconfig').with_content(/^\s*proxy$/)}
-        ['/home/git','/home/git/gitlab-satellites'].each do |file|
-          it { should contain_file(file).with(:ensure => 'directory',:mode => '0755')}
-        end
+        it { should contain_file('/home/git').with(:ensure => 'directory', :mode => '0755')}
+        it { should contain_file('/home/git/gitlab-satellites').with(:ensure => 'directory', :mode => '0750')}
       end
       context 'with specifics params' do
         let(:params) { params_set }
@@ -55,9 +54,8 @@ describe 'gitlab' do
         it { should contain_file('/srv/gitlab/.gitconfig').with_content(/^\s*name = "GitLab"$/)}
         it { should contain_file('/srv/gitlab/.gitconfig').with_content(/^\s*email = #{params_set[:git_email]}$/)}
         it { should contain_file('/srv/gitlab/.gitconfig').with_content(/^\s*proxy = #{params_set[:git_proxy]}$/)}
-        ['/srv/gitlab','/srv/gitlab/gitlab-satellites'].each do |file|
-          it { should contain_file(file).with(:ensure => 'directory',:mode => '0755')}
-        end
+        it { should contain_file('/srv/gitlab').with(:ensure => 'directory',:mode => '0755')}
+        it { should contain_file('/srv/gitlab/gitlab-satellites').with(:ensure => 'directory',:mode => '0750')}
       end
     end
 
