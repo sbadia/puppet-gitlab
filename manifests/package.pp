@@ -1,7 +1,7 @@
 # Class:: gitlab::package
 #
 #
-class gitlab::package inherits gitlab {
+class gitlab::package inherits ::gitlab {
   Vcsrepo {
     ensure   => $ensure,
     provider => 'git',

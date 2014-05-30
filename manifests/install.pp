@@ -1,7 +1,7 @@
 # Class:: gitlab::install
 #
 #
-class gitlab::install inherits gitlab {
+class gitlab::install inherits ::gitlab {
 
   $gitlab_without_gems = $gitlab_dbtype ? {
     'mysql' => 'postgres',
