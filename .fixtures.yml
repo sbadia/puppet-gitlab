@@ -1,8 +1,16 @@
 fixtures:
   symlinks:
-    "gitlab": "#{source_dir}"
+    gitlab: "#{source_dir}"
   repositories:
-    "rbenv": "git://github.com/alup/puppet-rbenv.git"
-    "stdlib": "git://github.com/puppetlabs/puppetlabs-stdlib.git"
-    "vcsrepo": "git://github.com/puppetlabs/puppetlabs-vcsrepo.git"
-    "git": "git://github.com/puppetlabs/puppetlabs-git.git"
+    rbenv:
+      repo: "git://github.com/alup/puppet-rbenv.git"
+      ref: "6628a24"
+    stdlib:
+      repo: "git://github.com/puppetlabs/puppetlabs-stdlib.git"
+      ref: "4.2.1"
+    vcsrepo:
+      repo: "git://github.com/puppetlabs/puppetlabs-vcsrepo.git"
+      ref: "0.2.0"
+    git:
+      repo: "git://github.com/puppetlabs/puppetlabs-git.git"
+      ref: "0.2.0"
