@@ -93,10 +93,10 @@ class gitlab::setup inherits gitlab {
   }
 
   rbenv::gem { 'charlock_holmes':
+    ensure => '0.6.9.4',
     user   => $git_user,
     home   => $git_home,
     ruby   => $gitlab_ruby_version,
-    ensure => '0.6.9.4',
   }
 
   # other packages
