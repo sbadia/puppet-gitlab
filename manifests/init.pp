@@ -30,7 +30,7 @@
 #
 # [*gitlab_branch*]
 #   Gitlab branch
-#   default: 6-6-stable
+#   default: 6-9-stable
 #
 # [*gitlabshell_sources*]
 #   Gitlab-shell sources
@@ -38,7 +38,12 @@
 #
 # [*gitlabshell_banch*]
 #   Gitlab-shell branch
-#   default: v1.8.0
+#   default: v1.9.4
+#
+# [*gitlab_manage_nginx*]
+#   Whether or not this module should install a templated Nginx
+#   configuration; set to false to manage separately
+#   default: true
 #
 # [*gitlab_http_port*]
 #   Port that NGINX listens on for HTTP traffic
@@ -87,6 +92,11 @@
 # [*gitlab_domain*]
 #   Gitlab domain
 #   default: $fqdn
+#
+# [*gitlab_domain_alias*]
+#   Gitlab domain aliases for nginx
+#   default: false (does not configure any alias)
+#   examples: "hostname1" or "hostname1 hostname2 hostname3.example.com"
 #
 # [*gitlab_repodir*]
 #   Gitlab repository directory
@@ -152,9 +162,18 @@
 #   Flags that should be passed to bundler when installing gems
 #   default: --deployment
 #
+# [*gitlab_bundler_jobs*]
+#   Number of jobs to use while installing gems.  Should match number of
+#   procs on your system (default: number of processors on system)
+#
 # [*gitlab_ruby_version*]
 #   Ruby version to install with rbenv for Gitlab user
 #   default: 2.1.1
+#
+# [*gitlab_ensure_postfix*]
+#   Whether or not this module should ensure the postfix package is
+#   installed (used to manage conflicts with other modules)
+#   default: true
 #
 # [*ldap_enabled*]
 #   Enable LDAP backend for gitlab web (see bellow)
@@ -242,6 +261,7 @@ class gitlab(
     $gitlab_branch            = $gitlab::params::gitlab_branch,
     $gitlabshell_branch       = $gitlab::params::gitlabshell_branch,
     $gitlabshell_sources      = $gitlab::params::gitlabshell_sources,
+    $gitlab_manage_nginx      = $gitlab::params::gitlab_manage_nginx,
     $gitlab_http_port         = $gitlab::params::gitlab_http_port,
     $gitlab_ssl_port          = $gitlab::params::gitlab_ssl_port,
     $gitlab_http_timeout      = $gitlab::params::gitlab_http_timeout,
@@ -254,6 +274,7 @@ class gitlab(
     $gitlab_dbhost            = $gitlab::params::gitlab_dbhost,
     $gitlab_dbport            = $gitlab::params::gitlab_dbport,
     $gitlab_domain            = $gitlab::params::gitlab_domain,
+    $gitlab_domain_alias      = $gitlab::params::gitlab_domain_alias,
     $gitlab_repodir           = $gitlab::params::gitlab_repodir,
     $gitlab_backup            = $gitlab::params::gitlab_backup,
     $gitlab_backup_path       = $gitlab::params::gitlab_backup_path,
@@ -270,7 +291,9 @@ class gitlab(
     $gitlab_unicorn_port      = $gitlab::params::gitlab_unicorn_port,
     $gitlab_unicorn_worker    = $gitlab::params::gitlab_unicorn_worker,
     $gitlab_bundler_flags     = $gitlab::params::gitlab_bundler_flags,
+    $gitlab_bundler_jobs      = $gitlab::params::gitlab_bundler_jobs,
     $gitlab_ruby_version      = $gitlab::params::gitlab_ruby_version,
+    $gitlab_ensure_postfix    = $gitlab::params::gitlab_ensure_postfix,
     $exec_path                = $gitlab::params::exec_path,
     $ldap_enabled             = $gitlab::params::ldap_enabled,
     $ldap_host                = $gitlab::params::ldap_host,
@@ -316,6 +339,7 @@ class gitlab(
   validate_re($gitlab_projects, '^\d+$', 'gitlab_projects is not valid')
   validate_re($gitlab_unicorn_port, '^\d+$', 'gitlab_unicorn_port is not valid')
   validate_re($gitlab_unicorn_worker, '^\d+$', 'gitlab_unicorn_worker is not valid')
+  validate_re($gitlab_bundler_jobs, '^\d+$', 'gitlab_bundler_jobs is not valid')
   validate_re($ensure, '(present|latest)', 'ensure is not valid (present|latest)')
   validate_re($ssh_port, '^\d+$', 'ssh_port is not a valid port')
 

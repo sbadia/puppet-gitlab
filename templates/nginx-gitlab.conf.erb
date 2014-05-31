@@ -23,7 +23,7 @@ upstream gitlab {
 server {
   listen <%= @gitlab_http_port %>;
   listen [::]:<%= @gitlab_http_port %> ipv6only=on;
-  server_name <%= @gitlab_domain %>;
+  server_name <%= @gitlab_domain_alias ? @gitlab_domain+' '+@gitlab_domain_alias : @gitlab_domain %>;
   server_tokens off;
   root /nowhere;
   rewrite ^ https://$server_name$request_uri permanent;
@@ -35,7 +35,7 @@ server {
   listen <%= @gitlab_ssl ? @gitlab_ssl_port : @gitlab_http_port %>;
   listen [::]:<%= @gitlab_ssl ? @gitlab_ssl_port : @gitlab_http_port %> ipv6only=on;
   # e.g., server_name source.example.com;
-  server_name <%= @gitlab_domain %>;
+  server_name <%= @gitlab_domain_alias ? @gitlab_domain+' '+@gitlab_domain_alias : @gitlab_domain %>;
   server_tokens off;
   root <%= @git_home %>/gitlab/public;
 
@@ -44,6 +44,7 @@ server {
   client_max_body_size 20m;
 
 <% if @gitlab_ssl %>
+  gzip                          off;
   ssl                           on;
   ssl_certificate               <%= @gitlab_ssl_cert %>;
   ssl_certificate_key           <%= @gitlab_ssl_key %>;
@@ -61,6 +62,14 @@ server {
     # serve static files from defined root folder;.
     # @gitlab is a named location for the upstream fallback, see below
     try_files $uri $uri/index.html $uri.html @gitlab;
+  }
+
+  # Enable gzip compression as per rails guide: http://guides.rubyonrails.org/asset_pipeline.html#gzip-compression
+  location ~ ^/(assets)/  {
+    root /<%= @git_home %>/gitlab/public;
+    gzip_static on; # to serve pre-gzipped version
+    expires max;
+    add_header Cache-Control public;
   }
 
   # if a file, which is not found in the root folder is requested,

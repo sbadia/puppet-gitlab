@@ -1,13 +1,23 @@
 # vi: set ft=changelog :
 
-2014-04-xx - 0.1.4
+2014-05-26 - 0.1.4
   * feature:
     - added ldap_user_filter parameter (RFC 4515 style filter for the
       user) (thanks Igor)
     - added nginx to listen ipv6 also
+    - allow end users to disable nginx (with the param.
+      manage_nginx) (thanks Andrew)
+    - added support for nginx domain aliases (thanks Leonardo)
+    - added gitlab_ensure_postfix parameter (to manage or not postfix package)
+    - disable gzip compression if SSL enabled (nginx)
+      - and enable it for static assets
+    - bump to gitlab 6.9 + gitlab-shell 1.9.4 (6.7 → 6.8 → 6.9)
+    - allow adjustment of number of bundler threads
+    - simplify backup task
 
   * bugfix:
     - Fix travis gate (ruby1.8 and rake > 10.1.0)
+    - remove MySQL reaping_frequency
 
 2014-03-25 - 0.1.3
   * feature:

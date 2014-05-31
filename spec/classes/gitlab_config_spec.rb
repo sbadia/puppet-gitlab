@@ -3,9 +3,10 @@ require 'spec_helper'
 # Gitlab
 describe 'gitlab' do
   let(:facts) {{
-    :osfamily  => 'Debian',
-    :fqdn      => 'gitlab.fooboozoo.fr',
-    :sshrsakey => 'AAAAB3NzaC1yc2EAAAA'
+    :osfamily       => 'Debian',
+    :fqdn           => 'gitlab.fooboozoo.fr',
+    :processorcount => '2',
+    :sshrsakey      => 'AAAAB3NzaC1yc2EAAAA'
   }}
 
   ## Parameter set
@@ -118,12 +119,24 @@ describe 'gitlab' do
         it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/^\s*root #{params_set[:git_home]}\/gitlab\/public;$/)}
         it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/^\s*proxy_read_timeout #{params_set[:gitlab_http_timeout]};$/)}
         it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/^\s*proxy_connect_timeout #{params_set[:gitlab_http_timeout]};$/)}
+        ["hostname1", "hostname1 hostname2.example.com hostname3.example.org"].each do |domain_alias|
+          context "with domain_alias => #{domain_alias}" do
+            let(:params) { params_set.merge(:gitlab_domain_alias => domain_alias)} 
+            it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/^\s*server_name gitlab.fooboozoo.fr #{domain_alias};$/)}
+          end
+        end
         context 'with ssl' do
           let(:params) { params_set.merge(params_ssl) }
           it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/^\s*listen 443;$/)}
           it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/^\s*ssl_certificate               \/etc\/ssl\/certs\/ssl-cert-snakeoil.pem;$/)}
           it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/^\s*ssl_certificate_key           \/etc\/ssl\/private\/ssl-cert-snakeoil.key;$/)}
           it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/^\s*proxy_set_header   X-Forwarded-Ssl   on;$/)}
+        end
+        ["hostname1", "hostname1 hostname2.example.com hostname3.example.org"].each do |domain_alias|
+          context "with ssl and domain_alias => #{domain_alias}" do
+            let(:params) { params_set.merge(:gitlab_domain_alias => domain_alias)} 
+            it { should contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/^\s*server_name gitlab.fooboozoo.fr #{domain_alias};$/)}
+          end
         end
         context 'with ssl and custom certs' do
           let(:params) { params_set.merge(params_ssl.merge({:gitlab_ssl_cert => '/srv/ssl/gitlab.pem',:gitlab_ssl_key => '/srv/ssl/gitlab.key'})) }

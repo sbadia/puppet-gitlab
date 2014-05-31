@@ -1,6 +1,6 @@
 # Puppet-gitlab [![Build Status](https://travis-ci.org/sbadia/puppet-gitlab.png?branch=master)](https://travis-ci.org/sbadia/puppet-gitlab)
 
-Tested successfully with Gitlab 6-7-stable on Ubuntu 12.04 and Debian Wheezy (7.2) with Puppet 3.2 or newer.
+Tested successfully with Gitlab 6-8-stable on Ubuntu 12.04 and Debian Wheezy (7.2) with Puppet 3.2 or newer.
 
 #### Table of contents
 
@@ -46,9 +46,9 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 * `git_email`: Email address for gitlab user (default: git@someserver.net)
 * `git_comment`: Gitlab user comment (default: GitLab)
 * `gitlab_sources`: Gitlab sources (default: git://github.com/gitlabhq/gitlabhq.git)
-* `gitlab_branch`: Gitlab branch (default: 6-7-stable)
+* `gitlab_branch`: Gitlab branch (default: 6-9-stable)
 * `gitlabshell_sources`: Gitlab-shell sources (default: git://github.com/gitlabhq/gitlab-shell.git)
-* `gitlabshell_branch`: Gitlab-shell branch (default: v1.9.1)
+* `gitlabshell_branch`: Gitlab-shell branch (default: v1.9.4)
 * `gitlab_http_port`: Port that NGINX listens on for HTTP traffic (default: 80)
 * `gitlab_ssl_port`: Port that NGINX listens on for HTTPS traffic (default: 443)
 * `gitlab_http_timeout`: HTTP timeout in seconds (unicorn/nginx) (default: 60)
@@ -77,6 +77,10 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 * `gitlab_unicorn_port`: Port that unicorn listens on 172.0.0.1 for HTTP traffic (default: 8080)
 * `gitlab_unicorn_worker`: Number of unicorn workers (default: 2)
 * `gitlab_bundler_flags`: Flags to be passed to bundler when installing gems (default: --deployment)
+* `gitlab_bundler_jobs`: The number of jobs to use while installing gems. Should match number of CPUs on machine (default: number of system processors)
+* `gitlab_ensure_postfix`: Whether or not this module should ensure the postfix
+  package is installed (used to manage conflicts with other modules) (default:
+true)
 * `exec_path`: PATH of executtion (default: `/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin`)
 * `ldap_enabled`: Enable LDAP backend for gitlab web (see bellow) (default: false)
 * `ldap_host`: FQDN of LDAP server (default: ldap.domain.com)

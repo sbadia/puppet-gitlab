@@ -3,9 +3,10 @@ require 'spec_helper'
 # Gitlab
 describe 'gitlab' do
   let(:facts) {{
-    :osfamily  => 'Debian',
-    :fqdn      => 'gitlab.fooboozoo.fr',
-    :sshrsakey => 'AAAAB3NzaC1yc2EAAAA'
+    :osfamily       => 'Debian',
+    :fqdn           => 'gitlab.fooboozoo.fr',
+    :processorcount => '2',
+    :sshrsakey      => 'AAAAB3NzaC1yc2EAAAA'
   }}
 
   ## Parameter set
@@ -37,9 +38,8 @@ describe 'gitlab' do
         it { should contain_file('/home/git/.gitconfig').with_content(/^\s*name = "GitLab"$/)}
         it { should contain_file('/home/git/.gitconfig').with_content(/^\s*email = git@someserver.net$/)}
         it { should_not contain_file('/srv/gitlab/.gitconfig').with_content(/^\s*proxy$/)}
-        ['/home/git','/home/git/gitlab-satellites'].each do |file|
-          it { should contain_file(file).with(:ensure => 'directory',:mode => '0755')}
-        end
+        it { should contain_file('/home/git').with(:ensure => 'directory', :mode => '0755')}
+        it { should contain_file('/home/git/gitlab-satellites').with(:ensure => 'directory', :mode => '0750')}
       end
       context 'with specifics params' do
         let(:params) { params_set }
@@ -54,9 +54,8 @@ describe 'gitlab' do
         it { should contain_file('/srv/gitlab/.gitconfig').with_content(/^\s*name = "GitLab"$/)}
         it { should contain_file('/srv/gitlab/.gitconfig').with_content(/^\s*email = #{params_set[:git_email]}$/)}
         it { should contain_file('/srv/gitlab/.gitconfig').with_content(/^\s*proxy = #{params_set[:git_proxy]}$/)}
-        ['/srv/gitlab','/srv/gitlab/gitlab-satellites'].each do |file|
-          it { should contain_file(file).with(:ensure => 'directory',:mode => '0755')}
-        end
+        it { should contain_file('/srv/gitlab').with(:ensure => 'directory',:mode => '0755')}
+        it { should contain_file('/srv/gitlab/gitlab-satellites').with(:ensure => 'directory',:mode => '0750')}
       end
     end
 
@@ -102,7 +101,7 @@ describe 'gitlab' do
         #= With each dbtype
         ['mysql','pgsql'].each do |dbtype|
           context "for #{dbtype} devel on #{distro}" do
-            let(:facts) {{ :osfamily => distro }}
+            let(:facts) {{ :osfamily => distro, :processorcount => '2' }}
             let(:params) {{ :gitlab_dbtype => dbtype }}
             p[distro]['db_packages'][dbtype].each do |pkg|
               it { should contain_package(pkg) }
@@ -110,7 +109,7 @@ describe 'gitlab' do
           end
         end
         context "for devel dependencies on #{distro}" do
-          let(:facts) {{ :osfamily => distro }}
+          let(:facts) {{ :osfamily => distro, :processorcount => '2' }}
           p[distro]['system_packages'].each do |pkg|
             it { should contain_package(pkg) }
           end

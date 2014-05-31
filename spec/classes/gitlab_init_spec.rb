@@ -3,9 +3,10 @@ require 'spec_helper'
 # Gitlab
 describe 'gitlab' do
   let(:facts) {{
-    :osfamily  => 'Debian',
-    :fqdn      => 'gitlab.fooboozoo.fr',
-    :sshrsakey => 'AAAAB3NzaC1yc2EAAAA'
+    :osfamily       => 'Debian',
+    :fqdn           => 'gitlab.fooboozoo.fr',
+    :processorcount => '2',
+    :sshrsakey      => 'AAAAB3NzaC1yc2EAAAA'
   }}
 
   describe 'input validation' do

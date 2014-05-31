@@ -5,6 +5,7 @@ describe 'gitlab' do
   let(:facts) {{
     :osfamily  => 'Debian',
     :fqdn      => 'gitlab.fooboozoo.fr',
+    :processorcount => '2',
     :sshrsakey => 'AAAAB3NzaC1yc2EAAAA'
   }}
 
@@ -30,14 +31,14 @@ describe 'gitlab' do
           :user     => 'git',
           :provider => 'git',
           :source   => 'git://github.com/gitlabhq/gitlabhq.git',
-          :revision => '6-7-stable'
+          :revision => '6-9-stable'
         )}
         it { should contain_vcsrepo('/home/git/gitlab-shell').with(
           :ensure   => 'present',
           :user     => 'git',
           :provider => 'git',
           :source   => 'git://github.com/gitlabhq/gitlab-shell.git',
-          :revision => 'v1.9.1'
+          :revision => 'v1.9.4'
         )}
       end
       context 'with specifics params' do

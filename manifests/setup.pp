@@ -38,7 +38,7 @@ class gitlab::setup inherits gitlab {
 
   file { "${git_home}/gitlab-satellites":
     ensure    => directory,
-    mode      => '0755',
+    mode      => '0750',
   }
 
   # database dependencies
@@ -100,5 +100,9 @@ class gitlab::setup inherits gitlab {
   }
 
   # other packages
-  ensure_packages([$git_package_name, 'postfix', 'curl'])
+  ensure_packages([$git_package_name, 'curl'])
+
+  if $gitlab_ensure_postfix {
+    ensure_packages(['postfix'])
+  }
 }
