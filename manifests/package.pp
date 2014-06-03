@@ -10,11 +10,11 @@ class gitlab::package inherits ::gitlab {
   vcsrepo { "${git_home}/gitlab":
     source   => $gitlab_sources,
     revision => $gitlab_branch,
-    provider => 'git',
+    provider => git,
   }
   vcsrepo { "${git_home}/gitlab-shell":
     source   => $gitlabshell_sources,
     revision => $gitlabshell_branch,
-    provider => 'git',
+    provider => git,
   }
 }
