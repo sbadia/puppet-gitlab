@@ -4,6 +4,7 @@
 class gitlab::package inherits ::gitlab {
   Vcsrepo {
     ensure   => $ensure,
+    provider => 'git',
     user     => $git_user,
   }
 
