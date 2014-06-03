@@ -84,6 +84,8 @@ class gitlab::setup inherits ::gitlab {
   if $::osfamily == 'redhat' {
     include ::epel
     Package <||> { require +> Yumrepo['epel'], }
+    Package <| 'ruby-devel' != title |> { require +> Package['ruby-devel'], }
+    Package <| 'rubygems' != title and 'ruby-devel' != title |> { require +> Package['rubygems'], }
   }
 
   # dev. dependencies
