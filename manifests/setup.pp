@@ -80,6 +80,12 @@ class gitlab::setup inherits ::gitlab {
     provider  => gem,
   }
 
+  # for libyaml-devel at the least
+  if $::osfamily == 'redhat' {
+    include ::epel
+    Package <||> { require +> Yumrepo['epel'], }
+  }
+
   # dev. dependencies
   ensure_packages($system_packages)
 
