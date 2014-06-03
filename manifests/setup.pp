@@ -1,7 +1,7 @@
 # Class:: gitlab::setup
 #
 #
-class gitlab::setup inherits gitlab {
+class gitlab::setup inherits ::gitlab {
   File {
     owner     => $git_user,
     group     => $git_user,
@@ -78,6 +78,14 @@ class gitlab::setup inherits gitlab {
   package { 'bundler':
     ensure    => installed,
     provider  => gem,
+  }
+
+  # for libyaml-devel at the least
+  if $::osfamily == 'redhat' {
+    include ::epel
+    Package <||> { require +> Yumrepo['epel'], }
+    Package <| title != 'ruby-devel' |> { require +> Package['ruby-devel'], }
+    Package <| title != 'rubygems' and title != 'ruby-devel' |> { require +> Package['rubygems'], }
   }
 
   # dev. dependencies

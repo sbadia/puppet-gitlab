@@ -303,7 +303,7 @@ class gitlab(
     $ssh_port                 = $gitlab::params::ssh_port,
     $google_analytics_id      = $gitlab::params::google_analytics_id,
     $git_proxy                = $gitlab::params::git_proxy,
-  ) inherits gitlab::params {
+  ) inherits ::gitlab::params {
   case $::osfamily {
     Debian: {}
     Redhat: {
