@@ -319,6 +319,7 @@ class gitlab(
     $company_logo_url         = $gitlab::params::company_logo_url,
     $company_link             = $gitlab::params::company_link,
     $company_name             = $gitlab::params::company_name,
+    $use_exim                 = $gitlab::params::use_exim,
   ) inherits gitlab::params {
   case $::osfamily {
     Debian: {}

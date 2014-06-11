@@ -61,7 +61,7 @@ class gitlab::install inherits gitlab {
     source => "${git_home}/gitlab/config/initializers/rack_attack.rb.example"
   }
 
-  if $gitlab_relative_url_root {
+  if $gitlab_relative_url_root or $use_exim {
     file { "${git_home}/gitlab/config/application.rb":
       ensure  => file,
       content => template('gitlab/application.rb.erb'),
