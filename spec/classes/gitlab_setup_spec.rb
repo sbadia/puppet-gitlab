@@ -79,7 +79,6 @@ describe 'gitlab' do
         },
         'system_packages' => ['libicu-dev', 'python2.7','python-docutils',
                               'libxml2-dev','libxslt1-dev','python-dev'],
-        'git_packages' => ['git-core']
       },
       'RedHat' => {
         'db_packages' => {
@@ -90,7 +89,6 @@ describe 'gitlab' do
                               'libxslt-devel','python-devel','libcurl-devel',
                               'readline-devel','openssl-devel','zlib-devel',
                               'libyaml-devel','patch','gcc-c++'],
-        'git_packages' => ['git']
       }
     }
 
@@ -113,9 +111,9 @@ describe 'gitlab' do
           p[distro]['system_packages'].each do |pkg|
             it { should contain_package(pkg) }
           end
-          p[distro]['git_packages'].each do |pkg|
-            it { should contain_package(pkg) }
-          end
+
+          it { should contain_class('git') }
+          it { should contain_package('git') }
         end
       end
       #### Gems (all dist.)
@@ -131,7 +129,7 @@ describe 'gitlab' do
       end
       #### Commons packages (all dist.)
       describe 'commons packages' do
-        ['git-core','postfix','curl'].each do |pkg|
+        ['postfix','curl'].each do |pkg|
           it { should contain_package(pkg) }
         end
       end

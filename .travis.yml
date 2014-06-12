@@ -1,6 +1,6 @@
 language: ruby
 bundler_args: --without development
-script: "bundle exec rake test SPEC_OPTS='--format n --color --backtrace'"
+script: "bundle exec rake test SPEC_OPTS='--format documentation --color --backtrace'"
 rvm:
   - 1.8.7
   - 1.9.3

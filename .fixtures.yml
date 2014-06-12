@@ -4,3 +4,4 @@ fixtures:
   repositories:
     "stdlib": "git://github.com/puppetlabs/puppetlabs-stdlib.git"
     "vcsrepo": "git://github.com/puppetlabs/puppetlabs-vcsrepo.git"
+    "git": "git://github.com/puppetlabs/puppetlabs-git.git"

@@ -2,6 +2,9 @@
 #
 #
 class gitlab::setup inherits gitlab {
+
+  include git
+
   File {
     owner     => $git_user,
     group     => $git_user,
@@ -89,7 +92,7 @@ class gitlab::setup inherits gitlab {
   }
 
   # other packages
-  ensure_packages([$git_package_name, 'curl'])
+  ensure_packages(['curl'])
 
   if $gitlab_ensure_postfix {
     ensure_packages(['postfix'])
