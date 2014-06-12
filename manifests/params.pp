@@ -57,6 +57,9 @@ class gitlab::params {
   $ssh_port                 = '22'
   $google_analytics_id      = ''
   $git_proxy                = undef
+  $company_logo_url         = ''
+  $company_link             = ''
+  $company_name             = ''
 
   # determine pre-requisite packages
   case $::osfamily {
