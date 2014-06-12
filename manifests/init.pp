@@ -235,6 +235,10 @@
 #   Name of the company displayed under the logo of the company
 #   default: ''
 #
+# [*use_exim*]
+#   Apply a fix for compatibility with exim as explained at github.com/gitlabhq/gitlabhq/issues/4866
+#   default: false
+#
 # === Examples
 #
 # See examples/gitlab.pp
