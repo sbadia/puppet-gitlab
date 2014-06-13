@@ -375,6 +375,9 @@ class gitlab(
   validate_string($ldap_uid)
   validate_string($ldap_host)
   validate_string($google_analytics_id)
+  validate_string($company_logo_url)
+  validate_string($company_link)
+  validate_string($company_name)
 
   anchor { 'gitlab::begin': } ->
   class { '::gitlab::setup': } ->

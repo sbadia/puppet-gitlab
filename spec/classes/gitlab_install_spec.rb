@@ -42,7 +42,10 @@ describe 'gitlab' do
       :ldap_bind_dn             => 'uid=gitlab,o=bots,dc=fooboozoo,dc=fr',
       :ldap_bind_password       => 'aV!oo1ier5ahch;a',
       :ssh_port                 => '2223',
-      :google_analytics_id      => 'UA-12345678-9'
+      :google_analytics_id      => 'UA-12345678-9',
+      :company_logo_url         => 'http://fooboozoo.fr/logo.png',
+      :company_link             => 'http://fooboozoo.fr',
+      :company_name             => 'Fooboozoo'
     }
   end
 
@@ -140,6 +143,7 @@ describe 'gitlab' do
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*hooks_path: \/home\/git\/gitlab-shell\/hooks\/$/)}
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*ssh_port: 22$/)}
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*# google_analytics_id: '_your_tracking_id'$/)}
+        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*# sign_in_text: \|\n\s*#   !\[Company Logo\]\(http:\/\/www.companydomain.com\/logo.png\)\n\s*#   \[Learn more about CompanyName\]\(http:\/\/www.companydomain.com\/\)$/)}
       end # gitlab config
       describe 'resque config' do
         it { should contain_file('/home/git/gitlab/config/resque.yml').with(:ensure => 'file',:owner => 'git',:group => 'git')}
@@ -313,6 +317,7 @@ describe 'gitlab' do
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*hooks_path: #{params_set[:git_home]}\/gitlab-shell\/hooks\/$/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*ssh_port: #{params_set[:ssh_port]}$/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*google_analytics_id: #{params_set[:google_analytics_id]}$/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*sign_in_text: \|\n\s*!\[Company Logo\]\(#{params_set[:company_logo_url]}\)\n\s*\[Learn more about #{params_set[:company_name]}\]\(#{params_set[:company_link]}\)$/)}
       end # gitlab config
       describe 'resque config' do
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/resque.yml").with(:ensure => 'file',:owner => params_set[:git_user],:group => params_set[:git_user])}
