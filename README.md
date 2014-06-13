@@ -95,6 +95,9 @@ true)
 * `git_proxy`: Proxy for GIT access (default: undef)
 * `ssh_port`: Port accepting SSH connections (default: 22)
 * `google_analytics_id`: Google Analytics tracking ID (default: nil)
+* `company_logo_url`: Url to the company logo to be displayed at the bottom of the sign_in page (default: '')
+* `company_link`: Link to the company displayed under the logo of the company (default: '')
+* `company_name`: Name of the company displayed under the logo of the company (default: '')
 
 # Usage
 

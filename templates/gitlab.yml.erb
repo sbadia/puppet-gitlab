@@ -260,9 +260,23 @@ production: &base
     # piwik_site_id: '_your_piwik_site_id'
 
     ## Text under sign-in page (Markdown enabled)
+<% if @company_logo_url != '' or @company_link != '' or @company_name != '' %>
+    sign_in_text: |
+    <% if @company_logo_url != '' %>
+      ![Company Logo](<%= @company_logo_url %>)
+    <% end %>
+    <% if @company_name != '' and @company_link != '' %>
+      [Learn more about <%= @company_name %>](<%= @company_link %>)
+    <% elsif @company_name != '' %>
+      <%= @company_name %>
+    <% else %>
+      <%= @company_link %>
+    <% end %>
+<% else %>
     # sign_in_text: |
     #   ![Company Logo](http://www.companydomain.com/logo.png)
     #   [Learn more about CompanyName](http://www.companydomain.com/)
+<% end %>
 
 development:
   <<: *base
