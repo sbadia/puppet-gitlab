@@ -60,6 +60,7 @@ class gitlab::params {
   $company_logo_url         = ''
   $company_link             = ''
   $company_name             = ''
+  $use_exim                 = false
 
   # determine pre-requisite packages
   case $::osfamily {

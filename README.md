@@ -98,6 +98,7 @@ true)
 * `company_logo_url`: Url to the company logo to be displayed at the bottom of the sign_in page (default: '')
 * `company_link`: Link to the company displayed under the logo of the company (default: '')
 * `company_name`: Name of the company displayed under the logo of the company (default: '')
+* `use_exim` : Apply a fix for compatibility with exim as explained at [gitlabhq/gitlabhq#4866](https://github.com/gitlabhq/gitlabhq/issues/486) (default: false)
 
 # Usage
 

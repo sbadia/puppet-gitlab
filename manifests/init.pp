@@ -235,6 +235,10 @@
 #   Name of the company displayed under the logo of the company
 #   default: ''
 #
+# [*use_exim*]
+#   Apply a fix for compatibility with exim as explained at github.com/gitlabhq/gitlabhq/issues/4866
+#   default: false
+#
 # === Examples
 #
 # See examples/gitlab.pp
@@ -319,6 +323,7 @@ class gitlab(
     $company_logo_url         = $gitlab::params::company_logo_url,
     $company_link             = $gitlab::params::company_link,
     $company_name             = $gitlab::params::company_name,
+    $use_exim                 = $gitlab::params::use_exim,
   ) inherits gitlab::params {
   case $::osfamily {
     Debian: {}
