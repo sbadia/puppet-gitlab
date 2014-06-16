@@ -27,6 +27,9 @@ This module is based on the admin guides for [gitlab](https://github.com/gitlabh
 
 ## Dependencies
 - [puppetlabs/puppetlabs-stdlib](https://github.com/puppetlabs/puppetlabs-stdlib)
+- [puppetlabs/puppetlabs-vcsrepo](https://github.com/puppetlabs/puppetlabs-vcsrepo)
+- [puppetlabs/puppetlabs-git](https://github.com/puppetlabs/puppetlabs-git)
+
 See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/examples/gitlab.pp).
 
 ## GitLab web interface
