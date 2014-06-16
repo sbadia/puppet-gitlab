@@ -45,7 +45,8 @@ describe 'gitlab' do
       :google_analytics_id      => 'UA-12345678-9',
       :company_logo_url         => 'http://fooboozoo.fr/logo.png',
       :company_link             => 'http://fooboozoo.fr',
-      :company_name             => 'Fooboozoo'
+      :company_name             => 'Fooboozoo',
+      :use_exim                 => true
     }
   end
 
@@ -318,6 +319,7 @@ describe 'gitlab' do
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*ssh_port: #{params_set[:ssh_port]}$/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*google_analytics_id: #{params_set[:google_analytics_id]}$/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*sign_in_text: \|\n\s*!\[Company Logo\]\(#{params_set[:company_logo_url]}\)\n\s*\[Learn more about #{params_set[:company_name]}\]\(#{params_set[:company_link]}\)$/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/application.rb").with_content(/^\s*#Fix for compatibility issue with exim as explained at https:\/\/github.com\/gitlabhq\/gitlabhq\/issues\/4866\s*config.action_mailer.sendmail_settings = { :arguments => "-i" }$/)}
       end # gitlab config
       describe 'resque config' do
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/resque.yml").with(:ensure => 'file',:owner => params_set[:git_user],:group => params_set[:git_user])}
