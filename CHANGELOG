@@ -1,5 +1,18 @@
 # vi: set ft=changelog :
 
+2014-06-18 - 0.1.5
+  * feature:
+    - Use puppetlabs/git module for git package declaration
+    - Add parameter for company link and logo support (thx Ludovic)
+    - Fix compatibility issue with exim (thx Ludovic)
+      https://github.com/gitlabhq/gitlabhq/issues/4866
+
+  * bugfix:
+    - Fix gitlab-satellites permissions (should be 0750)
+    - Fix rspec output formatter (documentation)
+    - Lock rspec version to 2.14.1 (puppet rspec not yet ready
+      for RSpec +3.0, see https://github.com/rodjek/rspec-puppet/pull/204 )
+
 2014-05-26 - 0.1.4
   * feature:
     - added ldap_user_filter parameter (RFC 4515 style filter for the
