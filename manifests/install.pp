@@ -68,8 +68,13 @@ class gitlab::install inherits gitlab {
     }
   }
 
+  if($gitlab_bundler_jobs == '1') {
+    $gitlab_bundler_jobs_flag = ""
+  } else {
+    $gitlab_bundler_jobs_flag = " -j${gitlab_bundler_jobs}"
+  }
   exec { 'install gitlab':
-    command => "bundle install -j${gitlab_bundler_jobs} --without development aws test ${gitlab_without_gems} ${gitlab_bundler_flags}",
+    command => "bundle install${gitlab_bundler_jobs_flag} --without development aws test ${gitlab_without_gems} ${gitlab_bundler_flags}",
     cwd     => "${git_home}/gitlab",
     unless  => 'bundle check',
     timeout => 0,
