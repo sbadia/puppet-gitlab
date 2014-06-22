@@ -69,7 +69,7 @@ class gitlab::install inherits gitlab {
   }
 
   if($gitlab_bundler_jobs == '1') {
-    $gitlab_bundler_jobs_flag = ""
+    $gitlab_bundler_jobs_flag = ''
   } else {
     $gitlab_bundler_jobs_flag = " -j${gitlab_bundler_jobs}"
   }
