@@ -118,13 +118,8 @@ describe 'gitlab' do
       end
       #### Gems (all dist.)
       describe 'commons gems' do
-        it { should contain_package('bundler').with(
-          :ensure   => 'installed',
-          :provider => 'gem'
-        )}
-        it { should contain_package('charlock_holmes').with(
-          :ensure   => '0.6.9.4',
-          :provider => 'gem'
+        it { should contain_rbenv__gem('charlock_holmes').with(
+          :ensure   => '0.6.9.4'
         )}
       end
       #### Commons packages (all dist.)
