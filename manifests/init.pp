@@ -164,7 +164,7 @@
 #
 # [*gitlab_ruby_version*]
 #   Ruby version to install with rbenv for Gitlab user
-#   default: 2.1.1
+#   default: 2.1.2
 #
 # [*gitlab_bundler_jobs*]
 #   Number of jobs to use while installing gems.  Should match number of
