@@ -42,7 +42,7 @@ class gitlab::params {
   $gitlab_unicorn_worker    = '2'
   $gitlab_bundler_flags     = '--deployment'
   $gitlab_bundler_jobs      = 1
-  $gitlab_ruby_version      = '2.1.1'
+  $gitlab_ruby_version      = '2.1.2'
   $gitlab_ensure_postfix    = true
   $exec_path                = "${git_home}/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   $ldap_enabled             = false

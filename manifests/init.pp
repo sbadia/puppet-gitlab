@@ -168,7 +168,7 @@
 #
 # [*gitlab_ruby_version*]
 #   Ruby version to install with rbenv for Gitlab user
-#   default: 2.1.1
+#   default: 2.1.2
 #
 # [*gitlab_ensure_postfix*]
 #   Whether or not this module should ensure the postfix package is
