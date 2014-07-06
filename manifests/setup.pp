@@ -83,7 +83,18 @@ class gitlab::setup inherits gitlab {
   rbenv::install { $git_user:
     group   => $git_user,
     home    => $git_home,
-    rc      => '.bashrc', # read by non-interactive shells (e.g. ssh)
+
+  }
+
+  # By default, puppet-rbenv sets ~/.profile to load rbenv, which is
+  # read when bash is invoked as an interactive login shell, but we
+  # also need ~/.bashrc to load rbenv (which is read by interactive
+  # but non-login shells). This works, but may not be the best
+  # solution, please see issue #114 if you have a better solution.
+  file { "${git_home}/.bashrc":
+    ensure  => link,
+    target  => "${git_home}/.profile",
+    require => Rbenv::Install[$git_user],
   }
 
   rbenv::compile { 'gitlab/ruby':
