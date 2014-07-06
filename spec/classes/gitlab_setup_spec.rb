@@ -13,11 +13,12 @@ describe 'gitlab' do
   # a non-default common parameter set
   let :params_set do
     {
-      :git_user    => 'gitlab',
-      :git_home    => '/srv/gitlab',
-      :git_comment => 'Labfooboozoo',
-      :git_email   => 'gitlab@fooboozoo.fr',
-      :git_proxy   => 'http://proxy.fooboozoo.fr:3128'
+      :git_user            => 'gitlab',
+      :git_home            => '/srv/gitlab',
+      :git_comment         => 'Labfooboozoo',
+      :git_email           => 'gitlab@fooboozoo.fr',
+      :git_proxy           => 'http://proxy.fooboozoo.fr:3128',
+      :gitlab_ruby_version => '2.0.0'
     }
   end
 
@@ -41,7 +42,7 @@ describe 'gitlab' do
         it { should contain_file('/home/git').with(:ensure => 'directory', :mode => '0755')}
         it { should contain_file('/home/git/gitlab-satellites').with(:ensure => 'directory', :mode => '0750')}
       end
-      context 'with specifics params' do
+      context 'with specific params' do
         let(:params) { params_set }
         it { should contain_user(params_set[:git_user]).with(
           :ensure   => 'present',
@@ -59,8 +60,50 @@ describe 'gitlab' do
       end
     end
 
+    ### Ruby
+    describe 'rbenv' do
+      context 'with default params' do
+        it { should contain_rbenv__install('git').with(
+                      :group => 'git',
+                      :home  => '/home/git'
+                    )}
+        it { should contain_file('/home/git/.bashrc').with(
+                      :ensure  => 'link',
+                      :target  => '/home/git/.profile',
+                      :require => 'Rbenv::Install[git]'
+                    )}
+        it { should contain_rbenv__compile('gitlab/ruby').with(
+                      :user   => 'git',
+                      :home   => '/home/git',
+                      :ruby   => '2.1.2',
+                      :global => true,
+                      :notify => ['Exec[install gitlab-shell]', 'Exec[install gitlab]']
+                    )}
+
+      end
+      context 'with specific params' do
+        let(:params) { params_set }
+        it { should contain_rbenv__install(params_set[:git_user]).with(
+                      :group => params_set[:git_user],
+                      :home  => params_set[:git_home]
+                    )}
+        it { should contain_file('/srv/gitlab/.bashrc').with(
+                      :ensure  => 'link',
+                      :target  => '/srv/gitlab/.profile',
+                      :require => 'Rbenv::Install[gitlab]'
+                    )}
+        it { should contain_rbenv__compile('gitlab/ruby').with(
+                      :user   => params_set[:git_user],
+                      :home   => params_set[:git_home],
+                      :ruby   => '2.0.0',
+                      :global => true,
+                      :notify => ['Exec[install gitlab-shell]', 'Exec[install gitlab]']
+                    )}
+      end
+    end
+
     ### Sshkey
-    describe  'sshkey (hostfile)' do
+    describe 'sshkey (hostfile)' do
       it { should contain_sshkey('localhost').with(
         :ensure       => 'present',
         :host_aliases => 'gitlab.fooboozoo.fr',
@@ -118,13 +161,8 @@ describe 'gitlab' do
       end
       #### Gems (all dist.)
       describe 'commons gems' do
-        it { should contain_package('bundler').with(
-          :ensure   => 'installed',
-          :provider => 'gem'
-        )}
-        it { should contain_package('charlock_holmes').with(
-          :ensure   => '0.6.9.4',
-          :provider => 'gem'
+        it { should contain_rbenv__gem('charlock_holmes').with(
+          :ensure   => '0.6.9.4'
         )}
       end
       #### Commons packages (all dist.)

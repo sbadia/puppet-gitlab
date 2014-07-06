@@ -156,15 +156,19 @@
 #
 # [*gitlab_unicorn_port*]
 #   Port that unicorn listens on 172.0.0.1 for HTTP traffic
-#   (default: 8080)
+#   default: 8080
 #
 # [*gitlab_bundler_flags*]
 #   Flags that should be passed to bundler when installing gems
-#   (default: --deployment)
+#   default: --deployment
 #
 # [*gitlab_bundler_jobs*]
 #   Number of jobs to use while installing gems.  Should match number of
 #   procs on your system (default: 1)
+#
+# [*gitlab_ruby_version*]
+#   Ruby version to install with rbenv for Gitlab user
+#   default: 2.1.2
 #
 # [*gitlab_ensure_postfix*]
 #   Whether or not this module should ensure the postfix package is
@@ -304,6 +308,7 @@ class gitlab(
     $gitlab_unicorn_worker    = $gitlab::params::gitlab_unicorn_worker,
     $gitlab_bundler_flags     = $gitlab::params::gitlab_bundler_flags,
     $gitlab_bundler_jobs      = $gitlab::params::gitlab_bundler_jobs,
+    $gitlab_ruby_version      = $gitlab::params::gitlab_ruby_version,
     $gitlab_ensure_postfix    = $gitlab::params::gitlab_ensure_postfix,
     $exec_path                = $gitlab::params::exec_path,
     $ldap_enabled             = $gitlab::params::ldap_enabled,
