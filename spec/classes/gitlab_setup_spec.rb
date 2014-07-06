@@ -77,7 +77,7 @@ describe 'gitlab' do
                       :home   => '/home/git',
                       :ruby   => '2.1.2',
                       :global => true,
-                      :notify => ['Exec[install gitlab-shell]', 'Exec[install gitlab]'],
+                      :notify => ['Exec[install gitlab-shell]', 'Exec[install gitlab]']
                     )}
 
       end
@@ -85,19 +85,19 @@ describe 'gitlab' do
         let(:params) { params_set }
         it { should contain_rbenv__install(params_set[:git_user]).with(
                       :group => params_set[:git_user],
-                      :home  => params_set[:git_home],
+                      :home  => params_set[:git_home]
                     )}
         it { should contain_file('/srv/gitlab/.bashrc').with(
                       :ensure  => 'link',
                       :target  => '/srv/gitlab/.profile',
-                      :require => 'Rbenv::Install[gitlab]',
+                      :require => 'Rbenv::Install[gitlab]'
                     )}
         it { should contain_rbenv__compile('gitlab/ruby').with(
                       :user   => params_set[:git_user],
                       :home   => params_set[:git_home],
                       :ruby   => '2.0.0',
                       :global => true,
-                      :notify => ['Exec[install gitlab-shell]', 'Exec[install gitlab]'],
+                      :notify => ['Exec[install gitlab-shell]', 'Exec[install gitlab]']
                     )}
       end
     end
