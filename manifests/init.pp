@@ -171,6 +171,11 @@
 #   installed (used to manage conflicts with other modules)
 #   default: true
 #
+# [*gitlab_ensure_curl*]
+#   Whether or not this module should ensure the curl package is
+#   installed (used to manage conflicts with other modules)
+#   default: true
+#
 # [*ldap_enabled*]
 #   Enable LDAP backend for gitlab web (see bellow)
 #   default: false
@@ -305,6 +310,7 @@ class gitlab(
     $gitlab_bundler_flags     = $gitlab::params::gitlab_bundler_flags,
     $gitlab_bundler_jobs      = $gitlab::params::gitlab_bundler_jobs,
     $gitlab_ensure_postfix    = $gitlab::params::gitlab_ensure_postfix,
+    $gitlab_ensure_curl       = $gitlab::params::gitlab_ensure_curl,
     $exec_path                = $gitlab::params::exec_path,
     $ldap_enabled             = $gitlab::params::ldap_enabled,
     $ldap_host                = $gitlab::params::ldap_host,

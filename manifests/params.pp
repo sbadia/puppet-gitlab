@@ -44,6 +44,7 @@ class gitlab::params {
   $gitlab_bundler_flags     = '--deployment'
   $gitlab_bundler_jobs      = 1
   $gitlab_ensure_postfix    = true
+  $gitlab_ensure_curl       = true
   $exec_path                = '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   $ldap_enabled             = false
   $ldap_host                = 'ldap.domain.com'
