@@ -1,5 +1,21 @@
 # vi: set ft=changelog :
 
+2014-07-21 - 1.0.0
+  * feature:
+    - Major release
+    - Manage ruby with rbenv (great thanks Andrew!!
+      #114 (6 months, 48 comments))
+    - Bump to gitlab 7.0 (6.9 → 7.0)
+    - Allow users to disable curl package (thanks Dan)
+    - Added parameters to manage jira/redmine forge (thanks Sam)
+
+  * bugfix:
+    - Fix bundler job flag with older bundler version (< 1.4)
+
+  * others:
+    - Added Andrew to contributors (full access on this repo)
+    - Use semantic versionning http://semver.org/
+
 2014-06-18 - 0.1.5
   * feature:
     - Use puppetlabs/git module for git package declaration
