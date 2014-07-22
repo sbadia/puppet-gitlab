@@ -45,9 +45,12 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 
 * `ensure`:  Ensure gitlab/gitlab-shell repo are present, latest. absent is not yet supported (default: present)
 * `git_user`: Name of the gitlab (default: git)
+* `git_group`: Name of the group for the gitlab user (default: $git_user)
 * `git_home`: Home directory for gitlab repository (default: /home/git)
 * `git_email`: Email address for gitlab user (default: git@someserver.net)
 * `git_comment`: Gitlab user comment (default: GitLab)
+* `gitlab_manage_user`: Whether to manage the user account for gitlab (default: true)
+* `gitlab_manage_home`: Whether to manage the home directory for gitlab (default: true)
 * `gitlab_sources`: Gitlab sources (default: git://github.com/gitlabhq/gitlabhq.git)
 * `gitlab_branch`: Gitlab branch (default: 6-9-stable)
 * `gitlabshell_sources`: Gitlab-shell sources (default: git://github.com/gitlabhq/gitlab-shell.git)

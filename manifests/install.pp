@@ -17,7 +17,7 @@ class gitlab::install inherits gitlab {
 
   File {
     owner => $git_user,
-    group => $git_user,
+    group => $git_group,
   }
 
   # gitlab shell
@@ -37,7 +37,7 @@ class gitlab::install inherits gitlab {
   # gitlab
   gitlab::config::database { 'gitlab':
     database => $gitlab_dbname,
-    group    => $git_user,
+    group    => $git_group,
     host     => $gitlab_dbhost,
     owner    => $git_user,
     password => $gitlab_dbpwd,
@@ -48,7 +48,7 @@ class gitlab::install inherits gitlab {
   }
 
   gitlab::config::unicorn { 'gitlab':
-    group             => $git_user,
+    group             => $git_group,
     home              => $git_home,
     http_timeout      => $gitlab_http_timeout,
     owner             => $git_user,
@@ -65,7 +65,7 @@ class gitlab::install inherits gitlab {
   }
 
   gitlab::config::resque { 'gitlab':
-    group      => $git_user,
+    group      => $git_group,
     owner      => $git_user,
     path       => "${git_home}/gitlab/config/resque.yml",
     redis_host => $gitlab_redishost,

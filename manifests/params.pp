@@ -4,7 +4,10 @@
 class gitlab::params {
 
   $ensure                   = 'present'
+  $gitlab_manage_user       = true
+  $gitlab_manage_home       = true
   $git_user                 = 'git'
+  $git_group                = $git_user
   $git_home                 = '/home/git'
   $git_email                = 'git@someserver.net'
   $git_comment              = 'GitLab'
