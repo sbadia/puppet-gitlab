@@ -88,36 +88,6 @@ describe 'gitlab' do
           :require  => 'File[/home/git/gitlab-shell/config.yml]'
         )}
       end # gitlab-shell
-      describe 'database config' do
-        it { should contain_file('/home/git/gitlab/config/database.yml').with(:ensure => 'file',:owner => 'git',:group => 'git')}
-        it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*adapter: mysql2$/)}
-        it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*encoding: utf8$/)}
-        it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*database: gitlab_db$/)}
-        it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*username: gitlab_user$/)}
-        it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*password: 'changeme'$/)}
-        it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*host: localhost$/)}
-        context 'postgresql' do
-          let(:params) {{ :gitlab_dbtype => 'pgsql' }}
-          it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*adapter: postgresql$/)}
-          it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*encoding: unicode$/)}
-          it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*database: gitlab_db$/)}
-          it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*username: gitlab_user$/)}
-          it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*password: 'changeme'$/)}
-          it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*host: localhost$/)}
-          it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*port: 5432$/)}
-        end # pgsql
-      end # database config
-      describe 'unicorn config' do
-        it { should contain_file('/home/git/gitlab/config/unicorn.rb').with(:ensure => 'file',:owner => 'git',:group => 'git')}
-        it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/^\s*worker_processes 2$/)}
-        it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/^\s*working_directory "\/home\/git\/gitlab"$/)}
-        it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/^\s*listen "127.0.0.1:8080", :tcp_nopush => true$/)}
-        it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/^\s*listen "\/home\/git\/gitlab\/tmp\/sockets\/gitlab.socket", :backlog => 64$/)}
-        it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/^\s*timeout 60$/)}
-        it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/^\s*pid "\/home\/git\/gitlab\/tmp\/pids\/unicorn.pid"$/)}
-        it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/^\s*stderr_path "\/home\/git\/gitlab\/log\/unicorn.stderr.log"$/)}
-        it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/^\s*stdout_path "\/home\/git\/gitlab\/log\/unicorn.stdout.log"$/)}
-      end # unicorn config
       describe 'gitlab config' do
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with(:ensure => 'file',:owner => 'git',:group => 'git')}
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*host: gitlab.fooboozoo.fr$/)}
@@ -146,10 +116,6 @@ describe 'gitlab' do
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*# google_analytics_id: '_your_tracking_id'$/)}
         it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*# sign_in_text: \|\n\s*#   !\[Company Logo\]\(http:\/\/www.companydomain.com\/logo.png\)\n\s*#   \[Learn more about CompanyName\]\(http:\/\/www.companydomain.com\/\)$/)}
       end # gitlab config
-      describe 'resque config' do
-        it { should contain_file('/home/git/gitlab/config/resque.yml').with(:ensure => 'file',:owner => 'git',:group => 'git')}
-        it { should contain_file('/home/git/gitlab/config/resque.yml').with_content(/^\s*production: redis:\/\/127.0.0.1:6379$/)}
-      end # resque config
       describe 'rack_attack config' do
         it { should contain_file('/home/git/gitlab/config/initializers/rack_attack.rb').with(
           :ensure => 'file',
@@ -164,10 +130,10 @@ describe 'gitlab' do
           :unless  => 'bundle check',
           :cwd     => '/home/git/gitlab',
           :timeout => 0,
-          :require => ['File[/home/git/gitlab/config/database.yml]',
-                        'File[/home/git/gitlab/config/unicorn.rb]',
+          :require => ['Gitlab::Config::Database[gitlab]',
+                        'Gitlab::Config::Unicorn[gitlab]',
                         'File[/home/git/gitlab/config/gitlab.yml]',
-                        'File[/home/git/gitlab/config/resque.yml]'],
+                        'Gitlab::Config::Resque[gitlab]'],
           :notify  => 'Exec[run migrations]'
         )}
         it { should contain_exec('run migrations').with(
@@ -185,10 +151,10 @@ describe 'gitlab' do
             :unless  => 'bundle check',
             :cwd     => '/home/git/gitlab',
             :timeout => 0,
-            :require => ['File[/home/git/gitlab/config/database.yml]',
-                          'File[/home/git/gitlab/config/unicorn.rb]',
-                          'File[/home/git/gitlab/config/gitlab.yml]',
-                          'File[/home/git/gitlab/config/resque.yml]']
+            :require => ['Gitlab::Config::Database[gitlab]',
+                        'Gitlab::Config::Unicorn[gitlab]',
+                        'File[/home/git/gitlab/config/gitlab.yml]',
+                        'Gitlab::Config::Resque[gitlab]']
           )}
         end # pgsql
       end # install gitlab
@@ -245,41 +211,6 @@ describe 'gitlab' do
         )}
       end # gitlab-shell
 
-      describe 'database config' do
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with(
-          :ensure => 'file',
-          :owner  => params_set[:git_user],
-          :group  => params_set[:git_user]
-        )}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/^\s*adapter: mysql2$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/^\s*encoding: utf8$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/^\s*database: #{params_set[:gitlab_dbname]}$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/^\s*username: #{params_set[:gitlab_dbuser]}$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/^\s*password: '#{params_set[:gitlab_dbpwd]}'$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/^\s*host: #{params_set[:gitlab_dbhost]}$/)}
-        context 'postgresql' do
-          let(:params) { params_set.merge({ :gitlab_dbtype => 'pgsql' }) }
-          it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/^\s*adapter: postgresql$/)}
-          it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/^\s*encoding: unicode$/)}
-          it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/^\s*database: #{params_set[:gitlab_dbname]}$/)}
-          it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/^\s*username: #{params_set[:gitlab_dbuser]}$/)}
-          it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/^\s*password: '#{params_set[:gitlab_dbpwd]}'$/)}
-          it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/^\s*host: #{params_set[:gitlab_dbhost]}$/)}
-          it { should contain_file("#{params_set[:git_home]}/gitlab/config/database.yml").with_content(/^\s*port: #{params_set[:gitlab_dbport]}$/)}
-        end # pgsql
-      end # database config
-      describe 'unicorn config' do
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with(:ensure => 'file',:owner => params_set[:git_user],:group => params_set[:git_user])}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/^\s*worker_processes #{params_set[:gitlab_unicorn_worker]}$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/^\s*working_directory "#{params_set[:git_home]}\/gitlab"$/)}
-
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/^\s*listen "127.0.0.1:#{params_set[:gitlab_unicorn_port]}", :tcp_nopush => true$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/^\s*timeout #{params_set[:gitlab_http_timeout]}$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/^\s*listen "#{params_set[:git_home]}\/gitlab\/tmp\/sockets\/gitlab.socket", :backlog => 64$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/^\s*pid "#{params_set[:git_home]}\/gitlab\/tmp\/pids\/unicorn.pid"$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/^\s*stderr_path "#{params_set[:git_home]}\/gitlab\/log\/unicorn.stderr.log"$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/unicorn.rb").with_content(/^\s*stdout_path "#{params_set[:git_home]}\/gitlab\/log\/unicorn.stdout.log"$/)}
-      end # unicorn config
       describe 'gitlab config' do
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with(:ensure => 'file',:owner => params_set[:git_user],:group => params_set[:git_user])}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*host: gitlab.fooboozoo.fr$/)}
@@ -321,10 +252,6 @@ describe 'gitlab' do
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*sign_in_text: \|\n\s*!\[Company Logo\]\(#{params_set[:company_logo_url]}\)\n\s*\[Learn more about #{params_set[:company_name]}\]\(#{params_set[:company_link]}\)$/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/application.rb").with_content(/^\s*#Fix for compatibility issue with exim as explained at https:\/\/github.com\/gitlabhq\/gitlabhq\/issues\/4866\s*config.action_mailer.sendmail_settings = { :arguments => "-i" }$/)}
       end # gitlab config
-      describe 'resque config' do
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/resque.yml").with(:ensure => 'file',:owner => params_set[:git_user],:group => params_set[:git_user])}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/resque.yml").with_content(/^\s*production: redis:\/\/#{params_set[:gitlab_redishost]}:#{params_set[:gitlab_redisport]}$/)}
-      end # gitlab config
       describe 'rack_attack config' do
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/initializers/rack_attack.rb").with(
           :ensure => 'file',
@@ -339,10 +266,10 @@ describe 'gitlab' do
           :unless  => 'bundle check',
           :cwd     => "#{params_set[:git_home]}/gitlab",
           :timeout => 0,
-          :require => ["File[#{params_set[:git_home]}/gitlab/config/database.yml]",
-                        "File[#{params_set[:git_home]}/gitlab/config/unicorn.rb]",
-                        "File[#{params_set[:git_home]}/gitlab/config/gitlab.yml]",
-                        "File[#{params_set[:git_home]}/gitlab/config/resque.yml]"]
+          :require => ['Gitlab::Config::Database[gitlab]',
+                       'Gitlab::Config::Unicorn[gitlab]',
+                       "File[#{params_set[:git_home]}/gitlab/config/gitlab.yml]",
+                       'Gitlab::Config::Resque[gitlab]']
         )}
         context 'postgresql' do
           let(:params) { params_set.merge({ :gitlab_dbtype => 'pgsql' }) }
@@ -353,10 +280,10 @@ describe 'gitlab' do
             :unless  => 'bundle check',
             :cwd     => "#{params_set[:git_home]}/gitlab",
             :timeout => 0,
-            :require => ["File[#{params_set[:git_home]}/gitlab/config/database.yml]",
-                          "File[#{params_set[:git_home]}/gitlab/config/unicorn.rb]",
-                          "File[#{params_set[:git_home]}/gitlab/config/gitlab.yml]",
-                          "File[#{params_set[:git_home]}/gitlab/config/resque.yml]"]
+            :require => ['Gitlab::Config::Database[gitlab]',
+                       'Gitlab::Config::Unicorn[gitlab]',
+                       "File[#{params_set[:git_home]}/gitlab/config/gitlab.yml]",
+                       'Gitlab::Config::Resque[gitlab]']
           )}
         end # pgsql
       end # install gitlab

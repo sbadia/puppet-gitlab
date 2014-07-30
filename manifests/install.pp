@@ -34,15 +34,27 @@ class gitlab::install inherits gitlab {
   }
 
   # gitlab
-  file { "${git_home}/gitlab/config/database.yml":
-    ensure  => file,
-    content => template('gitlab/database.yml.erb'),
-    mode    => '0640',
+  gitlab::config::database { 'gitlab':
+    database => $gitlab_dbname,
+    group    => $git_user,
+    host     => $gitlab_dbhost,
+    owner    => $git_user,
+    password => $gitlab_dbpwd,
+    path     => "${git_home}/gitlab/config/database.yml",
+    port     => $gitlab_dbport,
+    type     => $gitlab_dbtype,
+    username => $gitlab_dbuser,
   }
 
-  file { "${git_home}/gitlab/config/unicorn.rb":
-    ensure  => file,
-    content => template('gitlab/unicorn.rb.erb'),
+  gitlab::config::unicorn { 'gitlab':
+    group             => $git_user,
+    home              => $git_home,
+    http_timeout      => $gitlab_http_timeout,
+    owner             => $git_user,
+    path              => "${git_home}/gitlab/config/unicorn.rb",
+    relative_url_root => $gitlab_relative_url_root,
+    unicorn_port      => $gitlab_unicorn_port,
+    unicorn_worker    => $gitlab_unicorn_worker,
   }
 
   file { "${git_home}/gitlab/config/gitlab.yml":
@@ -51,9 +63,12 @@ class gitlab::install inherits gitlab {
     mode    => '0640',
   }
 
-  file { "${git_home}/gitlab/config/resque.yml":
-    ensure  => file,
-    content => template('gitlab/resque.yml.erb'),
+  gitlab::config::resque { 'gitlab':
+    group      => $git_user,
+    owner      => $git_user,
+    path       => "${git_home}/gitlab/config/resque.yml",
+    redis_host => $gitlab_redishost,
+    redis_port => $gitlab_redisport,
   }
 
   file { "${git_home}/gitlab/config/initializers/rack_attack.rb":
@@ -79,10 +94,10 @@ class gitlab::install inherits gitlab {
     unless  => 'bundle check',
     timeout => 0,
     require => [
-      File["${git_home}/gitlab/config/database.yml"],
-      File["${git_home}/gitlab/config/unicorn.rb"],
+      Gitlab::Config::Database['gitlab'],
+      Gitlab::Config::Unicorn['gitlab'],
       File["${git_home}/gitlab/config/gitlab.yml"],
-      File["${git_home}/gitlab/config/resque.yml"],
+      Gitlab::Config::Resque['gitlab'],
     ],
     notify  => Exec['run migrations'],
   }
