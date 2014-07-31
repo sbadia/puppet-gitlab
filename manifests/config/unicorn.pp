@@ -1,3 +1,4 @@
+#
 define gitlab::config::unicorn (
   $group,
   $home,

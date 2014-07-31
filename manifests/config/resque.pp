@@ -1,3 +1,4 @@
+#
 define gitlab::config::resque (
   $group,
   $owner,

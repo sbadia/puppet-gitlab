@@ -15,8 +15,8 @@
 # [1] https://github.com/agentzh/chunkin-nginx-module#status
 # [2] https://github.com/agentzh/chunkin-nginx-module
 
-upstream gitlab {
-  server unix:<%= @git_home %>/gitlab/tmp/sockets/gitlab.socket;
+upstream <%= @proxy_name %> {
+  server unix:<%= @socket_path %>;
 }
 
 <% if @gitlab_ssl %>
@@ -37,7 +37,7 @@ server {
   # e.g., server_name source.example.com;
   server_name <%= @gitlab_domain_alias ? @gitlab_domain+' '+@gitlab_domain_alias : @gitlab_domain %>;
   server_tokens off;
-  root <%= @git_home %>/gitlab/public;
+  root <%= @root_path %>;
 
   # Increase this if you want to upload large attachments
   # Or if you want to accept large git objects over http
@@ -55,18 +55,18 @@ server {
 <% end %>
 
   # individual nginx logs for this gitlab vhost
-  access_log  /var/log/nginx/gitlab_access.log;
-  error_log   /var/log/nginx/gitlab_error.log;
+  access_log  /var/log/nginx/<%= @proxy_name %>_access.log;
+  error_log   /var/log/nginx/<%= @proxy_name %>_error.log;
 
   location / {
     # serve static files from defined root folder;.
     # @gitlab is a named location for the upstream fallback, see below
-    try_files $uri $uri/index.html $uri.html @gitlab;
+    try_files $uri $uri/index.html $uri.html @<%= @proxy_name %>;
   }
 
   # Enable gzip compression as per rails guide: http://guides.rubyonrails.org/asset_pipeline.html#gzip-compression
   location ~ ^/(assets)/  {
-    root /<%= @git_home %>/gitlab/public;
+    root <%= @root_path %>;
     gzip_static on; # to serve pre-gzipped version
     expires max;
     add_header Cache-Control public;
@@ -74,7 +74,7 @@ server {
 
   # if a file, which is not found in the root folder is requested,
   # then the proxy pass the request to the upsteam (gitlab unicorn)
-  location @gitlab {
+  location @<%= @proxy_name %> {
     # https://github.com/gitlabhq/gitlabhq/issues/694
     proxy_read_timeout <%= @gitlab_http_timeout %>;
     # https://github.com/gitlabhq/gitlabhq/issues/694
@@ -89,7 +89,7 @@ server {
     proxy_set_header   X-Real-IP         $remote_addr;
     proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
 
-    proxy_pass http://gitlab;
+    proxy_pass http://<%= @proxy_name %>;
   }
 
   error_page 502 /502.html;
