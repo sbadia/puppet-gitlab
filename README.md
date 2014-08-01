@@ -123,6 +123,20 @@ class {
 }
 ```
 
+## class gitlab::ci
+
+```puppet
+class { 'gitlab::ci':
+  ci_comment       => 'GitLab',
+  gitlab_domain    => $gitlab_domain,
+  gitlab_dbtype    => 'mysql',
+  gitlab_dbname    => $ci_dbname,
+  gitlab_dbuser    => $ci_dbuser,
+  gitlab_dbpwd     => $ci_dbpwd,
+  gitlab_http_port => 8081,
+}
+```
+
 ## class gitlab::ci::runner
 
 ```puppet
