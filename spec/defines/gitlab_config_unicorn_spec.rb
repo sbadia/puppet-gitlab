@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'gitlab::config::unicorn', :type => :define do
 
   let(:title) { 'gitlab' }
-  let :params do
+  let :params_set do
     {
       :group             => 'git',
       :home              => '/home/git',
@@ -16,7 +16,14 @@ describe 'gitlab::config::unicorn', :type => :define do
     }
   end
 
+  let :params_url do
+    {
+      :relative_url_root => '/blahforge'
+    }
+  end
+
   describe 'unicorn config' do
+    let(:params) { params_set }
     it { should contain_file('/home/git/gitlab/config/unicorn.rb').with(
       :ensure => 'file',
       :owner  => 'git',
@@ -30,6 +37,12 @@ describe 'gitlab::config::unicorn', :type => :define do
     it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/^\s*pid "\/home\/git\/gitlab\/tmp\/pids\/unicorn.pid"$/)}
     it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/^\s*stderr_path "\/home\/git\/gitlab\/log\/unicorn.stderr.log"$/)}
     it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/^\s*stdout_path "\/home\/git\/gitlab\/log\/unicorn.stdout.log"$/)}
-  end
 
+
+    context 'with non default url-root-path' do
+      let(:params) { params_set.merge(params_url) }
+        it { should contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/^\s*ENV\['RAILS_RELATIVE_URL_ROOT'\] = "\/blahforge"$/)}
+    end
+
+  end
 end

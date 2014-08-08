@@ -250,7 +250,7 @@ describe 'gitlab' do
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*ssh_port: #{params_set[:ssh_port]}$/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*google_analytics_id: #{params_set[:google_analytics_id]}$/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*sign_in_text: \|\n\s*!\[Company Logo\]\(#{params_set[:company_logo_url]}\)\n\s*\[Learn more about #{params_set[:company_name]}\]\(#{params_set[:company_link]}\)$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/application.rb").with_content(/^\s*#Fix for compatibility issue with exim as explained at https:\/\/github.com\/gitlabhq\/gitlabhq\/issues\/4866\s*config.action_mailer.sendmail_settings = { :arguments => "-i" }$/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/application.rb").with_content(/^\s*#Fix for compatibility issue with exim as explained at https:\/\/github.com\/gitlabhq\/gitlabhq\/issues\/4866\s*config.action_mailer.sendmail_settings = \{ :arguments => "-i" \}$/)}
       end # gitlab config
       describe 'rack_attack config' do
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/initializers/rack_attack.rb").with(
