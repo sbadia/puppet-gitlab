@@ -5,9 +5,9 @@ define gitlab::config::unicorn (
   $http_timeout,
   $owner,
   $path,
-  $relative_url_root,
   $unicorn_port,
-  $unicorn_worker
+  $unicorn_worker,
+  $relative_url_root = false
 ){
 
   file { $path:
