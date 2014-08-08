@@ -83,7 +83,6 @@ class gitlab::setup inherits gitlab {
   rbenv::install { $git_user:
     group   => $git_user,
     home    => $git_home,
-
   }
 
   # By default, puppet-rbenv sets ~/.profile to load rbenv, which is
@@ -102,8 +101,10 @@ class gitlab::setup inherits gitlab {
     home   => $git_home,
     ruby   => $gitlab_ruby_version,
     global => true,
-    notify => [ Exec['install gitlab-shell'],
-                Exec['install gitlab'] ],
+    notify => [
+      Exec['install gitlab-shell'],
+      Exec['install gitlab'],
+    ],
   }
 
   rbenv::gem { 'charlock_holmes':

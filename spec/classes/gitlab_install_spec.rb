@@ -195,7 +195,7 @@ describe 'gitlab' do
       describe 'setup gitlab database' do
         it { should contain_exec('setup gitlab database').with(
           :user    => 'git',
-          :path     => '/home/git/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+          :path    => '/home/git/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
           :command => '/usr/bin/yes yes | bundle exec rake gitlab:setup RAILS_ENV=production',
           :cwd     => '/home/git/gitlab',
           :creates => '/home/git/.gitlab_setup_done',
