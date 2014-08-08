@@ -10,12 +10,4 @@ Puppet::Type.newtype(:gitlab_project) do
     desc "Project options."
    end
 
-   newparam(:endpoint) do
-     desc "Gitlab endpoint"
-   end
-
-   newparam(:private_token) do
-     desc "Private token"
-   end
-
 end
