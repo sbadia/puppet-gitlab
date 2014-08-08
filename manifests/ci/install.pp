@@ -73,27 +73,30 @@ class gitlab::ci::install inherits gitlab::ci {
     cwd     => "${ci_home}/gitlab-ci",
     creates => "${ci_home}/.gitlab-ci_setup_done",
     require => Exec['install gitlab-ci'],
-    notify  => [Exec['precompile gitlab-ci assets'],Exec['run gitlab-ci schedules']],
     before  => Exec['run gitlab-ci migrations'],
+    notify  => [
+      Exec['precompile gitlab-ci assets'],
+      Exec['run gitlab-ci schedules']
+    ],
   }
 
   exec { 'precompile gitlab-ci assets':
     command     => 'bundle exec rake assets:clean assets:precompile cache:clear RAILS_ENV=production',
-    cwd         =>  "${ci_home}/gitlab-ci",
-    refreshonly =>  true,
+    cwd         => "${ci_home}/gitlab-ci",
+    refreshonly => true,
   }
 
   exec { 'run gitlab-ci migrations':
     command     => 'bundle exec rake db:migrate RAILS_ENV=production',
-    cwd         =>  "${ci_home}/gitlab-ci",
-    refreshonly =>  true,
+    cwd         => "${ci_home}/gitlab-ci",
+    refreshonly => true,
     notify      => Exec['precompile gitlab-ci assets'],
   }
 
   exec { 'run gitlab-ci schedules':
     command     => 'bundle exec whenever -w RAILS_ENV=production',
-    cwd         =>  "${ci_home}/gitlab-ci",
-    refreshonly =>  true,
+    cwd         => "${ci_home}/gitlab-ci",
+    refreshonly => true,
   }
 
 }
