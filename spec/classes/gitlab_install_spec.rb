@@ -201,7 +201,7 @@ describe 'gitlab' do
           :creates => '/home/git/.gitlab_setup_done',
           :before  => 'Exec[run migrations]',
           :require => ['Exec[install gitlab-shell]',
-                        'Exec[install gitlab]']
+                        'Exec[install gitlab]'],
           :notify  => 'Exec[precompile assets]'
         )}
         it { should contain_exec('precompile assets').with(
