@@ -31,7 +31,7 @@ describe 'gitlab' do
       :gitlab_unicorn_port      => '8888',
       :gitlab_unicorn_worker    => '8',
       :gitlab_bundler_flags     => '--no-deployment',
-      :gitlab_bundler_jobs      => '1',
+      :gitlab_bundler_jobs      => '2',
       :exec_path                => '/opt/bw/bin:/bin:/usr/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/sbin',
       :ldap_host                => 'ldap.fooboozoo.fr',
       :ldap_base                => 'dc=fooboozoo,dc=fr',
@@ -160,7 +160,7 @@ describe 'gitlab' do
         it { should contain_exec('install gitlab').with(
           :user    => 'git',
           :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          :command => "bundle install -j#{Facter['processorcount'].value} --without development aws test postgres --deployment",
+          :command => "bundle install --without development aws test postgres --deployment",
           :unless  => 'bundle check',
           :cwd     => '/home/git/gitlab',
           :timeout => 0,
@@ -181,7 +181,7 @@ describe 'gitlab' do
           it { should contain_exec('install gitlab').with(
             :user    => 'git',
             :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-            :command => "bundle install -j#{Facter['processorcount'].value} --without development aws test mysql --deployment",
+            :command => "bundle install --without development aws test mysql --deployment",
             :unless  => 'bundle check',
             :cwd     => '/home/git/gitlab',
             :timeout => 0,

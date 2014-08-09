@@ -42,7 +42,7 @@ class gitlab::params {
   $gitlab_unicorn_port      = '8080'
   $gitlab_unicorn_worker    = '2'
   $gitlab_bundler_flags     = '--deployment'
-  $gitlab_bundler_jobs      = $::processorcount
+  $gitlab_bundler_jobs      = 1
   $gitlab_ensure_postfix    = true
   $gitlab_ensure_curl       = true
   $exec_path                = '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'

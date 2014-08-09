@@ -3,7 +3,6 @@
 *.swp
 pkg/
 .rvmrc
-metadata.json
 .redcar
 Gemfile.lock
 coverage/

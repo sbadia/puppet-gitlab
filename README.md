@@ -27,6 +27,9 @@ This module is based on the admin guides for [gitlab](https://github.com/gitlabh
 
 ## Dependencies
 - [puppetlabs/puppetlabs-stdlib](https://github.com/puppetlabs/puppetlabs-stdlib)
+- [puppetlabs/puppetlabs-vcsrepo](https://github.com/puppetlabs/puppetlabs-vcsrepo)
+- [puppetlabs/puppetlabs-git](https://github.com/puppetlabs/puppetlabs-git)
+
 See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/examples/gitlab.pp).
 
 ## GitLab web interface
@@ -77,7 +80,7 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 * `gitlab_unicorn_port`: Port that unicorn listens on 172.0.0.1 for HTTP traffic (default: 8080)
 * `gitlab_unicorn_worker`: Number of unicorn workers (default: 2)
 * `gitlab_bundler_flags`: Flags to be passed to bundler when installing gems (default: --deployment)
-* `gitlab_bundler_jobs`: The number of jobs to use while installing gems. Should match number of CPUs on machine (default: number of system processors)
+* `gitlab_bundler_jobs`: The number of jobs to use while installing gems. Should match number of CPUs on machine (default: 1)
 * `gitlab_ensure_postfix`: Whether or not this module should ensure the postfix
   package is installed (used to manage conflicts with other modules) (default:
 true)

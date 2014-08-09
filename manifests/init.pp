@@ -164,7 +164,7 @@
 #
 # [*gitlab_bundler_jobs*]
 #   Number of jobs to use while installing gems.  Should match number of
-#   procs on your system (default: number of processors on system)
+#   procs on your system (default: 1)
 #
 # [*gitlab_ensure_postfix*]
 #   Whether or not this module should ensure the postfix package is
