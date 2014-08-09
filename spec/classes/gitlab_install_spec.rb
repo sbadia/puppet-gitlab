@@ -73,7 +73,7 @@ describe 'gitlab' do
       describe 'gitlab-shell' do
         it { should contain_file('/home/git/gitlab-shell/config.yml').with(:ensure => 'file', :mode => '0644', :group => 'git', :owner => 'git')}
         it { should contain_file('/home/git/gitlab-shell/config.yml').with_content(/^\s*user: git$/)}
-        it { should contain_file('/home/git/gitlab-shell/config.yml').with_content(/^\s*gitlab_url: "http:\/\/gitlab.fooboozoo.fr\/"$/)}
+        it { should contain_file('/home/git/gitlab-shell/config.yml').with_content(/^\s*gitlab_url: "http:\/\/gitlab.fooboozoo.fr:80\/"$/)}
         it { should contain_file('/home/git/gitlab-shell/config.yml').with_content(/^\s*self_signed_cert: false$/)}
         it { should contain_file('/home/git/gitlab-shell/config.yml').with_content(/^\s*repos_path: "\/home\/git\/repositories"$/)}
         it { should contain_file('/home/git/gitlab-shell/config.yml').with_content(/^\s*auth_file: "\/home\/git\/.ssh\/authorized_keys"$/)}
@@ -221,10 +221,10 @@ describe 'gitlab' do
       describe 'gitlab-shell' do
         it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with(:ensure => 'file',:mode => '0644',:group => 'gitlab',:owner => 'gitlab')}
         it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*user: #{params_set[:git_user]}$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*gitlab_url: "http:\/\/gitlab.fooboozoo.fr#{params_set[:gitlab_relative_url_root]}"$/)}
+        it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*gitlab_url: "http:\/\/gitlab.fooboozoo.fr:80#{params_set[:gitlab_relative_url_root]}"$/)}
         context 'with ssl' do
           let(:params) { params_set.merge(params_ssl) }
-          it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*gitlab_url: "https:\/\/gitlab.fooboozoo.fr#{params_set[:gitlab_relative_url_root]}"$/)}
+          it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*gitlab_url: "https:\/\/gitlab.fooboozoo.fr:443#{params_set[:gitlab_relative_url_root]}"$/)}
         end
         it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*self_signed_cert: false$/)}
         context 'with self signed ssl cert' do
