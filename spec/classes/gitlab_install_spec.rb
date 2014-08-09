@@ -200,7 +200,8 @@ describe 'gitlab' do
           :cwd     => '/home/git/gitlab',
           :creates => '/home/git/.gitlab_setup_done',
           :before  => 'Exec[run migrations]',
-          :require => 'Exec[install gitlab]',
+          :require => ['Exec[install gitlab-shell]',
+                        'Exec[install gitlab]']
           :notify  => 'Exec[precompile assets]'
         )}
         it { should contain_exec('precompile assets').with(
@@ -367,7 +368,8 @@ describe 'gitlab' do
           :command => '/usr/bin/yes yes | bundle exec rake gitlab:setup RAILS_ENV=production',
           :cwd     => "#{params_set[:git_home]}/gitlab",
           :creates => "#{params_set[:git_home]}/.gitlab_setup_done",
-          :require => 'Exec[install gitlab]'
+          :require => ['Exec[install gitlab-shell]',
+                        'Exec[install gitlab]']
         )}
         it { should contain_file("#{params_set[:git_home]}/.gitlab_setup_done").with(
           :ensure   => 'present',
