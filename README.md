@@ -107,6 +107,8 @@ true)
 
 _Note:_ Assume that a database server is already installed on your server/infrastructure (see: [vagrant-gitlab](https://github.com/sbadia/vagrant-gitlab/blob/master/examples/gitlab.pp)).
 
+## class gitlab
+
 ```puppet
 class {
   'gitlab':
@@ -119,6 +121,31 @@ class {
     gitlab_dbpwd      => $gitlab_dbpwd,
     ldap_enabled      => false,
 }
+```
+
+## class gitlab::ci
+
+```puppet
+class { 'gitlab::ci':
+  ci_comment       => 'GitLab',
+  gitlab_domain    => $gitlab_domain,
+  gitlab_dbtype    => 'mysql',
+  gitlab_dbname    => $ci_dbname,
+  gitlab_dbuser    => $ci_dbuser,
+  gitlab_dbpwd     => $ci_dbpwd,
+  gitlab_http_port => 8081,
+}
+```
+
+## class gitlab::ci::runner
+
+```puppet
+# The registration token can be found at: http://ci.example.com/admin/runners, accessible through Header > Runners.
+class { 'gitlab::ci::runner':
+  ci_server_url      => 'https://ci.example.com',
+  registration_token => 'replaceme',
+}
+
 ```
 
 # Limitations

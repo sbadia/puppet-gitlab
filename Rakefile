@@ -10,6 +10,7 @@ require 'puppet-syntax/tasks/puppet-syntax'
 
 PuppetLint.configuration.send('disable_80chars')
 PuppetLint.configuration.send('disable_variable_scope')
+PuppetLint.configuration.send('disable_class_parameter_defaults')
 #TODO http://puppet-lint.com/checks/class_inherits_from_params_class/
 PuppetLint.configuration.send('disable_class_inherits_from_params_class')
 PuppetLint.configuration.fail_on_warnings = true

@@ -15,19 +15,19 @@
 # Uncomment and customize the last line to run in a non-root path
 # WARNING: We recommend creating a FQDN to host GitLab in a root path instead of this.
 # Note that four settings need to be changed for this to work.
-# 1) In your application.rb file: config.relative_url_root = "/gitlab"
-# 2) In your gitlab.yml file: relative_url_root: /gitlab
-# 3) In your unicorn.rb: ENV['RAILS_RELATIVE_URL_ROOT'] = "/gitlab"
-# 4) In ../gitlab-shell/config.yml: gitlab_url: "http://127.0.0.1/gitlab"
+# 1) In your application.rb file: config.relative_url_root = "/<%= @name %>"
+# 2) In your <%= @name %>.yml file: relative_url_root: /<%= @name %>
+# 3) In your unicorn.rb: ENV['RAILS_RELATIVE_URL_ROOT'] = "/<%= @name %>"
+# 4) In ../<%= @name %>-shell/config.yml: <%= @name %>_url: "http://127.0.0.1/<%= @name %>"
 # To update the path, run: sudo -u git -H bundle exec rake assets:precompile RAILS_ENV=production
 #
-<%- if @gitlab_relative_url_root %>
-ENV['RAILS_RELATIVE_URL_ROOT'] = "<%= @gitlab_relative_url_root %>"
+<%- if @relative_url_root %>
+ENV['RAILS_RELATIVE_URL_ROOT'] = "<%= @relative_url_root %>"
 <%- end %>
 
 # Use at least one worker per core if you're on a dedicated server,
 # more will usually help for _short_ waits on databases/caches.
-worker_processes <%= @gitlab_unicorn_worker %>
+worker_processes <%= @unicorn_worker %>
 
 # Since Unicorn is never exposed to outside clients, it does not need to
 # run on the standard HTTP port (80), there is no reason to start Unicorn
@@ -39,24 +39,24 @@ worker_processes <%= @gitlab_unicorn_worker %>
 # Help ensure your application will always spawn in the symlinked
 # "current" directory that Capistrano sets up.
 # available in 0.94.0+
-working_directory "<%= @git_home %>/gitlab"
+working_directory "<%= @home %>/<%= @name %>"
 
 # listen on both a Unix domain socket and a TCP port,
 # we use a shorter backlog for quicker failover when busy
-listen "<%= @git_home %>/gitlab/tmp/sockets/gitlab.socket", :backlog => 64
-listen "127.0.0.1:<%= @gitlab_unicorn_port %>", :tcp_nopush => true
+listen "<%= @home %>/<%= @name %>/tmp/sockets/<%= @name %>.socket", :backlog => 64
+listen "127.0.0.1:<%= @unicorn_port %>", :tcp_nopush => true
 
 # nuke workers after 30 seconds instead of 60 seconds (the default)
-timeout <%= @gitlab_http_timeout %>
+timeout <%= @http_timeout %>
 
 # feel free to point this anywhere accessible on the filesystem
-pid "<%= @git_home %>/gitlab/tmp/pids/unicorn.pid"
+pid "<%= @home %>/<%= @name %>/tmp/pids/unicorn.pid"
 
 # By default, the Unicorn logger will write to stderr.
 # Additionally, some applications/frameworks log to stderr or stdout,
 # so prevent them from going to /dev/null when daemonized here:
-stderr_path "<%= @git_home %>/gitlab/log/unicorn.stderr.log"
-stdout_path "<%= @git_home %>/gitlab/log/unicorn.stdout.log"
+stderr_path "<%= @home %>/<%= @name %>/log/unicorn.stderr.log"
+stdout_path "<%= @home %>/<%= @name %>/log/unicorn.stdout.log"
 
 # combine Ruby 2.0.0dev or REE with "preload_app true" for memory savings
 # http://rubyenterpriseedition.com/faq.html#adapt_apps_for_cow
