@@ -19,7 +19,7 @@ PuppetLint.configuration.ignore_paths = exclude_tests_paths
 PuppetSyntax.exclude_paths = exclude_tests_paths
 
 def get_version
-  if File.read(File.join(TDIR, 'Modulefile')) =~ /(\d+)\.(\d+)\.(\d+)/
+  if File.read(File.join(TDIR, 'metadata.json')) =~ /(\d+)\.(\d+)\.(\d+)/
     return [$1.to_i, $2.to_i, $3.to_i].compact.join('.')
   end
 end # def:: get_version
