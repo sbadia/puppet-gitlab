@@ -156,11 +156,15 @@
 #
 # [*gitlab_unicorn_port*]
 #   Port that unicorn listens on 172.0.0.1 for HTTP traffic
-#   (default: 8080)
+#   default: 8080
 #
 # [*gitlab_bundler_flags*]
 #   Flags that should be passed to bundler when installing gems
-#   (default: --deployment)
+#   default: --deployment
+#
+# [*gitlab_ruby_version*]
+#   Ruby version to install with rbenv for Gitlab user
+#   default: 2.1.2
 #
 # [*gitlab_bundler_jobs*]
 #   Number of jobs to use while installing gems.  Should match number of
@@ -312,6 +316,7 @@ class gitlab(
     $gitlab_bundler_jobs      = $gitlab::params::gitlab_bundler_jobs,
     $gitlab_ensure_postfix    = $gitlab::params::gitlab_ensure_postfix,
     $gitlab_ensure_curl       = $gitlab::params::gitlab_ensure_curl,
+    $gitlab_ruby_version      = $gitlab::params::gitlab_ruby_version,
     $exec_path                = $gitlab::params::exec_path,
     $ldap_enabled             = $gitlab::params::ldap_enabled,
     $ldap_host                = $gitlab::params::ldap_host,

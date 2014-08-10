@@ -81,7 +81,7 @@ describe 'gitlab' do
         it { should contain_file('/home/git/gitlab-shell/config.yml').with_content(/^\s*port: 6379$/)}
         it { should contain_exec('install gitlab-shell').with(
           :user     => 'git',
-          :path     => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+          :path     => '/home/git/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
           :command  => 'ruby /home/git/gitlab-shell/bin/install',
           :cwd      => '/home/git',
           :creates  => '/home/git/repositories',
@@ -125,7 +125,7 @@ describe 'gitlab' do
       describe 'install gitlab' do
         it { should contain_exec('install gitlab').with(
           :user    => 'git',
-          :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+          :path     => '/home/git/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
           :command => "bundle install --without development aws test postgres --deployment",
           :unless  => 'bundle check',
           :cwd     => '/home/git/gitlab',
@@ -146,7 +146,7 @@ describe 'gitlab' do
           let(:params) {{ :gitlab_dbtype => 'pgsql' }}
           it { should contain_exec('install gitlab').with(
             :user    => 'git',
-            :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+            :path     => '/home/git/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
             :command => "bundle install --without development aws test mysql --deployment",
             :unless  => 'bundle check',
             :cwd     => '/home/git/gitlab',
@@ -161,7 +161,7 @@ describe 'gitlab' do
       describe 'setup gitlab database' do
         it { should contain_exec('setup gitlab database').with(
           :user    => 'git',
-          :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+          :path    => '/home/git/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
           :command => '/usr/bin/yes yes | bundle exec rake gitlab:setup RAILS_ENV=production',
           :cwd     => '/home/git/gitlab',
           :creates => '/home/git/.gitlab_setup_done',

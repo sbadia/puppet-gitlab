@@ -25,6 +25,7 @@
   ],
   "description": "Module to install GitLab using puppet",
   "dependencies": [
+    {"name":"alup/rbenv","version_requirement":">= 1.2.0"},
     {"name":"puppetlabs/stdlib","version_requirement":">= 3.1.0"},
     {"name":"puppetlabs/vcsrepo","version_requirement":">= 0.2.0"},
     {"name":"puppetlabs/git","version_requirement":">= 0.0.3"}

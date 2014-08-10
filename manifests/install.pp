@@ -3,6 +3,7 @@
 #
 class gitlab::install inherits gitlab {
 
+  # note that this is *without*
   $gitlab_without_gems = $gitlab_dbtype ? {
     'mysql' => 'postgres',
     'pgsql' => 'mysql',
@@ -73,7 +74,7 @@ class gitlab::install inherits gitlab {
 
   file { "${git_home}/gitlab/config/initializers/rack_attack.rb":
     ensure => file,
-    source => "${git_home}/gitlab/config/initializers/rack_attack.rb.example"
+    source => "${git_home}/gitlab/config/initializers/rack_attack.rb.example",
   }
 
   if $gitlab_relative_url_root or $use_exim {

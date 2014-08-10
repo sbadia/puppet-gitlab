@@ -45,7 +45,8 @@ class gitlab::params {
   $gitlab_bundler_jobs      = 1
   $gitlab_ensure_postfix    = true
   $gitlab_ensure_curl       = true
-  $exec_path                = '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  $gitlab_ruby_version      = '2.1.2'
+  $exec_path                = "${git_home}/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   $ldap_enabled             = false
   $ldap_host                = 'ldap.domain.com'
   $ldap_base                = 'dc=domain,dc=com'
