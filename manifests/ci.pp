@@ -7,7 +7,7 @@ class gitlab::ci(
   $ci_home                  = $gitlab::ci::params::ci_home,
   $gitlabci_sources         = $gitlab::ci::params::gitlabci_sources,
   $gitlabci_branch          = $gitlab::ci::params::gitlabci_branch,
-  $manage_nginx             = $gitlab::ci::params::gitlabci_manage_nginx,
+  $gitlab_manage_nginx      = $gitlab::ci::params::gitlabci_manage_nginx,
   $proxy_name               = 'gitlab-ci',
   $exec_path                = $gitlab::ci::params::exec_path,
   $gitlab_http_port         = $gitlab::ci::params::gitlabci_http_port,
