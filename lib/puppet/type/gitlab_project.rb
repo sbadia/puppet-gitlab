@@ -2,11 +2,11 @@ Puppet::Type.newtype(:gitlab_project) do
 
    ensurable
 
-   newparam(:name) do
+   newparam(:name, :namevar => true) do
      desc "The name of the gitlab project."
    end
 
-   newparam(:options) do
+   newproperty(:options) do
     desc "Project options."
    end
 

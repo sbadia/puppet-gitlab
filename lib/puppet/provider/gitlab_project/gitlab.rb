@@ -13,7 +13,7 @@ Puppet::Type.type(:gitlab_project).provide :gitlab do
   def self.symbolize_keys(h)
     h.keys.each do |key|
         if h[key].is_a?(Hash)
-          h[key] =self.symbolize_keys(h[key])
+          h[key] = self.symbolize_keys(h[key])
         end
         h[(key.to_sym rescue key) || key] = h.delete(key)
     end
@@ -27,22 +27,21 @@ Puppet::Type.type(:gitlab_project).provide :gitlab do
      end
 
      Gitlab.projects.collect do |project|
-      resource = {}
-      resource[:options] = self.symbolize_keys(project.to_h)
-      resource[:name] = project.name
+      resource            = {}
+      resource[:options]  = self.symbolize_keys(project.to_h)
+      resource[:name]     = project.name
       resource[:provider] = :gitlab
-      resource[:ensure] = :present
-      Puppet.debug resource
+      resource[:ensure]   = :present
       new(resource)
     end
   end
 
   def self.get_properties(name)
     resource = {}
-    resource[:options] = self.symbolize_keys(@client.project(name).to_h)
-    resource[:name] = name
+    resource[:options]  = self.symbolize_keys(@client.project(name).to_h)
+    resource[:name]     = name
     resource[:provider] = :gitlab
-    resource[:ensure] = :present
+    resource[:ensure]   = :present
     return properties
   end
 
