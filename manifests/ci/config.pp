@@ -10,7 +10,7 @@ class gitlab::ci::config inherits gitlab::ci {
   $socket_path = "${ci_home}/gitlab-ci/tmp/sockets/gitlab-ci.socket"
   $root_path = "${ci_home}/gitlab-ci/public"
 
-  if $gitlabci_manage_nginx {
+  if $gitlab_manage_nginx {
     file { '/etc/nginx/conf.d/gitlab-ci.conf':
       ensure  => file,
       content => template('gitlab/nginx-gitlab.conf.erb'),
