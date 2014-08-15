@@ -7,7 +7,10 @@ Puppet::Type.newtype(:gitlab_project) do
    end
 
    newproperty(:options) do
-    desc "Project options."
+     desc "Project options."
+     validate do |v|
+       raise(Puppet::Error, 'gitlab_project options value should be a hash') unless v.is_a? Hash
+     end
    end
 
 end
