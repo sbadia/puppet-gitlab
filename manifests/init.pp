@@ -12,6 +12,10 @@
 #   Name of gitlab user
 #   default: git
 #
+# [*git_group*]
+#   Name of gitlab group
+#   default: $git_user
+#
 # [*git_home*]
 #   Home directory for gitlab repository
 #   default: /home/git
@@ -23,6 +27,14 @@
 # [*git_comment*]
 #   Gitlab user comment
 #   default: GitLab
+#
+# [*gitlab_manage_user*]
+#   Whether to manage the Gitlab user account
+#   default: true
+#
+# [*gitlab_manage_home*]
+#   Whether to manage the Gitlab user's home directory
+#   default: true
 #
 # [*gitlab_sources*]
 #   Gitlab sources
@@ -275,9 +287,12 @@
 class gitlab(
     $ensure                   = $gitlab::params::ensure,
     $git_user                 = $gitlab::params::git_user,
+    $git_group                = $git_user,
     $git_home                 = $gitlab::params::git_home,
     $git_email                = $gitlab::params::git_email,
     $git_comment              = $gitlab::params::git_comment,
+    $gitlab_manage_user       = $gitlab::params::gitlab_manage_user,
+    $gitlab_manage_home       = $gitlab::params::gitlab_manage_home,
     $gitlab_sources           = $gitlab::params::gitlab_sources,
     $gitlab_branch            = $gitlab::params::gitlab_branch,
     $gitlabshell_branch       = $gitlab::params::gitlabshell_branch,

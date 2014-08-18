@@ -14,6 +14,7 @@ describe 'gitlab' do
   let :params_set do
     {
       :git_user                 => 'gitlab',
+      :git_group                => 'gitgroup',
       :git_home                 => '/srv/gitlab',
       :git_email                => 'gitlab@fooboozoo.fr',
       :gitlab_repodir           => '/mnt/nas',
@@ -185,7 +186,7 @@ describe 'gitlab' do
     context 'with specifics params' do
       let(:params) { params_set }
       describe 'gitlab-shell' do
-        it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with(:ensure => 'file',:mode => '0644',:group => 'gitlab',:owner => 'gitlab')}
+        it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with(:ensure => 'file',:mode => '0644',:group => 'gitgroup',:owner => 'gitlab')}
         it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*user: #{params_set[:git_user]}$/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*gitlab_url: "http:\/\/gitlab.fooboozoo.fr#{params_set[:gitlab_relative_url_root]}"$/)}
         context 'with ssl' do
@@ -212,7 +213,7 @@ describe 'gitlab' do
       end # gitlab-shell
 
       describe 'gitlab config' do
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with(:ensure => 'file',:owner => params_set[:git_user],:group => params_set[:git_user])}
+        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with(:ensure => 'file',:owner => params_set[:git_user],:group => params_set[:git_group])}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*host: gitlab.fooboozoo.fr$/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*port: 80$/)}
         it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*https: false$/)}

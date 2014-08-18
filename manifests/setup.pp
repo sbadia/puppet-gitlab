@@ -7,17 +7,20 @@ class gitlab::setup inherits gitlab {
 
   File {
     owner     => $git_user,
-    group     => $git_user,
+    group     => $git_group,
   }
 
   # user
-  user { $git_user:
-    ensure   => present,
-    shell    => '/bin/bash',
-    password => '*',
-    home     => $git_home,
-    comment  => $git_comment,
-    system   => true,
+  if($gitlab_manage_user)
+  {
+    user { $git_user:
+      ensure   => present,
+      shell    => '/bin/bash',
+      password => '*',
+      home     => $git_home,
+      comment  => $git_comment,
+      system   => true,
+    }
   }
 
   sshkey { 'localhost':
@@ -34,9 +37,12 @@ class gitlab::setup inherits gitlab {
   }
 
   # directories
-  file { $git_home:
-    ensure => directory,
-    mode   => '0755',
+  if($gitlab_manage_home)
+  {
+    file { $git_home:
+      ensure => directory,
+      mode   => '0755',
+    }
   }
 
   file { "${git_home}/gitlab-satellites":
@@ -81,7 +87,7 @@ class gitlab::setup inherits gitlab {
   ensure_packages($system_packages)
 
   rbenv::install { $git_user:
-    group   => $git_user,
+    group   => $git_group,
     home    => $git_home,
   }
 
