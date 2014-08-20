@@ -26,9 +26,10 @@ This module is based on the admin guides for [gitlab](https://github.com/gitlabh
 - [puppet-gitlab](http://forge.puppetlabs.com/sbadia/gitlab) on puppet forge.
 
 ## Dependencies
+- [alup/puppet-rbenv](https://github.com/alup/puppet-rbenv)
+- [puppetlabs/puppetlabs-git](https://github.com/puppetlabs/puppetlabs-git)
 - [puppetlabs/puppetlabs-stdlib](https://github.com/puppetlabs/puppetlabs-stdlib)
 - [puppetlabs/puppetlabs-vcsrepo](https://github.com/puppetlabs/puppetlabs-vcsrepo)
-- [puppetlabs/puppetlabs-git](https://github.com/puppetlabs/puppetlabs-git)
 
 See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/examples/gitlab.pp).
 
