@@ -3,11 +3,12 @@ class gitlab::ci::runner (
   $ci_server_url,
   $registration_token,
   $ensure              = 'present',
+  $branch              = '5-0-stable',
+  $exec_path           = '/home/gitlab_ci_runner/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+  $ruby_version        = '2.1.2',
+  $source              = 'https://gitlab.com/gitlab-org/gitlab-ci-runner.git',
   $user                = 'gitlab_ci_runner',
   $user_home           = '/home/gitlab_ci_runner',
-  $source              = 'https://gitlab.com/gitlab-org/gitlab-ci-runner.git',
-  $branch              = '5-0-stable',
-  $exec_path           = '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 ){
 
   user { $user:
@@ -26,6 +27,39 @@ class gitlab::ci::runner (
     revision => $branch,
     provider => 'git',
     user     => $user,
+  }
+
+  case $::osfamily {
+    'Debian': {
+      $system_packages = ['libicu-dev']
+    }
+    'RedHat': {
+      $system_packages = ['libicu-devel']
+    }
+    default: {
+      fail("${::osfamily} not supported yet")
+    }
+  }
+
+  ensure_packages($system_packages)
+
+  file { "${user_home}/.bashrc":
+    ensure  => file,
+    content => "source ${user_home}/.rbenvrc",
+    require => Rbenv::Install['gitlab_ci_runner']
+  }
+
+  rbenv::install { $user:
+    group   => $user,
+    home    => $user_home,
+  }
+
+  rbenv::compile { 'gitlab-ci-runner/ruby':
+    user   => $user,
+    home   => $user_home,
+    ruby   => $ruby_version,
+    global => true,
+    notify => Exec['install gitlab-ci-runner'],
   }
 
   Exec {
@@ -66,6 +100,8 @@ class gitlab::ci::runner (
 
   User[$user] ->
   Vcsrepo["${user_home}/gitlab-ci-runner"] ->
+  Rbenv::Install[$user] ->
+  Rbenv::Compile['gitlab-ci-runner/ruby'] ->
   Exec['install gitlab-ci-runner'] ->
   File['/etc/init.d/gitlab_ci_runner'] ->
   Service['gitlab_ci_runner']
