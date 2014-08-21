@@ -36,6 +36,7 @@ class gitlab::ci::params {
   $gitlabci_unicorn_worker    = '2'
   $gitlabci_bundler_flags     = '--deployment'
   $gitlabci_bundler_jobs      = 1
-  $exec_path                  = '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  $exec_path                  = "${ci_home}/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+  $gitlab_ruby_version        = '2.1.2'
 
 } # Class:: gitlab::ci::params
