@@ -1,7 +1,9 @@
 defaults: &defaults
   gitlab_server_urls:
     # Replace with your gitlab server url
-    - <%= @gitlab_domain %>
+<% Array(@gitlab_server_urls).each do |server| -%>
+    - <%= server %>
+<% end -%>
 
   ## Gitlab CI settings
   gitlab_ci:

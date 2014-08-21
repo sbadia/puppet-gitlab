@@ -131,13 +131,14 @@ class {
 
 ```puppet
 class { 'gitlab::ci':
-  ci_comment       => 'GitLab',
-  gitlab_domain    => $gitlab_domain,
-  gitlab_dbtype    => 'mysql',
-  gitlab_dbname    => $ci_dbname,
-  gitlab_dbuser    => $ci_dbuser,
-  gitlab_dbpwd     => $ci_dbpwd,
-  gitlab_http_port => 8081,
+  ci_comment         => 'GitLab',
+  gitlab_server_urls => ['https://gitlab.example.org']
+  gitlab_domain      => $gitlab_domain,
+  gitlab_dbtype      => 'mysql',
+  gitlab_dbname      => $ci_dbname,
+  gitlab_dbuser      => $ci_dbuser,
+  gitlab_dbpwd       => $ci_dbpwd,
+  gitlab_http_port   => 8081,
 }
 ```
 

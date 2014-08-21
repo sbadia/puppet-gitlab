@@ -1,5 +1,6 @@
 #
 class gitlab::ci(
+  $gitlab_server_urls       = [],
   $ensure                   = $gitlab::ci::params::ensure,
   $ci_user                  = $gitlab::ci::params::ci_user,
   $ci_comment               = $gitlab::ci::params::ci_comment,
