@@ -9,6 +9,7 @@ class gitlab::ci(
   $gitlabci_branch          = $gitlab::ci::params::gitlabci_branch,
   $gitlab_manage_nginx      = $gitlab::ci::params::gitlabci_manage_nginx,
   $proxy_name               = 'gitlab-ci',
+  $gitlab_ruby_version      = $gitlab::ci::params::gitlab_ruby_version,
   $exec_path                = $gitlab::ci::params::exec_path,
   $gitlab_http_port         = $gitlab::ci::params::gitlabci_http_port,
   $gitlab_ssl_port          = $gitlab::ci::params::gitlabci_ssl_port,

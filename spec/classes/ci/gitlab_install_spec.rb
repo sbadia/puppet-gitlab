@@ -53,7 +53,7 @@ describe 'gitlab::ci' do
       describe 'install gitlab ci' do
         it { should contain_exec('install gitlab-ci').with(
           :user    => 'gitlab_ci',
-          :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+          :path    => '/home/gitlab_ci/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
           :command => "bundle install --without development aws test postgres --deployment",
           :unless  => 'bundle check',
           :cwd     => '/home/gitlab_ci/gitlab-ci',
@@ -79,7 +79,7 @@ describe 'gitlab::ci' do
           let(:params) {{ :gitlab_dbtype => 'pgsql' }}
           it { should contain_exec('install gitlab-ci').with(
             :user    => 'gitlab_ci',
-            :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+            :path    => '/home/gitlab_ci/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
             :command => "bundle install --without development aws test mysql --deployment",
             :unless  => 'bundle check',
             :cwd     => '/home/gitlab_ci/gitlab-ci',
@@ -94,7 +94,7 @@ describe 'gitlab::ci' do
       describe 'setup gitlab-ci database' do
         it { should contain_exec('setup gitlab-ci database').with(
           :user    => 'gitlab_ci',
-          :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+          :path    => '/home/gitlab_ci/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
           :command => '/usr/bin/yes yes | bundle exec rake setup RAILS_ENV=production && touch /home/gitlab_ci/.gitlab-ci_setup_done',
           :cwd     => '/home/gitlab_ci/gitlab-ci',
           :creates => '/home/gitlab_ci/.gitlab-ci_setup_done',
