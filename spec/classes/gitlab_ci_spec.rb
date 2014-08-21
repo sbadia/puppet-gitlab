@@ -3,10 +3,9 @@ require 'spec_helper'
 # Gitlab
 describe 'gitlab::ci' do
   let(:facts) {{
-    :osfamily       => 'Debian',
-    :fqdn           => 'gitlabci.fooboozoo.fr',
-    :processorcount => '2',
-    :sshrsakey      => 'AAAAB3NzaC1yc2EAAAA'
+    :osfamily           => 'Debian',
+    :fqdn               => 'gitlabci.fooboozoo.fr',
+    :gitlab_server_urls => ['https://gitlab.example.org']
   }}
 
   describe 'gitlab::ci internal' do

@@ -52,6 +52,7 @@ class gitlab::ci::install inherits gitlab::ci {
     ensure  => file,
     content => template('gitlab/gitlab-ci-application.yml.erb'),
     mode    => '0640',
+    notify  => Service['gitlab_ci'],
   }
 
   exec { 'install gitlab-ci':
