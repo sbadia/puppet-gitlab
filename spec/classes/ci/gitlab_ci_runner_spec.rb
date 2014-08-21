@@ -31,9 +31,28 @@ describe 'gitlab::ci::runner' do
     :system     => true
   )}
 
+  it { should contain_rbenv__install('gitlab_ci_runner').with(
+    :group => 'gitlab_ci_runner',
+    :home  => '/home/gitlab_ci_runner'
+  )}
+
+  it { should contain_file('/home/gitlab_ci_runner/.bashrc').with(
+    :ensure  => 'file',
+    :content => 'source /home/gitlab_ci_runner/.rbenvrc',
+    :require => 'Rbenv::Install[gitlab_ci_runner]'
+  )}
+
+  it { should contain_rbenv__compile('gitlab-ci-runner/ruby').with(
+    :user   => 'gitlab_ci_runner',
+    :home   => '/home/gitlab_ci_runner',
+    :ruby   => '2.1.2',
+    :global => true,
+    :notify => 'Exec[install gitlab-ci-runner]'
+  )}
+
   it { should contain_exec('install gitlab-ci-runner').with(
     :user    => 'gitlab_ci_runner',
-    :path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+    :path    => '/home/gitlab_ci_runner/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     :command => "bundle install --deployment",
     :unless  => 'bundle check',
     :cwd     => '/home/gitlab_ci_runner/gitlab-ci-runner',
@@ -43,7 +62,7 @@ describe 'gitlab::ci::runner' do
 
   it { should contain_exec('run gitlab-ci-runner setup').with(
     :user        => 'gitlab_ci_runner',
-    :path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+    :path        => '/home/gitlab_ci_runner/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     :command     => 'bundle exec ./bin/setup',
     :cwd         => '/home/gitlab_ci_runner/gitlab-ci-runner',
     :refreshonly => true,
