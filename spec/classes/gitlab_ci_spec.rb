@@ -2,11 +2,6 @@ require 'spec_helper'
 
 # Gitlab
 describe 'gitlab::ci' do
-  let(:facts) {{
-    :osfamily           => 'Debian',
-    :fqdn               => 'gitlabci.fooboozoo.fr',
-    :gitlab_server_urls => ['https://gitlab.example.org']
-  }}
 
   describe 'gitlab::ci internal' do
     it { should contain_anchor('gitlab::ci::begin') }

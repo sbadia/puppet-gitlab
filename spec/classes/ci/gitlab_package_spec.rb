@@ -2,10 +2,6 @@ require 'spec_helper'
 
 # Gitlab
 describe 'gitlab::ci' do
-  let(:facts) {{
-    :osfamily  => 'Debian',
-    :fqdn      => 'gitlabci.fooboozoo.fr'
-  }}
 
   ## Parameter set
   # a non-default common parameter set

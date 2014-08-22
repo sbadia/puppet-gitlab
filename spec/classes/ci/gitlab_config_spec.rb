@@ -3,7 +3,6 @@ require 'spec_helper'
 # Gitlab
 describe 'gitlab::ci' do
   let(:facts) {{
-    :osfamily => 'Debian',
     :fqdn     => 'gitlab-ci.fooboozoo.fr',
   }}
 
