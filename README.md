@@ -1,6 +1,8 @@
-# Puppet-gitlab [![Build Status](https://travis-ci.org/sbadia/puppet-gitlab.png?branch=master)](https://travis-ci.org/sbadia/puppet-gitlab)
+# Puppet-gitlab
 
-Tested successfully with Gitlab 6-8-stable on Ubuntu 12.04 and Debian Wheezy (7.2) with Puppet 3.2 or newer.
+[![Build Status](https://travis-ci.org/sbadia/puppet-gitlab.png?branch=master)](https://travis-ci.org/sbadia/puppet-gitlab)
+[![Puppet Forge](http://img.shields.io/puppetforge/v/sbadia/gitlab.svg)](https://forge.puppetlabs.com/sbadia/gitlab)
+[![License](http://img.shields.io/:license-gpl3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0.html)
 
 #### Table of contents
 
