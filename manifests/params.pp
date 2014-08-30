@@ -66,6 +66,7 @@ class gitlab::params {
   $company_link             = ''
   $company_name             = ''
   $use_exim                 = false
+  $webserver_service_name   = 'nginx'
 
   # determine pre-requisite packages
   case $::osfamily {
