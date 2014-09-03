@@ -125,7 +125,7 @@ describe 'gitlab' do
         'system_packages' => ['libicu-devel','perl-Time-HiRes','libxml2-devel',
                               'libxslt-devel','python-devel','libcurl-devel',
                               'readline-devel','openssl-devel','zlib-devel',
-                              'libyaml-devel','patch','gcc-c++'],
+                              'libyaml-devel','patch','gcc-c++','ruby-devel'],
       }
     }
 
