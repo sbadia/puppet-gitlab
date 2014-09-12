@@ -133,4 +133,11 @@ class gitlab::install inherits gitlab {
       require => Exec['setup gitlab database'];
   }
 
+  file { "${git_home}/gitlab-shell/hooks/update":
+    ensure  => present,
+    content => template('gitlab/update.erb'),
+    mode    => '0775',
+    require => File["${git_home}/gitlab-shell/config.yml"],
+  }
+
 }
