@@ -14,11 +14,11 @@ describe 'gitlab::config::resque', :type => :define do
     end
 
     describe 'resque config' do
-      it { should contain_file('/home/git/gitlab/config/resque.yml').with(
+      it { is_expected.to contain_file('/home/git/gitlab/config/resque.yml').with(
         :ensure => 'file',
         :owner  => 'git',
         :group  => 'git'
       )}
-      it { should contain_file('/home/git/gitlab/config/resque.yml').with_content(/^\s*production: redis:\/\/127.0.0.1:6379$/)}
+      it { is_expected.to contain_file('/home/git/gitlab/config/resque.yml').with_content(/^\s*production: redis:\/\/127.0.0.1:6379$/)}
     end
 end

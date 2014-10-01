@@ -18,7 +18,7 @@ describe 'gitlab::ci' do
   describe 'gitlab::ci::package' do
     describe 'get gitlabci sources' do
       context 'with default params' do
-        it { should contain_vcsrepo('/home/gitlab_ci/gitlab-ci').with(
+        it { is_expected.to contain_vcsrepo('/home/gitlab_ci/gitlab-ci').with(
           :ensure   => 'present',
           :user     => 'gitlab_ci',
           :provider => 'git',
@@ -28,7 +28,7 @@ describe 'gitlab::ci' do
       end
       context 'with specifics params' do
         let(:params) { params_set }
-        it { should contain_vcsrepo("#{params_set[:ci_home]}/gitlab-ci").with(
+        it { is_expected.to contain_vcsrepo("#{params_set[:ci_home]}/gitlab-ci").with(
           :ensure   => 'present',
           :user     => params_set[:ci_user],
           :provider => 'git',

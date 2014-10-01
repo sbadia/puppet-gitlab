@@ -20,14 +20,14 @@ describe 'gitlab' do
   describe 'gitlab::package' do
     describe 'get gitlab{-shell} sources' do
       context 'with default params' do
-        it { should contain_vcsrepo('/home/git/gitlab').with(
+        it { is_expected.to contain_vcsrepo('/home/git/gitlab').with(
           :ensure   => 'present',
           :user     => 'git',
           :provider => 'git',
           :source   => 'git://github.com/gitlabhq/gitlabhq.git',
           :revision => '6-9-stable'
         )}
-        it { should contain_vcsrepo('/home/git/gitlab-shell').with(
+        it { is_expected.to contain_vcsrepo('/home/git/gitlab-shell').with(
           :ensure   => 'present',
           :user     => 'git',
           :provider => 'git',
@@ -37,14 +37,14 @@ describe 'gitlab' do
       end
       context 'with specifics params' do
         let(:params) { params_set }
-        it { should contain_vcsrepo("#{params_set[:git_home]}/gitlab").with(
+        it { is_expected.to contain_vcsrepo("#{params_set[:git_home]}/gitlab").with(
           :ensure   => 'present',
           :user     => params_set[:git_user],
           :provider => 'git',
           :source   => params_set[:gitlab_sources],
           :revision => params_set[:gitlab_branch]
         )}
-        it { should contain_vcsrepo("#{params_set[:git_home]}/gitlab-shell").with(
+        it { is_expected.to contain_vcsrepo("#{params_set[:git_home]}/gitlab-shell").with(
           :ensure   => 'present',
           :user     => params_set[:git_user],
           :provider => 'git',

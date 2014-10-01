@@ -5,11 +5,30 @@ describe "gitlab class:" do
     pp = "class { 'gitlab': }"
 
     context puppet_apply(pp) do
-      its(:stderr) { should be_empty }
-      its(:exit_code) { should_not == 1 }
-      its(:refresh) { should be_nil }
-      its(:stderr) { should be_empty }
-      its(:exit_code) { should be_zero }
+      describe '#stderr' do
+        subject { super().stderr }
+        it { is_expected.to be_empty }
+      end
+
+      describe '#exit_code' do
+        subject { super().exit_code }
+        it { is_expected.not_to eq(1) }
+      end
+
+      describe '#refresh' do
+        subject { super().refresh }
+        it { is_expected.to be_nil }
+      end
+
+      describe '#stderr' do
+        subject { super().stderr }
+        it { is_expected.to be_empty }
+      end
+
+      describe '#exit_code' do
+        subject { super().exit_code }
+        it { is_expected.to be_zero }
+      end
     end
   end
 

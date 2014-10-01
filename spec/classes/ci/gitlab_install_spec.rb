@@ -47,7 +47,7 @@ describe 'gitlab::ci' do
   describe 'gitlab::ci::install' do
     context 'with default params' do
       describe 'install gitlab ci' do
-        it { should contain_exec('install gitlab-ci').with(
+        it { is_expected.to contain_exec('install gitlab-ci').with(
           :user    => 'gitlab_ci',
           :path    => '/home/gitlab_ci/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
           :command => "bundle install --without development aws test postgres --deployment",
@@ -60,20 +60,20 @@ describe 'gitlab::ci' do
                         'Gitlab::Config::Resque[gitlab-ci]'],
           :notify  => 'Exec[run gitlab-ci migrations]'
         )}
-        it { should contain_exec('run gitlab-ci migrations').with(
+        it { is_expected.to contain_exec('run gitlab-ci migrations').with(
           :command     => 'bundle exec rake db:migrate RAILS_ENV=production',
           :cwd         => '/home/gitlab_ci/gitlab-ci',
           :refreshonly => 'true',
           :notify      => 'Exec[precompile gitlab-ci assets]'
         )}
-        it { should contain_exec('run gitlab-ci schedules').with(
+        it { is_expected.to contain_exec('run gitlab-ci schedules').with(
           :command     => 'bundle exec whenever -w RAILS_ENV=production',
           :cwd         => '/home/gitlab_ci/gitlab-ci',
           :refreshonly => 'true'
         )}
         context 'postgresql' do
           let(:params) {{ :gitlab_dbtype => 'pgsql' }}
-          it { should contain_exec('install gitlab-ci').with(
+          it { is_expected.to contain_exec('install gitlab-ci').with(
             :user    => 'gitlab_ci',
             :path    => '/home/gitlab_ci/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
             :command => "bundle install --without development aws test mysql --deployment",
@@ -88,7 +88,7 @@ describe 'gitlab::ci' do
         end # pgsql
       end # install gitlab
       describe 'setup gitlab-ci database' do
-        it { should contain_exec('setup gitlab-ci database').with(
+        it { is_expected.to contain_exec('setup gitlab-ci database').with(
           :user    => 'gitlab_ci',
           :path    => '/home/gitlab_ci/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
           :command => '/usr/bin/yes yes | bundle exec rake setup RAILS_ENV=production && touch /home/gitlab_ci/.gitlab-ci_setup_done',
@@ -98,7 +98,7 @@ describe 'gitlab::ci' do
           :require => 'Exec[install gitlab-ci]',
           :notify  => ['Exec[precompile gitlab-ci assets]','Exec[run gitlab-ci schedules]']
         )}
-        it { should contain_exec('precompile gitlab-ci assets').with(
+        it { is_expected.to contain_exec('precompile gitlab-ci assets').with(
           :command     => 'bundle exec rake assets:clean assets:precompile cache:clear RAILS_ENV=production',
           :cwd         => '/home/gitlab_ci/gitlab-ci',
           :refreshonly => 'true'
@@ -109,7 +109,7 @@ describe 'gitlab::ci' do
       let(:params) { params_set }
 
       describe 'install gitlab-ci' do
-        it { should contain_exec('install gitlab-ci').with(
+        it { is_expected.to contain_exec('install gitlab-ci').with(
           :user    => params_set[:ci_user],
           :path    => params_set[:exec_path],
           :command => "bundle install --without development aws test postgres #{params_set[:bundler_flags]}",
@@ -123,7 +123,7 @@ describe 'gitlab::ci' do
         )}
         context 'postgresql' do
           let(:params) { params_set.merge({ :gitlab_dbtype => 'pgsql' }) }
-          it { should contain_exec('install gitlab-ci').with(
+          it { is_expected.to contain_exec('install gitlab-ci').with(
             :user    => params_set[:ci_user],
             :path    => params_set[:exec_path],
             :command => "bundle install --without development aws test mysql #{params_set[:bundler_flags]}",
@@ -138,7 +138,7 @@ describe 'gitlab::ci' do
         end # pgsql
       end # install gitlab-ci
       describe 'setup gitlab-ci database' do
-        it { should contain_exec('setup gitlab-ci database').with(
+        it { is_expected.to contain_exec('setup gitlab-ci database').with(
           :user    => params_set[:ci_user],
           :path    => params_set[:exec_path],
           :command => "/usr/bin/yes yes | bundle exec rake setup RAILS_ENV=production && touch #{params_set[:ci_home]}/.gitlab-ci_setup_done",
