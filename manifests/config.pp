@@ -3,8 +3,8 @@
 #
 class gitlab::config inherits gitlab {
   File {
-    owner     => $git_user,
-    group     => $git_group,
+    owner => $git_user,
+    group => $git_group,
   }
 
   $socket_path = "${git_home}/gitlab/tmp/sockets/gitlab.socket"
@@ -40,11 +40,11 @@ class gitlab::config inherits gitlab {
   }
 
   file { '/etc/logrotate.d/gitlab':
-      ensure  => file,
-      source  => "${git_home}/gitlab/lib/support/logrotate/gitlab",
-      owner   => root,
-      group   => root,
-      mode    => '0644';
+      ensure => file,
+      source => "${git_home}/gitlab/lib/support/logrotate/gitlab",
+      owner  => root,
+      group  => root,
+      mode   => '0644';
   }
 
   # directories
@@ -56,8 +56,8 @@ class gitlab::config inherits gitlab {
       "${git_home}/gitlab/public",
       "${git_home}/gitlab/public/uploads"
     ]:
-    ensure    => directory,
-    mode      => '0755',
+    ensure => directory,
+    mode   => '0755',
   }
 
   # symlink fix for python

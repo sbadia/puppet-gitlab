@@ -50,8 +50,8 @@ class gitlab::ci::runner (
   }
 
   rbenv::install { $user:
-    group   => $user,
-    home    => $user_home,
+    group => $user,
+    home  => $user_home,
   }
 
   rbenv::compile { 'gitlab-ci-runner/ruby':
@@ -84,11 +84,11 @@ class gitlab::ci::runner (
   }
 
   file { '/etc/init.d/gitlab_ci_runner':
-    ensure  => file,
-    source  => "${user_home}/gitlab-ci-runner/lib/support/init.d/gitlab_ci_runner",
-    owner   => root,
-    group   => root,
-    mode    => '0755',
+    ensure => file,
+    source => "${user_home}/gitlab-ci-runner/lib/support/init.d/gitlab_ci_runner",
+    owner  => root,
+    group  => root,
+    mode   => '0755',
   }
 
   service { 'gitlab_ci_runner':
