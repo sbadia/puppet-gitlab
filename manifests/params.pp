@@ -12,9 +12,9 @@ class gitlab::params {
   $git_email                = 'git@someserver.net'
   $git_comment              = 'GitLab'
   $gitlab_sources           = 'git://github.com/gitlabhq/gitlabhq.git'
-  $gitlab_branch            = '6-9-stable'
+  $gitlab_branch            = '7-3-stable'
   $gitlabshell_sources      = 'git://github.com/gitlabhq/gitlab-shell.git'
-  $gitlabshell_branch       = 'v1.9.4'
+  $gitlabshell_branch       = 'v2.0.1'
   $gitlab_manage_nginx      = true
   $gitlab_http_port         = '80'
   $gitlab_ssl_port          = '443'
