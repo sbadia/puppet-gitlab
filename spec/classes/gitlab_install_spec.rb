@@ -152,6 +152,7 @@ describe 'gitlab' do
                         'Gitlab::Config::Resque[gitlab]']
           )}
         end # pgsql
+        it { should contain_file('/home/git/gitlab-shell/hooks/update').with_content(/^#!\/home\/git\/.rbenv\/shims\/ruby$/)}
       end # install gitlab
       describe 'setup gitlab database' do
         it { is_expected.to contain_exec('setup gitlab database').with(
@@ -281,6 +282,7 @@ describe 'gitlab' do
                        'Gitlab::Config::Resque[gitlab]']
           )}
         end # pgsql
+        it { should contain_file("#{params_set[:git_home]}/gitlab-shell/hooks/update").with_content(/^#!#{params_set[:git_home]}\/.rbenv\/shims\/ruby$/)}
       end # install gitlab
       describe 'setup gitlab database' do
         it { is_expected.to contain_exec('setup gitlab database').with(
