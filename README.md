@@ -163,6 +163,22 @@ class { 'gitlab::ci::runner':
 
 Want to help - send a pull request.
 
+
+# Beaker-Rspec
+
+This module has beaker-rspec tests
+
+To run:
+
+```shell
+bundle install
+bundle exec rspec spec/acceptance
+# or use BEAKER_destroy=no to keep the resulting vm
+BEAKER_destroy=no bundle exec rspec spec/acceptance
+```
+
+And test on http://10.255.127.206/
+
 ## Development environment with vagrant
 
 See [vagrant-gitlab](https://github.com/sbadia/vagrant-gitlab).
