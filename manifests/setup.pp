@@ -6,8 +6,8 @@ class gitlab::setup inherits gitlab {
   include git
 
   File {
-    owner     => $git_user,
-    group     => $git_group,
+    owner => $git_user,
+    group => $git_group,
   }
 
   # user
@@ -31,9 +31,9 @@ class gitlab::setup inherits gitlab {
   }
 
   file { "${git_home}/.gitconfig":
-    ensure    => file,
-    content   => template('gitlab/git.gitconfig.erb'),
-    mode      => '0644',
+    ensure  => file,
+    content => template('gitlab/git.gitconfig.erb'),
+    mode    => '0644',
   }
 
   # directories
@@ -46,8 +46,8 @@ class gitlab::setup inherits gitlab {
   }
 
   file { "${git_home}/gitlab-satellites":
-    ensure    => directory,
-    mode      => '0750',
+    ensure => directory,
+    mode   => '0750',
   }
 
   # database dependencies
@@ -87,8 +87,8 @@ class gitlab::setup inherits gitlab {
   ensure_packages($gitlab::system_packages)
 
   rbenv::install { $git_user:
-    group   => $git_group,
-    home    => $git_home,
+    group => $git_group,
+    home  => $git_home,
   }
 
   # By default, puppet-rbenv sets ~/.profile to load rbenv, which is

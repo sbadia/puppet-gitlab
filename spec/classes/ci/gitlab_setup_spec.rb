@@ -19,7 +19,7 @@ describe 'gitlab::ci' do
     ### User, gitconfig, home and satellites
     describe 'user, home' do
       context 'with default params' do
-        it { should contain_user('gitlab_ci').with(
+        it { is_expected.to contain_user('gitlab_ci').with(
           :ensure     => 'present',
           :shell      => '/bin/bash',
           :password   => '*',
@@ -31,7 +31,7 @@ describe 'gitlab::ci' do
       end
       context 'with specifics params' do
         let(:params) { params_set }
-        it { should contain_user(params_set[:ci_user]).with(
+        it { is_expected.to contain_user(params_set[:ci_user]).with(
           :ensure     => 'present',
           :shell      => '/bin/bash',
           :password   => '*',
@@ -45,16 +45,16 @@ describe 'gitlab::ci' do
       ### Ruby
       describe 'rbenv' do
         context 'with default params' do
-          it { should contain_rbenv__install('gitlab_ci').with(
+          it { is_expected.to contain_rbenv__install('gitlab_ci').with(
                         :group => 'gitlab_ci',
                         :home  => '/home/gitlab_ci'
                       )}
-          it { should contain_file('/home/gitlab_ci/.bashrc').with(
+          it { is_expected.to contain_file('/home/gitlab_ci/.bashrc').with(
                         :ensure  => 'file',
                         :content => 'source /home/gitlab_ci/.rbenvrc',
                         :require => 'Rbenv::Install[gitlab_ci]'
                       )}
-          it { should contain_rbenv__compile('gitlabci/ruby').with(
+          it { is_expected.to contain_rbenv__compile('gitlabci/ruby').with(
                         :user   => 'gitlab_ci',
                         :home   => '/home/gitlab_ci',
                         :ruby   => '2.1.2',

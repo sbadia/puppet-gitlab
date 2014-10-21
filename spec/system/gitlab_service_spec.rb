@@ -11,13 +11,13 @@ describe 'gitlab::service class' do
   })
 
   describe service('gitlab') do
-    it { should be_enabled }
-    it { should be_running }
+    it { is_expected.to be_enabled }
+    it { is_expected.to be_running }
   end
 
   decribe service('nginx') do
-    it { should be_enabled }
-    it { should be_running }
+    it { is_expected.to be_enabled }
+    it { is_expected.to be_running }
   end
 
 end

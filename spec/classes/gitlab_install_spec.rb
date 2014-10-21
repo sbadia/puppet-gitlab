@@ -66,15 +66,15 @@ describe 'gitlab' do
   describe 'gitlab::install' do
     context 'with default params' do
       describe 'gitlab-shell' do
-        it { should contain_file('/home/git/gitlab-shell/config.yml').with(:ensure => 'file', :mode => '0644', :group => 'git', :owner => 'git')}
-        it { should contain_file('/home/git/gitlab-shell/config.yml').with_content(/^\s*user: git$/)}
-        it { should contain_file('/home/git/gitlab-shell/config.yml').with_content(/^\s*gitlab_url: "http:\/\/gitlab.fooboozoo.fr\/"$/)}
-        it { should contain_file('/home/git/gitlab-shell/config.yml').with_content(/^\s*self_signed_cert: false$/)}
-        it { should contain_file('/home/git/gitlab-shell/config.yml').with_content(/^\s*repos_path: "\/home\/git\/repositories"$/)}
-        it { should contain_file('/home/git/gitlab-shell/config.yml').with_content(/^\s*auth_file: "\/home\/git\/.ssh\/authorized_keys"$/)}
-        it { should contain_file('/home/git/gitlab-shell/config.yml').with_content(/^\s*host: 127.0.0.1$/)}
-        it { should contain_file('/home/git/gitlab-shell/config.yml').with_content(/^\s*port: 6379$/)}
-        it { should contain_exec('install gitlab-shell').with(
+        it { is_expected.to contain_file('/home/git/gitlab-shell/config.yml').with(:ensure => 'file', :mode => '0644', :group => 'git', :owner => 'git')}
+        it { is_expected.to contain_file('/home/git/gitlab-shell/config.yml').with_content(/^\s*user: git$/)}
+        it { is_expected.to contain_file('/home/git/gitlab-shell/config.yml').with_content(/^\s*gitlab_url: "http:\/\/gitlab.fooboozoo.fr\/"$/)}
+        it { is_expected.to contain_file('/home/git/gitlab-shell/config.yml').with_content(/^\s*self_signed_cert: false$/)}
+        it { is_expected.to contain_file('/home/git/gitlab-shell/config.yml').with_content(/^\s*repos_path: "\/home\/git\/repositories"$/)}
+        it { is_expected.to contain_file('/home/git/gitlab-shell/config.yml').with_content(/^\s*auth_file: "\/home\/git\/.ssh\/authorized_keys"$/)}
+        it { is_expected.to contain_file('/home/git/gitlab-shell/config.yml').with_content(/^\s*host: 127.0.0.1$/)}
+        it { is_expected.to contain_file('/home/git/gitlab-shell/config.yml').with_content(/^\s*port: 6379$/)}
+        it { is_expected.to contain_exec('install gitlab-shell').with(
           :user     => 'git',
           :path     => '/home/git/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
           :command  => 'ruby /home/git/gitlab-shell/bin/install',
@@ -84,41 +84,41 @@ describe 'gitlab' do
         )}
       end # gitlab-shell
       describe 'gitlab config' do
-        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with(:ensure => 'file',:owner => 'git',:group => 'git')}
-        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*host: gitlab.fooboozoo.fr$/)}
+        it { is_expected.to contain_file('/home/git/gitlab/config/gitlab.yml').with(:ensure => 'file',:owner => 'git',:group => 'git')}
+        it { is_expected.to contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*host: gitlab.fooboozoo.fr$/)}
         context 'with ssl' do
           let(:params) {{ :gitlab_ssl => true }}
-          it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*port: 443$/)}
-          it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*https: true$/)}
+          it { is_expected.to contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*port: 443$/)}
+          it { is_expected.to contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*https: true$/)}
         end
-        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*port: 80$/)}
-        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*https: false$/)}
-        it { should_not contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*relative_url_root: \/myfoobooforge$/)}
-        it { should_not contain_file('/home/git/gitlab/config/application.rb')}
-        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*email_from: git@someserver.net$/)}
-        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*default_projects_limit: 10$/)}
-        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*username_changing_enabled: true$/)}
-        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*host: 'ldap.domain.com'$/)}
-        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*base: 'dc=domain,dc=com'$/)}
-        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*port: 636$/)}
-        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*uid: 'uid'$/)}
-        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*user_filter: ''$/)}
-        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*method: 'ssl'$/)}
-        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*path: \/home\/git\/gitlab-satellites\/$/)}
-        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*repos_path: \/home\/git\/repositories\/$/)}
-        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*hooks_path: \/home\/git\/gitlab-shell\/hooks\/$/)}
-        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*ssh_port: 22$/)}
-        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*# google_analytics_id: '_your_tracking_id'$/)}
-        it { should contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*# sign_in_text: \|\n\s*#   !\[Company Logo\]\(http:\/\/www.companydomain.com\/logo.png\)\n\s*#   \[Learn more about CompanyName\]\(http:\/\/www.companydomain.com\/\)$/)}
+        it { is_expected.to contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*port: 80$/)}
+        it { is_expected.to contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*https: false$/)}
+        it { is_expected.not_to contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*relative_url_root: \/myfoobooforge$/)}
+        it { is_expected.not_to contain_file('/home/git/gitlab/config/application.rb')}
+        it { is_expected.to contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*email_from: git@someserver.net$/)}
+        it { is_expected.to contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*default_projects_limit: 10$/)}
+        it { is_expected.to contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*username_changing_enabled: true$/)}
+        it { is_expected.to contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*host: 'ldap.domain.com'$/)}
+        it { is_expected.to contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*base: 'dc=domain,dc=com'$/)}
+        it { is_expected.to contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*port: 636$/)}
+        it { is_expected.to contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*uid: 'uid'$/)}
+        it { is_expected.to contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*user_filter: ''$/)}
+        it { is_expected.to contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*method: 'ssl'$/)}
+        it { is_expected.to contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*path: \/home\/git\/gitlab-satellites\/$/)}
+        it { is_expected.to contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*repos_path: \/home\/git\/repositories\/$/)}
+        it { is_expected.to contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*hooks_path: \/home\/git\/gitlab-shell\/hooks\/$/)}
+        it { is_expected.to contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*ssh_port: 22$/)}
+        it { is_expected.to contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*# google_analytics_id: '_your_tracking_id'$/)}
+        it { is_expected.to contain_file('/home/git/gitlab/config/gitlab.yml').with_content(/^\s*# sign_in_text: \|\n\s*#   !\[Company Logo\]\(http:\/\/www.companydomain.com\/logo.png\)\n\s*#   \[Learn more about CompanyName\]\(http:\/\/www.companydomain.com\/\)$/)}
       end # gitlab config
       describe 'rack_attack config' do
-        it { should contain_file('/home/git/gitlab/config/initializers/rack_attack.rb').with(
+        it { is_expected.to contain_file('/home/git/gitlab/config/initializers/rack_attack.rb').with(
           :ensure => 'file',
           :source => '/home/git/gitlab/config/initializers/rack_attack.rb.example'
         )}
       end # rack_attack config
       describe 'install gitlab' do
-        it { should contain_exec('install gitlab').with(
+        it { is_expected.to contain_exec('install gitlab').with(
           :user    => 'git',
           :path     => '/home/git/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
           :command => "bundle install --without development aws test postgres --deployment",
@@ -131,7 +131,7 @@ describe 'gitlab' do
                         'Gitlab::Config::Resque[gitlab]'],
           :notify  => 'Exec[run migrations]'
         )}
-        it { should contain_exec('run migrations').with(
+        it { is_expected.to contain_exec('run migrations').with(
           :command     => 'bundle exec rake db:migrate RAILS_ENV=production',
           :cwd         => '/home/git/gitlab',
           :refreshonly => 'true',
@@ -139,7 +139,7 @@ describe 'gitlab' do
         )}
         context 'postgresql' do
           let(:params) {{ :gitlab_dbtype => 'pgsql' }}
-          it { should contain_exec('install gitlab').with(
+          it { is_expected.to contain_exec('install gitlab').with(
             :user    => 'git',
             :path     => '/home/git/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
             :command => "bundle install --without development aws test mysql --deployment",
@@ -154,7 +154,7 @@ describe 'gitlab' do
         end # pgsql
       end # install gitlab
       describe 'setup gitlab database' do
-        it { should contain_exec('setup gitlab database').with(
+        it { is_expected.to contain_exec('setup gitlab database').with(
           :user    => 'git',
           :path    => '/home/git/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
           :command => '/usr/bin/yes yes | bundle exec rake gitlab:setup RAILS_ENV=production',
@@ -164,12 +164,12 @@ describe 'gitlab' do
           :require => 'Exec[install gitlab]',
           :notify  => 'Exec[precompile assets]'
         )}
-        it { should contain_exec('precompile assets').with(
+        it { is_expected.to contain_exec('precompile assets').with(
           :command     => 'bundle exec rake assets:clean assets:precompile cache:clear RAILS_ENV=production',
           :cwd         => '/home/git/gitlab',
           :refreshonly => 'true'
         )}
-        it { should contain_file("/home/git/.gitlab_setup_done").with(
+        it { is_expected.to contain_file("/home/git/.gitlab_setup_done").with(
           :ensure   => 'present',
           :owner    => 'root',
           :group    => 'root',
@@ -180,23 +180,23 @@ describe 'gitlab' do
     context 'with specifics params' do
       let(:params) { params_set }
       describe 'gitlab-shell' do
-        it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with(:ensure => 'file',:mode => '0644',:group => 'gitgroup',:owner => 'gitlab')}
-        it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*user: #{params_set[:git_user]}$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*gitlab_url: "http:\/\/gitlab.fooboozoo.fr#{params_set[:gitlab_relative_url_root]}"$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with(:ensure => 'file',:mode => '0644',:group => 'gitgroup',:owner => 'gitlab')}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*user: #{params_set[:git_user]}$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*gitlab_url: "http:\/\/gitlab.fooboozoo.fr#{params_set[:gitlab_relative_url_root]}"$/)}
         context 'with ssl' do
           let(:params) { params_set.merge(params_ssl) }
-          it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*gitlab_url: "https:\/\/gitlab.fooboozoo.fr#{params_set[:gitlab_relative_url_root]}"$/)}
+          it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*gitlab_url: "https:\/\/gitlab.fooboozoo.fr#{params_set[:gitlab_relative_url_root]}"$/)}
         end
-        it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*self_signed_cert: false$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*self_signed_cert: false$/)}
         context 'with self signed ssl cert' do
           let(:params) { params_set.merge(params_ssl) }
-          it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*self_signed_cert: true$/)}
+          it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*self_signed_cert: true$/)}
         end
-        it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*repos_path: "#{params_set[:gitlab_repodir]}\/repositories"$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*auth_file: "#{params_set[:git_home]}\/.ssh\/authorized_keys"$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*host: #{params_set[:gitlab_redishost]}$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*port: #{params_set[:gitlab_redisport]}$/)}
-        it { should contain_exec('install gitlab-shell').with(
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*repos_path: "#{params_set[:gitlab_repodir]}\/repositories"$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*auth_file: "#{params_set[:git_home]}\/.ssh\/authorized_keys"$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*host: #{params_set[:gitlab_redishost]}$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab-shell/config.yml").with_content(/^\s*port: #{params_set[:gitlab_redisport]}$/)}
+        it { is_expected.to contain_exec('install gitlab-shell').with(
           :user     => params_set[:git_user],
           :path     => params_set[:exec_path],
           :command  => "ruby #{params_set[:git_home]}/gitlab-shell/bin/install",
@@ -207,54 +207,54 @@ describe 'gitlab' do
       end # gitlab-shell
 
       describe 'gitlab config' do
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with(:ensure => 'file',:owner => params_set[:git_user],:group => params_set[:git_group])}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*host: gitlab.fooboozoo.fr$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*port: 80$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*https: false$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with(:ensure => 'file',:owner => params_set[:git_user],:group => params_set[:git_group])}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*host: gitlab.fooboozoo.fr$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*port: 80$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*https: false$/)}
         context 'with ssl' do
           let(:params) { params_set.merge(params_ssl) }
-          it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*port: 443$/)}
-          it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*https: true$/)}
+          it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*port: 443$/)}
+          it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*https: true$/)}
         end
         context 'with non-default http ports' do
           let(:params) { params_set.merge!(:gitlab_http_port => '81') }
-          it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*port: 81$/)}
-          it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*https: false$/)}
+          it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*port: 81$/)}
+          it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*https: false$/)}
           context 'with non-default https ports' do
             let(:params) { params_set.merge!(:gitlab_ssl => true, :gitlab_ssl_self_signed => true, :gitlab_ssl_port => '444') }
-            it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*port: 444$/)}
-            it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*https: true$/)}
+            it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*port: 444$/)}
+            it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*https: true$/)}
           end
         end
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*relative_url_root: #{params_set[:gitlab_relative_url_root]}$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/application.rb").with_content(/^\s*config.relative_url_root = "#{params_set[:gitlab_relative_url_root]}"$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*email_from: #{params_set[:git_email]}$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*default_projects_limit: #{params_set[:gitlab_projects]}$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*username_changing_enabled: #{params_set[:gitlab_username_change]}$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*host: '#{params_set[:ldap_host]}'$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*base: '#{params_set[:ldap_base]}'$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*port: #{params_set[:ldap_port]}$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*uid: '#{params_set[:ldap_uid]}'$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*user_filter: '#{params_set[:ldap_user_filter]}'$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*method: '#{params_set[:ldap_method]}'$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*bind_dn: '#{params_set[:ldap_bind_dn]}'$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*password: '#{params_set[:ldap_bind_password]}'$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*path: #{params_set[:git_home]}\/gitlab-satellites\/$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*repos_path: #{params_set[:gitlab_repodir]}\/repositories\/$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*hooks_path: #{params_set[:git_home]}\/gitlab-shell\/hooks\/$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*ssh_port: #{params_set[:ssh_port]}$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*google_analytics_id: #{params_set[:google_analytics_id]}$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*sign_in_text: \|\n\s*!\[Company Logo\]\(#{params_set[:company_logo_url]}\)\n\s*\[Learn more about #{params_set[:company_name]}\]\(#{params_set[:company_link]}\)$/)}
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/application.rb").with_content(/^\s*#Fix for compatibility issue with exim as explained at https:\/\/github.com\/gitlabhq\/gitlabhq\/issues\/4866\s*config.action_mailer.sendmail_settings = \{ :arguments => "-i" \}$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*relative_url_root: #{params_set[:gitlab_relative_url_root]}$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/application.rb").with_content(/^\s*config.relative_url_root = "#{params_set[:gitlab_relative_url_root]}"$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*email_from: #{params_set[:git_email]}$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*default_projects_limit: #{params_set[:gitlab_projects]}$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*username_changing_enabled: #{params_set[:gitlab_username_change]}$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*host: '#{params_set[:ldap_host]}'$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*base: '#{params_set[:ldap_base]}'$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*port: #{params_set[:ldap_port]}$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*uid: '#{params_set[:ldap_uid]}'$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*user_filter: '#{params_set[:ldap_user_filter]}'$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*method: '#{params_set[:ldap_method]}'$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*bind_dn: '#{params_set[:ldap_bind_dn]}'$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*password: '#{params_set[:ldap_bind_password]}'$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*path: #{params_set[:git_home]}\/gitlab-satellites\/$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*repos_path: #{params_set[:gitlab_repodir]}\/repositories\/$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*hooks_path: #{params_set[:git_home]}\/gitlab-shell\/hooks\/$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*ssh_port: #{params_set[:ssh_port]}$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*google_analytics_id: #{params_set[:google_analytics_id]}$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/gitlab.yml").with_content(/^\s*sign_in_text: \|\n\s*!\[Company Logo\]\(#{params_set[:company_logo_url]}\)\n\s*\[Learn more about #{params_set[:company_name]}\]\(#{params_set[:company_link]}\)$/)}
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/application.rb").with_content(/^\s*#Fix for compatibility issue with exim as explained at https:\/\/github.com\/gitlabhq\/gitlabhq\/issues\/4866\s*config.action_mailer.sendmail_settings = \{ :arguments => "-i" \}$/)}
       end # gitlab config
       describe 'rack_attack config' do
-        it { should contain_file("#{params_set[:git_home]}/gitlab/config/initializers/rack_attack.rb").with(
+        it { is_expected.to contain_file("#{params_set[:git_home]}/gitlab/config/initializers/rack_attack.rb").with(
           :ensure => 'file',
           :source => "#{params_set[:git_home]}/gitlab/config/initializers/rack_attack.rb.example"
         )}
       end # rack_attack config
       describe 'install gitlab' do
-        it { should contain_exec('install gitlab').with(
+        it { is_expected.to contain_exec('install gitlab').with(
           :user    => params_set[:git_user],
           :path    => params_set[:exec_path],
           :command => "bundle install -j#{params_set[:gitlab_bundler_jobs]} --without development aws test postgres #{params_set[:gitlab_bundler_flags]}",
@@ -268,7 +268,7 @@ describe 'gitlab' do
         )}
         context 'postgresql' do
           let(:params) { params_set.merge({ :gitlab_dbtype => 'pgsql' }) }
-          it { should contain_exec('install gitlab').with(
+          it { is_expected.to contain_exec('install gitlab').with(
             :user    => params_set[:git_user],
             :path    => params_set[:exec_path],
             :command => "bundle install -j#{params_set[:gitlab_bundler_jobs]} --without development aws test mysql #{params_set[:gitlab_bundler_flags]}",
@@ -283,7 +283,7 @@ describe 'gitlab' do
         end # pgsql
       end # install gitlab
       describe 'setup gitlab database' do
-        it { should contain_exec('setup gitlab database').with(
+        it { is_expected.to contain_exec('setup gitlab database').with(
           :user    => params_set[:git_user],
           :path    => params_set[:exec_path],
           :command => '/usr/bin/yes yes | bundle exec rake gitlab:setup RAILS_ENV=production',
@@ -291,7 +291,7 @@ describe 'gitlab' do
           :creates => "#{params_set[:git_home]}/.gitlab_setup_done",
           :require => 'Exec[install gitlab]'
         )}
-        it { should contain_file("#{params_set[:git_home]}/.gitlab_setup_done").with(
+        it { is_expected.to contain_file("#{params_set[:git_home]}/.gitlab_setup_done").with(
           :ensure   => 'present',
           :owner    => 'root',
           :group    => 'root',

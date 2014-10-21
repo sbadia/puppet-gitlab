@@ -22,7 +22,7 @@ describe 'gitlab' do
     ### User, gitconfig, home and satellites
     describe 'user, home, gitconfig and GitLab satellites' do
       context 'with default params' do
-        it { should contain_user('git').with(
+        it { is_expected.to contain_user('git').with(
           :ensure   => 'present',
           :shell    => '/bin/bash',
           :password => '*',
@@ -30,15 +30,15 @@ describe 'gitlab' do
           :comment  => 'GitLab',
           :system   => true
         )}
-        it { should contain_file('/home/git/.gitconfig').with_content(/^\s*name = "GitLab"$/)}
-        it { should contain_file('/home/git/.gitconfig').with_content(/^\s*email = git@someserver.net$/)}
-        it { should_not contain_file('/srv/gitlab/.gitconfig').with_content(/^\s*proxy$/)}
-        it { should contain_file('/home/git').with(:ensure => 'directory', :mode => '0755')}
-        it { should contain_file('/home/git/gitlab-satellites').with(:ensure => 'directory', :mode => '0750')}
+        it { is_expected.to contain_file('/home/git/.gitconfig').with_content(/^\s*name = "GitLab"$/)}
+        it { is_expected.to contain_file('/home/git/.gitconfig').with_content(/^\s*email = git@someserver.net$/)}
+        it { is_expected.not_to contain_file('/srv/gitlab/.gitconfig').with_content(/^\s*proxy$/)}
+        it { is_expected.to contain_file('/home/git').with(:ensure => 'directory', :mode => '0755')}
+        it { is_expected.to contain_file('/home/git/gitlab-satellites').with(:ensure => 'directory', :mode => '0750')}
       end
       context 'with specific params' do
         let(:params) { params_set }
-        it { should contain_user(params_set[:git_user]).with(
+        it { is_expected.to contain_user(params_set[:git_user]).with(
           :ensure   => 'present',
           :shell    => '/bin/bash',
           :password => '*',
@@ -46,27 +46,27 @@ describe 'gitlab' do
           :comment  => params_set[:git_comment],
           :system   => true
         )}
-        it { should contain_file('/srv/gitlab/.gitconfig').with_content(/^\s*name = "GitLab"$/)}
-        it { should contain_file('/srv/gitlab/.gitconfig').with_content(/^\s*email = #{params_set[:git_email]}$/)}
-        it { should contain_file('/srv/gitlab/.gitconfig').with_content(/^\s*proxy = #{params_set[:git_proxy]}$/)}
-        it { should contain_file('/srv/gitlab').with(:ensure => 'directory',:mode => '0755')}
-        it { should contain_file('/srv/gitlab/gitlab-satellites').with(:ensure => 'directory',:mode => '0750')}
+        it { is_expected.to contain_file('/srv/gitlab/.gitconfig').with_content(/^\s*name = "GitLab"$/)}
+        it { is_expected.to contain_file('/srv/gitlab/.gitconfig').with_content(/^\s*email = #{params_set[:git_email]}$/)}
+        it { is_expected.to contain_file('/srv/gitlab/.gitconfig').with_content(/^\s*proxy = #{params_set[:git_proxy]}$/)}
+        it { is_expected.to contain_file('/srv/gitlab').with(:ensure => 'directory',:mode => '0755')}
+        it { is_expected.to contain_file('/srv/gitlab/gitlab-satellites').with(:ensure => 'directory',:mode => '0750')}
       end
     end
 
     ### Ruby
     describe 'rbenv' do
       context 'with default params' do
-        it { should contain_rbenv__install('git').with(
+        it { is_expected.to contain_rbenv__install('git').with(
                       :group => 'git',
                       :home  => '/home/git'
                     )}
-        it { should contain_file('/home/git/.bashrc').with(
+        it { is_expected.to contain_file('/home/git/.bashrc').with(
                       :ensure  => 'link',
                       :target  => '/home/git/.profile',
                       :require => 'Rbenv::Install[git]'
                     )}
-        it { should contain_rbenv__compile('gitlab/ruby').with(
+        it { is_expected.to contain_rbenv__compile('gitlab/ruby').with(
                       :user   => 'git',
                       :home   => '/home/git',
                       :ruby   => '2.1.2',
@@ -77,16 +77,16 @@ describe 'gitlab' do
       end
       context 'with specific params' do
         let(:params) { params_set }
-        it { should contain_rbenv__install(params_set[:git_user]).with(
+        it { is_expected.to contain_rbenv__install(params_set[:git_user]).with(
                       :group => params_set[:git_user],
                       :home  => params_set[:git_home]
                     )}
-        it { should contain_file('/srv/gitlab/.bashrc').with(
+        it { is_expected.to contain_file('/srv/gitlab/.bashrc').with(
                       :ensure  => 'link',
                       :target  => '/srv/gitlab/.profile',
                       :require => 'Rbenv::Install[gitlab]'
                     )}
-        it { should contain_rbenv__compile('gitlab/ruby').with(
+        it { is_expected.to contain_rbenv__compile('gitlab/ruby').with(
                       :user   => params_set[:git_user],
                       :home   => params_set[:git_home],
                       :ruby   => '2.0.0',
@@ -98,7 +98,7 @@ describe 'gitlab' do
 
     ### Sshkey
     describe 'sshkey (hostfile)' do
-      it { should contain_sshkey('localhost').with(
+      it { is_expected.to contain_sshkey('localhost').with(
         :ensure       => 'present',
         :host_aliases => 'gitlab.fooboozoo.fr',
         :key          => 'AAAAB3NzaC1yc2EAAAA',
@@ -139,30 +139,30 @@ describe 'gitlab' do
             let(:facts) {{ :osfamily => distro, :processorcount => '2' }}
             let(:params) {{ :gitlab_dbtype => dbtype }}
             p[distro]['db_packages'][dbtype].each do |pkg|
-              it { should contain_package(pkg) }
+              it { is_expected.to contain_package(pkg) }
             end
           end
         end
         context "for devel dependencies on #{distro}" do
           let(:facts) {{ :osfamily => distro, :processorcount => '2' }}
           p[distro]['system_packages'].each do |pkg|
-            it { should contain_package(pkg) }
+            it { is_expected.to contain_package(pkg) }
           end
 
-          it { should contain_class('git') }
-          it { should contain_package('git') }
+          it { is_expected.to contain_class('git') }
+          it { is_expected.to contain_package('git') }
         end
       end
       #### Gems (all dist.)
       describe 'commons gems' do
-        it { should contain_rbenv__gem('charlock_holmes').with(
+        it { is_expected.to contain_rbenv__gem('charlock_holmes').with(
           :ensure   => '0.6.9.4'
         )}
       end
       #### Commons packages (all dist.)
       describe 'commons packages' do
         ['postfix','curl'].each do |pkg|
-          it { should contain_package(pkg) }
+          it { is_expected.to contain_package(pkg) }
         end
       end
     end # packages

@@ -4,16 +4,16 @@ require 'spec_helper'
 describe 'gitlab::ci' do
 
   describe 'gitlab::ci internal' do
-    it { should contain_anchor('gitlab::ci::begin') }
-    it { should contain_class('gitlab::ci::setup') }
-    it { should contain_class('gitlab::ci::package') }
-    it { should contain_class('gitlab::ci::install') }
-    it { should contain_class('gitlab::ci::config') }
-    it { should contain_class('gitlab::ci::service') }
-    it { should contain_anchor('gitlab::ci::end') }
+    it { is_expected.to contain_anchor('gitlab::ci::begin') }
+    it { is_expected.to contain_class('gitlab::ci::setup') }
+    it { is_expected.to contain_class('gitlab::ci::package') }
+    it { is_expected.to contain_class('gitlab::ci::install') }
+    it { is_expected.to contain_class('gitlab::ci::config') }
+    it { is_expected.to contain_class('gitlab::ci::service') }
+    it { is_expected.to contain_anchor('gitlab::ci::end') }
 
-    it { should contain_class('gitlab::ci::params') }
-    it { should contain_class('gitlab::ci') }
+    it { is_expected.to contain_class('gitlab::ci::params') }
+    it { is_expected.to contain_class('gitlab::ci') }
   end
 
 end # gitlab::ci

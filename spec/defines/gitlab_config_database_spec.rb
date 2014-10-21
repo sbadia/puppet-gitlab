@@ -19,17 +19,17 @@ describe 'gitlab::config::database', :type => :define do
       }
     }
 
-    it { should contain_file('/home/git/gitlab/config/database.yml').with(
+    it { is_expected.to contain_file('/home/git/gitlab/config/database.yml').with(
       :ensure => 'file',
       :owner  => 'git',
       :group  => 'git'
     )}
-    it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*adapter: mysql2$/)}
-    it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*encoding: utf8$/)}
-    it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*database: gitlab_db$/)}
-    it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*username: gitlab_user$/)}
-    it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*password: 'changeme'$/)}
-    it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*host: localhost$/)}
+    it { is_expected.to contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*adapter: mysql2$/)}
+    it { is_expected.to contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*encoding: utf8$/)}
+    it { is_expected.to contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*database: gitlab_db$/)}
+    it { is_expected.to contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*username: gitlab_user$/)}
+    it { is_expected.to contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*password: 'changeme'$/)}
+    it { is_expected.to contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*host: localhost$/)}
   end
 
   context 'postgresql' do
@@ -46,12 +46,12 @@ describe 'gitlab::config::database', :type => :define do
         :username => 'gitlab_user'
       }
     }
-    it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*adapter: postgresql$/)}
-    it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*encoding: unicode$/)}
-    it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*database: gitlab_db$/)}
-    it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*username: gitlab_user$/)}
-    it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*password: 'changeme'$/)}
-    it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*host: localhost$/)}
-    it { should contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*port: 5432$/)}
+    it { is_expected.to contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*adapter: postgresql$/)}
+    it { is_expected.to contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*encoding: unicode$/)}
+    it { is_expected.to contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*database: gitlab_db$/)}
+    it { is_expected.to contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*username: gitlab_user$/)}
+    it { is_expected.to contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*password: 'changeme'$/)}
+    it { is_expected.to contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*host: localhost$/)}
+    it { is_expected.to contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*port: 5432$/)}
   end
 end
