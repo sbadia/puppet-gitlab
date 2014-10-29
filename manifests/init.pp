@@ -42,7 +42,7 @@
 #
 # [*gitlab_branch*]
 #   Gitlab branch
-#   default: 6-9-stable
+#   default: 7-4-stable
 #
 # [*gitlabshell_sources*]
 #   Gitlab-shell sources
@@ -50,7 +50,7 @@
 #
 # [*gitlabshell_banch*]
 #   Gitlab-shell branch
-#   default: v1.9.4
+#   default: v2.0.1
 #
 # [*gitlab_manage_nginx*]
 #   Whether or not this module should install a templated Nginx
