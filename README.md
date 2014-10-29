@@ -157,7 +157,16 @@ class { 'gitlab::ci::runner':
 
 # Limitations
 
-- TBF
+This module has been built on and tested against Puppet 2.7 and higher.
+
+The module has been tested on:
+
+* RedHat Enterprise Linux 5/6/7
+* Debian 6/7
+* CentOS 5/6/7
+* Ubuntu 12.04/14.04
+
+Testing on other platforms has been light and cannot be guaranteed. 
 
 # Development
 
