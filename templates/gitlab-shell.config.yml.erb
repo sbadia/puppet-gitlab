@@ -2,7 +2,7 @@
 user: <%= @git_user %>
 
 # Url to gitlab instance. Used for api calls. Should end with a slash.
-gitlab_url: "<%= @gitlab_ssl ? 'https' : 'http' %>://<%= @gitlab_domain %><%= @gitlab_relative_url_root ? @gitlab_relative_url_root : '/' %>"
+gitlab_url: "<%= @gitlab_ssl ? 'https' : 'http' %>://<%= @gitlab_domain %>:<%= @gitlab_ssl ? @gitlab_ssl_port : @gitlab_http_port %><%= @gitlab_relative_url_root ? @gitlab_relative_url_root : '/' %>"
 
 http_settings:
 #  user: someone
