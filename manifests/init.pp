@@ -359,8 +359,8 @@ class gitlab(
     $use_exim                 = $gitlab::params::use_exim,
   ) inherits gitlab::params {
   case $::osfamily {
-    Debian: {}
-    Redhat: {
+    'Debian': {}
+    'Redhat': {
       warning("${::osfamily} not fully tested with ${gitlab_branch}")
     }
     default: {
