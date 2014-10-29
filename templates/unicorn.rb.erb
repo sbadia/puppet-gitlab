@@ -44,7 +44,7 @@ working_directory "<%= @home %>/<%= @name %>"
 # listen on both a Unix domain socket and a TCP port,
 # we use a shorter backlog for quicker failover when busy
 listen "<%= @home %>/<%= @name %>/tmp/sockets/<%= @name %>.socket", :backlog => 64
-listen "127.0.0.1:<%= @unicorn_port %>", :tcp_nopush => true
+listen "<%= @unicorn_listen %>:<%= @unicorn_port %>", :tcp_nopush => true
 
 # nuke workers after 30 seconds instead of 60 seconds (the default)
 timeout <%= @http_timeout %>

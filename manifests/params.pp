@@ -42,6 +42,7 @@ class gitlab::params {
   $gitlab_ssl_self_signed   = false
   $gitlab_projects          = '10'
   $gitlab_username_change   = true
+  $gitlab_unicorn_listen    = '127.0.0.1'
   $gitlab_unicorn_port      = '8080'
   $gitlab_unicorn_worker    = '2'
   $gitlab_bundler_flags     = '--deployment'

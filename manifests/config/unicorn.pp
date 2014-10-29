@@ -5,6 +5,7 @@ define gitlab::config::unicorn (
   $http_timeout,
   $owner,
   $path,
+  $unicorn_listen,
   $unicorn_port,
   $unicorn_worker,
   $relative_url_root = false
