@@ -36,6 +36,7 @@ class gitlab::ci::install inherits gitlab::ci {
     owner             => $ci_user,
     path              => "${ci_home}/gitlab-ci/config/unicorn.rb",
     relative_url_root => $gitlab_relative_url_root,
+    unicorn_listen    => $gitlab_unicorn_listen,
     unicorn_port      => $gitlab_unicorn_port,
     unicorn_worker    => $gitlab_unicorn_worker,
   }

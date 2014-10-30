@@ -32,6 +32,7 @@ class gitlab::ci::params {
   $gitlabci_ssl_self_signed   = false
   $gitlabci_projects          = '10'
   $gitlabci_username_change   = true
+  $gitlabci_unicorn_listen    = '127.0.0.1'
   $gitlabci_unicorn_port      = '8081'
   $gitlabci_unicorn_worker    = '2'
   $gitlabci_bundler_flags     = '--deployment'
