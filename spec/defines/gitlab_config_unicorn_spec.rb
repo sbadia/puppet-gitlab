@@ -12,13 +12,8 @@ describe 'gitlab::config::unicorn', :type => :define do
       :path              => '/home/git/gitlab/config/unicorn.rb',
       :relative_url_root => false,
       :unicorn_port      => 8080,
+      :unicorn_listen    => '127.0.0.1',
       :unicorn_worker    => 2
-    }
-  end
-
-  let :params_url do
-    {
-      :relative_url_root => '/blahforge'
     }
   end
 
@@ -40,9 +35,20 @@ describe 'gitlab::config::unicorn', :type => :define do
 
 
     context 'with non default url-root-path' do
-      let(:params) { params_set.merge(params_url) }
+      let(:params) { params_set.merge(:relative_url_root => '/blahforge') }
         it { is_expected.to contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/^\s*ENV\['RAILS_RELATIVE_URL_ROOT'\] = "\/blahforge"$/)}
     end
+
+    context 'with non default unicorn_listen param' do
+      let(:params) { params_set.merge(:unicorn_listen => '1.3.3.7') }
+        it { is_expected.to contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/^\s*listen "1.3.3.7:8080", :tcp_nopush => true$/)}
+    end
+
+    context 'with non default unicorn_port param' do
+      let(:params) { params_set.merge(:unicorn_port => '666') }
+        it { is_expected.to contain_file('/home/git/gitlab/config/unicorn.rb').with_content(/^\s*listen "127.0.0.1:666", :tcp_nopush => true$/)}
+    end
+
 
   end
 end

@@ -166,6 +166,10 @@
 #   Gitlab username changing
 #   default: true
 #
+# [*gitlab_unicorn_listen*]
+#   IP address that unicorn listens on
+#   default: 127.0.0.1
+#
 # [*gitlab_unicorn_port*]
 #   Port that unicorn listens on 172.0.0.1 for HTTP traffic
 #   default: 8080
@@ -329,6 +333,7 @@ class gitlab(
     $gitlab_ssl_self_signed   = $gitlab::params::gitlab_ssl_self_signed,
     $gitlab_projects          = $gitlab::params::gitlab_projects,
     $gitlab_username_change   = $gitlab::params::gitlab_username_change,
+    $gitlab_unicorn_listen    = $gitlab::params::gitlab_unicorn_listen,
     $gitlab_unicorn_port      = $gitlab::params::gitlab_unicorn_port,
     $gitlab_unicorn_worker    = $gitlab::params::gitlab_unicorn_worker,
     $gitlab_bundler_flags     = $gitlab::params::gitlab_bundler_flags,
@@ -396,6 +401,10 @@ class gitlab(
   validate_re($gitlab_bundler_jobs, '^\d+$', 'gitlab_bundler_jobs is not valid')
   validate_re($ensure, '(present|latest)', 'ensure is not valid (present|latest)')
   validate_re($ssh_port, '^\d+$', 'ssh_port is not a valid port')
+  
+  if !is_ip_address($gitlab_unicorn_listen){
+      fail("${gitlab_unicorn_listen} is not a valid IP address")
+  }
 
   validate_string($git_user)
   validate_string($git_email)

@@ -30,6 +30,7 @@ class gitlab::ci(
   $gitlab_dbport            = $gitlab::ci::params::gitlabci_dbport,
   $gitlab_domain            = $gitlab::ci::params::gitlabci_domain,
   $gitlab_domain_alias      = $gitlab::ci::params::gitlab_domain_alias,
+  $gitlab_unicorn_listen    = $gitlab::ci::params::gitlabci_unicorn_listen,
   $gitlab_unicorn_port      = $gitlab::ci::params::gitlabci_unicorn_port,
   $gitlab_unicorn_worker    = $gitlab::ci::params::gitlabci_unicorn_worker,
   $bundler_flags            = $gitlab::ci::params::gitlabci_bundler_flags,
