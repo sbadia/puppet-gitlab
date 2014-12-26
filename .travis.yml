@@ -4,7 +4,7 @@
 ---
 language: ruby
 bundler_args: --without system_tests
-script: "bundle exec rake validate && bundle exec metadata && bundle exec rake lint && bundle exec rake spec SPEC_OPTS='--format documentation'"
+script: "bundle exec rake validate && bundle exec rake metadata && bundle exec rake lint && bundle exec rake spec SPEC_OPTS='--format documentation'"
 sudo: false
 matrix:
   fast_finish: true
