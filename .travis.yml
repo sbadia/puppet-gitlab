@@ -1,26 +1,19 @@
+# Managed by modulesync
+# Configs https://github.com/sbadia/modulesync_configs/
+#
+---
 language: ruby
-bundler_args: --without development
-script: "bundle exec rake test SPEC_OPTS='--format documentation --color --backtrace'"
-rvm:
-  - 1.8.7
-  - 1.9.3
-  - 2.0.0
-  - 2.1.2
-env:
-  matrix:
-    - PUPPET_GEM_VERSION="~> 2.7.0"
-    - PUPPET_GEM_VERSION="~> 3.3.0"
-    - PUPPET_GEM_VERSION="~> 3.4.0"
+bundler_args: --without system_tests
+script: "bundle exec rake validate && bundle exec metadata && bundle exec rake lint && bundle exec rake spec SPEC_OPTS='--format documentation'"
+sudo: false
 matrix:
-  exclude:
-    - rvm: 1.9.3
-      env: PUPPET_GEM_VERSION="~> 2.7.0"
-    - rvm: 2.0.0
-      env: PUPPET_GEM_VERSION="~> 2.7.0"
-    - rvm: 2.1.2
-      env: PUPPET_GEM_VERSION="~> 2.7.0"
-    - rvm: 2.1.2
-      env: PUPPET_GEM_VERSION="~> 3.3.0"
-
+  fast_finish: true
+  include:
+  - rvm: 1.8.7
+    env: PUPPET_GEM_VERSION="~> 2.7.0" FACTER_GEM_VERSION="~> 1.7.0"
+  - rvm: 1.9.3
+    env: PUPPET_GEM_VERSION="~> 3.0"
+  - rvm: 2.0.0
+    env: PUPPET_GEM_VERSION="~> 3.0"
 notifications:
   email: false

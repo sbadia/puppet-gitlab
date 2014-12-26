@@ -1,3 +1,6 @@
---format n
---color
+--format
+s
+--colour
+--loadby
+mtime
 --backtrace

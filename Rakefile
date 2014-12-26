@@ -1,110 +1,30 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 #
-NAME = 'sbadia-gitlab'
-TDIR = File.expand_path(File.dirname(__FILE__))
-
+# Managed by modulesync
+# Configs https://github.com/sbadia/modulesync_configs/
+#
 require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
 require 'puppet-syntax/tasks/puppet-syntax'
 
+TDIR = File.expand_path(File.dirname(__FILE__))
+NAME = "sbadia-#{File.basename(TDIR).split('-')[1]}"
+
+exclude_path = ["spec/**/*.pp", "pkg/**/*.pp"]
+
+PuppetLint.configuration.fail_on_warnings
 PuppetLint.configuration.send('disable_80chars')
-PuppetLint.configuration.send('disable_variable_scope')
-PuppetLint.configuration.send('disable_class_parameter_defaults')
-#TODO http://puppet-lint.com/checks/class_inherits_from_params_class/
-PuppetLint.configuration.send('disable_class_inherits_from_params_class')
-PuppetLint.configuration.fail_on_warnings = true
-
-exclude_tests_paths = ['pkg/**/*','vendor/**/*','spec/**/*']
-PuppetLint.configuration.ignore_paths = exclude_tests_paths
-PuppetSyntax.exclude_paths = exclude_tests_paths
-
-def get_version
-  if File.read(File.join(TDIR, 'metadata.json')) =~ /(\d+)\.(\d+)\.(\d+)/
-    return [$1.to_i, $2.to_i, $3.to_i].compact.join('.')
-  end
-end # def:: get_version
-
-def bump_version(level)
-  version_txt = get_version
-  if version_txt =~ /(\d+)\.(\d+)\.(\d+)/
-    major = $1.to_i
-    minor = $2.to_i
-    patch = $3.to_i
-  end
-
-  case level
-  when :major
-    major += 1
-    minor = 0
-    patch = 0
-  when :minor
-    minor += 1
-    patch = 0
-  when :patch
-    patch += 1
-  end
-
-  new_version = [major,minor,patch].compact.join('.')
-  v = File.read(File.join(TDIR,'Modulefile')).chomp
-  v.gsub!(/\w+\s'(\d+)\.(\d+)\.(\d+)'/,"version\ '#{new_version}'")
-  File.open(File.join(TDIR,'Modulefile'), 'w') do |file|
-    file.puts v
-  end
-end # def:: bump_version(level)
+PuppetLint.configuration.ignore_paths = exclude_path
+PuppetSyntax.exclude_paths = exclude_path
 
 namespace :module do
-  desc "New #{NAME} GIT release (v#{get_version})"
-  task :release do
-    sh "git tag #{get_version} -m \"New release: #{get_version}\" -s"
-    sh "git push --tag"
-  end
-
-  namespace :bump do
-    desc "Bump #{NAME} by a major version"
-    task :major do
-      bump_version(:major)
-    end
-
-    desc "Bump #{NAME} by a minor version"
-    task :minor do
-      bump_version(:minor)
-    end
-
-    desc "Bump #{NAME} by a patch version"
-    task :patch do
-      bump_version(:patch)
-    end
-  end
-
-  namespace :check do
-    desc 'Check erb template syntax'
-    task :erb do
-      file=ARGV.values_at(Range.new(ARGV.index('check:erb')+1,-1))
-      exec "erb -x -T '-' #{file} | ruby -c"
-    end
-
-    desc "Check pp file syntax (return nothing if ok)"
-    task :pp do
-      file=ARGV.values_at(Range.new(ARGV.index('check:pp')+1,-1))
-      exec "puppet parser validate \"#{file}\""
-    end
-
-    desc "Check puppet syntax"
-    task :syntax do
-      file=ARGV.values_at(Range.new(ARGV.index('check:syntax')+1,-1))
-      exec "puppet-lint \"#{file}\""
-    end
-  end
-
-  desc "Build #{NAME} module (in a clean env) Please use this for puppetforge"
+  desc "Build #{NAME} module (in a clean env, for puppetforge)"
   task :build do
     exec "rsync -rv --exclude-from=#{TDIR}/.forgeignore . /tmp/#{NAME};cd /tmp/#{NAME};puppet module build"
   end
 end
 
-task(:default).clear
-task :default => [:spec_prep, :spec_standalone, :lint]
-
-desc 'Run syntax, lint and spec tests'
-task :test => [:syntax,:lint,:spec]
+task :metadata do
+  sh "metadata-json-lint metadata.json"
+end

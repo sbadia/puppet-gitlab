@@ -1,3 +1,6 @@
+# Managed by modulesync
+# Configs https://github.com/sbadia/modulesync_configs/
+#
 - pkg/
 - spec/
 - Rakefile
@@ -9,3 +12,4 @@
 - Gemfile
 - Gemfile.lock
 - .fixtures.yml
+- .vagrant
