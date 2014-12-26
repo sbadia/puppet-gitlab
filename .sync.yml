@@ -1,0 +1,8 @@
+---
+Rakefile:
+  extra_disabled_lint_checks:
+    - 'disable_variable_scope'
+    - 'disable_class_parameter_defaults'
+    - 'disable_class_inherits_from_params_class'
+spec/spec_helper.rb:
+  unmanaged: true
