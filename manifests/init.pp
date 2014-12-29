@@ -48,9 +48,13 @@
 #   Gitlab-shell sources
 #   default: git://github.com/gitlabhq/gitlab-shell.git
 #
-# [*gitlabshell_banch*]
+# [*gitlabshell_branch*]
 #   Gitlab-shell branch
 #   default: v1.9.4
+#
+# [*proxy_name*]
+#   The name of the Nginx proxy
+#   default: 'gitlab'
 #
 # [*gitlab_manage_nginx*]
 #   Whether or not this module should install a templated Nginx
@@ -174,6 +178,10 @@
 #   Port that unicorn listens on 172.0.0.1 for HTTP traffic
 #   default: 8080
 #
+# [*gitlab_unicorn_worker*]
+#   The number of unicorn worker
+#   default: 2
+#
 # [*gitlab_bundler_flags*]
 #   Flags that should be passed to bundler when installing gems
 #   default: --deployment
@@ -181,6 +189,10 @@
 # [*gitlab_ruby_version*]
 #   Ruby version to install with rbenv for Gitlab user
 #   default: 2.1.2
+#
+# [*exec_path*]
+#   The default PATH passed to all exec ressources (this path include rbenv shims)
+#   default: '${git_home}/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 #
 # [*gitlab_bundler_jobs*]
 #   Number of jobs to use while installing gems.  Should match number of
@@ -264,6 +276,10 @@
 #   Apply a fix for compatibility with exim as explained at github.com/gitlabhq/gitlabhq/issues/4866
 #   default: false
 #
+# [*webserver_service_name*]
+#   Name of webserver service (nginx, apache2)
+#   default: nginx
+#
 # [*system_packages*]
 #   Packages that Gitlab needs to work, and that will be managed by the Gitlab module
 #   default: $gitlab::params::system_packages
@@ -281,16 +297,11 @@
 #
 # === Authors
 #
-# Sebastien Badia <seb@sebian.fr>
-# Steffen Roegner <steffen@sroegner.org>
-# Andrew Tomaka <atomaka@gmail.com>
-# Uwe Kleinmann <uwe@kleinmann.org>
-# Matt Klich <matt@elementalvoid.com>
+# See https://github.com/sbadia/puppet-gitlab/graphs/contributors
 #
 # === Copyright
 #
 # See LICENSE file
-# Andrew Tomaka, Sebastien Badia, Steffen Roegner (c) 2013
 #
 class gitlab(
     $ensure                   = $gitlab::params::ensure,
@@ -398,7 +409,7 @@ class gitlab(
   validate_re($gitlab_bundler_jobs, '^\d+$', 'gitlab_bundler_jobs is not valid')
   validate_re($ensure, '(present|latest)', 'ensure is not valid (present|latest)')
   validate_re($ssh_port, '^\d+$', 'ssh_port is not a valid port')
-  
+
   if !is_ip_address($gitlab_unicorn_listen){
       fail("${gitlab_unicorn_listen} is not a valid IP address")
   }

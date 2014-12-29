@@ -1,3 +1,44 @@
+# == Class: gitlab::ci::runner
+#
+# Install and configure a GitLab CI runner using puppet.
+#
+# === Parameters
+#
+# [*ci_server_url*]
+#   URL of Gitlab CI server
+#   required
+#
+# [*registration_token*]
+#   Token for authentication on Gitlab CI Server
+#   required
+#
+# [*ensure*]
+#   Ensure present, latest. absent is not yet supported
+#   default: present
+#
+# [*user*]
+#   Name of gitlab CI user
+#   default: gitlab_ci_runner
+#
+# [*user_home*]
+#   Home directory for gitlab CI
+#   default: /home/gitlab_ci_runner
+#
+# [*source*]
+#   Gitlab CI sources
+#   default: git://github.com/gitlabhq/gitlabhq-ci-runner.git
+#
+# [*branch*]
+#   Gitlab CI branch
+#   default: 5-0-stable
+#
+# [*ruby_version*]
+#   Ruby version to install with rbenv for Gitlab user
+#   default: 2.1.2
+#
+# [*exec_path*]
+#   The default PATH passed to all exec ressources (this path include rbenv shims)
+#   default: '${git_home}/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 #
 class gitlab::ci::runner (
   $ci_server_url,
