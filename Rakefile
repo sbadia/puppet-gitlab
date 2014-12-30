@@ -13,7 +13,7 @@ NAME = "sbadia-#{File.basename(TDIR).split('-')[1]}"
 
 exclude_path = ["spec/**/*","pkg/**/*","vendor/**/*"]
 
-PuppetLint.configuration.fail_on_warnings
+PuppetLint.configuration.fail_on_warnings = true
 PuppetLint.configuration.send('disable_80chars')
 PuppetLint.configuration.send('disable_variable_scope')
 PuppetLint.configuration.send('disable_class_parameter_defaults')
