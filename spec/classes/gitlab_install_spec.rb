@@ -152,7 +152,14 @@ describe 'gitlab' do
                         'Gitlab::Config::Resque[gitlab]']
           )}
         end # pgsql
-        it { should contain_file('/home/git/gitlab-shell/hooks/update').with_content(/^#!\/home\/git\/.rbenv\/shims\/ruby$/)}
+        it { should contain_exec('fix ruby paths in gitlab-shell hooks').with(
+          :user     => 'git',
+          :path     => '/home/git/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+          :command  => 'ruby -p -i -e \'$_.sub!(/^#!.*ruby$/,"#!/home/git/.rbenv/shims/ruby")\' *',
+          :cwd      => '/home/git/gitlab-shell/hooks',
+          :onlyif   => 'head -q -n 1 * | egrep -v \'^#!/home/git/.rbenv/shims/ruby$\'',
+          :require  => 'Exec[install gitlab-shell]'        
+        )}
       end # install gitlab
       describe 'setup gitlab database' do
         it { is_expected.to contain_exec('setup gitlab database').with(
@@ -283,7 +290,14 @@ describe 'gitlab' do
                        'Gitlab::Config::Resque[gitlab]']
           )}
         end # pgsql
-        it { should contain_file("#{params_set[:git_home]}/gitlab-shell/hooks/update").with_content(/^#!#{params_set[:git_home]}\/.rbenv\/shims\/ruby$/)}
+        it { should contain_exec('fix ruby paths in gitlab-shell hooks').with(
+          :user     => params_set[:git_user],
+          :path     => params_set[:exec_path],
+          :command  => "ruby -p -i -e '$_.sub!(/^#!.*ruby$/,\"#!#{params_set[:git_home]}/.rbenv/shims/ruby\")' *",
+          :cwd      => "#{params_set[:git_home]}/gitlab-shell/hooks",
+          :onlyif   => "head -q -n 1 * | egrep -v '^#!#{params_set[:git_home]}/.rbenv/shims/ruby$'",
+          :require  => 'Exec[install gitlab-shell]'        
+        )}
       end # install gitlab
       describe 'setup gitlab database' do
         it { is_expected.to contain_exec('setup gitlab database').with(

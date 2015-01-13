@@ -186,8 +186,13 @@
 #   Flags that should be passed to bundler when installing gems
 #   default: --deployment
 #
+# [*gitlab_manage_rbenv*]
+#   Whether this module should use rbenv to install a suitable version of Ruby 
+#   for the Gitlab user; set to false to use the system Ruby or manage separately
+#   default: true
+#
 # [*gitlab_ruby_version*]
-#   Ruby version to install with rbenv for Gitlab user
+#   Ruby version to install with rbenv for the Gitlab user
 #   default: 2.1.2
 #
 # [*exec_path*]
@@ -351,6 +356,7 @@ class gitlab(
     $gitlab_bundler_jobs      = $gitlab::params::gitlab_bundler_jobs,
     $gitlab_ensure_postfix    = $gitlab::params::gitlab_ensure_postfix,
     $gitlab_ensure_curl       = $gitlab::params::gitlab_ensure_curl,
+    $gitlab_manage_rbenv      = $gitlab::params::gitlab_manage_rbenv,
     $gitlab_ruby_version      = $gitlab::params::gitlab_ruby_version,
     $exec_path                = $gitlab::params::exec_path,
     $ldap_enabled             = $gitlab::params::ldap_enabled,

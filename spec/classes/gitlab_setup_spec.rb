@@ -12,7 +12,8 @@ describe 'gitlab' do
       :git_comment         => 'Labfooboozoo',
       :git_email           => 'gitlab@fooboozoo.fr',
       :git_proxy           => 'http://proxy.fooboozoo.fr:3128',
-      :gitlab_ruby_version => '2.0.0'
+      :gitlab_ruby_version => '2.0.0',
+      :gitlab_manage_rbenv => false,
     }
   end
 
@@ -77,22 +78,9 @@ describe 'gitlab' do
       end
       context 'with specific params' do
         let(:params) { params_set }
-        it { is_expected.to contain_rbenv__install(params_set[:git_user]).with(
-                      :group => params_set[:git_user],
-                      :home  => params_set[:git_home]
-                    )}
-        it { is_expected.to contain_file('/srv/gitlab/.bashrc').with(
-                      :ensure  => 'link',
-                      :target  => '/srv/gitlab/.profile',
-                      :require => 'Rbenv::Install[gitlab]'
-                    )}
-        it { is_expected.to contain_rbenv__compile('gitlab/ruby').with(
-                      :user   => params_set[:git_user],
-                      :home   => params_set[:git_home],
-                      :ruby   => '2.0.0',
-                      :global => true,
-                      :notify => ['Exec[install gitlab-shell]', 'Exec[install gitlab]']
-                    )}
+        it { is_expected.not_to contain_rbenv__install(params_set[:git_user]) }
+        it { is_expected.not_to contain_file('/srv/gitlab/.bashrc') }
+        it { is_expected.not_to contain_rbenv__compile('gitlab/ruby') }
       end
     end
 
@@ -155,9 +143,15 @@ describe 'gitlab' do
       end
       #### Gems (all dist.)
       describe 'commons gems' do
-        it { is_expected.to contain_rbenv__gem('charlock_holmes').with(
-          :ensure   => '0.6.9.4'
-        )}
+        context 'with default params' do
+          it { is_expected.to contain_rbenv__gem('charlock_holmes').with(
+            :ensure   => '0.6.9.4'
+          )}
+        end
+        context 'with specific params' do
+          let(:params) { params_set }
+          it { is_expected.not_to contain_rbenv__gem('charlock_holmes') }
+        end
       end
       #### Commons packages (all dist.)
       describe 'commons packages' do

@@ -136,12 +136,18 @@ class gitlab::install inherits gitlab {
       group   => 'root',
       require => Exec['setup gitlab database'];
   }
-
-  file { "${git_home}/gitlab-shell/hooks/update":
-    ensure  => present,
-    content => template('gitlab/update.erb'),
-    mode    => '0775',
-    require => File["${git_home}/gitlab-shell/config.yml"],
+  
+  if ($gitlab_manage_rbenv) {
+    #gitlab-shell hooks must be updated to use the Ruby version installed by rbenv.
+    #Use a script because different versions of gitlab-shell have a varying
+    #set of hooks
+    $ruby_cmd="${git_home}/.rbenv/shims/ruby"
+    exec { 'fix ruby paths in gitlab-shell hooks':
+      command => "ruby -p -i -e '\$_.sub!(/^#!.*ruby\$/,\"#!${ruby_cmd}\")' *",
+      cwd     => "${git_home}/gitlab-shell/hooks",
+      onlyif  => "head -q -n 1 * | egrep -v '^#!${ruby_cmd}\$'",
+      require => Exec['install gitlab-shell'],
+    }
   }
 
 }
