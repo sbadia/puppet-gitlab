@@ -3,7 +3,7 @@
   "version": "0.1.5",
   "author": "Andrew Tomaka, Steffen Roegner, Igor Galic, Uwe Kleinmann, Matt Klich, Sebastien Badia",
   "summary": "Puppet GitLab Module",
-  "license": "GPLv3",
+  "license": "GPL-3.0",
   "source": "git://github.com/sbadia/puppet-gitlab.git",
   "project_page": "https://github.com/sbadia/puppet-gitlab/",
   "issues_url": "https://github.com/sbadia/puppet-gitlab/issues",
@@ -42,9 +42,9 @@
   "description": "Module to install GitLab using puppet",
   "tags": ["gitlab","git","vcs"],
   "dependencies": [
-    {"name":"alup/rbenv","version_requirement":">= 1.2.0"},
-    {"name":"puppetlabs/stdlib","version_requirement":">= 3.1.0"},
-    {"name":"puppetlabs/vcsrepo","version_requirement":">= 0.2.0"},
-    {"name":"puppetlabs/git","version_requirement":">= 0.0.3"}
+    {"name":"alup/rbenv","version_requirement":">= 1.2.0 <= 2.0.0"},
+    {"name":"puppetlabs/stdlib","version_requirement":">= 3.1.0 <= 5.0.0"},
+    {"name":"puppetlabs/vcsrepo","version_requirement":">= 0.2.0 <= 2.0.0"},
+    {"name":"puppetlabs/git","version_requirement":">= 0.0.3 <= 1.0.0"}
   ]
 }
