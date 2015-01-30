@@ -8,6 +8,8 @@ refname = ARGV[0]
 key_id  = ENV['GL_ID']
 repo_path = Dir.pwd
 
-require_relative '../lib/gitlab_update'
-
-GitlabUpdate.new(repo_path, key_id, refname).exec
+update_file = '<%= @git_home %>/gitlab-shell/lib/gitlab_update.rb'
+if File.file?(update_file)
+        require update_file
+        GitlabUpdate.new(repo_path, key_id, refname).exec
+end
