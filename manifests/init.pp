@@ -28,6 +28,18 @@
 #   Gitlab user comment
 #   default: GitLab
 #
+# [*git_bin_path*]
+#   Path to git binary.
+#   default: /usr/bin/git
+#
+# [*git_max_size*]
+#   Maximum memory size grit can use, given in number of bytes per git object (e.g. a commit)
+#   default: 5242880 (5MB)
+#
+# [*git_timeout*]
+#   Git timeout to read a commit, in seconds
+#   default: 10
+#
 # [*gitlab_manage_user*]
 #   Whether to manage the Gitlab user account
 #   default: true
@@ -51,6 +63,14 @@
 # [*gitlabshell_branch*]
 #   Gitlab-shell branch
 #   default: v1.9.4
+#
+# [*gitlabshell_log_folder*]
+#   Gitlab-shell log folder
+#   default: the gitlab-shell root directory
+#
+# [*gitlab_log_folder*]
+#   Gitlab rails log folder
+#   default: ${git_home}/gitlab/log
 #
 # [*proxy_name*]
 #   The name of the Nginx proxy
@@ -142,6 +162,43 @@
 #   run in a non-root path
 #   default: /
 #
+# [*gitlab_restricted_visibility_levels*]
+#   Restrict setting visibility levels for non-admin users. 
+#   Specify as an array of one or more of "private" | "internal" | "public"
+#   default: nil
+#
+# [*gitlab_default_projects_features_issues*]
+#   Default project features setting for issues. 
+#   default: true
+#
+# [*gitlab_default_projects_features_merge_requests*]
+#   Default project features setting for merge requests. 
+#   default: true
+#
+# [*gitlab_default_projects_features_wiki*]
+#   Default project features settings for wiki. 
+#   default: true
+#
+# [*gitlab_default_projects_features_wall*]
+#   Default project features setting for wall. 
+#   default: false
+#
+# [*gitlab_default_projects_features_snippets*]
+#   Default project features setting for snippets. 
+#   default: false
+#
+# [*gitlab_default_projects_features_visibility_level*]
+#   Default project features settings for visibility level. ("private" | "internal" | "public")
+#   default: private
+#
+# [*gitlab_support_email*]
+#   Email address of your support contact
+#   default: support@local.host
+#
+# [*gitlab_time_zone*]
+#   Default time zone of GitLab application
+#   default: UTC
+#
 # [*gitlab_ssl*]
 #   Enable SSL for GitLab
 #   default: false
@@ -164,6 +221,10 @@
 #
 # [*gitlab_repodir*]
 #   Gitlab repository directory
+#   default: $git_home
+#
+# [*gitlab_satellitedir*]
+#   Directory for Gitlab satellites
 #   default: $git_home
 #
 # [*gitlab_username_change*]
@@ -194,6 +255,10 @@
 # [*gitlab_ruby_version*]
 #   Ruby version to install with rbenv for the Gitlab user
 #   default: 2.1.2
+#
+# [*gitlab_auth_file*]
+#   File used as authorized_keys for gitlab user
+#   default: ${git_home}/.ssh/authorized_keys
 #
 # [*exec_path*]
 #   The default PATH passed to all exec ressources (this path include rbenv shims)
@@ -249,6 +314,33 @@
 #   Password for LDN bind auth
 #   default: nil
 #
+# [*ldap_sync_time*]
+#   This setting controls the amount of time between LDAP permission checks for each user.
+#   default: nil
+#
+# [*ldap_group_base*]
+#   Base where we can search for groups.
+#   default: nil
+#
+# [*ldap_sync_ssh_keys*]
+#   Name of attribute which holds a ssh public key of the user object.
+#   If false or nil, SSH key syncronisation will be disabled.
+#   default: nil
+#
+# [*ldap_admin_group*]
+#   LDAP group of users who should be admins in GitLab.
+#   default: nil
+#
+# [*issues_tracker*]
+#   External issues trackers. Provide a hash with all issues_tracker configuration as would
+#   appear in gitlab.yaml. E.g. { redmine => { title => "Redmine", project_url => ... } }
+#   default: nil
+#
+# [*omniauth*]
+#   Omniauth configuration. Provide a hash with all omniauth configuration as would
+#   appear in gitlab.yaml. E.g. { enabled => true, providers => [ { name => "github", app_id => ... }]}
+#   default: nil
+#
 # [*git_package_name*]
 #   Package name for git install
 #   default: git-core (Debian)
@@ -276,6 +368,10 @@
 # [*company_name*]
 #   Name of the company displayed under the logo of the company
 #   default: ''
+#
+# [*gravatar_enabled*]
+#   Use user avatar image from Gravatar.com
+#   default: true
 #
 # [*use_exim*]
 #   Apply a fix for compatibility with exim as explained at github.com/gitlabhq/gitlabhq/issues/4866
@@ -315,12 +411,17 @@ class gitlab(
     $git_home                 = $gitlab::params::git_home,
     $git_email                = $gitlab::params::git_email,
     $git_comment              = $gitlab::params::git_comment,
+    $git_bin_path             = $gitlab::params::git_bin_path,
+    $git_max_size             = $gitlab::params::git_max_size,
+    $git_timeout              = $gitlab::params::git_timeout,
     $gitlab_manage_user       = $gitlab::params::gitlab_manage_user,
     $gitlab_manage_home       = $gitlab::params::gitlab_manage_home,
     $gitlab_sources           = $gitlab::params::gitlab_sources,
     $gitlab_branch            = $gitlab::params::gitlab_branch,
     $gitlabshell_branch       = $gitlab::params::gitlabshell_branch,
     $gitlabshell_sources      = $gitlab::params::gitlabshell_sources,
+    $gitlabshell_log_folder   = $gitlab::params::gitlabshell_log_folder,
+    $gitlab_log_folder        = $gitlab::params::gitlab_log_folder,
     $gitlab_manage_nginx      = $gitlab::params::gitlab_manage_nginx,
     $proxy_name               = 'gitlab',
     $gitlab_http_port         = $gitlab::params::gitlab_http_port,
@@ -337,12 +438,22 @@ class gitlab(
     $gitlab_domain            = $gitlab::params::gitlab_domain,
     $gitlab_domain_alias      = $gitlab::params::gitlab_domain_alias,
     $gitlab_repodir           = $gitlab::params::gitlab_repodir,
+    $gitlab_satellitedir      = $git_home,
     $gitlab_backup            = $gitlab::params::gitlab_backup,
     $gitlab_backup_path       = $gitlab::params::gitlab_backup_path,
     $gitlab_backup_keep_time  = $gitlab::params::gitlab_backup_keep_time,
     $gitlab_backup_time       = $gitlab::params::gitlab_backup_time,
     $gitlab_backup_postscript = $gitlab::params::gitlab_backup_postscript,
     $gitlab_relative_url_root = $gitlab::params::gitlab_relative_url_root,
+    $gitlab_restricted_visibility_levels = $gitlab::params::gitlab_restricted_visibility_levels,
+    $gitlab_default_projects_features_issues = $gitlab::params::gitlab_default_projects_features_issues,
+    $gitlab_default_projects_features_merge_requests = $gitlab::params::gitlab_default_projects_features_merge_requests,
+    $gitlab_default_projects_features_wiki = $gitlab::params::gitlab_default_projects_features_wiki,
+    $gitlab_default_projects_features_wall = $gitlab::params::gitlab_default_projects_features_wall,
+    $gitlab_default_projects_features_snippets = $gitlab::params::gitlab_default_projects_features_snippets,
+    $gitlab_default_projects_features_visibility_level = $gitlab::params::gitlab_default_projects_features_visibility_level,
+    $gitlab_time_zone         = $gitlab::params::gitlab_time_zone,
+    $gitlab_support_email     = $gitlab::params::gitlab_support_email,
     $gitlab_ssl               = $gitlab::params::gitlab_ssl,
     $gitlab_ssl_cert          = $gitlab::params::gitlab_ssl_cert,
     $gitlab_ssl_key           = $gitlab::params::gitlab_ssl_key,
@@ -358,6 +469,7 @@ class gitlab(
     $gitlab_ensure_curl       = $gitlab::params::gitlab_ensure_curl,
     $gitlab_manage_rbenv      = $gitlab::params::gitlab_manage_rbenv,
     $gitlab_ruby_version      = $gitlab::params::gitlab_ruby_version,
+    $gitlab_auth_file         = "${git_home}/.ssh/authorized_keys",
     $exec_path                = $gitlab::params::exec_path,
     $ldap_enabled             = $gitlab::params::ldap_enabled,
     $ldap_host                = $gitlab::params::ldap_host,
@@ -368,6 +480,12 @@ class gitlab(
     $ldap_method              = $gitlab::params::ldap_method,
     $ldap_bind_dn             = $gitlab::params::ldap_bind_dn,
     $ldap_bind_password       = $gitlab::params::ldap_bind_password,
+    $ldap_sync_time           = $gitlab::params::ldap_sync_time,
+    $ldap_group_base          = $gitlab::params::ldap_group_base,
+    $ldap_sync_ssh_keys       = $gitlab::params::ldap_sync_ssh_keys,
+    $ldap_admin_group         = $gitlab::params::ldap_admin_group,
+    $issues_tracker           = $gitlab::params::issues_tracker,
+    $omniauth                 = $gitlab::params::omniauth,
     $ssh_port                 = $gitlab::params::ssh_port,
     $google_analytics_id      = $gitlab::params::google_analytics_id,
     $git_proxy                = $gitlab::params::git_proxy,
@@ -378,6 +496,7 @@ class gitlab(
     $company_logo_url         = $gitlab::params::company_logo_url,
     $company_link             = $gitlab::params::company_link,
     $company_name             = $gitlab::params::company_name,
+    $gravatar_enabled         = $gitlab::params::gravatar_enabled,
     $use_exim                 = $gitlab::params::use_exim,
   ) inherits gitlab::params {
   case $::osfamily {
@@ -400,24 +519,40 @@ class gitlab(
   validate_bool($gitlab_ssl_self_signed)
   validate_bool($gitlab_username_change)
   validate_bool($ldap_enabled)
+  validate_bool($gitlab_default_projects_features_issues)
+  validate_bool($gitlab_default_projects_features_merge_requests)
+  validate_bool($gitlab_default_projects_features_wiki)
+  validate_bool($gitlab_default_projects_features_wall)
+  validate_bool($gitlab_default_projects_features_snippets)
 
   validate_re($gitlab_dbtype, '(mysql|pgsql)', 'gitlab_dbtype is not supported')
-  validate_re($gitlab_dbport, '^\d+$', 'gitlab_dbport is not a valid port')
-  validate_re($ldap_port, '^\d+$', 'ldap_port is not a valid port')
-  validate_re($gitlab_ssl_port, '^\d+$', 'gitlab_ssl_port is not a valid port')
-  validate_re($gitlab_http_port, '^\d+$', 'gitlab_http_port is not a valid port')
-  validate_re($gitlab_http_timeout, '^\d+$', 'gitlab_http_timeout is not a number')
-  validate_re($gitlab_redisport, '^\d+$', 'gitlab_redisport is not a valid port')
+  validate_re("${gitlab_dbport}", '^\d+$', 'gitlab_dbport is not a valid port')
+  validate_re("${ldap_port}", '^\d+$', 'ldap_port is not a valid port')
+  validate_re("${gitlab_ssl_port}", '^\d+$', 'gitlab_ssl_port is not a valid port')
+  validate_re("${gitlab_http_port}", '^\d+$', 'gitlab_http_port is not a valid port')
+  validate_re("${gitlab_http_timeout}", '^\d+$', 'gitlab_http_timeout is not a number')
+  validate_re("${gitlab_redisport}", '^\d+$', 'gitlab_redisport is not a valid port')
   validate_re($ldap_method, '(ssl|tls|plain)', 'ldap_method is not supported (ssl, tls or plain)')
-  validate_re($gitlab_projects, '^\d+$', 'gitlab_projects is not valid')
-  validate_re($gitlab_unicorn_port, '^\d+$', 'gitlab_unicorn_port is not valid')
-  validate_re($gitlab_unicorn_worker, '^\d+$', 'gitlab_unicorn_worker is not valid')
-  validate_re($gitlab_bundler_jobs, '^\d+$', 'gitlab_bundler_jobs is not valid')
+  validate_re("${gitlab_projects}", '^\d+$', 'gitlab_projects is not valid')
+  validate_re("${gitlab_unicorn_port}", '^\d+$', 'gitlab_unicorn_port is not valid')
+  validate_re("${gitlab_unicorn_worker}", '^\d+$', 'gitlab_unicorn_worker is not valid')
+  validate_re("${gitlab_bundler_jobs}", '^\d+$', 'gitlab_bundler_jobs is not valid')
   validate_re($ensure, '(present|latest)', 'ensure is not valid (present|latest)')
-  validate_re($ssh_port, '^\d+$', 'ssh_port is not a valid port')
+  validate_re("${ssh_port}", '^\d+$', 'ssh_port is not a valid port')
+  validate_re($gitlab_default_projects_features_visibility_level, 'private|internal|public','gitlab_default_projects_features_visibility_level is not valid')
 
   if !is_ip_address($gitlab_unicorn_listen){
       fail("${gitlab_unicorn_listen} is not a valid IP address")
+  }
+
+  if $gitlab_restricted_visibility_levels {
+    validate_array($gitlab_restricted_visibility_levels)
+  }
+  if $omniauth {
+    validate_hash($omniauth)
+  }
+  if $issues_tracker {
+    validate_hash($issues_tracker)
   }
 
   validate_string($git_user)

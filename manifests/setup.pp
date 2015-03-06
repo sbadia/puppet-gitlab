@@ -45,7 +45,7 @@ class gitlab::setup inherits gitlab {
     }
   }
 
-  file { "${git_home}/gitlab-satellites":
+  file { "${gitlab_satellitedir}/gitlab-satellites":
     ensure => directory,
     mode   => '0750',
   }
