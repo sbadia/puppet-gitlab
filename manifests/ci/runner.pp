@@ -87,7 +87,7 @@ class gitlab::ci::runner (
   file { "${user_home}/.bashrc":
     ensure  => file,
     content => "source ${user_home}/.rbenvrc",
-    require => Rbenv::Install['gitlab_ci_runner']
+    require => Rbenv::Install['gitlab_ci_runner'],
   }
 
   rbenv::install { $user:
