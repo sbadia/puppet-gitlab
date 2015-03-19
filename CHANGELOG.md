@@ -1,3 +1,24 @@
+## 2015-03-19 - 0.2.0
+
+### features:
+* Add a parameter to make rbenv configuration optional
+* Introduce modulesync \o/
+* Explicitly support rhel distro
+* Added parameter to enable Unicorn to listen on give IP address
+* Add flexibility to system packages that are controller by the Gitlab module
+* Add ability to manage git user and/or home directory separately, and to manually specify the group for the git user.
+* Bumping Ruby version to 2.1.2
+* Parameterizing ruby version
+* Updating to Ruby 2.0.0-p353 (from 1.9.3-p484)
+* Using rbenv instead of managing system ruby
+* Add Gitlab CI Runner Support
+* Add gitlab::ci class to manage a gitlab-ci instance
+* Abstract config files into reusuable defines
+* Allowing management of curl elsewhere
+
+### bugfix:
+* Fix the jobs flag to not break with older bundler
+
 ## 2014-06-18 - 0.1.5
 
 ### features:
