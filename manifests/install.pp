@@ -131,12 +131,11 @@ class gitlab::install inherits gitlab {
 
   file {
     "${git_home}/.gitlab_setup_done":
-      ensure  => present,
       owner   => 'root',
       group   => 'root',
       require => Exec['setup gitlab database'];
   }
-  
+
   if ($gitlab_manage_rbenv) {
     #gitlab-shell hooks must be updated to use the Ruby version installed by rbenv.
     #Use a script because different versions of gitlab-shell have a varying

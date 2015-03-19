@@ -3,11 +3,11 @@
 #
 class gitlab::ci::setup inherits gitlab::ci {
 
-  include git
+  include ::git
 
   File {
-    owner     => $ci_user,
-    group     => $ci_user,
+    owner => $ci_user,
+    group => $ci_user,
   }
 
   # user

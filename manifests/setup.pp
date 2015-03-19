@@ -3,7 +3,7 @@
 #
 class gitlab::setup inherits gitlab {
 
-  include git
+  include ::git
 
   File {
     owner => $git_user,

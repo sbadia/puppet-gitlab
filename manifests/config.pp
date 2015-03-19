@@ -54,7 +54,7 @@ class gitlab::config inherits gitlab {
       "${git_home}/gitlab/tmp/sockets",
       "${git_home}/gitlab/log",
       "${git_home}/gitlab/public",
-      "${git_home}/gitlab/public/uploads"
+      "${git_home}/gitlab/public/uploads",
     ]:
     ensure => directory,
     mode   => '0755',

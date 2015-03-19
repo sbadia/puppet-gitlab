@@ -1,1 +1,1 @@
-include gitlab
+include ::gitlab
