@@ -77,7 +77,7 @@ describe 'gitlab::ci' do
         it { is_expected.to contain_file('/etc/nginx/conf.d/gitlab-ci.conf').with_content(/^\s*proxy_connect_timeout #{params_set[:gitlab_http_timeout]};$/)}
         ["hostname1", "hostname1 hostname2.example.com hostname3.example.org"].each do |domain_alias|
           context "with domain_alias => #{domain_alias}" do
-            let(:params) { params_set.merge(:gitlab_domain_alias => domain_alias)} 
+            let(:params) { params_set.merge(:gitlab_domain_alias => domain_alias)}
             it { is_expected.to contain_file('/etc/nginx/conf.d/gitlab-ci.conf').with_content(/^\s*server_name gitlab-ci.fooboozoo.fr #{domain_alias};$/)}
           end
         end
@@ -90,7 +90,7 @@ describe 'gitlab::ci' do
         end
         ["hostname1", "hostname1 hostname2.example.com hostname3.example.org"].each do |domain_alias|
           context "with ssl and domain_alias => #{domain_alias}" do
-            let(:params) { params_set.merge(:gitlab_domain_alias => domain_alias)} 
+            let(:params) { params_set.merge(:gitlab_domain_alias => domain_alias)}
             it { is_expected.to contain_file('/etc/nginx/conf.d/gitlab-ci.conf').with_content(/^\s*server_name gitlab-ci.fooboozoo.fr #{domain_alias};$/)}
           end
         end

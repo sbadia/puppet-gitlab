@@ -158,7 +158,7 @@ describe 'gitlab' do
           :command  => 'ruby -p -i -e \'$_.sub!(/^#!.*ruby$/,"#!/home/git/.rbenv/shims/ruby")\' *',
           :cwd      => '/home/git/gitlab-shell/hooks',
           :onlyif   => 'head -q -n 1 * | egrep -v \'^#!/home/git/.rbenv/shims/ruby$\'',
-          :require  => 'Exec[install gitlab-shell]'        
+          :require  => 'Exec[install gitlab-shell]'
         )}
       end # install gitlab
       describe 'setup gitlab database' do
@@ -179,7 +179,6 @@ describe 'gitlab' do
           :refreshonly => 'true'
         )}
         it { is_expected.to contain_file("/home/git/.gitlab_setup_done").with(
-          :ensure   => 'present',
           :owner    => 'root',
           :group    => 'root',
           :require  => 'Exec[setup gitlab database]'
@@ -296,7 +295,7 @@ describe 'gitlab' do
           :command  => "ruby -p -i -e '$_.sub!(/^#!.*ruby$/,\"#!#{params_set[:git_home]}/.rbenv/shims/ruby\")' *",
           :cwd      => "#{params_set[:git_home]}/gitlab-shell/hooks",
           :onlyif   => "head -q -n 1 * | egrep -v '^#!#{params_set[:git_home]}/.rbenv/shims/ruby$'",
-          :require  => 'Exec[install gitlab-shell]'        
+          :require  => 'Exec[install gitlab-shell]'
         )}
       end # install gitlab
       describe 'setup gitlab database' do
@@ -310,7 +309,6 @@ describe 'gitlab' do
                         'Exec[install gitlab]']
         )}
         it { is_expected.to contain_file("#{params_set[:git_home]}/.gitlab_setup_done").with(
-          :ensure   => 'present',
           :owner    => 'root',
           :group    => 'root',
           :require  => 'Exec[setup gitlab database]'
