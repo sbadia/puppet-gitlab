@@ -90,7 +90,9 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 * `gitlab_ensure_postfix`: Whether or not this module should ensure the postfix
   package is installed (used to manage conflicts with other modules) (default:
 true)
-* `exec_path`: PATH of executtion (default: `/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin`)
+* `gitlab_manage_rbenv`: Whether this module should use rbenv to install a suitable version of Ruby for the Gitlab user (default: true)
+* `gitlab_ruby_version`: Ruby version to install with rbenv for the Gitlab user (default: 2.1.2)
+* `exec_path`: PATH of execution (default: ${git\_home}/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin)
 * `ldap_enabled`: Enable LDAP backend for gitlab web (see bellow) (default: false)
 * `ldap_host`: FQDN of LDAP server (default: ldap.domain.com)
 * `ldap_base`: LDAP base dn (default: dc=domain,dc=com)
