@@ -5,6 +5,7 @@
 # Configs https://github.com/sbadia/modulesync_configs/
 #
 require 'puppetlabs_spec_helper/rake_tasks'
+require 'puppet_blacksmith/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
 require 'puppet-syntax/tasks/puppet-syntax'
 
@@ -26,8 +27,4 @@ namespace :module do
   task :build do
     exec "rsync -rv --exclude-from=#{TDIR}/.forgeignore . /tmp/#{NAME};cd /tmp/#{NAME};puppet module build"
   end
-end
-
-task :metadata do
-  sh "metadata-json-lint metadata.json"
 end
