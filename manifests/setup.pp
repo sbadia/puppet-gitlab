@@ -96,7 +96,7 @@ class gitlab::setup inherits gitlab {
       group => $git_group,
       home  => $git_home,
     }
-  
+
     # By default, puppet-rbenv sets ~/.profile to load rbenv, which is
     # read when bash is invoked as an interactive login shell, but we
     # also need ~/.bashrc to load rbenv (which is read by interactive
@@ -107,7 +107,7 @@ class gitlab::setup inherits gitlab {
       target  => "${git_home}/.profile",
       require => Rbenv::Install[$git_user],
     }
-  
+
     rbenv::compile { 'gitlab/ruby':
       user   => $git_user,
       group  => $git_group,
@@ -119,7 +119,7 @@ class gitlab::setup inherits gitlab {
         Exec['install gitlab'],
       ],
     }
-  
+
     #Gitlab <= 6.3 requires us to install the charlock_holmes gem
     rbenv::gem { 'charlock_holmes':
       ensure => '0.6.9.4',
