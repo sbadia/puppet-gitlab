@@ -75,7 +75,7 @@ class gitlab::params {
     'Debian': {
       # system packages
       $system_packages = ['libicu-dev', 'python2.7','python-docutils',
-                          'libxml2-dev', 'libxslt1-dev','python-dev', 'cmake']
+                          'libxml2-dev', 'libxslt1-dev','python-dev', 'cmake', 'pkg-config']
     }
     'RedHat': {
       # system packages
