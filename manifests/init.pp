@@ -80,6 +80,10 @@
 # [*gitlab_redisport*]
 #   Redis host used for Sidekiq
 #   default: 6379
+# [*gitlab_manage_redis*]
+#   Whether or not this module should install redis(-server)
+#   set to false to manage separately
+#   default: true
 #
 # [*gitlab_dbtype*]
 #   Gitlab database type
@@ -328,6 +332,7 @@ class gitlab(
     $gitlab_http_timeout      = $gitlab::params::gitlab_http_timeout,
     $gitlab_redishost         = $gitlab::params::gitlab_redishost,
     $gitlab_redisport         = $gitlab::params::gitlab_redisport,
+    $gitlab_manage_redis      = $gitlab::params::gitlab_manage_redis,
     $gitlab_dbtype            = $gitlab::params::gitlab_dbtype,
     $gitlab_dbname            = $gitlab::params::gitlab_dbname,
     $gitlab_dbuser            = $gitlab::params::gitlab_dbuser,
@@ -400,6 +405,7 @@ class gitlab(
   validate_bool($gitlab_ssl_self_signed)
   validate_bool($gitlab_username_change)
   validate_bool($ldap_enabled)
+  validate_bool($gitlab_manage_redis)
 
   validate_re($gitlab_dbtype, '(mysql|pgsql)', 'gitlab_dbtype is not supported')
   validate_re($gitlab_dbport, '^\d+$', 'gitlab_dbport is not a valid port')

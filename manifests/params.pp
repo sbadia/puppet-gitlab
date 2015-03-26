@@ -21,6 +21,7 @@ class gitlab::params {
   $gitlab_http_timeout      = '60'
   $gitlab_redishost         = '127.0.0.1'
   $gitlab_redisport         = '6379'
+  $gitlab_manage_redis      = true    
   $gitlab_dbtype            = 'mysql'
   $gitlab_dbname            = 'gitlab_db'
   $gitlab_dbuser            = 'gitlab_user'
@@ -76,6 +77,8 @@ class gitlab::params {
       # system packages
       $system_packages = ['libicu-dev', 'python2.7','python-docutils',
                           'libxml2-dev', 'libxslt1-dev','python-dev', 'cmake', 'pkg-config', 'libkrb5-dev', 'ruby-execjs']
+                          
+      $redis_packages = ['redis-server']
     }
     'RedHat': {
       # system packages
@@ -83,6 +86,8 @@ class gitlab::params {
                           'libxslt-devel','python-devel','libcurl-devel',
                           'readline-devel','openssl-devel','zlib-devel',
                           'libyaml-devel','patch','gcc-c++']
+                          
+      $redis_packages = ['redis-server']
     }
     default: {
       fail("${::osfamily} not supported yet")
@@ -90,5 +95,6 @@ class gitlab::params {
   }
 
   validate_array($system_packages)
+  validate_array($redis_packages)
 
 } # Class:: gitlab::params
