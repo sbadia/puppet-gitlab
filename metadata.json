@@ -61,10 +61,6 @@
     {
       "name": "puppetlabs/git",
       "version_requirement": ">= 0.0.3 <= 1.0.0"
-    },
-    {
-      "name": "thomasvandoren/redis",
-      "version_requirement": ">= 0.10.0 <= 1.0.0"
     }
   ]
 }
