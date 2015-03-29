@@ -21,7 +21,7 @@ class gitlab::params {
   $gitlab_http_timeout      = '60'
   $gitlab_redishost         = '127.0.0.1'
   $gitlab_redisport         = '6379'
-  $gitlab_manage_redis      = true    
+  $gitlab_manage_redis      = true
   $gitlab_dbtype            = 'mysql'
   $gitlab_dbname            = 'gitlab_db'
   $gitlab_dbuser            = 'gitlab_user'
@@ -83,7 +83,7 @@ class gitlab::params {
       $system_packages = ['libicu-devel', 'perl-Time-HiRes','libxml2-devel',
                           'libxslt-devel','python-devel','libcurl-devel',
                           'readline-devel','openssl-devel','zlib-devel',
-                          'libyaml-devel','patch','gcc-c++']                          
+                          'libyaml-devel','patch','gcc-c++']
     }
     default: {
       fail("${::osfamily} not supported yet")
