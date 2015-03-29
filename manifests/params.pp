@@ -77,17 +77,13 @@ class gitlab::params {
       # system packages
       $system_packages = ['libicu-dev', 'python2.7','python-docutils',
                           'libxml2-dev', 'libxslt1-dev','python-dev', 'cmake', 'pkg-config', 'libkrb5-dev', 'ruby-execjs']
-                          
-      $redis_packages = ['redis-server']
     }
     'RedHat': {
       # system packages
       $system_packages = ['libicu-devel', 'perl-Time-HiRes','libxml2-devel',
                           'libxslt-devel','python-devel','libcurl-devel',
                           'readline-devel','openssl-devel','zlib-devel',
-                          'libyaml-devel','patch','gcc-c++']
-                          
-      $redis_packages = ['redis-server']
+                          'libyaml-devel','patch','gcc-c++']                          
     }
     default: {
       fail("${::osfamily} not supported yet")
@@ -95,6 +91,5 @@ class gitlab::params {
   }
 
   validate_array($system_packages)
-  validate_array($redis_packages)
 
 } # Class:: gitlab::params
