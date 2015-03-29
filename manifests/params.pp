@@ -21,7 +21,6 @@ class gitlab::params {
   $gitlab_http_timeout      = '60'
   $gitlab_redishost         = '127.0.0.1'
   $gitlab_redisport         = '6379'
-  $gitlab_manage_redis      = true
   $gitlab_dbtype            = 'mysql'
   $gitlab_dbname            = 'gitlab_db'
   $gitlab_dbuser            = 'gitlab_user'
