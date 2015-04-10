@@ -99,16 +99,28 @@ describe 'gitlab' do
     p = {
       'Debian' => {
         'db_packages' => {
-          'mysql' => ['libmysql++-dev','libmysqlclient-dev'],
-          'pgsql' => ['libpq-dev', 'postgresql-client']
+          'mysql' => {
+             '6' => ['libmysql++-dev','libmysqlclient-dev'],
+             '7' => ['libmysql++-dev','libmysqlclient-dev'],
+          },
+          'pgsql' => {
+             '6' => ['libpq-dev', 'postgresql-client'],
+             '7' => ['libpq-dev', 'postgresql-client'],
+          },
         },
         'system_packages' => ['libicu-dev', 'python2.7','python-docutils',
                               'libxml2-dev','libxslt1-dev','python-dev'],
       },
       'RedHat' => {
         'db_packages' => {
-          'mysql' => ['mysql-devel'],
-          'pgsql' => ['postgresql-devel']
+          'mysql' => {
+            '6' => ['mysql-devel'],
+            '7' => ['mariadb-devel'],
+          },
+          'pgsql' => {
+            '6' => ['postgresql-devel'],
+            '7' => ['postgresql-devel'],
+          },
         },
         'system_packages' => ['libicu-devel','perl-Time-HiRes','libxml2-devel',
                               'libxslt-devel','python-devel','libcurl-devel',
@@ -123,11 +135,13 @@ describe 'gitlab' do
       ['Debian','RedHat'].each do |distro|
         #= With each dbtype
         ['mysql','pgsql'].each do |dbtype|
-          context "for #{dbtype} devel on #{distro}" do
-            let(:facts) {{ :osfamily => distro, :processorcount => '2' }}
-            let(:params) {{ :gitlab_dbtype => dbtype }}
-            p[distro]['db_packages'][dbtype].each do |pkg|
-              it { is_expected.to contain_package(pkg) }
+          ['6', '7'].each do |majrelease|
+            context "for #{dbtype} devel on #{distro}" do
+              let(:facts) {{ :osfamily => distro, :processorcount => '2', :operatingsystemmajrelease => majrelease }}
+              let(:params) {{ :gitlab_dbtype => dbtype }}
+              p[distro]['db_packages'][dbtype][majrelease].each do |pkg|
+                it { is_expected.to contain_package(pkg) }
+              end
             end
           end
         end
