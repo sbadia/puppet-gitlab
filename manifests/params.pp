@@ -26,7 +26,7 @@ class gitlab::params {
   $gitlab_dbuser            = 'gitlab_user'
   $gitlab_dbpwd             = 'changeme'
   $gitlab_dbhost            = 'localhost'
-  $gitlab_dbport            = '5432'
+  $gitlab_dbport            = '3306'
   $gitlab_domain            = $::fqdn
   $gitlab_domain_alias      = false
   $gitlab_repodir           = $git_home
