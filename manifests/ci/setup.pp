@@ -39,7 +39,12 @@ class gitlab::ci::setup inherits gitlab::ci {
     'RedHat': {
       case $gitlab_dbtype {
         'mysql': {
-          ensure_packages(['mysql-devel'])
+          if $::operatingsystemmajrelease >= 7 {
+            $mysql_devel_package = 'mariadb-devel'
+          } else {
+            $mysql_devel_package = 'mysql-devel'
+          }
+          ensure_packages([$mysql_devel_package])
         }
         'pgsql': {
           ensure_packages(['postgresql-devel'])
