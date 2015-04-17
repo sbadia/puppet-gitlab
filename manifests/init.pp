@@ -42,7 +42,7 @@
 #
 # [*gitlab_branch*]
 #   Gitlab branch
-#   default: 6-9-stable
+#   default: 7-3-stable
 #
 # [*gitlabshell_sources*]
 #   Gitlab-shell sources
@@ -50,7 +50,7 @@
 #
 # [*gitlabshell_branch*]
 #   Gitlab-shell branch
-#   default: v1.9.4
+#   default: v2.0.1
 #
 # [*proxy_name*]
 #   The name of the Nginx proxy
