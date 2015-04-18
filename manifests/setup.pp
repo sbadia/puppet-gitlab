@@ -90,7 +90,7 @@ class gitlab::setup inherits gitlab {
 
   # dev. dependencies
   ensure_packages($gitlab::system_packages)
-
+  
   if ($gitlab_manage_rbenv) {
     rbenv::install { $git_user:
       group => $git_group,
