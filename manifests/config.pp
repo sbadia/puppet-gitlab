@@ -52,12 +52,24 @@ class gitlab::config inherits gitlab {
       "${git_home}/gitlab/tmp",
       "${git_home}/gitlab/tmp/pids",
       "${git_home}/gitlab/tmp/sockets",
-      "${git_home}/gitlab/log",
       "${git_home}/gitlab/public",
       "${git_home}/gitlab/public/uploads",
     ]:
     ensure => directory,
     mode   => '0755',
+  }
+
+  #gitlab does not provide an option to configure a log directory, so create a symlink to
+  #the desired folder if specified (otherwise, simply ensure the default log folder is there)
+  $gitlab_log_path_type = $gitlab_log_folder ? {
+    undef   => 'directory',
+    default => 'link',
+  }
+  file { "${git_home}/gitlab/log":
+    ensure => $gitlab_log_path_type,
+    target => $gitlab_log_folder,
+    mode   => '0755',
+    force  => true, #for the conversion to link
   }
 
   # symlink fix for python

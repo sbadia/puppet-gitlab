@@ -37,12 +37,18 @@ production: &base
     # Uncomment and customize if you can't use the default user to run GitLab (default: 'git')
     # user: git
 
+    # Uncomment and customize if you want to change the default time zone of GitLab application.
+    # To see all available zones, run `bundle exec rake time:zones:all RAILS_ENV=production`
+    <%- if @gitlab_time_zone %>
+    time_zone: <%= @gitlab_time_zone %>
+    <%- end %>
+
     ## Email settings
     # Email address used in the "From" field in mails sent by GitLab
     email_from: <%= @git_email %>
 
     # Email address of your support contact (default: same as email_from)
-    support_email: support@localhost
+    support_email: <%= @gitlab_support_email %>
 
     ## User settings
     default_projects_limit: <%= @gitlab_projects %>
@@ -67,7 +73,14 @@ production: &base
 
     # Restrict setting visibility levels for non-admin users.
     # The default is to allow all levels.
+<% if @restricted_visibility_levels %>
+    restricted_visibility_levels: 
+<%   @restricted_visibility_levels.each do |level| %>
+      - <%= level %>
+<%   end %>
+<% else %>
     #restricted_visibility_levels: [ "public" ]
+<% end %>
 
     ## Automatic issue closing
     # If a commit message matches this regular expression, all issues referenced from the matched text will be closed.
@@ -77,13 +90,13 @@ production: &base
 
     ## Default project features settings
     default_projects_features:
-      issues: true
-      merge_requests: true
-      wiki: true
-      wall: false
-      snippets: false
+      issues: <%= @gitlab_default_projects_features_issues %>
+      merge_requests: <%= @gitlab_default_projects_features_merge_requests %>
+      wiki: <%= @gitlab_default_projects_features_wiki %>
+      wall: <%= @gitlab_default_projects_features_wall %>
+      snippets: <%= @gitlab_default_projects_features_snippets %>
       # can be "private" | "internal" | "public"
-      visibility_level: "private"
+      visibility_level: <%= @gitlab_default_projects_features_visibility_level %>
     ## Repository downloads directory
     # When a user clicks e.g. 'Download zip' on a project, a temporary zip file is created in the following directory.
     # The default is 'tmp/repositories' relative to the root of the Rails app.
@@ -91,6 +104,14 @@ production: &base
 
   ## External issues trackers
   issues_tracker:
+<% if @issues_tracker %>
+<%   @issues_tracker.keys.sort.each do |name| %>
+    <%= name %>:
+<%     @issues_tracker[name].keys.sort.each do |k| %>
+      <%= k %>: <%= @issues_tracker[name][k] -%>
+<%     end -%>
+<%   end -%>
+<% else %>
     # redmine:
     #   title: "Redmine"
     #   ## If not nil, link 'Issues' on project page will be replaced with this
@@ -117,10 +138,11 @@ production: &base
     #   project_url: "http://jira.sample/issues/?jql=project=:issues_tracker_id"
     #   issues_url: "http://jira.sample/browse/:id"
     #   new_issue_url: "http://jira.sample/secure/CreateIssue.jspa"
+<% end %>
 
   ## Gravatar
   gravatar:
-    enabled: true                 # Use user avatar image from Gravatar.com (default: true)
+    enabled: <%= @gravatar_enabled %> # Use user avatar image from Gravatar.com (default: true)
     # gravatar urls: possible placeholders: %{hash} %{size} %{email}
     # plain_url: "http://..."     # default: http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=mm
     # ssl_url:   "https://..."    # default: https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=mm
@@ -166,10 +188,40 @@ production: &base
     #   Ex. (employeeType=developer)
     #
     user_filter: '<%= @ldap_user_filter -%>'
+    
+    # EE settings
+<% if @ldap_sync_time!= '' -%>
+    sync_time: <%=@ldap_sync_time%>
+<% end -%>
+<% if @ldap_group_base!= '' -%>
+    group_base: <%=@ldap_group_base%>
+<% end -%>
+<% if @ldap_sync_ssh_keys!= '' -%>
+    sync_ssh_keys: <%=@ldap_sync_ssh_keys%>
+<% end -%>
+<% if @ldap_admin_group!= '' -%>
+    admin_group: <%=@ldap_admin_group%>
+<% end -%>
 
 
   ## OmniAuth settings
   omniauth:
+<% if @omniauth -%>
+<%   @omniauth.keys.reject{|param| param=="providers"}.sort.each do |param| -%>
+    <%= param %>: <%= @omniauth[param] %>
+<%   end -%>
+    providers:
+<%   @omniauth["providers"] && @omniauth["providers"].each do |provider|  -%>
+      -
+<%     provider.keys.reject{|key| key=="args"}.sort.each do |key|  -%>
+        <%= key %>: <%= provider[key] %>
+<%     end -%>
+        args:
+<%     provider["args"] && provider["args"].keys.sort.each do |arg|  -%>
+          <%= arg %>: <%= provider["args"][arg] %>
+<%     end -%>
+<%   end -%>
+<% else %>
     # Allow login via Twitter, Google, etc. using OmniAuth providers
     enabled: false
 
@@ -196,7 +248,7 @@ production: &base
       # - { name: 'github', app_id: 'YOUR APP ID',
       #     app_secret: 'YOUR APP SECRET',
       #     args: { scope: 'user:email' } }
-
+<% end %>
 
 
   #
@@ -206,7 +258,7 @@ production: &base
   # GitLab Satellites
   satellites:
     # Relative paths are relative to Rails.root (default: tmp/repo_satellites/)
-    path: <%= @git_home %>/gitlab-satellites/
+    path: <%= @gitlab_satellitedir %>/gitlab-satellites/
 
   ## Backup settings
   backup:
@@ -234,14 +286,14 @@ production: &base
   # CAUTION!
   # Use the default values unless you really know what you are doing
   git:
-    bin_path: /usr/bin/git
+    bin_path: <%= @git_bin_path %>
     # The next value is the maximum memory size grit can use
     # Given in number of bytes per git object (e.g. a commit)
     # This value can be increased if you have very large commits
     # 5.megabytes
-    max_size: 5242880
+    max_size: <%= @git_max_size %>
     # Git timeout to read a commit, in seconds
-    timeout: 10
+    timeout: <%= @git_timeout %>
 
   #
   # 4. Extra customization
