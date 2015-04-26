@@ -131,6 +131,7 @@ class gitlab::install inherits gitlab {
 
   file {
     "${git_home}/.gitlab_setup_done":
+      ensure  => file,
       owner   => 'root',
       group   => 'root',
       require => Exec['setup gitlab database'];
