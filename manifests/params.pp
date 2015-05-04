@@ -52,6 +52,8 @@ class gitlab::params {
   $gitlab_time_zone         = false
   $gitlab_email_support     = 'support@localhost'
   $gitlab_ssl               = false
+  $gitlab_ssl_protocols     = 'TLSv1.2 TLSv1.1 TLSv1'
+  $gitlab_ssl_ciphers       = 'AES:HIGH:!aNULL:!RC4:!MD5:!ADH:!MDF'
   $gitlab_ssl_cert          = '/etc/ssl/certs/ssl-cert-snakeoil.pem'
   $gitlab_ssl_key           = '/etc/ssl/private/ssl-cert-snakeoil.key'
   $gitlab_ssl_self_signed   = false
