@@ -457,6 +457,8 @@ class gitlab(
     $gitlab_ssl               = $gitlab::params::gitlab_ssl,
     $gitlab_ssl_cert          = $gitlab::params::gitlab_ssl_cert,
     $gitlab_ssl_key           = $gitlab::params::gitlab_ssl_key,
+    $gitlab_ssl_protocols     = $gitlab::params::gitlab_ssl_protocols,
+    $gitlab_ssl_ciphers       = $gitlab::params::gitlab_ssl_ciphers,
     $gitlab_ssl_self_signed   = $gitlab::params::gitlab_ssl_self_signed,
     $gitlab_projects          = $gitlab::params::gitlab_projects,
     $gitlab_username_change   = $gitlab::params::gitlab_username_change,
