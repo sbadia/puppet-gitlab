@@ -96,9 +96,6 @@ describe 'gitlab' do
         it { is_expected.not_to contain_cron("gitlab backup ") }
       end # no gitlab backup by default
 
-      describe 'python2 symlink' do
-        it { is_expected.to contain_file('/usr/bin/python2').with(:ensure => 'link',:target => '/usr/bin/python')}
-      end # python2 symlink
     end # default params
     context 'with specifics params' do
       let(:params) { params_set }
@@ -190,9 +187,6 @@ describe 'gitlab' do
           )}
         end
       end # gitlab directories
-      describe 'python2 symlink' do
-        it { is_expected.to contain_file('/usr/bin/python2').with(:ensure => 'link',:target => '/usr/bin/python')}
-      end # python2 symlink
     end # specifics params
   end # gitlab::config
 end # gitlab

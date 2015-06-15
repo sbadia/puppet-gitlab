@@ -72,14 +72,6 @@ class gitlab::config inherits gitlab {
     force  => true, #for the conversion to link
   }
 
-  # symlink fix for python
-  file { '/usr/bin/python2':
-    ensure => link,
-    owner  => root,
-    group  => root,
-    target => '/usr/bin/python';
-  }
-
   # backup task
   $backup_file = '/usr/local/sbin/backup-gitlab.sh'
 
