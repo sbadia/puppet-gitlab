@@ -94,10 +94,10 @@
 #   default: 60
 #
 # [*gitlab_webhook_timeout*]
-#   Number of seconds to wait for HTTP response after sending webhook 
+#   Number of seconds to wait for HTTP response after sending webhook
 #   HTTP POST request
 #   default: 10
-#  
+#
 # [*gitlab_redishost*]
 #   Redis host used for Sidekiq
 #   default: localhost
@@ -173,33 +173,33 @@
 #   default: '([Cc]lose[sd]|[Ff]ixe[sd]) #(\d+)' on GitLab-CE
 #
 # [*gitlab_repository_downloads_path*]
-#   When a user clicks e.g. 'Download zip' on a project, a temporary zip file is 
+#   When a user clicks e.g. 'Download zip' on a project, a temporary zip file is
 #   created in the following directory (relative to the root of the Rails app)
 #   default: tmp/repositories
 #
 # [*gitlab_restricted_visibility_levels*]
-#   Restrict setting visibility levels for non-admin users. 
+#   Restrict setting visibility levels for non-admin users.
 #   Specify as an array of one or more of "private" | "internal" | "public"
 #   default: nil
 #
 # [*gitlab_default_projects_features_issues*]
-#   Default project features setting for issues. 
+#   Default project features setting for issues.
 #   default: true
 #
 # [*gitlab_default_projects_features_merge_requests*]
-#   Default project features setting for merge requests. 
+#   Default project features setting for merge requests.
 #   default: true
 #
 # [*gitlab_default_projects_features_wiki*]
-#   Default project features settings for wiki. 
+#   Default project features settings for wiki.
 #   default: true
 #
 # [*gitlab_default_projects_features_wall*]
-#   Default project features setting for wall. 
+#   Default project features setting for wall.
 #   default: false
 #
 # [*gitlab_default_projects_features_snippets*]
-#   Default project features setting for snippets. 
+#   Default project features setting for snippets.
 #   default: false
 #
 # [*gitlab_default_projects_features_visibility_level*]
@@ -280,7 +280,7 @@
 #   default: --deployment
 #
 # [*gitlab_manage_rbenv*]
-#   Whether this module should use rbenv to install a suitable version of Ruby 
+#   Whether this module should use rbenv to install a suitable version of Ruby
 #   for the Gitlab user; set to false to use the system Ruby or manage separately
 #   default: true
 #
@@ -358,7 +358,7 @@
 #
 # [*ldap_block_auto_created_users*]
 #   To maintain tight control over the number of active users on your GitLab installation,
-#   enable this setting to keep new users blocked until they have been cleared by the admin 
+#   enable this setting to keep new users blocked until they have been cleared by the admin
 #   default: false
 #
 # [*ldap_sync_time*]
