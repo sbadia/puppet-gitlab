@@ -44,8 +44,14 @@ production: &base
     <%- end %>
 
     ## Email settings
+    # Uncomment and set to false if you need to disable email sending from GitLab (default: true)
+    email_enabled: <%= @gitlab_email_enabled %>
     # Email address used in the "From" field in mails sent by GitLab
     email_from: <%= @git_email %>
+    email_display_name: <%= @gitlab_email_display_name %>
+    email_reply_to: <%= @gitlab_email_reply_to %>
+
+    # Email server smtp settings are in config/initializers/smtp_settings.rb.sample
 
     # Email address of your support contact (default: same as email_from)
     support_email: <%= @gitlab_support_email %>
@@ -87,6 +93,9 @@ production: &base
     # This happens when the commit is pushed or merged into the default branch of a project.
     # When not specified the default issue_closing_pattern as specified below will be used.
     # issue_closing_pattern: '([Cc]lose[sd]|[Ff]ixe[sd]) #(\d+)'
+<% if @gitlab_issue_closing_pattern -%>
+    issue_closing_pattern: '<%= @gitlab_issue_closing_pattern.gsub("'","''") %>'
+<% end -%>     
 
     ## Default project features settings
     default_projects_features:
@@ -97,10 +106,15 @@ production: &base
       snippets: <%= @gitlab_default_projects_features_snippets %>
       # can be "private" | "internal" | "public"
       visibility_level: <%= @gitlab_default_projects_features_visibility_level %>
+      
+    ## Webhook settings
+    # Number of seconds to wait for HTTP response after sending webhook HTTP POST request (default: 10)
+    webhook_timeout: <%= @gitlab_webhook_timeout %>
+
     ## Repository downloads directory
     # When a user clicks e.g. 'Download zip' on a project, a temporary zip file is created in the following directory.
     # The default is 'tmp/repositories' relative to the root of the Rails app.
-    # repository_downloads_path: tmp/repositories
+    repository_downloads_path: <%= @gitlab_repository_downloads_path %>
 
   ## External issues trackers
   issues_tracker:
@@ -165,6 +179,12 @@ production: &base
     bind_dn: '<%= @ldap_bind_dn %>'
     password: '<%= @ldap_bind_password %>'
 <% end -%>
+
+    # This setting specifies if LDAP server is Active Directory LDAP server.
+    # For non AD servers it skips the AD specific queries.
+    # If your LDAP server is not AD, set this to false.
+    active_directory: <%= @ldap_active_directory %>
+
     # If allow_username_or_email_login is enabled, GitLab will ignore everything
     # after the first '@' in the LDAP username submitted by the user on login.
     #
@@ -175,6 +195,12 @@ production: &base
     # If you are using "uid: 'userPrincipalName'" on ActiveDirectory you need to
     # disable this setting, because the userPrincipalName contains an '@'.
     allow_username_or_email_login: true
+
+
+    # To maintain tight control over the number of active users on your GitLab installation,
+    # enable this setting to keep new users blocked until they have been cleared by the admin 
+    # (default: false).
+    block_auto_created_users: <%= @ldap_block_auto_created_users %>
 
     # Base where we can search for users
     #
@@ -275,6 +301,14 @@ production: &base
     repos_path: <%= @gitlab_repodir %>/repositories/
     hooks_path: <%= @git_home %>/gitlab-shell/hooks/
 
+    # File that contains the secret key for verifying access for gitlab-shell.
+    # Default is '.gitlab_shell_secret' relative to Rails.root (i.e. root of the GitLab app).
+<% if @gitlab_secret_file -%>
+    secret_file: <%= @gitlab_secret_file %>
+<% else -%>
+    # secret_file: /home/git/gitlab/.gitlab_shell_secret
+<% end -%>     
+  
     # Git over HTTP
     upload_pack: true
     receive_pack: true
