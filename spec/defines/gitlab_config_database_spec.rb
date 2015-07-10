@@ -13,7 +13,7 @@ describe 'gitlab::config::database', :type => :define do
         :owner    => 'git',
         :password => 'changeme',
         :path     => '/home/git/gitlab/config/database.yml',
-        :port     => '5432',
+        :port     => '3306',
         :type     => 'mysql',
         :username => 'gitlab_user'
       }
@@ -30,6 +30,7 @@ describe 'gitlab::config::database', :type => :define do
     it { is_expected.to contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*username: gitlab_user$/)}
     it { is_expected.to contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*password: 'changeme'$/)}
     it { is_expected.to contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*host: localhost$/)}
+    it { is_expected.to contain_file('/home/git/gitlab/config/database.yml').with_content(/^\s*port: 3306$/)}
   end
 
   context 'postgresql' do
