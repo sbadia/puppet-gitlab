@@ -121,7 +121,7 @@ describe 'gitlab' do
         it { is_expected.to contain_exec('install gitlab').with(
           :user    => 'git',
           :path     => '/home/git/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          :command => "bundle install -j1 --without development aws test postgres --deployment",
+          :command => "bundle install --without development aws test postgres --deployment",
           :unless  => 'bundle check',
           :cwd     => '/home/git/gitlab',
           :timeout => 0,
@@ -142,7 +142,7 @@ describe 'gitlab' do
           it { is_expected.to contain_exec('install gitlab').with(
             :user    => 'git',
             :path     => '/home/git/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-            :command => "bundle install -j1 --without development aws test mysql --deployment",
+            :command => "bundle install --without development aws test mysql --deployment",
             :unless  => 'bundle check',
             :cwd     => '/home/git/gitlab',
             :timeout => 0,
