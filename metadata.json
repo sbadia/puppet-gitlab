@@ -1,6 +1,6 @@
 {
   "name": "sbadia-gitlab",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "author": "Andrew Tomaka, Steffen Roegner, Igor Galic, Uwe Kleinmann, Matt Klich, Sebastien Badia",
   "summary": "Puppet GitLab Module",
   "license": "GPL-3.0",
