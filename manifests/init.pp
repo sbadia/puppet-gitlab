@@ -54,7 +54,7 @@
 #
 # [*gitlab_branch*]
 #   Gitlab branch
-#   default: 6-9-stable
+#   default: 7-12-stable
 #
 # [*gitlabshell_sources*]
 #   Gitlab-shell sources
@@ -62,7 +62,7 @@
 #
 # [*gitlabshell_branch*]
 #   Gitlab-shell branch
-#   default: v1.9.4
+#   default: v2.6.3
 #
 # [*gitlabshell_log_folder*]
 #   Gitlab-shell log folder
@@ -294,7 +294,7 @@
 #
 # [*gitlab_ruby_version*]
 #   Ruby version to install with rbenv for the Gitlab user
-#   default: 2.1.2
+#   default: 2.1.6
 #
 # [*gitlab_secret_file*]
 #   File that contains the secret key for verifying access for gitlab-shell.

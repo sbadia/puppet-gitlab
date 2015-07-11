@@ -16,9 +16,9 @@ class gitlab::params {
   $git_timeout              = 10
   $gitlab_webhook_timeout   = 10
   $gitlab_sources           = 'git://github.com/gitlabhq/gitlabhq.git'
-  $gitlab_branch            = '6-9-stable'
+  $gitlab_branch            = '7-12-stable'
   $gitlabshell_sources      = 'git://github.com/gitlabhq/gitlab-shell.git'
-  $gitlabshell_branch       = 'v1.9.4'
+  $gitlabshell_branch       = 'v2.6.3'
   $gitlabshell_log_folder   = undef
   $gitlab_log_folder        = undef
   $gitlab_manage_nginx      = true
@@ -74,7 +74,7 @@ class gitlab::params {
   $gitlab_ensure_postfix    = true
   $gitlab_ensure_curl       = true
   $gitlab_manage_rbenv      = true
-  $gitlab_ruby_version      = '2.1.2'
+  $gitlab_ruby_version      = '2.1.6'
   $gitlab_auth_file         = "${git_home}/.ssh/authorized_keys"
   $gitlab_secret_file       = undef
   $exec_path                = "${git_home}/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
