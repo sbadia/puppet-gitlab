@@ -238,6 +238,14 @@
 #   SSL Key location
 #   default: /etc/ssl/private/ssl-cert-snakeoil.key
 #
+# [*gitlab_ssl_protocols*]
+#   Nginx SSL enabled protocols
+#   default: 'TLSv1.2 TLSv1.1 TLSv1'
+#
+# [*gitlab_ssl_ciphers*]
+#   Nginx SSL enabled ciphers
+#   default: 'AES:HIGH:!aNULL:!RC4:!MD5:!ADH:!MDF'
+#
 # [*gitlab_ssl_self_signed*]
 #   Set true if your SSL Cert is self signed
 #   default: false
