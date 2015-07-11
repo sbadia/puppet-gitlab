@@ -25,14 +25,14 @@ describe 'gitlab' do
           :user     => 'git',
           :provider => 'git',
           :source   => 'git://github.com/gitlabhq/gitlabhq.git',
-          :revision => '6-9-stable'
+          :revision => '7-12-stable'
         )}
         it { is_expected.to contain_vcsrepo('/home/git/gitlab-shell').with(
           :ensure   => 'present',
           :user     => 'git',
           :provider => 'git',
           :source   => 'git://github.com/gitlabhq/gitlab-shell.git',
-          :revision => 'v1.9.4'
+          :revision => 'v2.6.3'
         )}
       end
       context 'with specifics params' do

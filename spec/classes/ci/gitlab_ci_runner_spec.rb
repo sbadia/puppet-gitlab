@@ -41,7 +41,7 @@ describe 'gitlab::ci::runner' do
   it { is_expected.to contain_rbenv__compile('gitlab-ci-runner/ruby').with(
     :user   => 'gitlab_ci_runner',
     :home   => '/home/gitlab_ci_runner',
-    :ruby   => '2.1.2',
+    :ruby   => '2.1.6',
     :global => true,
     :notify => 'Exec[install gitlab-ci-runner]'
   )}

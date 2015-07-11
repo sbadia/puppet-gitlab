@@ -42,7 +42,7 @@
 #
 # [*gitlab_ruby_version*]
 #   Ruby version to install with rbenv for Gitlab user
-#   default: 2.1.2
+#   default: 2.1.6
 #
 # [*gitlab_manage_nginx*]
 #   Whether or not this module should install a templated Nginx
