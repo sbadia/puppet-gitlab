@@ -99,6 +99,7 @@ include redis
 include nginx
 include mysql::server
 include git
+include nodejs
 include logrotate
 
 mysql::db {'gitlab': user => 'user', password => 'password' }
