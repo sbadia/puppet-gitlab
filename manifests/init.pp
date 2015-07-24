@@ -145,7 +145,7 @@
 #
 # [*gitlab_backup*]
 #   Whether to enable automatic backups
-#   dbackup efault: false
+#   default: false
 #
 # [*gitlab_backup_path*]
 #   Path where Gitlab's backup rake task puts its files

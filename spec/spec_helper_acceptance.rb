@@ -22,6 +22,9 @@ RSpec.configure do |c|
       on host, puppet('module','install','fsalum/redis'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','jfryman/nginx'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','evenup/logrotate'), { :acceptable_exit_codes => [0,1] }
+      on host, puppet('module','install','puppet/nodejs'), { :acceptable_exit_codes => [0,1] }
+      # FIXME https://github.com/puppet-community/puppet-nodejs/pull/152
+      on host, puppet('module','install','treydock/gpg_key'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','puppetlabs-git'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','puppetlabs-vcsrepo'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','puppetlabs-mysql'), { :acceptable_exit_codes => [0,1] }
