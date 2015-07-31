@@ -37,7 +37,7 @@ See [gitlab example](https://github.com/sbadia/vagrant-gitlab/blob/master/exampl
 
 ## GitLab web interface
 - access via your browser under the hostname (e.g. http://gitlab.domain.tld)
-- **Login**: admin@local.host
+- **Login**: admin@example.com (version before GitLab v7.1.0 use admin@local.host)
 - **Password**: 5iveL!fe
 
 1. Add an ssh key to your account, or create another account
