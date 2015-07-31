@@ -1,6 +1,6 @@
 {
   "name": "sbadia-gitlab",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "author": "Andrew Tomaka, Steffen Roegner, Igor Galic, Uwe Kleinmann, Matt Klich, Sebastien Badia",
   "summary": "Puppet GitLab Module",
   "license": "GPL-3.0",
@@ -10,57 +10,33 @@
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
-      "operatingsystemrelease": [
-        "5",
-        "6",
-        "7"
-      ]
+      "operatingsystemrelease": ["5","6","7"]
     },
     {
       "operatingsystem": "CentOS",
-      "operatingsystemrelease": [
-        "5",
-        "6",
-        "7"
-      ]
+      "operatingsystemrelease": ["5","6","7"]
     },
     {
       "operatingsystem": "Debian",
-      "operatingsystemrelease": [
-        "6",
-        "7"
-      ]
+      "operatingsystemrelease": ["6","7"]
     },
     {
       "operatingsystem": "Ubuntu",
-      "operatingsystemrelease": [
-        "12.04",
-        "14.04"
-      ]
+      "operatingsystemrelease": ["12.04","14.04"]
     }
   ],
   "description": "Module to install GitLab using puppet",
-  "tags": [
-    "gitlab",
-    "git",
-    "vcs"
-  ],
+  "tags": ["gitlab","git","vcs"],
   "dependencies": [
-    {
-      "name": "alup/rbenv",
-      "version_requirement": ">= 1.2.0 <= 2.0.0"
-    },
-    {
-      "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 3.1.0 <= 5.0.0"
-    },
-    {
-      "name": "puppetlabs/vcsrepo",
-      "version_requirement": ">= 0.2.0 <= 2.0.0"
-    },
-    {
-      "name": "puppetlabs/git",
-      "version_requirement": ">= 0.0.3 <= 1.0.0"
-    }
+    { "name": "alup/rbenv", "version_requirement": ">= 1.2.0 <= 2.0.0" },
+    { "name": "puppetlabs/stdlib", "version_requirement": ">= 3.1.0 <= 5.0.0" },
+    { "name": "puppetlabs/vcsrepo", "version_requirement": ">= 0.2.0 <= 2.0.0" },
+    { "name": "puppetlabs/git", "version_requirement": ">= 0.4.0 <= 1.0.0" },
+    { "name": "puppetlabs/mysql", "version_requirement": ">= 3.0.0 <= 4.0.0" },
+    { "name": "puppet/nodejs", "version_requirement": ">= 1.1.0 <= 2.0.0" },
+    { "name": "treydock/gpg_key", "version_requirement": ">= 0.0.3 <= 1.0.0" },
+    { "name": "jfryman/nginx", "version_requirement": ">= 0.2.7 <= 1.0.0" },
+    { "name": "evenup/logrotate", "version_requirement": ">= 1.0.0 <= 2.0.0" },
+    { "name": "fsalum/redis", "version_requirement": ">= 1.0.3 <= 2.0.0" }
   ]
 }

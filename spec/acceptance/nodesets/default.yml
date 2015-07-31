@@ -1,10 +1,1 @@
-HOSTS:
-  debian-73-x64:
-    roles:
-      - master
-    platform: debian-7-amd64
-    box : debian-73-x64-nocm
-    box_url : http://puppet-vagrant-boxes.puppetlabs.com/debian-73-x64-virtualbox-nocm.box
-    hypervisor : vagrant
-CONFIG:
-  type: foss
+ubuntu-server-1404-x64.yml

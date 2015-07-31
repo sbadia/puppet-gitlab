@@ -123,6 +123,8 @@ describe 'gitlab' do
           it { is_expected.to contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/^\s*listen 443;$/)}
           it { is_expected.to contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/^\s*ssl_certificate               \/etc\/ssl\/certs\/ssl-cert-snakeoil.pem;$/)}
           it { is_expected.to contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/^\s*ssl_certificate_key           \/etc\/ssl\/private\/ssl-cert-snakeoil.key;$/)}
+          it { is_expected.to contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/^\s*ssl_protocols                 TLSv1.2 TLSv1.1 TLSv1;$/)}
+          it { is_expected.to contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/^\s*ssl_ciphers                   AES:HIGH:!aNULL:!RC4:!MD5:!ADH:!MDF;$/)}
           it { is_expected.to contain_file('/etc/nginx/conf.d/gitlab.conf').with_content(/^\s*proxy_set_header   X-Forwarded-Ssl   on;$/)}
         end
         ["hostname1", "hostname1 hostname2.example.com hostname3.example.org"].each do |domain_alias|

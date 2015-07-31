@@ -70,7 +70,7 @@ describe 'gitlab' do
         it { is_expected.to contain_rbenv__compile('gitlab/ruby').with(
                       :user   => 'git',
                       :home   => '/home/git',
-                      :ruby   => '2.1.2',
+                      :ruby   => '2.1.6',
                       :global => true,
                       :notify => ['Exec[install gitlab-shell]', 'Exec[install gitlab]']
                     )}

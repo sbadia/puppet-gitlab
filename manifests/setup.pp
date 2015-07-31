@@ -68,7 +68,7 @@ class gitlab::setup inherits gitlab {
     'RedHat': {
       case $gitlab_dbtype {
         'mysql': {
-          if $::operatingsystemmajrelease >= 7 {
+          if (versioncmp($::operatingsystemmajrelease, '7') >= 0) {
             $mysql_devel_package = 'mariadb-devel'
           } else {
             $mysql_devel_package = 'mysql-devel'

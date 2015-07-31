@@ -1,3 +1,18 @@
+## 2015-07-11 - 1.0.0
+
+### features:
+* Install mariadb-devel on EL7 platforms
+* Add extra parameters for Gitlab configuration
+* Add new config options for GitLab 7.12
+* add variables for SSL ciphers/protocol
+* Fix spec tests, lint and acceptance
+
+### bugfix:
+* Offer a coherent gitlab_dbport default value
+* Missing System Package: 'cmake', 'pkg-config', 'libkrb5-dev', 'ruby-execjs'.
+* create ${git_home].gitlab_setup_done with ensure => file
+* gitlab should not fix the system
+
 ## 2015-03-19 - 0.2.0
 
 ### features:

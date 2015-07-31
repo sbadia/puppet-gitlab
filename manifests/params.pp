@@ -14,10 +14,11 @@ class gitlab::params {
   $git_bin_path             = '/usr/bin/git'
   $git_max_size             = 5242880
   $git_timeout              = 10
+  $gitlab_webhook_timeout   = 10
   $gitlab_sources           = 'git://github.com/gitlabhq/gitlabhq.git'
-  $gitlab_branch            = '6-9-stable'
+  $gitlab_branch            = '7-12-stable'
   $gitlabshell_sources      = 'git://github.com/gitlabhq/gitlab-shell.git'
-  $gitlabshell_branch       = 'v1.9.4'
+  $gitlabshell_branch       = 'v2.6.3'
   $gitlabshell_log_folder   = undef
   $gitlab_log_folder        = undef
   $gitlab_manage_nginx      = true
@@ -36,12 +37,15 @@ class gitlab::params {
   $gitlab_domain_alias      = false
   $gitlab_repodir           = $git_home
   $gitlab_satellitedir      = $git_home
+  $gitlab_setup_status_dir  = $git_home
   $gitlab_backup            = false
   $gitlab_backup_path       = 'tmp/backups/'
   $gitlab_backup_keep_time  = '0'
   $gitlab_backup_time       = fqdn_rand(5)+1
   $gitlab_backup_postscript = false
   $gitlab_relative_url_root = false
+  $gitlab_issue_closing_pattern = undef
+  $gitlab_repository_downloads_path = 'tmp/repositories'
   $gitlab_restricted_visibility_levels = undef
   $gitlab_default_projects_features_issues = true
   $gitlab_default_projects_features_merge_requests = true
@@ -50,8 +54,13 @@ class gitlab::params {
   $gitlab_default_projects_features_snippets = false
   $gitlab_default_projects_features_visibility_level = 'private'
   $gitlab_time_zone         = false
-  $gitlab_email_support     = 'support@localhost'
+  $gitlab_email_enabled     = true
+  $gitlab_email_reply_to    = "noreply@${gitlab_domain}"
+  $gitlab_email_display_name= 'GitLab'
+  $gitlab_support_email     = 'support@localhost'
   $gitlab_ssl               = false
+  $gitlab_ssl_protocols     = 'TLSv1.2 TLSv1.1 TLSv1'
+  $gitlab_ssl_ciphers       = 'AES:HIGH:!aNULL:!RC4:!MD5:!ADH:!MDF'
   $gitlab_ssl_cert          = '/etc/ssl/certs/ssl-cert-snakeoil.pem'
   $gitlab_ssl_key           = '/etc/ssl/private/ssl-cert-snakeoil.key'
   $gitlab_ssl_self_signed   = false
@@ -65,8 +74,9 @@ class gitlab::params {
   $gitlab_ensure_postfix    = true
   $gitlab_ensure_curl       = true
   $gitlab_manage_rbenv      = true
-  $gitlab_ruby_version      = '2.1.2'
+  $gitlab_ruby_version      = '2.1.6'
   $gitlab_auth_file         = "${git_home}/.ssh/authorized_keys"
+  $gitlab_secret_file       = undef
   $exec_path                = "${git_home}/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   $ldap_enabled             = false
   $ldap_host                = 'ldap.domain.com'
@@ -77,6 +87,8 @@ class gitlab::params {
   $ldap_method              = 'ssl'
   $ldap_bind_dn             = ''
   $ldap_bind_password       = ''
+  $ldap_active_directory    = true
+  $ldap_block_auto_created_users = false
   $ldap_sync_time           = ''
   $ldap_group_base          = ''
   $ldap_sync_ssh_keys       = ''
@@ -106,7 +118,7 @@ class gitlab::params {
       $system_packages = ['libicu-devel', 'perl-Time-HiRes','libxml2-devel',
                           'libxslt-devel','python-devel','libcurl-devel',
                           'readline-devel','openssl-devel','zlib-devel',
-                          'libyaml-devel','patch','gcc-c++']
+                          'cmake','libyaml-devel','patch','gcc-c++']
     }
     default: {
       fail("${::osfamily} not supported yet")

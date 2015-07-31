@@ -34,7 +34,7 @@
 #
 # [*ruby_version*]
 #   Ruby version to install with rbenv for Gitlab user
-#   default: 2.1.2
+#   default: 2.1.6
 #
 # [*exec_path*]
 #   The default PATH passed to all exec ressources (this path include rbenv shims)
@@ -46,7 +46,7 @@ class gitlab::ci::runner (
   $ensure              = 'present',
   $branch              = '5-0-stable',
   $exec_path           = '/home/gitlab_ci_runner/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-  $ruby_version        = '2.1.2',
+  $ruby_version        = '2.1.6',
   $source              = 'https://gitlab.com/gitlab-org/gitlab-ci-runner.git',
   $user                = 'gitlab_ci_runner',
   $user_home           = '/home/gitlab_ci_runner',
