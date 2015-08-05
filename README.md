@@ -150,6 +150,8 @@ bundle install
 bundle exec rspec spec/acceptance
 # or use BEAKER_destroy=no to keep the resulting vm
 BEAKER_destroy=no bundle exec rspec spec/acceptance
+# or for centos
+BEAKER_set=centos-70-x64 BEAKER_destroy=no bundle exec rspec spec/acceptance
 ```
 ## Development environment with vagrant
 
