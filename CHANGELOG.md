@@ -1,4 +1,13 @@
-## 2015-07-11 - 1.0.0
+## 2015-08-05 - 1.1.0
+
+### features:
+* New dependency on puppet/nodejs
+* New dependency on puppetlabs/postgresql
+
+### bugfix:
+* Use bundle to ensure that the correct rake version is used
+* Add missing cmake (on el platform) and nodejs on all distro
+* Fix login informations according 7.12 update
 
 ### features:
 * Install mariadb-devel on EL7 platforms
