@@ -33,6 +33,7 @@
     { "name": "puppetlabs/vcsrepo", "version_requirement": ">= 0.2.0 <= 2.0.0" },
     { "name": "puppetlabs/git", "version_requirement": ">= 0.4.0 <= 1.0.0" },
     { "name": "puppetlabs/mysql", "version_requirement": ">= 3.0.0 <= 4.0.0" },
+    { "name": "puppetlabs/postgresql", "version_requirement": ">=3.3.0 <5.0.0" },
     { "name": "puppet/nodejs", "version_requirement": ">= 1.1.0 <= 2.0.0" },
     { "name": "treydock/gpg_key", "version_requirement": ">= 0.0.3 <= 1.0.0" },
     { "name": "jfryman/nginx", "version_requirement": ">= 0.2.7 <= 1.0.0" },

@@ -104,8 +104,8 @@ describe 'gitlab' do
              '7' => ['libmysql++-dev','libmysqlclient-dev'],
           },
           'pgsql' => {
-             '6' => ['libpq-dev', 'postgresql-client'],
-             '7' => ['libpq-dev', 'postgresql-client'],
+             '6' => ['postgresql-devel', 'postgresql-client'],
+             '7' => ['postgresql-devel', 'postgresql-client'],
           },
         },
         'system_packages' => ['libicu-dev', 'python2.7','python-docutils',

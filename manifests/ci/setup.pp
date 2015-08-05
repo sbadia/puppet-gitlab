@@ -29,7 +29,8 @@ class gitlab::ci::setup inherits gitlab::ci {
           ensure_packages(['libmysql++-dev','libmysqlclient-dev'])
         }
         'pgsql': {
-          ensure_packages(['libpq-dev','postgresql-client'])
+          include ::postgresql::client
+          include ::postgresql::lib::devel
         }
         default: {
           fail("unknow dbtype (${gitlab_dbtype})")
@@ -47,7 +48,7 @@ class gitlab::ci::setup inherits gitlab::ci {
           ensure_packages([$mysql_devel_package])
         }
         'pgsql': {
-          ensure_packages(['postgresql-devel'])
+          include ::postgresql::lib::devel
         }
         default: {
           fail("unknow dbtype (${gitlab_dbtype})")
