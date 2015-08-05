@@ -9,6 +9,8 @@
 * Add missing cmake (on el platform) and nodejs on all distro
 * Fix login informations according 7.12 update
 
+## 2015-07-11 - 1.0.0
+
 ### features:
 * Install mariadb-devel on EL7 platforms
 * Add extra parameters for Gitlab configuration
