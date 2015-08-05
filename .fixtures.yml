@@ -14,3 +14,6 @@ fixtures:
     git:
       repo: "git://github.com/puppetlabs/puppetlabs-git.git"
       ref: "0.2.0"
+    postgresql:
+      repo: "git://github.com/puppetlabs/puppetlabs-postgresql.git"
+      ref: "4.4.2"
