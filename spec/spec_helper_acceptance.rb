@@ -28,6 +28,7 @@ RSpec.configure do |c|
       on host, puppet('module','install','puppetlabs-git'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','puppetlabs-vcsrepo'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','puppetlabs-mysql'), { :acceptable_exit_codes => [0,1] }
+      on host, puppet('module','install','puppetlabs-postgresql'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','puppetlabs-stdlib'), { :acceptable_exit_codes => [0,1] }
 
       # List modules installed to help with debugging
