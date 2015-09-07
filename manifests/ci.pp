@@ -146,6 +146,16 @@
 #   Number of jobs to use while installing gems.  Should match number of
 #   procs on your system (default: 1)
 #
+# [*omniauth_url*]
+#  The url to be used for the omniauth authentication. If the url 
+#  is not defined, the omniauth section will be skipped. (default: undef)
+#
+# [*omniauth_app_id*]
+#   The app id to use for the omniauth authentication (default: undef)
+#
+# [*omniauth_secret_id*]
+#   The app secret to use for the omniauth authentication (default: undef)
+#
 class gitlab::ci(
   $gitlab_server_urls       = [],
   $ensure                   = $gitlab::ci::params::ensure,
@@ -182,6 +192,9 @@ class gitlab::ci(
   $gitlab_unicorn_worker    = $gitlab::ci::params::gitlabci_unicorn_worker,
   $bundler_flags            = $gitlab::ci::params::gitlabci_bundler_flags,
   $bundler_jobs             = $gitlab::ci::params::gitlabci_bundler_jobs,
+  $omniauth_url = undef,
+  $omniauth_app_id = undef,
+  $omniauth_secret_id = undef,
 ) inherits gitlab::ci::params {
 
   anchor { 'gitlab::ci::begin': } ->
