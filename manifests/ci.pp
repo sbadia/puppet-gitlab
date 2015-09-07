@@ -24,6 +24,10 @@
 #   Email address for gitlab CI user
 #   default: gilab-ci@localhost
 #
+# [*ci_support_email*]
+#   Email address of your support contact
+#   default: support@localhost
+#
 # [*ci_comment*]
 #   Gitlab CI user comment
 #   default: GitLab CI
@@ -162,6 +166,7 @@ class gitlab::ci(
   $ci_user                  = $gitlab::ci::params::ci_user,
   $ci_comment               = $gitlab::ci::params::ci_comment,
   $ci_email                 = $gitlab::ci::params::ci_email,
+  $ci_support_email         = $gitlab::ci::params::ci_support_email,
   $ci_home                  = $gitlab::ci::params::ci_home,
   $gitlabci_sources         = $gitlab::ci::params::gitlabci_sources,
   $gitlabci_branch          = $gitlab::ci::params::gitlabci_branch,
