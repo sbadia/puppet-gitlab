@@ -197,9 +197,9 @@ class gitlab::ci(
   $gitlab_unicorn_worker    = $gitlab::ci::params::gitlabci_unicorn_worker,
   $bundler_flags            = $gitlab::ci::params::gitlabci_bundler_flags,
   $bundler_jobs             = $gitlab::ci::params::gitlabci_bundler_jobs,
-  $omniauth_url = undef,
-  $omniauth_app_id = undef,
-  $omniauth_secret_id = undef,
+  $omniauth_url             = undef,
+  $omniauth_app_id          = undef,
+  $omniauth_secret_id       = undef,
 ) inherits gitlab::ci::params {
 
   anchor { 'gitlab::ci::begin': } ->
