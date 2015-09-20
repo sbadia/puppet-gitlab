@@ -17,7 +17,7 @@ defaults: &defaults
     email_from: <%= @ci_email %>
 
     # Email address of your support contact (default: same as email_from)
-    support_email: support@localhost
+    support_email: <%= @ci_support_email %>
 
     # Default project notifications settings: 
     #
@@ -31,6 +31,12 @@ defaults: &defaults
     enabled: true
     plain_url: "http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=mm"
     ssl_url:   "https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=mm"
+  <%- if @omniauth_url %>
+  gitlab_server:
+    url: <%= @omniauth_url %>
+    app_id: <%= @omniauth_app_id %>
+    app_secret: <%= @omniauth_secret_id %>
+  <% end -%>
 
 
 development:

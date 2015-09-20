@@ -8,6 +8,7 @@ class gitlab::ci::params {
   $ci_home                    = '/home/gitlab_ci'
   $ci_comment                 = 'GitLab CI'
   $ci_email                   = 'gitlab-ci@localhost'
+  $ci_support_email           = 'support@localhost'
   $gitlabci_sources           = 'git://github.com/gitlabhq/gitlab-ci.git'
   $gitlabci_branch            = '5-0-stable'
   $gitlabci_manage_nginx      = true
