@@ -1,0 +1,23 @@
+#Managed by Puppet
+# GitLab logrotate settings
+# based on: http://stackoverflow.com/a/4883967
+
+<%= @gitlab_log_folder ? @gitlab_log_folder : (@git_home + "/gitlab/log") %>/*.log {
+    daily
+    missingok
+    rotate 90
+    compress
+    notifempty
+    copytruncate
+}
+
+<% unless @gitlabshell_log_folder && @gitlab_log_folder && @gitlabshell_log_folder == @gitlab_log_folder %>
+<%= @gitlabshell_log_folder ? @gitlabshell_log_folder : (@git_home + "/gitlab-shell") %>/gitlab-shell.log {
+    daily
+    missingok
+    rotate 90
+    compress
+    notifempty
+    copytruncate
+}
+<% end %>

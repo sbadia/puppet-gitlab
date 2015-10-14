@@ -9,6 +9,10 @@ class gitlab::config inherits gitlab {
 
   $socket_path = "${git_home}/gitlab/tmp/sockets/gitlab.socket"
   $root_path = "${git_home}/gitlab/public"
+  
+  if $gitlab_git_http_server_branch {
+    $gitlab_git_http_server_socket_path="${git_home}/gitlab/tmp/sockets/gitlab-git-http-server.socket"
+  }
 
   # gitlab
   if $gitlab_manage_nginx {
@@ -41,7 +45,7 @@ class gitlab::config inherits gitlab {
 
   file { '/etc/logrotate.d/gitlab':
       ensure => file,
-      source => "${git_home}/gitlab/lib/support/logrotate/gitlab",
+      content => template('gitlab/gitlab_logrotate.erb'),
       owner  => root,
       group  => root,
       mode   => '0644';
@@ -52,13 +56,25 @@ class gitlab::config inherits gitlab {
       "${git_home}/gitlab/tmp",
       "${git_home}/gitlab/tmp/pids",
       "${git_home}/gitlab/tmp/sockets",
-      "${git_home}/gitlab/public",
-      "${git_home}/gitlab/public/uploads",
+      "${git_home}/gitlab/public",      
     ]:
     ensure => directory,
     mode   => '0755',
   }
-
+  
+  #gitlab does not provide an option to configure the uploads directory location, so create a symlink to
+  #the desired folder if specified (otherwise, simply ensure the default uploads folder is there)
+  $gitlab_uploads_path_type = $gitlab_uploads_folder ? {
+    undef   => 'directory',
+    default => 'link',
+  }
+  file { "${git_home}/gitlab/public/uploads":
+    ensure => $gitlab_uploads_path_type,
+    target => $gitlab_uploads_folder,
+    mode   => '0755',
+    force  => true, #for the conversion to link
+  }
+  
   #gitlab does not provide an option to configure a log directory, so create a symlink to
   #the desired folder if specified (otherwise, simply ensure the default log folder is there)
   $gitlab_log_path_type = $gitlab_log_folder ? {

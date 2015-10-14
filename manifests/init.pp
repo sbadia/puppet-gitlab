@@ -34,7 +34,7 @@
 #
 # [*git_max_size*]
 #   Maximum memory size grit can use, given in number of bytes per git object (e.g. a commit)
-#   default: 5242880 (5MB)
+#   default: 20971520 (20MB)
 #
 # [*git_timeout*]
 #   Git timeout to read a commit, in seconds
@@ -56,6 +56,15 @@
 #   Gitlab branch
 #   default: 7-12-stable
 #
+# [*gitlab_git_http_server_sources*]
+#   gitlab-git-http-server sources (required for GitLab 8+)
+#   default: git://github.com/gitlabhq/gitlabhq.git
+#
+# [*gitlab_git_http_server_branch*]
+#   gitlab-git-http-server branch (required GitLab 8+). If not specified, gitlab-git-http-server will
+#   not be installed.
+#   default: undef
+#
 # [*gitlabshell_sources*]
 #   Gitlab-shell sources
 #   default: git://github.com/gitlabhq/gitlab-shell.git
@@ -71,6 +80,10 @@
 # [*gitlab_log_folder*]
 #   Gitlab rails log folder
 #   default: ${git_home}/gitlab/log
+#
+# [*gitlab_uploads_folder*]
+#   Folder for user uploads (if specified, it will be symlinked from the default location)
+#   default: ${git_home}/gitlab/public/uploads
 #
 # [*proxy_name*]
 #   The name of the Nginx proxy
@@ -163,6 +176,10 @@
 #   Path to one or more shell scripts to be executed after the backup
 #   default: false
 #
+# [*gitlab_backup_archive_permissions*]
+#   Permissions for the resulting backup.tar file
+#   default: '0600'
+#
 # [*gitlab_relative_url_root*]
 #   run in a non-root path
 #   default: /
@@ -177,11 +194,6 @@
 #   created in the following directory (relative to the root of the Rails app)
 #   default: tmp/repositories
 #
-# [*gitlab_restricted_visibility_levels*]
-#   Restrict setting visibility levels for non-admin users.
-#   Specify as an array of one or more of "private" | "internal" | "public"
-#   default: nil
-#
 # [*gitlab_default_projects_features_issues*]
 #   Default project features setting for issues.
 #   default: true
@@ -194,17 +206,9 @@
 #   Default project features settings for wiki.
 #   default: true
 #
-# [*gitlab_default_projects_features_wall*]
-#   Default project features setting for wall.
-#   default: false
-#
 # [*gitlab_default_projects_features_snippets*]
 #   Default project features setting for snippets.
 #   default: false
-#
-# [*gitlab_default_projects_features_visibility_level*]
-#   Default project features settings for visibility level. ("private" | "internal" | "public")
-#   default: private
 #
 # [*gitlab_email_enabled*]
 #   Set to false if you need to disable email sending from GitLab
@@ -217,10 +221,6 @@
 # [*gitlab_email_display_name*]
 #   Sender display name for emails sent by GitLab
 #   default: GitLab
-#
-# [*gitlab_support_email*]
-#   Email address of your support contact
-#   default: support@local.host
 #
 # [*gitlab_time_zone*]
 #   Default time zone of GitLab application
@@ -250,10 +250,6 @@
 #   Set true if your SSL Cert is self signed
 #   default: false
 #
-# [*gitlab_projects*]
-#   GitLab default number of projects for new users
-#   default: 10
-#
 # [*gitlab_repodir*]
 #   Gitlab repository directory
 #   default: $git_home
@@ -266,6 +262,10 @@
 #   Directory where the Puppet module can store a status file to
 #   indicate whether the GitLab database has already been initialized.
 #   default: $git_home
+#
+# [*gitlab_default_can_create_group*]
+#  Whether users are allowed to create groups by default.
+#  default: true
 #
 # [*gitlab_username_change*]
 #   Gitlab username changing
@@ -307,6 +307,10 @@
 # [*exec_path*]
 #   The default PATH passed to all exec ressources (this path include rbenv shims)
 #   default: '${git_home}/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+#
+# [*exec_environment*]
+#   The environment passed to all exec resources
+#   default: undef
 #
 # [*gitlab_bundler_jobs*]
 #   Number of jobs to use while installing gems.  Should match number of
@@ -369,27 +373,68 @@
 #   enable this setting to keep new users blocked until they have been cleared by the admin
 #   default: false
 #
+# [*ldap_allow_username_or_email_login*]
+#   If allow_username_or_email_login is enabled, GitLab will ignore everything
+#   after the first '@' in the LDAP username submitted by the user on login.
+#   default: false
+#
+# [*ldap_attributes_username*]
+#   LDAP attributes that GitLab will use to create an account for the LDAP user.
+#   Note that the user's LDAP login will always be the attribute specified as `uid` above.
+#   default: ['uid', 'userid', 'sAMAccountName']
+#
+# [*ldap_attributes_email*]
+#   LDAP attributes that GitLab will use to create an account for the LDAP user.
+#   default:  ['mail', 'email', 'userPrincipalName']
+#
+# [*ldap_attributes_name*]
+#   LDAP attributes that GitLab will use to create an account for the LDAP user.
+#   If no full name could be found at the attribute specified for `name`,
+#   the full name is determined using the attributes specified for 
+#   `first_name` and `last_name`.
+#   default: ['cn']
+#
+# [*ldap_attributes_first_name*]
+#   LDAP attributes that GitLab will use to create an account for the LDAP user.
+#   default:  ['givenName']
+#
+# [*ldap_attributes_last_name*]
+#   LDAP attributes that GitLab will use to create an account for the LDAP user.
+#   default:  ['sn']
+#
 # [*ldap_sync_time*]
 #   This setting controls the amount of time between LDAP permission checks for each user.
-#   default: nil
+#   default: 3600
+#
+# [*ldap_schedule_sync_hour*]
+#   In addition to refreshing users when they log in,
+#   refresh LDAP user membership once a day. 
+#   Hour of the day. Value from 0-23. (EE only)
+#   default: 1
+#
+# [*ldap_schedule_sync_minute*]
+#   In addition to refreshing users when they log in,
+#   refresh LDAP user membership once a day. 
+#   Minute of the hour. Value from 0-59. (EE only)
+#   default: 30
 #
 # [*ldap_group_base*]
-#   Base where we can search for groups.
+#   Base where we can search for groups. (EE only)
 #   default: nil
 #
 # [*ldap_sync_ssh_keys*]
 #   Name of attribute which holds a ssh public key of the user object.
-#   If false or nil, SSH key syncronisation will be disabled.
+#   If false or nil, SSH key syncronisation will be disabled. (EE only)
 #   default: nil
 #
 # [*ldap_admin_group*]
-#   LDAP group of users who should be admins in GitLab.
+#   LDAP group of users who should be admins in GitLab. (EE only)
 #   default: nil
 #
-# [*issues_tracker*]
-#   External issues trackers. Provide a hash with all issues_tracker configuration as would
-#   appear in gitlab.yaml. E.g. { redmine => { title => "Redmine", project_url => ... } }
-#   default: nil
+# [*nginx_client_max_body_size*]
+#   Increase this if you want to upload large attachments
+#   Or if you want to accept large git objects over http
+#   default: 20m
 #
 # [*omniauth*]
 #   Omniauth configuration. Provide a hash with all omniauth configuration as would
@@ -412,18 +457,6 @@
 #   Proxy for git access
 #   default: ''
 #
-# [*company_logo_url*]
-#   Url to the company logo to be diplayed at the bottom of the sign_in page
-#   default: ''
-#
-# [*company_link*]
-#   Link to the company displayed under the logo of the company
-#   default: ''
-#
-# [*company_name*]
-#   Name of the company displayed under the logo of the company
-#   default: ''
-#
 # [*gravatar_enabled*]
 #   Use user avatar image from Gravatar.com
 #   default: true
@@ -435,6 +468,52 @@
 # [*webserver_service_name*]
 #   Name of webserver service (nginx, apache2)
 #   default: nginx
+#
+# [*incoming_email_enabled*]
+#   Allow users to comment on issues and merge requests by replying to notification emails.
+#   default: false
+#
+# [*incoming_email_address*]
+#   For documentation on how to set this up, see http://doc.gitlab.com/ce/incoming_email/README.html
+#   default: 'incoming+%{key}@gitlab.example.com'
+#
+# [*gitlab_ci_all_broken_builds*]
+#   CI: Send emails only on broken builds
+#   default: true
+#
+# [*gitlab_ci_add_pusher*]
+#   CI: Add pusher to recipients list
+#   default: false
+#
+# [*gitlab_ci_builds_path*]
+#   CI: The location where build traces are stored. Relative paths are relative to Rails.root
+#   default: builds/
+#
+# [*kerberos_enabled*]
+#   Allow the HTTP Negotiate authentication method for Git clients (EE only)
+#   default: false
+#
+# [*kerberos_keytab*]
+#   Kerberos 5 keytab file. The keytab file must be readable by the GitLab user,
+#   and should be different from other keytabs in the system. (EE only)
+#   default: use default keytab from Krb5 config
+#
+# [*kerberos_service_principal_name*]
+#   The Kerberos service name to be used by GitLab. (EE only)
+#   default: accept any service name in keytab file
+#
+# [*kerberos_use_dedicated_port*]
+#   Dedicated port: Git before 2.4 does not fall back to Basic authentication if Negotiate fails.
+#   See http://doc.gitlab.com/ee/integration/kerberos.html (EE only)
+#   default: false
+#
+# [*kerberos_port*]
+#   Port when using a dedicated port for Kerberos. (EE only)
+#   default: 8443
+#
+# [*kerberos_https*]
+#   Whether to use https on the dedicated port for Kerberos. (EE only)
+#   default: use value of gitlab_ssl
 #
 # [*system_packages*]
 #   Packages that Gitlab needs to work, and that will be managed by the Gitlab module
@@ -474,10 +553,13 @@ class gitlab(
     $gitlab_manage_home       = $gitlab::params::gitlab_manage_home,
     $gitlab_sources           = $gitlab::params::gitlab_sources,
     $gitlab_branch            = $gitlab::params::gitlab_branch,
+    $gitlab_git_http_server_sources = $gitlab::params::gitlab_git_http_server_sources,
+    $gitlab_git_http_server_branch = $gitlab::params::gitlab_git_http_server_branch,
     $gitlabshell_branch       = $gitlab::params::gitlabshell_branch,
     $gitlabshell_sources      = $gitlab::params::gitlabshell_sources,
     $gitlabshell_log_folder   = $gitlab::params::gitlabshell_log_folder,
     $gitlab_log_folder        = $gitlab::params::gitlab_log_folder,
+    $gitlab_uploads_folder    = $gitlab::params::gitlab_uploads_folder,
     $gitlab_manage_nginx      = $gitlab::params::gitlab_manage_nginx,
     $proxy_name               = 'gitlab',
     $gitlab_http_port         = $gitlab::params::gitlab_http_port,
@@ -493,7 +575,7 @@ class gitlab(
     $gitlab_dbport            = $gitlab::params::gitlab_dbport,
     $gitlab_domain            = $gitlab::params::gitlab_domain,
     $gitlab_domain_alias      = $gitlab::params::gitlab_domain_alias,
-    $gitlab_repodir           = $gitlab::params::gitlab_repodir,
+    $gitlab_repodir           = $git_home,
     $gitlab_satellitedir      = $git_home,
     $gitlab_setup_status_dir  = $git_home,
     $gitlab_backup            = $gitlab::params::gitlab_backup,
@@ -501,28 +583,25 @@ class gitlab(
     $gitlab_backup_keep_time  = $gitlab::params::gitlab_backup_keep_time,
     $gitlab_backup_time       = $gitlab::params::gitlab_backup_time,
     $gitlab_backup_postscript = $gitlab::params::gitlab_backup_postscript,
+    $gitlab_backup_archive_permissions = '0600',
     $gitlab_relative_url_root = $gitlab::params::gitlab_relative_url_root,
     $gitlab_issue_closing_pattern = $gitlab::params::gitlab_issue_closing_pattern,
     $gitlab_repository_downloads_path = $gitlab::params::gitlab_repository_downloads_path,
-    $gitlab_restricted_visibility_levels = $gitlab::params::gitlab_restricted_visibility_levels,
     $gitlab_default_projects_features_issues = $gitlab::params::gitlab_default_projects_features_issues,
     $gitlab_default_projects_features_merge_requests = $gitlab::params::gitlab_default_projects_features_merge_requests,
     $gitlab_default_projects_features_wiki = $gitlab::params::gitlab_default_projects_features_wiki,
-    $gitlab_default_projects_features_wall = $gitlab::params::gitlab_default_projects_features_wall,
     $gitlab_default_projects_features_snippets = $gitlab::params::gitlab_default_projects_features_snippets,
-    $gitlab_default_projects_features_visibility_level = $gitlab::params::gitlab_default_projects_features_visibility_level,
     $gitlab_time_zone         = $gitlab::params::gitlab_time_zone,
     $gitlab_email_enabled     = $gitlab::params::gitlab_email_enabled,
     $gitlab_email_reply_to    = "noreply@${gitlab_domain}",
     $gitlab_email_display_name= $gitlab::params::gitlab_email_display_name,
-    $gitlab_support_email     = $gitlab::params::gitlab_support_email,
     $gitlab_ssl               = $gitlab::params::gitlab_ssl,
     $gitlab_ssl_cert          = $gitlab::params::gitlab_ssl_cert,
     $gitlab_ssl_key           = $gitlab::params::gitlab_ssl_key,
     $gitlab_ssl_protocols     = $gitlab::params::gitlab_ssl_protocols,
     $gitlab_ssl_ciphers       = $gitlab::params::gitlab_ssl_ciphers,
     $gitlab_ssl_self_signed   = $gitlab::params::gitlab_ssl_self_signed,
-    $gitlab_projects          = $gitlab::params::gitlab_projects,
+    $gitlab_default_can_create_group = true,
     $gitlab_username_change   = $gitlab::params::gitlab_username_change,
     $gitlab_unicorn_listen    = $gitlab::params::gitlab_unicorn_listen,
     $gitlab_unicorn_port      = $gitlab::params::gitlab_unicorn_port,
@@ -536,6 +615,7 @@ class gitlab(
     $gitlab_secret_file       = $gitlab::params::gitlab_secret_file,
     $gitlab_auth_file         = "${git_home}/.ssh/authorized_keys",
     $exec_path                = $gitlab::params::exec_path,
+    $exec_environment         = $gitlab::params::exec_environment,
     $ldap_enabled             = $gitlab::params::ldap_enabled,
     $ldap_host                = $gitlab::params::ldap_host,
     $ldap_base                = $gitlab::params::ldap_base,
@@ -548,21 +628,37 @@ class gitlab(
     $ldap_active_directory    = $gitlab::params::ldap_active_directory,
     $ldap_block_auto_created_users = $gitlab::params::ldap_block_auto_created_users,
     $ldap_sync_time           = $gitlab::params::ldap_sync_time,
+    $ldap_allow_username_or_email_login = false,
+    $ldap_attributes_username = ['uid', 'userid', 'sAMAccountName'],
+    $ldap_attributes_email    = ['mail', 'email', 'userPrincipalName'],
+    $ldap_attributes_name     = ['cn'],
+    $ldap_attributes_first_name = ['givenName'],
+    $ldap_attributes_last_name = ['sn'],
+    $ldap_schedule_sync_hour  = 1,
+    $ldap_schedule_sync_minute= 30,
     $ldap_group_base          = $gitlab::params::ldap_group_base,
     $ldap_sync_ssh_keys       = $gitlab::params::ldap_sync_ssh_keys,
     $ldap_admin_group         = $gitlab::params::ldap_admin_group,
-    $issues_tracker           = $gitlab::params::issues_tracker,
+    $nginx_client_max_body_size = $gitlab::params::nginx_client_max_body_size,
     $omniauth                 = $gitlab::params::omniauth,
     $ssh_port                 = $gitlab::params::ssh_port,
     $google_analytics_id      = $gitlab::params::google_analytics_id,
     $git_proxy                = $gitlab::params::git_proxy,
     $webserver_service_name   = $gitlab::params::webserver_service_name,
+    $incoming_email_enabled   = false,
+    $incoming_email_address   = 'incoming+%{key}@gitlab.example.com',
+    $gitlab_ci_all_broken_builds = true,
+    $gitlab_ci_add_pusher     = false,
+    $gitlab_ci_builds_path    = 'builds/',
+    $kerberos_enabled         = false,
+    $kerberos_keytab          = undef,
+    $kerberos_service_principal_name = undef,
+    $kerberos_use_dedicated_port = false,
+    $kerberos_port            = 8443,
+    $kerberos_https           = $gitlab_ssl,
     $system_packages          = $gitlab::params::system_packages,
     # Deprecated params
     $git_package_name         = undef,
-    $company_logo_url         = $gitlab::params::company_logo_url,
-    $company_link             = $gitlab::params::company_link,
-    $company_name             = $gitlab::params::company_name,
     $gravatar_enabled         = $gitlab::params::gravatar_enabled,
     $use_exim                 = $gitlab::params::use_exim,
   ) inherits gitlab::params {
@@ -589,7 +685,6 @@ class gitlab(
   validate_bool($gitlab_default_projects_features_issues)
   validate_bool($gitlab_default_projects_features_merge_requests)
   validate_bool($gitlab_default_projects_features_wiki)
-  validate_bool($gitlab_default_projects_features_wall)
   validate_bool($gitlab_default_projects_features_snippets)
 
   validate_re($gitlab_dbtype, '(mysql|pgsql)', 'gitlab_dbtype is not supported')
@@ -600,26 +695,18 @@ class gitlab(
   validate_re("${gitlab_http_timeout}", '^\d+$', 'gitlab_http_timeout is not a number')
   validate_re("${gitlab_redisport}", '^\d+$', 'gitlab_redisport is not a valid port')
   validate_re($ldap_method, '(ssl|tls|plain)', 'ldap_method is not supported (ssl, tls or plain)')
-  validate_re("${gitlab_projects}", '^\d+$', 'gitlab_projects is not valid')
   validate_re("${gitlab_unicorn_port}", '^\d+$', 'gitlab_unicorn_port is not valid')
   validate_re("${gitlab_unicorn_worker}", '^\d+$', 'gitlab_unicorn_worker is not valid')
   validate_re("${gitlab_bundler_jobs}", '^\d+$', 'gitlab_bundler_jobs is not valid')
   validate_re($ensure, '(present|latest)', 'ensure is not valid (present|latest)')
   validate_re("${ssh_port}", '^\d+$', 'ssh_port is not a valid port')
-  validate_re($gitlab_default_projects_features_visibility_level, 'private|internal|public','gitlab_default_projects_features_visibility_level is not valid')
 
   if !is_ip_address($gitlab_unicorn_listen){
       fail("${gitlab_unicorn_listen} is not a valid IP address")
   }
 
-  if $gitlab_restricted_visibility_levels {
-    validate_array($gitlab_restricted_visibility_levels)
-  }
   if $omniauth {
     validate_hash($omniauth)
-  }
-  if $issues_tracker {
-    validate_hash($issues_tracker)
   }
 
   validate_string($git_user)
@@ -638,9 +725,6 @@ class gitlab(
   validate_string($ldap_uid)
   validate_string($ldap_host)
   validate_string($google_analytics_id)
-  validate_string($company_logo_url)
-  validate_string($company_link)
-  validate_string($company_name)
 
   anchor { 'gitlab::begin': } ->
   class { '::gitlab::setup': } ->
