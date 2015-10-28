@@ -17,8 +17,8 @@ class gitlab::params {
   $gitlab_webhook_timeout   = 10
   $gitlab_sources           = 'git://github.com/gitlabhq/gitlabhq.git'
   $gitlab_branch            = '7-12-stable'
-  $gitlab_git_http_server_sources = 'https://gitlab.com/gitlab-org/gitlab-git-http-server.git'
-  $gitlab_git_http_server_branch = undef # specify a value here when gitlab_branch updated to 8-x
+  $gitlab_workhorse_sources = 'https://gitlab.com/gitlab-org/gitlab-workhorse.git'
+  $gitlab_workhorse_branch  = undef # specify a value here when gitlab_branch updated to 8-x
   $gitlabshell_sources      = 'git://github.com/gitlabhq/gitlab-shell.git'
   $gitlabshell_branch       = 'v2.6.3'
   $gitlabshell_log_folder   = undef

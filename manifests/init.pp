@@ -56,12 +56,12 @@
 #   Gitlab branch
 #   default: 7-12-stable
 #
-# [*gitlab_git_http_server_sources*]
-#   gitlab-git-http-server sources (required for GitLab 8+)
+# [*gitlab_workhorse_sources*]
+#   gitlab-workhorse sources (required for GitLab 8+)
 #   default: git://github.com/gitlabhq/gitlabhq.git
 #
-# [*gitlab_git_http_server_branch*]
-#   gitlab-git-http-server branch (required GitLab 8+). If not specified, gitlab-git-http-server will
+# [*gitlab_workhorse_branch*]
+#   gitlab-workhorse branch (required GitLab 8+). If not specified, gitlab-workhorse will
 #   not be installed.
 #   default: undef
 #
@@ -553,8 +553,8 @@ class gitlab(
     $gitlab_manage_home       = $gitlab::params::gitlab_manage_home,
     $gitlab_sources           = $gitlab::params::gitlab_sources,
     $gitlab_branch            = $gitlab::params::gitlab_branch,
-    $gitlab_git_http_server_sources = $gitlab::params::gitlab_git_http_server_sources,
-    $gitlab_git_http_server_branch = $gitlab::params::gitlab_git_http_server_branch,
+    $gitlab_workhorse_sources = $gitlab::params::gitlab_workhorse_sources,
+    $gitlab_workhorse_branch  = $gitlab::params::gitlab_workhorse_branch,
     $gitlabshell_branch       = $gitlab::params::gitlabshell_branch,
     $gitlabshell_sources      = $gitlab::params::gitlabshell_sources,
     $gitlabshell_log_folder   = $gitlab::params::gitlabshell_log_folder,

@@ -42,9 +42,9 @@ upstream <%= @proxy_name %> {
   server unix:<%= @socket_path %> fail_timeout=0;
 }
 
-<% if @gitlab_git_http_server_socket_path %>
+<% if @gitlab_workhorse_socket_path %>
 upstream gitlab-git-http-server {
-  server unix:<%= @gitlab_git_http_server_socket_path %> fail_timeout=0;
+  server unix:<%= @gitlab_workhorse_socket_path %> fail_timeout=0;
 }
 <% end %>
 
@@ -168,7 +168,7 @@ server {
     proxy_pass http://<%= @proxy_name %>;
   }
 
-<% if @gitlab_git_http_server_socket_path %>
+<% if @gitlab_workhorse_socket_path %>
   location ~ ^/[\w\.-]+/[\w\.-]+/(info/refs|git-upload-pack|git-receive-pack)$ {
     # 'Error' 418 is a hack to re-use the @gitlab-git-http-server block
     error_page 418 = @gitlab-git-http-server;
