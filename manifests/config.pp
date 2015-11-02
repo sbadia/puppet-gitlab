@@ -11,7 +11,7 @@ class gitlab::config inherits gitlab {
   $root_path = "${git_home}/gitlab/public"
   
   if $gitlab_workhorse_branch {
-    $gitlab_workhorse_socket_path="${git_home}/gitlab/tmp/sockets/gitlab-git-http-server.socket"
+    $gitlab_workhorse_socket_path="${git_home}/gitlab/tmp/sockets/gitlab-workhorse.socket"
   }
 
   # gitlab
