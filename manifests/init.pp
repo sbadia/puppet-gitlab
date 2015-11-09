@@ -94,6 +94,14 @@
 #   configuration; set to false to manage separately
 #   default: true
 #
+# [*nginx_access_log*]
+#   Nginx access_log path (and any log options).
+#   default: /var/log/nginx/gitlab_access.log
+#
+# [*nginx_error_log*]
+#   Nginx error_log file (and any log options).
+#   default: /var/log/nginx/gitlab_error.log
+#
 # [*gitlab_http_port*]
 #   Port that NGINX listens on for HTTP traffic
 #   default: 80
@@ -562,6 +570,8 @@ class gitlab(
     $gitlab_uploads_folder    = $gitlab::params::gitlab_uploads_folder,
     $gitlab_manage_nginx      = $gitlab::params::gitlab_manage_nginx,
     $proxy_name               = 'gitlab',
+    $nginx_access_log         = "/var/log/nginx/${proxy_name}_access.log",
+    $nginx_error_log          = "/var/log/nginx/${proxy_name}_error.log",
     $gitlab_http_port         = $gitlab::params::gitlab_http_port,
     $gitlab_ssl_port          = $gitlab::params::gitlab_ssl_port,
     $gitlab_http_timeout      = $gitlab::params::gitlab_http_timeout,
