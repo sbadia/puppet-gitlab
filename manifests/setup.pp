@@ -96,7 +96,7 @@ class gitlab::setup inherits gitlab {
     rbenv::install { $git_user:
       group => $git_group,
       home  => $git_home,
-      rc    => '.bashrc',
+      rc    => ['.bashrc','.profile'],
     }
 
     rbenv::compile { 'gitlab/ruby':
