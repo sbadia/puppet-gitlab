@@ -206,6 +206,10 @@
 #   Default project features settings for visibility level. ("private" | "internal" | "public")
 #   default: private
 #
+# [*gitlab_default_can_create_group*]
+#   Default bool for group creation permission.
+#   default: true
+#
 # [*gitlab_email_enabled*]
 #   Set to false if you need to disable email sending from GitLab
 #   default: true
@@ -300,6 +304,36 @@
 #   File that contains the secret key for verifying access for gitlab-shell.
 #   default: '.gitlab_shell_secret' relative to Rails.root (i.e. root of the GitLab app).
 #
+# [*gitlab_default_theme*]
+#   Numeric selector for default theme setting.
+#   default: 2
+#   Choices
+#     BASIC  = 1
+#     MARS   = 2
+#     MODERN = 3
+#     GRAY   = 4
+#     COLOR  = 5
+#
+# [*gitlab_signup_enabled*]
+#   Account passwords are not sent via the email if signup is enabled.
+#   default: false
+#
+# [*gitlab_signin_enabled*]
+#   If set to false, standard login form won't be shown on the sign-in page
+#   default: true
+#
+# [*gitlab_upload_pack*]
+#   Setting for Git over HTTP
+#   default: true
+#
+# [*gitlab_receive_pack *]
+#   Setting for Git over HTTP
+#   default: true
+#
+# [*gitlab_ssh_host*]
+#   Configuration option if ssh host is different from HTTP/HTTPS one
+#   default: undef
+#
 # [*gitlab_auth_file*]
 #   File used as authorized_keys for gitlab user
 #   default: ${git_home}/.ssh/authorized_keys
@@ -385,6 +419,11 @@
 # [*ldap_admin_group*]
 #   LDAP group of users who should be admins in GitLab.
 #   default: nil
+#
+# [*ldap_allow_username_or_email_login*]
+#   If allow_username_or_email_login is enabled, GitLab will ignore everything
+#   after the first '@' in the LDAP username submitted by the user on login.
+#   default: true
 #
 # [*issues_tracker*]
 #   External issues trackers. Provide a hash with all issues_tracker configuration as would
@@ -590,6 +629,9 @@ class gitlab(
   validate_absolute_path($gitlab_ssl_cert)
   validate_absolute_path($gitlab_ssl_key)
 
+
+  validate_numeric($gitlab_default_theme)
+
   validate_bool($gitlab_ssl)
   validate_bool($gitlab_ssl_self_signed)
   validate_bool($gitlab_username_change)
@@ -599,6 +641,12 @@ class gitlab(
   validate_bool($gitlab_default_projects_features_wiki)
   validate_bool($gitlab_default_projects_features_wall)
   validate_bool($gitlab_default_projects_features_snippets)
+  validate_bool($gitlab_default_can_create_group)
+  validate_bool($gitlab_signup_enabled)
+  validate_bool($gitlab_signin_enabled)
+  validate_bool($gitlab_upload_pack )
+  validate_bool($gitlab_receive_pack )
+  validate_bool($ldap_allow_username_or_email_login)
 
   validate_re($gitlab_dbtype, '(mysql|pgsql)', 'gitlab_dbtype is not supported')
   validate_re("${gitlab_dbport}", '^\d+$', 'gitlab_dbport is not a valid port')
@@ -615,7 +663,7 @@ class gitlab(
   validate_re($ensure, '(present|latest)', 'ensure is not valid (present|latest)')
   validate_re("${ssh_port}", '^\d+$', 'ssh_port is not a valid port')
   validate_re($gitlab_default_projects_features_visibility_level, 'private|internal|public','gitlab_default_projects_features_visibility_level is not valid')
-
+  validate_re()
   if !is_ip_address($gitlab_unicorn_listen){
       fail("${gitlab_unicorn_listen} is not a valid IP address")
   }
@@ -649,6 +697,7 @@ class gitlab(
   validate_string($company_logo_url)
   validate_string($company_link)
   validate_string($company_name)
+  validate_string($gitlab_ssh_host)
 
   anchor { 'gitlab::begin': } ->
   class { '::gitlab::setup': } ->
