@@ -644,8 +644,8 @@ class gitlab(
   validate_bool($gitlab_default_can_create_group)
   validate_bool($gitlab_signup_enabled)
   validate_bool($gitlab_signin_enabled)
-  validate_bool($gitlab_upload_pack )
-  validate_bool($gitlab_receive_pack )
+  validate_bool($gitlab_upload_pack)
+  validate_bool($gitlab_receive_pack)
   validate_bool($ldap_allow_username_or_email_login)
 
   validate_re($gitlab_dbtype, '(mysql|pgsql)', 'gitlab_dbtype is not supported')
@@ -663,7 +663,7 @@ class gitlab(
   validate_re($ensure, '(present|latest)', 'ensure is not valid (present|latest)')
   validate_re("${ssh_port}", '^\d+$', 'ssh_port is not a valid port')
   validate_re($gitlab_default_projects_features_visibility_level, 'private|internal|public','gitlab_default_projects_features_visibility_level is not valid')
-  validate_re()
+
   if !is_ip_address($gitlab_unicorn_listen){
       fail("${gitlab_unicorn_listen} is not a valid IP address")
   }
@@ -697,7 +697,9 @@ class gitlab(
   validate_string($company_logo_url)
   validate_string($company_link)
   validate_string($company_name)
-  validate_string($gitlab_ssh_host)
+  if $gitlab_ssh_host {
+    validate_string($gitlab_ssh_host)
+  }
 
   anchor { 'gitlab::begin': } ->
   class { '::gitlab::setup': } ->
