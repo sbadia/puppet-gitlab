@@ -326,7 +326,7 @@
 #   Setting for Git over HTTP
 #   default: true
 #
-# [*gitlab_receive_pack *]
+# [*gitlab_receive_pack*]
 #   Setting for Git over HTTP
 #   default: true
 #
