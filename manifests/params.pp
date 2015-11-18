@@ -53,6 +53,7 @@ class gitlab::params {
   $gitlab_default_projects_features_wall = false
   $gitlab_default_projects_features_snippets = false
   $gitlab_default_projects_features_visibility_level = 'private'
+  $gitlab_default_can_create_group = true
   $gitlab_time_zone         = false
   $gitlab_email_enabled     = true
   $gitlab_email_reply_to    = "noreply@${gitlab_domain}"
@@ -77,6 +78,12 @@ class gitlab::params {
   $gitlab_ruby_version      = '2.1.6'
   $gitlab_auth_file         = "${git_home}/.ssh/authorized_keys"
   $gitlab_secret_file       = undef
+  $gitlab_default_theme     = '2'
+  $gitlab_signup_enabled    = false
+  $gitlab_signin_enabled    = true
+  $gitlab_upload_pack       = true
+  $gitlab_receive_pack      = true
+  $gitlab_ssh_host          = undef
   $exec_path                = "${git_home}/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   $ldap_enabled             = false
   $ldap_host                = 'ldap.domain.com'
@@ -93,6 +100,7 @@ class gitlab::params {
   $ldap_group_base          = ''
   $ldap_sync_ssh_keys       = ''
   $ldap_admin_group         = ''
+  $ldap_allow_username_or_email_login = true
   $issues_tracker           = undef
   $omniauth                 = undef
   $ssh_port                 = '22'

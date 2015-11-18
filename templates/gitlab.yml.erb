@@ -26,7 +26,9 @@ production: &base
     # (you'd obviously need to replace ssh.host_example.com with your own host).
     # Otherwise, ssh host will be set to the `host:` value above
     # ssh_host: ssh.host_example.com
-
+    <%- if @gitlab_ssh_host %>
+    ssh_host: <%= @gitlab_ssh_host %>
+    <%- end %>
     # WARNING: See config/application.rb under "Relative url support" for the list of
     # other files that need to be changed for relative url support
     # relative_url_root: /gitlab
@@ -35,7 +37,7 @@ production: &base
     <%- end %>
 
     # Uncomment and customize if you can't use the default user to run GitLab (default: 'git')
-    # user: git
+    user: <%= @git_user %>
 
     # Uncomment and customize if you want to change the default time zone of GitLab application.
     # To see all available zones, run `bundle exec rake time:zones:all RAILS_ENV=production`
@@ -59,6 +61,7 @@ production: &base
     ## User settings
     default_projects_limit: <%= @gitlab_projects %>
     # default_can_create_group: false  # default: true
+    default_can_create_group: <%= @gitlab_default_can_create_group %>
     # default: true - User can change her username/namespace
     username_changing_enabled: <%= @gitlab_username_change ? 'true' : 'false' %>
     ## Default theme
@@ -67,20 +70,22 @@ production: &base
     ##   MODERN = 3
     ##   GRAY   = 4
     ##   COLOR  = 5
-    # default_theme: 2 # default: 2
+    default_theme: <%= @gitlab_default_theme %> # default: 2
 
 
     ## Users management
     # default: false - Account passwords are not sent via the email if signup is enabled.
-    # signup_enabled: true
+    # signup_enabled: false
+    signup_enabled: <%= @gitlab_signup_enabled ? 'true' : 'false' %>
     #
     # default: true - If set to false, standard login form won't be shown on the sign-in page
-    # signin_enabled: false
+    # signin_enabled: true
+    signin_enabled: <%= @gitlab_signin_enabled ? 'true' : 'false' %>
 
     # Restrict setting visibility levels for non-admin users.
     # The default is to allow all levels.
 <% if @restricted_visibility_levels %>
-    restricted_visibility_levels: 
+    restricted_visibility_levels:
 <%   @restricted_visibility_levels.each do |level| %>
       - <%= level %>
 <%   end %>
@@ -95,7 +100,7 @@ production: &base
     # issue_closing_pattern: '([Cc]lose[sd]|[Ff]ixe[sd]) #(\d+)'
 <% if @gitlab_issue_closing_pattern -%>
     issue_closing_pattern: '<%= @gitlab_issue_closing_pattern.gsub("'","''") %>'
-<% end -%>     
+<% end -%>
 
     ## Default project features settings
     default_projects_features:
@@ -106,7 +111,7 @@ production: &base
       snippets: <%= @gitlab_default_projects_features_snippets %>
       # can be "private" | "internal" | "public"
       visibility_level: <%= @gitlab_default_projects_features_visibility_level %>
-      
+
     ## Webhook settings
     # Number of seconds to wait for HTTP response after sending webhook HTTP POST request (default: 10)
     webhook_timeout: <%= @gitlab_webhook_timeout %>
@@ -194,11 +199,11 @@ production: &base
     #
     # If you are using "uid: 'userPrincipalName'" on ActiveDirectory you need to
     # disable this setting, because the userPrincipalName contains an '@'.
-    allow_username_or_email_login: true
+    allow_username_or_email_login: <%= @ldap_allow_username_or_email_login ? 'true' : 'false' %>
 
 
     # To maintain tight control over the number of active users on your GitLab installation,
-    # enable this setting to keep new users blocked until they have been cleared by the admin 
+    # enable this setting to keep new users blocked until they have been cleared by the admin
     # (default: false).
     block_auto_created_users: <%= @ldap_block_auto_created_users %>
 
@@ -214,7 +219,7 @@ production: &base
     #   Ex. (employeeType=developer)
     #
     user_filter: '<%= @ldap_user_filter -%>'
-    
+
     # EE settings
 <% if @ldap_sync_time!= '' -%>
     sync_time: <%=@ldap_sync_time%>
@@ -307,11 +312,11 @@ production: &base
     secret_file: <%= @gitlab_secret_file %>
 <% else -%>
     # secret_file: /home/git/gitlab/.gitlab_shell_secret
-<% end -%>     
-  
+<% end -%>
+
     # Git over HTTP
-    upload_pack: true
-    receive_pack: true
+    upload_pack: <%= @gitlab_upload_pack ? 'true' : 'false' %>
+    receive_pack: <%= @gitlab_receive_pack ? 'true' : 'false' %>
 
     # If you use non-standard ssh port you need to specify it
     ssh_port: <%= @ssh_port %>
