@@ -13,6 +13,7 @@ class gitlab::install inherits gitlab {
   Exec {
     user => $git_user,
     path => $exec_path,
+    environment => $exec_environment,
   }
 
   File {
@@ -91,9 +92,10 @@ class gitlab::install inherits gitlab {
     $gitlab_bundler_jobs_flag = " -j${gitlab_bundler_jobs}"
   }
   exec { 'install gitlab':
-    command => "bundle install${gitlab_bundler_jobs_flag} --without development aws test ${gitlab_without_gems} ${gitlab_bundler_flags}",
+    command => "bundle install${gitlab_bundler_jobs_flag} --without development aws test ${gitlab_without_gems} ${gitlab_with_gems} ${gitlab_bundler_flags}",
     cwd     => "${git_home}/gitlab",
-    unless  => 'bundle check',
+    subscribe  => Vcsrepo["${git_home}/gitlab"],
+    refreshonly => true,
     timeout => 0,
     require => [
       Gitlab::Config::Database['gitlab'],
@@ -101,7 +103,7 @@ class gitlab::install inherits gitlab {
       File["${git_home}/gitlab/config/gitlab.yml"],
       Gitlab::Config::Resque['gitlab'],
     ],
-    notify  => Exec['run migrations'],
+    notify  => [ Exec['run migrations'], Exec['run gitlab-ci schedules'] ],
   }
 
   exec { 'setup gitlab database':
@@ -113,7 +115,7 @@ class gitlab::install inherits gitlab {
       Exec['install gitlab'],
     ],
     notify  => Exec['precompile assets'],
-    before  => Exec['run migrations'],
+    before  => [ Exec['run migrations'], Exec['run gitlab-ci schedules'] ],
   }
 
   exec { 'precompile assets':
@@ -127,6 +129,14 @@ class gitlab::install inherits gitlab {
     cwd         =>  "${git_home}/gitlab",
     refreshonly =>  true,
     notify      => Exec['precompile assets'],
+  }
+
+  # this installs cron jobs defined in config/schedule.rb for gitlab-ci
+  exec { 'run gitlab-ci schedules':
+    command     => 'bundle exec whenever -w RAILS_ENV=production',
+    cwd         => "${git_home}/gitlab",
+    refreshonly => true,
+    onlyif      => "test -e '${git_home}/gitlab/config/schedule.rb'",
   }
 
   file {
