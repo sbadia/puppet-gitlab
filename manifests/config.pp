@@ -71,7 +71,7 @@ class gitlab::config inherits gitlab {
   file { "${git_home}/gitlab/public/uploads":
     ensure => $gitlab_uploads_path_type,
     target => $gitlab_uploads_folder,
-    mode   => '0755',
+    mode   => '0750',
     force  => true, #for the conversion to link
   }
   
