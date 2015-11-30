@@ -83,10 +83,17 @@ describe 'gitlab' do
         )}
       end # gitlab logrotate
       describe 'gitlab directories' do
-        ['gitlab/tmp','gitlab/tmp/pids','gitlab/tmp/sockets','gitlab/log','gitlab/public','gitlab/public/uploads'].each do |dir|
+        ['gitlab/tmp','gitlab/tmp/pids','gitlab/tmp/sockets','gitlab/log','gitlab/public'].each do |dir|
           it { is_expected.to contain_file("/home/git/#{dir}").with(
             :ensure => 'directory',
             :mode   => '0755'
+          )}
+        end
+
+        ['gitlab/public/uploads'].each do |dir|
+          it { is_expected.to contain_file("/home/git/#{dir}").with(
+            :ensure => 'directory',
+            :mode   => '0750'
           )}
         end
       end # gitlab directories

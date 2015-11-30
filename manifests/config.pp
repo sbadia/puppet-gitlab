@@ -53,10 +53,15 @@ class gitlab::config inherits gitlab {
       "${git_home}/gitlab/tmp/pids",
       "${git_home}/gitlab/tmp/sockets",
       "${git_home}/gitlab/public",
-      "${git_home}/gitlab/public/uploads",
     ]:
     ensure => directory,
     mode   => '0755',
+  }
+  file { [
+      "${git_home}/gitlab/public/uploads",
+    ]:
+    ensure => directory,
+    mode   => '0750',
   }
 
   #gitlab does not provide an option to configure a log directory, so create a symlink to
