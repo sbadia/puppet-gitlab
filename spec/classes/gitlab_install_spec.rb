@@ -119,17 +119,18 @@ describe 'gitlab' do
       end # rack_attack config
       describe 'install gitlab' do
         it { is_expected.to contain_exec('install gitlab').with(
-          :user    => 'git',
-          :path     => '/home/git/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          :command => "bundle install --without development aws test postgres --deployment",
-          :unless  => 'bundle check',
-          :cwd     => '/home/git/gitlab',
-          :timeout => 0,
-          :require => ['Gitlab::Config::Database[gitlab]',
+          :user        => 'git',
+          :path        => '/home/git/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+          :command     => "bundle install --without development aws test postgres --deployment",
+          :unless      => 'bundle check',
+          :cwd         => '/home/git/gitlab',
+          :environment => 'HOME=/home/git',
+          :timeout     => 0,
+          :require     => ['Gitlab::Config::Database[gitlab]',
                         'Gitlab::Config::Unicorn[gitlab]',
                         'File[/home/git/gitlab/config/gitlab.yml]',
                         'Gitlab::Config::Resque[gitlab]'],
-          :notify  => 'Exec[run migrations]'
+          :notify      => 'Exec[run migrations]'
         )}
         it { is_expected.to contain_exec('run migrations').with(
           :command     => 'bundle exec rake db:migrate RAILS_ENV=production',
@@ -140,13 +141,14 @@ describe 'gitlab' do
         context 'postgresql' do
           let(:params) {{ :gitlab_dbtype => 'pgsql' }}
           it { is_expected.to contain_exec('install gitlab').with(
-            :user    => 'git',
-            :path     => '/home/git/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-            :command => "bundle install --without development aws test mysql --deployment",
-            :unless  => 'bundle check',
-            :cwd     => '/home/git/gitlab',
-            :timeout => 0,
-            :require => ['Gitlab::Config::Database[gitlab]',
+            :user        => 'git',
+            :path        => '/home/git/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+            :command     => "bundle install --without development aws test mysql --deployment",
+            :unless      => 'bundle check',
+            :cwd         => '/home/git/gitlab',
+            :environment => 'HOME=/home/git',
+            :timeout     => 0,
+            :require     => ['Gitlab::Config::Database[gitlab]',
                         'Gitlab::Config::Unicorn[gitlab]',
                         'File[/home/git/gitlab/config/gitlab.yml]',
                         'Gitlab::Config::Resque[gitlab]']

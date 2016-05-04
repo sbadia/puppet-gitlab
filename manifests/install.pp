@@ -91,17 +91,18 @@ class gitlab::install inherits gitlab {
     $gitlab_bundler_jobs_flag = " -j${gitlab_bundler_jobs}"
   }
   exec { 'install gitlab':
-    command => "bundle install${gitlab_bundler_jobs_flag} --without development aws test ${gitlab_without_gems} ${gitlab_bundler_flags}",
-    cwd     => "${git_home}/gitlab",
-    unless  => 'bundle check',
-    timeout => 0,
-    require => [
+    command     => "bundle install${gitlab_bundler_jobs_flag} --without development aws test ${gitlab_without_gems} ${gitlab_bundler_flags}",
+    cwd         => "${git_home}/gitlab",
+    unless      => 'bundle check',
+    environment => "HOME=${git_home}",
+    timeout     => 0,
+    require     => [
       Gitlab::Config::Database['gitlab'],
       Gitlab::Config::Unicorn['gitlab'],
       File["${git_home}/gitlab/config/gitlab.yml"],
       Gitlab::Config::Resque['gitlab'],
     ],
-    notify  => Exec['run migrations'],
+    notify      => Exec['run migrations'],
   }
 
   exec { 'setup gitlab database':
