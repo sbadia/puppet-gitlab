@@ -159,7 +159,7 @@ class { 'gitlab':
   ldap_user_filter              => '(&(objectClass=*)(memberOf=CN=ACCESS_GIT,OU=groups,DC=localdomain,DC=local))',
   ldap_port                     => '389',
   ldap_method                   => 'plain',
-  ldap_bind_dn                  => 'CN=GIT_ADMIN,OU=Users,DC=localdomain,DC=local',
+  ldap_bind_dn                  => 'GIT_ADMIN@localdomain.local',
   ldap_bind_password            => 'change_me-GIT_ADMIN_password',
   ldap_active_directory         => true,
   ldap_block_auto_created_users => false,
