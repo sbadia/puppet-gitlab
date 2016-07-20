@@ -10,8 +10,11 @@
 2. [Module description](#module-description)
 3. [Parameters](#parameters)
 4. [Usage](#usage)
-    * [Basic usage](#basic-usage)
-    * [With LDAP](#with-ldap)
+    * [example class gitlab](#example-class-gitlab)
+    * [example class gitlab::ci](#example-class-gitlab-ci)
+    * [example class gitlab::runner](#example-class-gitlab-runner)
+    * [A complete example](#a-complete-example)
+    * [A complete example with LDAP authentication](#a-complete-usage-with-ldap-authentication)
 5. [Limitation](#limitation)
 6. [Development](#development)
 
@@ -52,7 +55,7 @@ See [manifest/init.pp](https://github.com/sbadia/puppet-gitlab/blob/master/manif
 
 _Note:_ Assume that a database server is already installed on your server/infrastructure (see: [vagrant-gitlab](https://github.com/sbadia/vagrant-gitlab/blob/master/examples/gitlab.pp)).
 
-## class gitlab
+## example: class gitlab
 
 ```puppet
 class {
@@ -68,7 +71,7 @@ class {
 }
 ```
 
-## class gitlab::ci
+## example: class gitlab::ci
 
 ```puppet
 class { 'gitlab::ci':
@@ -83,7 +86,7 @@ class { 'gitlab::ci':
 }
 ```
 
-## class gitlab::ci::runner
+## example: class gitlab::ci::runner
 
 ```puppet
 # The registration token can be found at: http://ci.example.com/admin/runners, accessible through Header > Runners.
@@ -92,7 +95,7 @@ class { 'gitlab::ci::runner':
   registration_token => 'replaceme',
 }
 ```
-## A Complete example
+## A complete example
 
 ```puppet
 include redis
@@ -118,6 +121,52 @@ class {'gitlab':
   gitlab_dbuser            => 'user',
   gitlab_dbpwd             => 'password',
   ldap_enabled             => false,
+}
+```
+
+## A complete example with LDAP authentication
+
+```puppet
+include redis
+include nginx
+include mysql::server
+include git
+include nodejs
+include logrotate
+
+mysql::db {'gitlab': 
+  user     => 'user',
+  password => 'password',
+}
+
+class { 'gitlab':
+  git_user                      => 'git',
+  git_home                      => '/home/gitlab',
+  git_email                     => 'gitlab@fooboozoo.fr',
+  git_comment                   => 'GitLab',
+  gitlab_sources                => 'https://github.com/gitlabhq/gitlabhq.git',
+  gitlab_domain                 => 'gitlab.localdomain.local',
+  gitlab_http_timeout           => '300',
+  gitlab_dbtype                 => 'mysql',
+  gitlab_backup                 => true,
+  gitlab_dbname                 => 'gitlab',
+  gitlab_dbuser                 => 'user',
+  gitlab_dbpwd                  => 'password',
+  ldap_enabled                  => true,
+  ldap_host                     => 'ads.localdomain.local',
+  ldap_base                     => 'DC=localdomain,DC=local',
+  ldap_uid                      => 'sAMAccountName',
+  ldap_user_filter              => '(&(objectClass=*)(memberOf=CN=ACCESS_GIT,OU=groups,DC=localdomain,DC=local))',
+  ldap_port                     => '389',
+  ldap_method                   => 'plain',
+  ldap_bind_dn                  => 'GIT_ADMIN@localdomain.local',
+  ldap_bind_password            => 'change_me-GIT_ADMIN_password',
+  ldap_active_directory         => true,
+  ldap_block_auto_created_users => false,
+  ldap_sync_time                => '1800',
+  ldap_group_base               => 'CN=ACCESS_GIT,OU=groups,DC=localdomain,DC=local',
+  ldap_sync_ssh_keys            => false,
+  ldap_admin_group              => 'CN=ADMIN_GIT,OU=groups,DC=localdomain,DC=local',
 }
 ```
 
