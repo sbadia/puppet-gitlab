@@ -101,7 +101,10 @@ class gitlab::install inherits gitlab {
       File["${git_home}/gitlab/config/gitlab.yml"],
       Gitlab::Config::Resque['gitlab'],
     ],
-    notify  => Exec['run migrations'],
+    notify  => [
+      Exec['run migrations'],
+      Exec['cleanup'],
+    ]
   }
 
   exec { 'setup gitlab database':
@@ -124,9 +127,19 @@ class gitlab::install inherits gitlab {
 
   exec { 'run migrations':
     command     => 'bundle exec rake db:migrate RAILS_ENV=production',
-    cwd         =>  "${git_home}/gitlab",
-    refreshonly =>  true,
-    notify      => Exec['precompile assets'],
+    cwd         => "${git_home}/gitlab",
+    refreshonly => true,
+    notify      => [
+      Exec['precompile assets'],
+      Class['::gitlab::service'],
+    ],
+  }
+
+  exec { 'cleanup':
+    command     => 'bundle clean',
+    cwd         => "${git_home}/gitlab",
+    refreshonly => true,
+    notify      => Class['::gitlab::service'],
   }
 
   file {
